@@ -1,0 +1,133 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+//    id 'com.google.gms.google-services'
+//    id 'com.google.firebase.crashlytics'
+}
+
+android {
+    def configs = rootProject.ext
+
+    namespace configs.applicationId
+    compileSdkVersion configs.compileSdkVersion
+
+
+    defaultConfig {
+        applicationId configs.applicationId
+        minSdk configs.minSdkVersion
+        targetSdk configs.targetSdkVersion
+        versionCode configs.versionCode
+        versionName configs.versionName
+
+        testInstrumentationRunner configs.testInstrumentationRunner
+        multiDexEnabled true
+
+    }
+
+    signingConfigs {
+        create("release") {
+            //organization taibahai
+            keyAlias 'taibahai'
+            keyPassword 'taibahai@theapp'
+            storePassword 'taibahai@theapp'
+            storeFile file("/Users/s/Desktop/Development/AndroidApps/Android-Apps-JKS-Files/TaibahAI/key-taibahai.jks")
+        }
+    }
+
+    buildTypes {
+        debug {
+            ext.enableCrashlytics = false
+
+        }
+        release {
+            ext.enableCrashlytics = true
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    buildFeatures {
+        viewBinding = true
+        dataBinding = true
+        buildConfig true
+    }
+
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_17.toString()
+    }
+
+    flavorDimensions 'taibahai'
+    productFlavors {
+        prod {
+            dimension 'taibahai'
+        }
+        dev {
+            dimension 'taibahai'
+            applicationIdSuffix '.dev'
+        }
+    }
+
+    applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            def currentDate = new Date().format("yyyy-MM-dd HH-mm-ss")
+            def appName = "TaibahAI"
+            def outputFileName = "${appName} ${variant.baseName} ${variant.versionName} ${variant.versionCode} ${currentDate}.apk"
+            output.outputFileName = outputFileName
+        }
+    }
+}
+
+dependencies {
+
+    implementation project(path: ':network')
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+
+
+    //android x
+    implementation("androidx.activity:activity-ktx:1.7.2")
+    implementation("androidx.fragment:fragment-ktx:1.6.0")
+
+    implementation("androidx.core:core-ktx:1.9.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("com.tbuonomo:dotsindicator:4.3")
+    implementation("io.github.chaosleung:pinview:1.4.4")
+    implementation("com.hbb20:ccp:2.5.4")
+    implementation("com.google.android.exoplayer:exoplayer:2.19.1")
+    implementation("de.hdodenhof:circleimageview:3.1.0")
+
+
+    //firebase
+
+    implementation 'com.google.firebase:firebase-analytics-ktx:21.3.0'
+    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.3.7'
+    implementation 'com.google.firebase:firebase-bom:32.1.1'
+    implementation 'com.google.firebase:firebase-messaging-ktx:23.1.2'
+    implementation 'com.google.android.gms:play-services-cloud-messaging:17.0.2'
+    implementation 'com.google.firebase:firebase-messaging:23.1.2'
+
+
+    implementation 'androidx.work:work-runtime-ktx:2.8.1'
+
+    implementation 'androidx.browser:browser:1.5.0'
+
+    implementation 'com.google.android.gms:play-services-auth:20.5.0'
+
+    //gif/image loading libraries
+    implementation 'com.github.bumptech.glide:glide:4.15.1'
+    kapt 'com.github.bumptech.glide:compiler:4.15.1'
+    implementation("androidx.viewpager2:viewpager2:1.0.0")
+
+    kapt 'com.android.databinding:compiler:3.5.1'
+
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+
+    implementation 'com.github.dhaval2404:imagepicker:2.1'
+}
