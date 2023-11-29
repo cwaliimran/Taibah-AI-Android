@@ -5,10 +5,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.taibahai.R
 import com.taibahai.databinding.ActivityBottomNavigationBinding
-import com.taibahai.fragments.ChatFragment
+import com.taibahai.fragments.ProfileFragment
 import com.taibahai.fragments.HomeFragment
-import com.taibahai.fragments.LikesFragment
-import com.taibahai.fragments.MatchesFragment
+import com.taibahai.fragments.RankFragment
+import com.taibahai.fragments.SearchFragment
 import com.taibahai.fragments.MoreFragment
 
 class BottomNavigation : AppCompatActivity() {
@@ -25,9 +25,9 @@ class BottomNavigation : AppCompatActivity() {
             when (it.itemId) {
 
                 R.id.home -> replaceFragment(HomeFragment())
-                R.id.likes -> replaceFragment(LikesFragment())
-                R.id.matches -> replaceFragment(MatchesFragment())
-                R.id.chat -> replaceFragment(ChatFragment())
+                R.id.rank -> replaceFragment(RankFragment())
+                R.id.search -> replaceFragment(SearchFragment())
+                R.id.profile -> replaceFragment(ProfileFragment())
                 R.id.more -> replaceFragment(MoreFragment())
 
                 else -> {

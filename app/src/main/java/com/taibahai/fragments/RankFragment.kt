@@ -7,17 +7,17 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.taibahai.R
-import com.taibahai.databinding.FragmentLikesBinding
+import com.taibahai.databinding.FragmentRankBinding
 
-class LikesFragment : Fragment() {
+class RankFragment : Fragment() {
 
-    lateinit var binding: FragmentLikesBinding
+    lateinit var binding: FragmentRankBinding
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding = DataBindingUtil.inflate<FragmentLikesBinding>(
-            inflater, R.layout.fragment_likes, container, false
+        binding = DataBindingUtil.inflate<FragmentRankBinding>(
+            inflater, R.layout.fragment_rank, container, false
         )
 
         return binding?.getRoot()

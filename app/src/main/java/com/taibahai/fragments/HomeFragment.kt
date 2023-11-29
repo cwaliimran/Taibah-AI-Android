@@ -12,7 +12,9 @@ import com.network.network.NetworkResult
 import com.network.utils.ProgressLoading.displayLoading
 import com.network.viewmodels.MainViewModel
 import com.taibahai.R
+import com.taibahai.adapters.AdapterHome
 import com.taibahai.databinding.FragmentHomeBinding
+import com.taibahai.models.ModelHome
 import com.taibahai.models.ModelHomeSlider
 import com.taibahai.utils.showToast
 
@@ -20,8 +22,8 @@ import com.taibahai.utils.showToast
 class HomeFragment : BaseFragment(), OnItemClick {
     lateinit var binding: FragmentHomeBinding
 
-    //    lateinit var adapter: AdapterHomeSlider
-    val showList = ArrayList<ModelHomeSlider>()
+    lateinit var adapter: AdapterHome
+    val showList = ArrayList<ModelHome>()
     val viewModel: MainViewModel by viewModels()
 
 
@@ -38,7 +40,6 @@ class HomeFragment : BaseFragment(), OnItemClick {
 
 
     override fun viewCreated() {
-        // viewModel.home(page = 1, per_page = 3)
     }
 
     override fun clicks() {
@@ -70,6 +71,14 @@ class HomeFragment : BaseFragment(), OnItemClick {
 
     override fun initAdapter() {
         showList.clear()
+        adapter = AdapterHome(this, showList)
+        showList.add(
+            ModelHome(R.drawable.hassan,"Hassan Ali", "12 minutes ago",
+                "Discover the spiritual depths and wisdom that illuminate your path with insights on Islamic teachings and practices.",R.drawable.rectangle_92,) )
+
+        adapter.setDate(showList)
+        binding.rvHome.adapter=adapter
+
 
     }
 
