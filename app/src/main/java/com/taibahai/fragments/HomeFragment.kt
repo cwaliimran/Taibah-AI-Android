@@ -1,5 +1,6 @@
 package com.taibahai.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,7 @@ import com.network.network.NetworkResult
 import com.network.utils.ProgressLoading.displayLoading
 import com.network.viewmodels.MainViewModel
 import com.taibahai.R
+import com.taibahai.activities.CreatePostActivity
 import com.taibahai.adapters.AdapterHome
 import com.taibahai.databinding.FragmentHomeBinding
 import com.taibahai.models.ModelHome
@@ -43,7 +45,10 @@ class HomeFragment : BaseFragment(), OnItemClick {
     }
 
     override fun clicks() {
-
+        binding.ivCreatePostIcon.setOnClickListener {
+            val intent= Intent(requireContext(),CreatePostActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     override fun initObservers() {

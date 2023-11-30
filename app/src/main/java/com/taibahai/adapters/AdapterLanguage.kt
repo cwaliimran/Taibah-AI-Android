@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.taibahai.R
 import com.taibahai.models.ModelLanguages
@@ -15,7 +16,12 @@ class AdapterLanguage():RecyclerView.Adapter<AdapterLanguage.ViewHolder>() {
         val view= LayoutInflater.from(parent.context).inflate(R.layout.item_language,parent,false)
         return AdapterLanguage.ViewHolder(view)
     }
-    var selectedPosition=RecyclerView.NO_POSITION
+    var selectedPosition = RecyclerView.NO_POSITION
+        set(value) {
+            // Update selected position and notify data set changed
+            field = value
+            notifyDataSetChanged()
+        }
 
 
     lateinit var showLanguage:ArrayList<ModelLanguages>
@@ -28,13 +34,15 @@ class AdapterLanguage():RecyclerView.Adapter<AdapterLanguage.ViewHolder>() {
         holder.tvLanguage.text = showLanguage[position].countryLanguage
         holder.ivCountryFlag.setImageResource(showLanguage[position].image)
 
-        /*holder.itemView.setOnClickListener {
-            onItemClick(position)
+        val isSelected = position == selectedPosition
+        val backgroundDrawableRes = if (isSelected) R.drawable.language_checked_bg else R.drawable.language_bg
+        holder.clSimple.setBackgroundResource(backgroundDrawableRes)
 
-            // Update selected position and notify data set changed
+        holder.itemView.setOnClickListener {
             selectedPosition = position
-            notifyDataSetChanged()
-        }*/
+        }
+
+
     }
 
     override fun getItemCount(): Int {
@@ -42,6 +50,7 @@ class AdapterLanguage():RecyclerView.Adapter<AdapterLanguage.ViewHolder>() {
     }
 
     class ViewHolder(ItemView: View):RecyclerView.ViewHolder(ItemView) {
+        val clSimple: ConstraintLayout = itemView.findViewById(R.id.clSimple)
         val tvLanguage: TextView = itemView.findViewById(R.id.tvLanguage)
         val ivCountryFlag: ImageView = itemView.findViewById(R.id.ivCountryFlag)
     }

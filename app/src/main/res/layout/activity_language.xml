@@ -36,11 +36,10 @@
         tools:listitem="@layout/item_language" />
 
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/button"
         style="@style/button"
-        android:insetTop="0dp"
-        android:insetBottom="0dp"
+
         android:text="Continue"
         android:background="@drawable/continue_btn_bg"
         app:layout_constraintBottom_toBottomOf="parent"

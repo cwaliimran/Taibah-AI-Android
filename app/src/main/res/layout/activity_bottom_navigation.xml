@@ -23,7 +23,9 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:itemIconTint="@drawable/nav_icon_selector"
         app:layout_constraintStart_toStartOf="parent"
+        app:itemTextColor="@drawable/nav_text_selector"
         android:background="@color/white"
         app:labelVisibilityMode="labeled"
         app:menu="@menu/bottom_nav"/>

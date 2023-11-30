@@ -2,17 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:title="Home"
         android:id="@+id/home"
-        android:icon="@drawable/ic_android_black_24dp"/>
-    <item android:title="Rank"
-        android:id="@+id/rank"
-        android:icon="@drawable/ic_android_black_24dp"/>
-    <item android:title="Search"
+        android:icon="@drawable/home_icon"/>
+    <item android:title="AI Search"
         android:id="@+id/search"
-        android:icon="@drawable/ic_android_black_24dp"/>
-    <item android:title="Profile"
-        android:id="@+id/profile"
-        android:icon="@drawable/ic_android_black_24dp"/>
+        android:icon="@drawable/search_ai_icon"/>
+    <item android:title="Recite"
+        android:id="@+id/recite"
+        android:icon="@drawable/recite_icon"/>
     <item android:title="More"
         android:id="@+id/more"
-        android:icon="@drawable/ic_android_black_24dp"/>
+        android:icon="@drawable/more_icon"/>
 </menu>
