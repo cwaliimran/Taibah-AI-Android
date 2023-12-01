@@ -26,6 +26,36 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".activities.ContactSupportActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.PrivacyPolicyActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.AboutUsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.RateAppActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.ShareActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.UpcomingFeaturesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.AIVoiceFeedbackActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.NotificationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.MyProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.SettingActivity"
+            android:exported="false" />
+        <activity
             android:name=".hadiths.HadithDetailsActivity4"
             android:exported="false" />
         <activity
@@ -43,7 +73,6 @@
         <activity
             android:name=".activities.QuranChaptersActivity"
             android:exported="false" />
-
         <activity
             android:name=".activities.HistoryActivity"
             android:exported="false" />
@@ -55,17 +84,16 @@
             android:exported="true" />
         <activity
             android:name=".activities.LoginActivity"
-            android:exported="true" >
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-    </activity>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".bottom_navigation.BottomNavigation"
-            android:exported="true"/>
-
+            android:exported="true" />
 
         <meta-data
             android:name="preloaded_fonts"

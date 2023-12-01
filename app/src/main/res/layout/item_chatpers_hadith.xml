@@ -1,14 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="model"
+            type="com.taibahai.models.ModelChapterHadiths" />
+    </data>
+<androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="wrap_content"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="10dp"
         android:background="@drawable/hadith_bg"
         android:layout_marginTop="20dp"
         android:layout_marginHorizontal="20dp"
@@ -24,6 +36,7 @@
             android:layout_marginTop="20dp"
             android:layout_marginHorizontal="20dp">
             <TextView
+                android:id="@+id/tvHadithNo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Hadith No: 1"
@@ -33,7 +46,9 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"/>
 
+
             <TextView
+                android:id="@+id/tvBookName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Sahih al-Bukhari"
@@ -64,6 +79,7 @@
                 android:textColor="#6E6E6E"/>
 
             <TextView
+                android:id="@+id/tvHadithType"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="al-Bukhari"
@@ -78,6 +94,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
+            android:id="@+id/tvArbiAyat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="إنما الأعمال بالنيات"
@@ -90,6 +107,7 @@
 
 
         <TextView
+            android:id="@+id/tvTranslation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="The reward of deeds depends upon the intentions."
@@ -101,6 +119,7 @@
             android:textSize="14sp"/>
 
         <TextView
+            android:id="@+id/btnReadMore"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Read More"
@@ -116,3 +135,4 @@
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

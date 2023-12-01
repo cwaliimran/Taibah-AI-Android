@@ -7,6 +7,6 @@ import com.taibahai.R
 class HadithDetailsActivity4 : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_hadith_details)
+        setContentView(R.layout.activity_hadith_details4)
     }
 }

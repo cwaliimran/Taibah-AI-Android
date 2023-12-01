@@ -1,5 +1,6 @@
 package com.taibahai.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.ConcatAdapter
 import com.network.base.BaseFragment
 import com.network.viewmodels.MainViewModel
 import com.taibahai.R
+import com.taibahai.activities.SettingActivity
 import com.taibahai.adapters.AdapterHome
 import com.taibahai.adapters.AdapterMore
 import com.taibahai.adapters.AdapterMoreLevels
@@ -41,6 +43,10 @@ class MoreFragment : BaseFragment() {
     }
 
     override fun clicks() {
+        binding.ivSetting.setOnClickListener {
+            val intent= Intent(requireContext(),SettingActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     override fun initAdapter() {
