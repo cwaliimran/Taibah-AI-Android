@@ -1,12 +1,21 @@
 package com.taibahai.activities
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import com.taibahai.R
 
-class UpcomingFeaturesActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_upcoming_features)
+import com.network.base.BaseActivity
+import com.taibahai.databinding.ActivityUpcomingFeaturesBinding
+
+class UpcomingFeaturesActivity : BaseActivity() {
+    lateinit var binding:ActivityUpcomingFeaturesBinding
+
+
+    override fun onCreate() {
+        binding=ActivityUpcomingFeaturesBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+    }
+
+    override fun clicks() {
+       binding.ivBack.setOnClickListener {
+           onBackPressed()
+       }
     }
 }

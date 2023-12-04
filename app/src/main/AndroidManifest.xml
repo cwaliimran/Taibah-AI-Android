@@ -25,6 +25,32 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+
+        <activity
+            android:name=".search_database_tablayout.SearchDatabaseActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".activities.InheritanceLawActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.ScholarDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.Activity100Scholars"
+            android:exported="false" />
+        <activity
+            android:name=".activities.BookPDFDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.BooksAndPDFActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.ZakatInfoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.ZakatCalculatorActivity"
+            android:exported="false" />
         <activity
             android:name=".activities.ContactSupportActivity"
             android:exported="false" />
@@ -84,16 +110,18 @@
             android:exported="true" />
         <activity
             android:name=".activities.LoginActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:exported="true" />
         <activity
             android:name=".bottom_navigation.BottomNavigation"
-            android:exported="true" />
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+    </activity>
+
 
         <meta-data
             android:name="preloaded_fonts"

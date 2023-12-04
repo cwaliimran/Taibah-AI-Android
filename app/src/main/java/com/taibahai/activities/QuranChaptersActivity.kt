@@ -19,7 +19,9 @@ class QuranChaptersActivity : BaseActivity() {
         setContentView(binding.root)    }
 
     override fun clicks() {
-
+        binding.ivBack.setOnClickListener {
+            onBackPressed()
+        }
     }
 
     override fun initAdapter() {

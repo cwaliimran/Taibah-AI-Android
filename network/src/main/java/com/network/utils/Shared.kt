@@ -85,6 +85,15 @@ class SharedPref(myApp: AppClass) {
         return sharedPref?.getLong(key, 0)
     }
 
+    fun setIsArchived(isArchived: Boolean) {
+        val editor = sharedPref?.edit()
+        editor?.putBoolean("isArchived", isArchived)
+        editor?.apply()
+    }
+
+    fun getIsArchived(): Boolean {
+        return sharedPref?.getBoolean("isArchived", false) ?: false
+    }
 
     //store object
     fun storeObject(key: String?, obj: Any?) {

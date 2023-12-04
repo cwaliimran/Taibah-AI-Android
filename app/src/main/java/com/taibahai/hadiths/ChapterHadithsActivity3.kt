@@ -22,7 +22,9 @@ class ChapterHadithsActivity3 : BaseActivity() {
     }
 
     override fun clicks() {
-
+        binding.ivBack.setOnClickListener {
+            onBackPressed()
+        }
     }
 
     override fun initAdapter() {

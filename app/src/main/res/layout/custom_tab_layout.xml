@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- res/layout/custom_tab_layout.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/customTabLayout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center">
+
+    <ImageView
+        android:id="@+id/tabIcon"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
+        android:layout_marginBottom="4dp"
+    android:src="@drawable/tab_hadithicon"
+    android:contentDescription="Tab Icon"/>
+
+    <TextView
+        android:id="@android:id/text1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:text="hadith"
+        android:layout_marginStart="10dp"
+        android:fontFamily="@font/poppins_medium"
+        android:textColor="@android:color/black"
+    android:layout_marginBottom="2dp"
+    />
+</LinearLayout>

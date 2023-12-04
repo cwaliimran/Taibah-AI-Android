@@ -22,6 +22,9 @@ class HadithBooksActivity1 : BaseActivity() {
     }
 
     override fun clicks() {
+        binding.ivBack.setOnClickListener {
+            onBackPressed()
+        }
     }
 
     override fun initAdapter() {

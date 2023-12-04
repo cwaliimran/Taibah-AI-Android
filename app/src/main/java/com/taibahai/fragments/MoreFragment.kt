@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.ConcatAdapter
 import com.network.base.BaseFragment
 import com.network.viewmodels.MainViewModel
 import com.taibahai.R
+import com.taibahai.activities.QuranChaptersActivity
 import com.taibahai.activities.SettingActivity
 import com.taibahai.adapters.AdapterHome
 import com.taibahai.adapters.AdapterMore
@@ -25,6 +26,7 @@ class MoreFragment : BaseFragment() {
     val viewModel: MainViewModel by viewModels()
     lateinit var adapter: AdapterMore
     val showList = ArrayList<ModelMore>()
+    val showLevelList=ArrayList<ModelMoreLevels>()
 
 
     override fun onCreateView(
@@ -51,7 +53,7 @@ class MoreFragment : BaseFragment() {
 
     override fun initAdapter() {
         showList.clear()
-        adapter = AdapterMore(showList)
+        adapter = AdapterMore(requireContext(),showList)
         val moreFree=ArrayList<ModelMoreLevels>()
 
         moreFree.add(ModelMoreLevels(R.drawable.search_icon, "30 AI Tokens (monthly)"))
@@ -81,22 +83,16 @@ class MoreFragment : BaseFragment() {
         moreLevel3.add(ModelMoreLevels(R.drawable.ads_icon, "Ads"))
         moreLevel3.add(ModelMoreLevels(R.drawable.bookspdf_icon, "Books & PDF"))
         moreLevel3.add(ModelMoreLevels(R.drawable.inheritancelaw_icon, "Inheritance Law"))
+        moreLevel3.add(ModelMoreLevels(R.drawable.sd_icon, "Search Database Hadith, Surah"))
         showList.add(ModelMore("Level 3" ,"Exclusive: Diamond Subscription Package",moreLevel3) )
+
 
 
 
         adapter.setDate(showList)
         binding.rvMoreList.adapter=adapter
-
-
-
-
-
-
     }
 
-    override fun initObservers() {
 
-    }
 
 }

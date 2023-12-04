@@ -1,8 +1,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/menu_profile"
-        android:title="Profile" />
+        android:id="@+id/menu_archive"
+        android:title="Archive" />
     <item
-        android:id="@+id/menu_report"
-        android:title="Report" />
+        android:id="@+id/menu_history"
+        android:title="History" />
 </menu>

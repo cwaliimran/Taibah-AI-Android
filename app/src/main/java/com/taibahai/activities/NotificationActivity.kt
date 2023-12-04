@@ -23,7 +23,9 @@ class NotificationActivity : BaseActivity() {
     }
 
     override fun clicks() {
-
+        binding.ivBack.setOnClickListener {
+            onBackPressed()
+        }
     }
 
     override fun initAdapter() {
