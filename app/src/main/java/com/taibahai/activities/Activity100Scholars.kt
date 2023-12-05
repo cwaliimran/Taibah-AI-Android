@@ -3,17 +3,24 @@ package com.taibahai.activities
 import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.viewModels
 import com.network.base.BaseActivity
+import com.network.network.NetworkResult
+import com.network.utils.ProgressLoading.displayLoading
+import com.network.viewmodels.MainViewModel
 import com.taibahai.R
 import com.taibahai.adapters.Adapter100Scholars
 import com.taibahai.databinding.ActivityActivity100ScholarsBinding
 import com.taibahai.models.Model100Scholars
 import com.taibahai.models.ModelSettings
+import com.taibahai.utils.showToast
 
 class Activity100Scholars : BaseActivity() {
     lateinit var binding:ActivityActivity100ScholarsBinding
     lateinit  var adapter:Adapter100Scholars
     val scholarList=ArrayList<Model100Scholars>()
+    val viewModel : MainViewModel by viewModels()
+
 
 
     override fun onCreate() {
@@ -40,6 +47,8 @@ class Activity100Scholars : BaseActivity() {
         binding.rv100Scholars.adapter=adapter
 
     }
+
+
 
 
 }

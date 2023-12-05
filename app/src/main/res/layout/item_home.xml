@@ -87,9 +87,8 @@
                         android:layout_height="32dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        android:visibility="invisible"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        android:src="@drawable/delete"/>
+                        android:src="@drawable/dots_icon"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -150,7 +149,7 @@
                         android:drawableStart="@drawable/likes_icon"/>
 
                     <TextView
-                        android:id="@+id/commentsCounting"
+                        android:id="@+id/commentCounts"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
@@ -204,7 +203,7 @@
                         android:drawablePadding="10dp"/>
 
                     <TextView
-                        android:id="@+id/tvComment"
+                        android:id="@+id/tvAddComment"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Comment"

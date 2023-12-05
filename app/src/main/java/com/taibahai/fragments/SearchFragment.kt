@@ -28,6 +28,7 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import androidx.lifecycle.Observer
+import com.network.interfaces.OnItemClick
 import com.network.utils.AppClass
 import com.network.utils.SharedPref
 import com.taibahai.activities.HistoryActivity
@@ -40,7 +41,7 @@ import java.io.IOException
 import java.util.UUID
 
 
-class SearchFragment : BaseFragment() {
+class SearchFragment : BaseFragment(),OnItemClick {
     lateinit var binding: FragmentSearchBinding
     private val client = OkHttpClient()
     private lateinit var chatDatabase: ChatDatabase
@@ -77,11 +78,11 @@ class SearchFragment : BaseFragment() {
     }
 
     override fun clicks() {
-        binding?.sendBtn?.setOnClickListener {
-            userQuestion = binding?.messageBox?.text?.toString()?.trim().toString()
+        binding.sendBtn.setOnClickListener {
+            userQuestion = binding.messageBox.text.toString().trim().toString()
             if (userQuestion != null) {
                 if (userQuestion.isNotEmpty()) {
-                    binding?.messageBox?.text?.clear()
+                    binding.messageBox.text.clear()
 
                     // Generate or use the existing conversationId for this conversation
                     currentChatId = UUID.randomUUID().toString()
@@ -116,28 +117,28 @@ class SearchFragment : BaseFragment() {
 
 
     private fun updateUI(messages: List<ModelChatMessage>) {
-        (binding?.rvSearchAI?.adapter as AdapterAISearch).messageList.clear()
+        (binding.rvSearchAI.adapter as AdapterAISearch).messageList.clear()
 
         if (isNewMessage) {
             for (i in messages.indexOfFirst { it.id == archiveMessageId } + 1 until messages.size) {
                 val message = messages[i]
                 val modelMessage = ModelSearchAI(message.message, message.isUser)
-                (binding?.rvSearchAI?.adapter as AdapterAISearch).messageList.add(modelMessage)
+                (binding.rvSearchAI.adapter as AdapterAISearch).messageList.add(modelMessage)
             }
         }
         else {
             // Display the entire chat
             for (message in messages) {
                 val modelMessage = ModelSearchAI(message.message, message.isUser)
-                (binding?.rvSearchAI?.adapter as AdapterAISearch).messageList.add(modelMessage)
+                (binding.rvSearchAI.adapter as AdapterAISearch).messageList.add(modelMessage)
             }
         }
 
-        binding?.rvSearchAI?.adapter?.notifyDataSetChanged()
+        binding.rvSearchAI.adapter?.notifyDataSetChanged()
 
-        val itemCount = (binding?.rvSearchAI?.adapter as AdapterAISearch).itemCount
+        val itemCount = (binding.rvSearchAI.adapter as AdapterAISearch).itemCount
         if (itemCount > 0) {
-            binding?.rvSearchAI?.smoothScrollToPosition(itemCount - 1)
+            binding.rvSearchAI.smoothScrollToPosition(itemCount - 1)
         }
     }
 
@@ -318,6 +319,8 @@ class SearchFragment : BaseFragment() {
         isNewMessage = false
         getAllMessages()
     }
+
+
 
 
 

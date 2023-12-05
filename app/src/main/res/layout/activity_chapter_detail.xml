@@ -44,10 +44,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_weight="1"
-                android:fontFamily="@font/poppins_semibold"
+                android:fontFamily="@font/poppins_medium"
                 android:text="Quran"
                 android:textColor="@color/white"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -64,28 +64,43 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <include
-        android:id="@+id/includedLayout"
-        layout="@layout/item_makki"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout5" />
+     <androidx.core.widget.NestedScrollView
+             android:layout_width="match_parent"
+             android:layout_height="0dp"
+             app:layout_constraintBottom_toTopOf="@+id/ii"
+             app:layout_constraintEnd_toEndOf="parent"
+             app:layout_constraintStart_toStartOf="parent"
+             app:layout_constraintTop_toBottomOf="@id/constraintLayout5">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvQuranDetail"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginHorizontal="20dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toTopOf="@+id/ii"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/includedLayout"
-        tools:itemCount="4"
-        tools:listitem="@layout/item_quran_chapter_detail" />
+             <androidx.constraintlayout.widget.ConstraintLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content">
 
+                 <include
+                     android:id="@+id/includedLayout"
+                     layout="@layout/item_makki"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     app:layout_constraintEnd_toEndOf="parent"
+                     app:layout_constraintStart_toStartOf="parent"
+                     />
+
+                 <androidx.recyclerview.widget.RecyclerView
+                     android:id="@+id/rvQuranDetail"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:layout_marginHorizontal="20dp"
+                     app:layout_constraintBottom_toBottomOf="parent"
+                     android:layout_marginBottom="20dp"
+                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                     app:layout_constraintEnd_toEndOf="parent"
+                     app:layout_constraintStart_toStartOf="parent"
+                     app:layout_constraintTop_toBottomOf="@+id/includedLayout"
+                     tools:itemCount="4"
+                     tools:listitem="@layout/item_quran_chapter_detail" />
+
+             </androidx.constraintlayout.widget.ConstraintLayout>
+     </androidx.core.widget.NestedScrollView>
     <include
         android:id="@+id/ii"
         layout="@layout/item_playing_audio"
@@ -95,8 +110,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginBottom="20dp"
-        android:layout_marginTop="20dp"
-        app:layout_constraintTop_toBottomOf="@id/rvQuranDetail"/>
+        android:layout_marginTop="20dp"/>
 
 
 

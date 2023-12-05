@@ -8,10 +8,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.network.interfaces.OnItemClick
+import com.taibahai.activities.HomeDetailActivity
 import com.taibahai.databinding.ItemHomeBinding
 import com.taibahai.models.ModelHome
 
-class AdapterHome( private var listener: OnItemClick, var showData: MutableList<ModelHome>
+class AdapterHome(  var showData: MutableList<ModelHome>
 ) : RecyclerView.Adapter<AdapterHome.ViewHolder>() {
 
     lateinit var binding: ItemHomeBinding
@@ -48,7 +49,9 @@ class AdapterHome( private var listener: OnItemClick, var showData: MutableList<
 
         }
 
-        holder.binding.tvComment.setOnClickListener {
+        holder.binding.tvAddComment.setOnClickListener {
+                val intent=Intent(holder.itemView.context,HomeDetailActivity::class.java)
+                holder.itemView.context.startActivity(intent)
 
 
         }

@@ -10,10 +10,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.network.interfaces.OnItemClick
 import com.taibahai.R
 import com.taibahai.models.ModelSearchAI
 
-class AdapterAISearch(val context: Context, val messageList: ArrayList<ModelSearchAI>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class AdapterAISearch( val context: Context, val messageList: ArrayList<ModelSearchAI>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     val ItemSend = 1
     val ItemReceive = 2
@@ -47,7 +48,9 @@ class AdapterAISearch(val context: Context, val messageList: ArrayList<ModelSear
         } else {
             val viewHolder = holder as ReceiveMessageViewHolder
             viewHolder.receiveMessage.text = currentMessage.message
+
             holder.ivSpeak.setOnClickListener {
+
                 speakText(textToSpeak)
 
 

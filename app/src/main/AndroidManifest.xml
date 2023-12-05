@@ -25,11 +25,12 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-
+        <activity
+            android:name=".activities.HomeDetailActivity"
+            android:exported="false" />
         <activity
             android:name=".search_database_tablayout.SearchDatabaseActivity"
             android:exported="true" />
-
         <activity
             android:name=".activities.InheritanceLawActivity"
             android:exported="false" />
@@ -115,13 +116,12 @@
             android:name=".bottom_navigation.BottomNavigation"
             android:exported="true"
             android:windowSoftInputMode="adjustPan">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-    </activity>
-
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <meta-data
             android:name="preloaded_fonts"

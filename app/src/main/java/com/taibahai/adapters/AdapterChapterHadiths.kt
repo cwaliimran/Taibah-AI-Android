@@ -1,10 +1,12 @@
 package com.taibahai.adapters
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.taibahai.databinding.ItemChatpersHadithBinding
 import com.taibahai.databinding.ItemHadithChapterBinding
+import com.taibahai.hadiths.HadithDetailsActivity4
 import com.taibahai.models.ModelChapterHadiths
 import com.taibahai.models.ModelHadithChapter
 
@@ -30,6 +32,12 @@ class AdapterChapterHadiths(var showData: MutableList<ModelChapterHadiths>):Recy
         holder.binding.tvHadithType.text=showData[position].hadithType
         holder.binding.tvArbiAyat.text=showData[position].arbiAyat
         holder.binding.tvTranslation.text=showData[position].translation
+
+        binding.btnReadMore.setOnClickListener {
+            val intent= Intent(holder.itemView.context,HadithDetailsActivity4::class.java)
+            holder.itemView.context.startActivity(intent)
+
+        }
 
     }
 

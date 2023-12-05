@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import com.network.base.BaseFragment
@@ -15,14 +16,16 @@ import com.network.viewmodels.MainViewModel
 import com.taibahai.R
 import com.taibahai.activities.CreatePostActivity
 import com.taibahai.adapters.AdapterHome
+import com.taibahai.bottom_navigation.BottomNavigation
 import com.taibahai.databinding.FragmentHomeBinding
 import com.taibahai.models.ModelHome
 import com.taibahai.models.ModelHomeSlider
 import com.taibahai.utils.showToast
 
 
-class HomeFragment : BaseFragment(), OnItemClick {
+class HomeFragment : BaseFragment() {
     lateinit var binding: FragmentHomeBinding
+
 
     lateinit var adapter: AdapterHome
     val showList = ArrayList<ModelHome>()
@@ -37,7 +40,7 @@ class HomeFragment : BaseFragment(), OnItemClick {
             inflater, R.layout.fragment_home, container, false
         )
 
-        return binding?.getRoot()
+        return binding.getRoot()
     }
 
 
@@ -76,7 +79,7 @@ class HomeFragment : BaseFragment(), OnItemClick {
 
     override fun initAdapter() {
         showList.clear()
-        adapter = AdapterHome(this, showList)
+        adapter = AdapterHome( showList)
         showList.add(
             ModelHome(R.drawable.hassan,"Hassan Ali", "12 minutes ago",
                 "Discover the spiritual depths and wisdom that illuminate your path with insights on Islamic teachings and practices.",R.drawable.rectangle_92,) )
@@ -86,5 +89,7 @@ class HomeFragment : BaseFragment(), OnItemClick {
 
 
     }
+
+
 
 }

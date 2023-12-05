@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.Observer
 import com.network.base.BaseActivity
+import com.network.interfaces.OnItemClick
 import com.taibahai.R
 import com.taibahai.adapters.AdapterAISearch
 import com.taibahai.databinding.ActivityHistoryBinding
