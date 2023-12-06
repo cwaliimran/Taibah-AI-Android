@@ -28,7 +28,7 @@ class HomeFragment : BaseFragment() {
 
 
     lateinit var adapter: AdapterHome
-    val showList = ArrayList<ModelHome>()
+    private var showList: MutableList<com.network.models.ModelHome.Data> = mutableListOf()
     val viewModel: MainViewModel by viewModels()
 
 
@@ -45,6 +45,7 @@ class HomeFragment : BaseFragment() {
 
 
     override fun viewCreated() {
+        viewModel.home(pageno = 1)
     }
 
     override fun clicks() {
@@ -67,7 +68,8 @@ class HomeFragment : BaseFragment() {
                 }
 
                 is NetworkResult.Success -> {
-
+                    showList.addAll((it.data?.data ?: listOf()))
+                    adapter.notifyDataSetChanged()
                 }
 
                 is NetworkResult.Error -> {
@@ -78,14 +80,8 @@ class HomeFragment : BaseFragment() {
     }
 
     override fun initAdapter() {
-        showList.clear()
-        adapter = AdapterHome( showList)
-        showList.add(
-            ModelHome(R.drawable.hassan,"Hassan Ali", "12 minutes ago",
-                "Discover the spiritual depths and wisdom that illuminate your path with insights on Islamic teachings and practices.",R.drawable.rectangle_92,) )
-
-        adapter.setDate(showList)
-        binding.rvHome.adapter=adapter
+        adapter = AdapterHome(showList)
+        binding.rvHome.adapter = adapter
 
 
     }

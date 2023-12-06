@@ -4,7 +4,7 @@ data class ModelHome(
     var status: Int = 0,
     var message: String = "",
     var total_pages: Int = 0,
-    var `data`: List<Data> = listOf()
+    var data: List<Data> = listOf()
 ) {
     data class Data(
         var feed_id: String = "",
@@ -18,7 +18,7 @@ data class ModelHome(
         var likes: Int = 0
     ) {
         data class FeedAttachment(
-            var `file`: String = "",
+            var file: String = "",
             var file_type: String = ""
         )
     }

@@ -35,12 +35,12 @@ class MyProfileActivity : BaseActivity() {
 
     override fun initAdapter() {
         showList.clear()
-        adapter = AdapterHome(showList)
+        //adapter = AdapterHome(showList)
         showList.add(
             ModelHome(R.drawable.hassan,"Hassan Ali", "12 minutes ago",
                 "Discover the spiritual depths and wisdom that illuminate your path with insights on Islamic teachings and practices.",R.drawable.rectangle_92,) )
 
-        adapter.setDate(showList)
+        //adapter.setDate(showList)
         binding.rvProfile.adapter=adapter
 
 

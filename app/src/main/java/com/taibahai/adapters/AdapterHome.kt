@@ -12,7 +12,7 @@ import com.taibahai.activities.HomeDetailActivity
 import com.taibahai.databinding.ItemHomeBinding
 import com.taibahai.models.ModelHome
 
-class AdapterHome(  var showData: MutableList<ModelHome>
+class AdapterHome(  var showData: MutableList<com.network.models.ModelHome.Data>
 ) : RecyclerView.Adapter<AdapterHome.ViewHolder>() {
 
     lateinit var binding: ItemHomeBinding
@@ -22,11 +22,11 @@ class AdapterHome(  var showData: MutableList<ModelHome>
         binding = ItemHomeBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
-
-    fun setDate(list: ArrayList<ModelHome>) {
+/*
+    fun setDate(list: List<com.network.models.ModelHome>) {
         showData = list
         notifyDataSetChanged()
-    }
+    }*/
 
     override fun getItemCount(): Int {
         return showData.size
@@ -37,11 +37,23 @@ class AdapterHome(  var showData: MutableList<ModelHome>
         val userData = showData[position]
         holder.binding.model = userData
 
-        holder.binding.ivProfileImage.setImageResource(showData[position].profileImage)
+        Glide.with(holder.itemView.context).load(userData.user_image).into(holder.binding.ivProfileImage)
+        holder.binding.tvUserName.text=userData.user_name
+        holder.binding.tvTimesAgo.text = userData.timesince
+        holder.binding.tvDescription.text = userData.description
+        holder.binding.likesCounting.text = userData.likes.toString()
+        holder.binding.commentCounts.text = userData.comments.toString()
+        Glide.with(holder.itemView.context).load(userData.feed_attachments.firstOrNull()?.file).into(holder.binding.ivUploadImage)
+
+
+
+        /*holder.binding.ivProfileImage.setImageResource(showData[position].profileImage)
         holder.binding.tvUserName.text = showData[position].userName
         holder.binding.tvTimesAgo.text = showData[position].timesAgo
         holder.binding.ivUploadImage.setImageResource(showData[position].userPost)
-        holder.binding.tvDescription.text = showData[position].userDescription
+        holder.binding.tvDescription.text = showData[position].userDescription*/
+
+
 
 
 

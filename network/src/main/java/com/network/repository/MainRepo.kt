@@ -245,7 +245,7 @@ class MainRepo : BaseApiResponse() {
                 // Create a request body with file and image media type
                 val reqFile1: RequestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
                 body = MultipartBody.Part.createFormData(
-                    "url", file.name, reqFile1
+                    "file", file.name, reqFile1
                 )
             }
             return uploadFileMutableLiveData.postValue(safeApiCall {
