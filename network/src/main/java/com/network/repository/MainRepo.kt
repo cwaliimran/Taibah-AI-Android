@@ -1,7 +1,6 @@
 package com.network.repository
 
 import android.util.Log
-import com.google.gson.JsonObject
 import com.network.models.ModelBooks
 import com.network.models.ModelDBSearch
 import com.network.models.ModelDailyAlert
@@ -9,7 +8,6 @@ import com.network.models.ModelGetFeeds
 import com.network.models.ModelHome
 import com.network.models.ModelPostFeed
 import com.network.models.ModelPrivacyTerms
-import com.network.models.ModelProfile
 import com.network.models.ModelScholars
 import com.network.models.ModelUpcoming
 import com.network.models.ModelUploadFile
@@ -58,15 +56,11 @@ class MainRepo : BaseApiResponse() {
     }
 
 
-    val profileMutableLiveData: SingleLiveEvent<NetworkResult<ModelUser>> by lazy {
-        SingleLiveEvent()
-    }
-
 
     suspend fun profile() {
-        profileMutableLiveData.value = null
-        profileMutableLiveData.postValue(NetworkResult.Loading())
-        profileMutableLiveData.postValue(safeApiCall {
+        socialLoginMutableLiveData.value = null
+        socialLoginMutableLiveData.postValue(NetworkResult.Loading())
+        socialLoginMutableLiveData.postValue(safeApiCall {
             apiService.profile()
         })
     }

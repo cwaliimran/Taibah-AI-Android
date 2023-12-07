@@ -80,14 +80,14 @@
                         android:layout_marginEnd="20dp"
                         android:textColor="@color/silver"
                         android:textSize="14sp"
-                        app:layout_constraintEnd_toStartOf="@+id/imageView4"
+                        app:layout_constraintEnd_toStartOf="@+id/ivDots"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/tvUserName" />
 
                     <ImageView
-                        android:id="@+id/imageView4"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
+                        android:id="@+id/ivDots"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
                         android:src="@drawable/dots_icon"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"

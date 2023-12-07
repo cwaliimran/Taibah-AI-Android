@@ -12,7 +12,8 @@ data class ModelScholars(
         var description: String = "",
         var created_at: String = "",
         var updated_at: Any = Any(),
-        var attachments: List<Attachment> = listOf()
+        var attachments: List<Attachment> = listOf(),
+        var books: List<Any> = listOf()
     ) {
         data class Attachment(
             var `file`: String = "",

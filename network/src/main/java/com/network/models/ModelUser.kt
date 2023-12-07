@@ -3,7 +3,7 @@ package com.network.models
 data class ModelUser(
     var status: Int = 0,
     var message: String = "",
-    var `data`: Data = Data()
+    var data: Data = Data()
 ) {
     data class Data(
         var id: String = "",
@@ -14,6 +14,6 @@ data class ModelUser(
         var social_id: Any = Any(),
         var social_type: String = "",
         var created_at: String = "",
-        var feed: List<Any> = listOf()
+        var feed: MutableList<ModelHome.Data> = mutableListOf()
     )
 }

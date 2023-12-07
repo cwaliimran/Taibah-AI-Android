@@ -12,7 +12,6 @@ import com.network.models.ModelGetFeeds
 import com.network.models.ModelHome
 import com.network.models.ModelPostFeed
 import com.network.models.ModelPrivacyTerms
-import com.network.models.ModelProfile
 import com.network.models.ModelScholars
 import com.network.models.ModelUpcoming
 import com.network.models.ModelUploadFile

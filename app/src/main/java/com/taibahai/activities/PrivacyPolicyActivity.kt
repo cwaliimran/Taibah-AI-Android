@@ -15,6 +15,7 @@ import com.taibahai.utils.showToast
 class PrivacyPolicyActivity : BaseActivity() {
     lateinit var binding:ActivityPrivacyPolicyBinding
     val viewModel : MainViewModel by viewModels()
+    var textPrivacy=""
 
 
 
@@ -42,7 +43,11 @@ class PrivacyPolicyActivity : BaseActivity() {
                 }
 
                 is NetworkResult.Success -> {
-
+                    textPrivacy= it.data?.data.toString()
+                    if(!textPrivacy.isNullOrEmpty())
+                        {
+                            binding.tvPrivacyPolicy.text=textPrivacy
+                        }
                 }
 
                 is NetworkResult.Error -> {
@@ -50,5 +55,10 @@ class PrivacyPolicyActivity : BaseActivity() {
                 }
             }
         }
+    }
+
+    override fun apiAndArgs() {
+        super.apiAndArgs()
+        viewModel.privacy()
     }
 }

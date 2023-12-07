@@ -69,9 +69,8 @@
 
         <ImageView
             android:id="@+id/ivIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/sheikhonline"
+            android:layout_width="62dp"
+            android:layout_height="62dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -83,7 +82,6 @@
             android:layout_marginTop="10dp"
             android:fontFamily="@font/poppins"
             android:gravity="center"
-            android:text="Sheikh online"
             android:textColor="#4F4F4F"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"

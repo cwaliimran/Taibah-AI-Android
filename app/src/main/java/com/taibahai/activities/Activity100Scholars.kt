@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
 import com.network.base.BaseActivity
+import com.network.models.ModelScholars
 import com.network.network.NetworkResult
 import com.network.utils.ProgressLoading.displayLoading
 import com.network.viewmodels.MainViewModel
@@ -18,7 +19,7 @@ import com.taibahai.utils.showToast
 class Activity100Scholars : BaseActivity() {
     lateinit var binding:ActivityActivity100ScholarsBinding
     lateinit  var adapter:Adapter100Scholars
-    val scholarList=ArrayList<Model100Scholars>()
+    val scholarList:MutableList<ModelScholars.Data> =mutableListOf()
     val viewModel : MainViewModel by viewModels()
 
 
@@ -34,18 +35,41 @@ class Activity100Scholars : BaseActivity() {
         }
     }
 
+    override fun initObservers() {
+        super.initObservers()
+        viewModel.scholarsLiveData.observe(this) {
+            if (it == null) {
+                return@observe
+            }
+            displayLoading(false)
+            when (it) {
+                is NetworkResult.Loading -> {
+                    displayLoading(true)
+                }
+
+                is NetworkResult.Success -> {
+                    scholarList.addAll((it.data?.data ?: listOf()))
+                    adapter.notifyDataSetChanged()
+                }
+
+                is NetworkResult.Error -> {
+                    showToast(it.message.toString())
+                }
+            }
+        }
+    }
+
     override fun initAdapter() {
         super.initAdapter()
         scholarList.clear()
         adapter= Adapter100Scholars(scholarList)
-        scholarList.add(Model100Scholars(R.drawable.profileicon, "Imam Al-Ghazali","(1058–1111)"))
-        scholarList.add(Model100Scholars(R.drawable.profileicon, "Sheikh Ibn Taymiyyah","(1263–1328)"))
-        scholarList.add(Model100Scholars(R.drawable.profileicon, "Imam Ibn Kathir","(1301–1373)"))
-        scholarList.add(Model100Scholars(R.drawable.profileicon, "Sheikh Yusuf al-Qaradawi","(1926–)"))
-        scholarList.add(Model100Scholars(R.drawable.profileicon, "Imam Malik ibn Anas","(711–795)"))
-        adapter.setDate(scholarList)
         binding.rv100Scholars.adapter=adapter
 
+    }
+
+    override fun apiAndArgs() {
+        super.apiAndArgs()
+        viewModel.scholars()
     }
 
 

@@ -14,6 +14,7 @@ import com.taibahai.utils.showToast
 class AboutUsActivity : BaseActivity() {
     lateinit var binding:ActivityAboutUsBinding
     val viewModel : MainViewModel by viewModels()
+    var textAboutUs=""
 
 
 
@@ -41,7 +42,11 @@ class AboutUsActivity : BaseActivity() {
                 }
 
                 is NetworkResult.Success -> {
-
+                    textAboutUs = it.data?.data.toString()
+                    if (!textAboutUs.isNullOrEmpty())
+                    {
+                        binding.tvAboutUs.text=textAboutUs
+                    }
                 }
 
                 is NetworkResult.Error -> {
@@ -49,5 +54,10 @@ class AboutUsActivity : BaseActivity() {
                 }
             }
         }
+    }
+
+    override fun apiAndArgs() {
+        super.apiAndArgs()
+        viewModel.about()
     }
 }

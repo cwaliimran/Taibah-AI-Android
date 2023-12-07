@@ -43,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:fontFamily="@font/poppins_medium"
-                android:text="Imam Al-Ghazali"
+                android:text=""
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -51,14 +51,16 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:id="@+id/tvScholarEra"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:fontFamily="@font/poppins"
-                android:text="(1058–1111)"
+                android:text=""
                 android:textColor="@color/white"
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@id/ivBack"
                 app:layout_constraintTop_toBottomOf="@id/tvScholarName" />
 
@@ -85,7 +87,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
                 android:fontFamily="@font/poppins"
-                android:text="@string/scholar_detail"
+                android:text=""
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 android:layout_marginTop="20dp"

@@ -2,9 +2,12 @@ package com.taibahai.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
+import com.bumptech.glide.Glide
 import com.network.base.BaseActivity
 import com.network.interfaces.OnItemClick
+import com.network.models.ModelUser
 import com.network.network.NetworkResult
 import com.network.utils.ProgressLoading.displayLoading
 import com.network.viewmodels.MainViewModel
@@ -14,10 +17,10 @@ import com.taibahai.databinding.ActivityMyProfileBinding
 import com.taibahai.models.ModelHome
 import com.taibahai.utils.showToast
 
-class MyProfileActivity : BaseActivity() {
+class MyProfileActivity : BaseActivity(),OnItemClick {
     lateinit var binding:ActivityMyProfileBinding
     lateinit var adapter: AdapterHome
-    val showList = ArrayList<ModelHome>()
+    private var profileFeedList: MutableList<com.network.models.ModelHome.Data> = mutableListOf()
     val viewModel : MainViewModel by viewModels()
 
 
@@ -33,20 +36,6 @@ class MyProfileActivity : BaseActivity() {
         }
     }
 
-    override fun initAdapter() {
-        showList.clear()
-        //adapter = AdapterHome(showList)
-        showList.add(
-            ModelHome(R.drawable.hassan,"Hassan Ali", "12 minutes ago",
-                "Discover the spiritual depths and wisdom that illuminate your path with insights on Islamic teachings and practices.",R.drawable.rectangle_92,) )
-
-        //adapter.setDate(showList)
-        binding.rvProfile.adapter=adapter
-
-
-    }
-
-
     override fun initObservers() {
         super.initObservers()
         viewModel.socialLoginLiveData.observe(this) {
@@ -60,6 +49,12 @@ class MyProfileActivity : BaseActivity() {
                 }
 
                 is NetworkResult.Success -> {
+                    showToast(it.data?.message.toString())
+
+                    val profileData: ModelUser.Data = it.data!!.data
+                    profileFeedList.addAll(profileData.feed)
+                    updateUI(profileData)
+                    adapter.notifyDataSetChanged()
 
                 }
 
@@ -70,5 +65,21 @@ class MyProfileActivity : BaseActivity() {
         }
     }
 
+    override fun initAdapter() {
+        adapter = AdapterHome(this,profileFeedList)
+        binding.rvProfile.adapter = adapter
+    }
 
+    override fun apiAndArgs() {
+
+        viewModel.profile()
+
+    }
+
+    private fun updateUI(profileData: ModelUser.Data) {
+
+        binding.tvName.text = profileData.name
+        binding.tvEmail.text = profileData.email
+        Glide.with(this).load(profileData.image).into(binding.ivProfileImage)
+    }
 }

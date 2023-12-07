@@ -2,6 +2,7 @@ package com.taibahai.activities
 
 
 import androidx.activity.viewModels
+import com.bumptech.glide.Glide
 import com.network.base.BaseActivity
 import com.network.network.NetworkResult
 import com.network.utils.ProgressLoading.displayLoading
@@ -39,7 +40,8 @@ class UpcomingFeaturesActivity : BaseActivity() {
                 }
 
                 is NetworkResult.Success -> {
-
+                    Glide.with(this).load(it.data?.data?.firstOrNull()?.icon).into(binding.ivIcon)
+                    binding.tvTitle.text=it.data?.data?.firstOrNull()?.title
                 }
 
                 is NetworkResult.Error -> {
@@ -47,5 +49,10 @@ class UpcomingFeaturesActivity : BaseActivity() {
                 }
             }
         }
+    }
+
+    override fun apiAndArgs() {
+        super.apiAndArgs()
+        viewModel.upcoming()
     }
 }

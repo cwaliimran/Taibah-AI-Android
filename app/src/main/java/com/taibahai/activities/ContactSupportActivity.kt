@@ -14,6 +14,8 @@ import com.taibahai.utils.showToast
 class ContactSupportActivity : BaseActivity() {
     lateinit var binding:ActivityContactSupportBinding
     val viewModel : MainViewModel by viewModels()
+    var title=""
+    var message=""
 
 
 
@@ -25,6 +27,13 @@ class ContactSupportActivity : BaseActivity() {
     override fun clicks() {
         binding.ivBack.setOnClickListener {
             onBackPressed()
+        }
+
+        binding.btnSend.setOnClickListener {
+            if(checkField())
+            {
+                viewModel.support(subject = title, message=message)
+            }
         }
     }
 
@@ -41,6 +50,9 @@ class ContactSupportActivity : BaseActivity() {
                 }
 
                 is NetworkResult.Success -> {
+                    it.data?.message?.let { it1 -> showToast(it1) }
+                    binding.etTitle.text.clear()
+                    binding.etMessage.text.clear()
 
                 }
 
@@ -49,5 +61,27 @@ class ContactSupportActivity : BaseActivity() {
                 }
             }
         }
+    }
+
+    private fun checkField():Boolean
+    {
+        title=binding.etTitle.text.toString()
+        message=binding.etMessage.text.toString()
+
+        if(title.isEmpty())
+        {
+            binding.etTitle.error="Title is required"
+            return false
+        }
+
+        if(message.isEmpty())
+        {
+            binding.etMessage.error="Enter your message"
+            return false
+
+        }
+
+
+        return true
     }
 }

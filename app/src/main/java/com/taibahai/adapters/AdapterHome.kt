@@ -12,7 +12,7 @@ import com.taibahai.activities.HomeDetailActivity
 import com.taibahai.databinding.ItemHomeBinding
 import com.taibahai.models.ModelHome
 
-class AdapterHome(  var showData: MutableList<com.network.models.ModelHome.Data>
+class AdapterHome(  private var listener: OnItemClick, var showData: MutableList<com.network.models.ModelHome.Data>
 ) : RecyclerView.Adapter<AdapterHome.ViewHolder>() {
 
     lateinit var binding: ItemHomeBinding
@@ -22,11 +22,11 @@ class AdapterHome(  var showData: MutableList<com.network.models.ModelHome.Data>
         binding = ItemHomeBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
-/*
-    fun setDate(list: List<com.network.models.ModelHome>) {
-        showData = list
+    fun setDate(list: MutableList<com.network.models.ModelHome.Data>) {
+        list.clear()
+        list.addAll(showData)
         notifyDataSetChanged()
-    }*/
+    }
 
     override fun getItemCount(): Int {
         return showData.size
@@ -45,18 +45,6 @@ class AdapterHome(  var showData: MutableList<com.network.models.ModelHome.Data>
         holder.binding.commentCounts.text = userData.comments.toString()
         Glide.with(holder.itemView.context).load(userData.feed_attachments.firstOrNull()?.file).into(holder.binding.ivUploadImage)
 
-
-
-        /*holder.binding.ivProfileImage.setImageResource(showData[position].profileImage)
-        holder.binding.tvUserName.text = showData[position].userName
-        holder.binding.tvTimesAgo.text = showData[position].timesAgo
-        holder.binding.ivUploadImage.setImageResource(showData[position].userPost)
-        holder.binding.tvDescription.text = showData[position].userDescription*/
-
-
-
-
-
         holder.binding.tvLike.setOnClickListener {
 
         }
@@ -67,6 +55,13 @@ class AdapterHome(  var showData: MutableList<com.network.models.ModelHome.Data>
 
 
         }
+
+        holder.binding.ivDots.setOnClickListener {
+            listener.onClick(position, "dots", userData)
+
+        }
+
+
     }
 
 
