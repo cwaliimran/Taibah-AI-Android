@@ -32,7 +32,7 @@ class AdapterHome(  private var listener: OnItemClick, var showData: MutableList
         return showData.size
     }
 
-    @SuppressLint("ResourceAsColor")
+    @SuppressLint("ResourceAsColor", "SuspiciousIndentation")
     override fun onBindViewHolder(holder: ViewHolder, @SuppressLint("RecyclerView") position: Int) {
         val userData = showData[position]
         holder.binding.model = userData
@@ -50,8 +50,12 @@ class AdapterHome(  private var listener: OnItemClick, var showData: MutableList
         }
 
         holder.binding.tvAddComment.setOnClickListener {
-                val intent=Intent(holder.itemView.context,HomeDetailActivity::class.java)
-                holder.itemView.context.startActivity(intent)
+            //listener.onClick(position, "comment", userData)
+
+            val intent=Intent(holder.itemView.context,HomeDetailActivity::class.java)
+            intent.putExtra("feedId", userData.feed_id)
+
+            holder.itemView.context.startActivity(intent)
 
 
         }

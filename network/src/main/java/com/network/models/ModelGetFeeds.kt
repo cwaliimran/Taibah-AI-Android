@@ -13,6 +13,6 @@ data class ModelGetFeeds(
         var created_at: String = "",
         var timesince: String = "",
         var feed_attachments: List<Any> = listOf(),
-        var comments: List<Any> = listOf()
+        var comments: List<ModelComments> = listOf()
     )
 }

@@ -7,7 +7,7 @@
     <data>
         <variable
             name="model"
-            type="com.taibahai.models.ModelComments" />
+            type="com.network.models.ModelComments" />
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
@@ -58,7 +58,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins"
-                android:text="Hassan Ali"
+                tools:text="Hassan Ali"
+                android:text="@{model.user_name, default=``}"
                 android:textColor="#1B1E28"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -69,7 +70,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins"
-                android:text="I really liked the one with “replace with name"
+                tools:text="I really liked the one with “replace with name"
+                android:text="@{model.comment, default=``}"
                 android:textColor="#1B1E28"
                 android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="parent"

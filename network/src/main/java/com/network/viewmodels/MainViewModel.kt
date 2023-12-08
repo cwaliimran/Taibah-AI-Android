@@ -64,7 +64,7 @@ class MainViewModel constructor(application: Application) : AndroidViewModel(app
     }
 
 
-    fun feedComment(postId:Int, comment: String )
+    fun feedComment(postId:String, comment: String )
     {
         viewModelScope.launch {
             repository.feedComment(postId,comment)
@@ -75,7 +75,7 @@ class MainViewModel constructor(application: Application) : AndroidViewModel(app
     val getFeedLiveData: MutableLiveData<NetworkResult<ModelGetFeeds>>
         get() = repository.getFeedMutableLiveData
 
-    fun getFeed(feedId:Int)
+    fun getFeed(feedId: String)
     {
         viewModelScope.launch {
             repository.getFeed(feedId)

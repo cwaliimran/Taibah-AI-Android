@@ -85,7 +85,7 @@ class MainRepo : BaseApiResponse() {
         SingleLiveEvent()
     }
 
-    suspend fun feedComment(postId: Int,comment: String)
+    suspend fun feedComment(postId: String, comment: String)
     {
         simpleResponseMutableLiveData.value = null
         simpleResponseMutableLiveData.postValue(NetworkResult.Loading())
@@ -101,7 +101,7 @@ class MainRepo : BaseApiResponse() {
         SingleLiveEvent()
     }
 
-    suspend fun getFeed(feedId:Int)
+    suspend fun getFeed(feedId: String)
     {
         getFeedMutableLiveData.value = null
         getFeedMutableLiveData.postValue(NetworkResult.Loading())

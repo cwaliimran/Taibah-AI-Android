@@ -98,6 +98,7 @@ class HomeFragment : BaseFragment(),OnItemClick {
                 }
             }
 
+
             else -> {}
         }
     }

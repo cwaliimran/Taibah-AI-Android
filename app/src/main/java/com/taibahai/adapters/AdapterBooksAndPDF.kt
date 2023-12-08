@@ -4,13 +4,13 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.network.models.ModelBooks
 import com.taibahai.activities.BookPDFDetailActivity
 import com.taibahai.databinding.ItemBooksPdfBinding
-import com.taibahai.hadiths.HadithChaptersActivity2
-import com.taibahai.models.ModelBooksAndPDF
 
 
-class AdapterBooksAndPDF(var showData: MutableList<ModelBooksAndPDF>):RecyclerView.Adapter<AdapterBooksAndPDF.ViewHolder>() {
+
+class AdapterBooksAndPDF(var showData: MutableList<ModelBooks.Data>):RecyclerView.Adapter<AdapterBooksAndPDF.ViewHolder>() {
     lateinit var binding: ItemBooksPdfBinding
 
     override fun onCreateViewHolder(parent: ViewGroup,viewType: Int): AdapterBooksAndPDF.ViewHolder {
@@ -18,7 +18,7 @@ class AdapterBooksAndPDF(var showData: MutableList<ModelBooksAndPDF>):RecyclerVi
         return AdapterBooksAndPDF.ViewHolder(binding)
     }
 
-    fun setDate(list: ArrayList<ModelBooksAndPDF>) {
+    fun setDate(list: ArrayList<ModelBooks.Data>) {
         showData = list
         notifyDataSetChanged()
     }
@@ -26,12 +26,13 @@ class AdapterBooksAndPDF(var showData: MutableList<ModelBooksAndPDF>):RecyclerVi
     override fun onBindViewHolder(holder: AdapterBooksAndPDF.ViewHolder, position: Int) {
         val booksPDFData = showData[position]
         holder.binding.model = booksPDFData
-        holder.binding.ivImage.setImageResource(showData[position].image)
-        holder.binding.tvBookName.text=showData[position].bookName
+        holder.binding.tvBookName.text=booksPDFData.title
+
 
         holder.itemView.setOnClickListener {
             val context = holder.itemView.context
             val intent = Intent(context, BookPDFDetailActivity::class.java)
+           intent.putExtra("model", booksPDFData)
 
             context.startActivity(intent)
         }

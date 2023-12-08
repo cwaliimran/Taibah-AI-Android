@@ -2,7 +2,12 @@ package com.taibahai.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.viewModels
 import com.network.base.BaseActivity
+import com.network.models.ModelBooks
+import com.network.network.NetworkResult
+import com.network.utils.ProgressLoading.displayLoading
+import com.network.viewmodels.MainViewModel
 import com.taibahai.R
 import com.taibahai.adapters.AdapterBooksAndPDF
 import com.taibahai.adapters.AdapterHadithBooks
@@ -11,11 +16,13 @@ import com.taibahai.databinding.ActivitySettingBinding
 import com.taibahai.models.ModelBooksAndPDF
 import com.taibahai.models.ModelHadithBook
 import com.taibahai.models.ModelSettings
+import com.taibahai.utils.showToast
 
 class BooksAndPDFActivity : BaseActivity() {
     lateinit var binding:ActivityBooksAndPdfactivityBinding
-    val showList = ArrayList<ModelBooksAndPDF>()
+    val showList = ArrayList<ModelBooks.Data>()
     lateinit var adapter:AdapterBooksAndPDF
+    val viewModel:MainViewModel by viewModels()
 
 
 
@@ -30,24 +37,42 @@ class BooksAndPDFActivity : BaseActivity() {
         }
     }
 
+    override fun initObservers() {
+        super.initObservers()
+        viewModel.booksLiveData.observe(this) {
+            if (it == null) {
+                return@observe
+            }
+            displayLoading(false)
+            when (it) {
+                is NetworkResult.Loading -> {
+                    displayLoading(true)
+                }
+
+                is NetworkResult.Success -> {
+                    showList.addAll((it.data?.data ?: listOf()))
+                    adapter.notifyDataSetChanged()
+                }
+
+                is NetworkResult.Error -> {
+                    showToast(it.message.toString())
+                }
+            }
+        }
+    }
+
     override fun initAdapter() {
         super.initAdapter()
         adapter= AdapterBooksAndPDF(showList)
-        showList.add(ModelBooksAndPDF(R.drawable.books, "Al oumou shafai"))
-        showList.add(ModelBooksAndPDF(R.drawable.books, "Mouwata Malick"))
-        showList.add(ModelBooksAndPDF(R.drawable.books, "Ousoulou Sounna Ahmad B"))
-        showList.add(ModelBooksAndPDF(R.drawable.books, "Mousnad Abi Hanifa"))
-        showList.add(ModelBooksAndPDF(R.drawable.books, "Mousnad Ahmad Boun Hambal"))
-        showList.add(ModelBooksAndPDF(R.drawable.books, "Aqeedah"))
-        showList.add(ModelBooksAndPDF(R.drawable.books, "Salah (Prayers)"))
-        showList.add(ModelBooksAndPDF(R.drawable.books, "Ramadan"))
-        showList.add(ModelBooksAndPDF(R.drawable.books, "Zakat (Charity)"))
-        showList.add(ModelBooksAndPDF(R.drawable.books, "Hajj (Pilgrimage)"))
 
-
-        adapter.setDate(showList)
         binding.rvBooksPDF.adapter=adapter
 
+    }
+
+    override fun apiAndArgs() {
+        super.apiAndArgs()
+
+        viewModel.books()
     }
 
 

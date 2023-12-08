@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="20dp"
+    >
+
+    <LinearLayout
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+
+
+
+
+        <TextView
+            android:id="@+id/dialogTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:fontFamily="@font/manrope"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:id="@+id/dialogSubtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:fontFamily="@font/manrope"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/greytext"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            />
+
+        <Button
+            android:id="@+id/btnRetry"
+            style="@style/button"
+            android:layout_marginTop="20dp"
+            android:text="Retry"
+            android:background="@drawable/continue_btn_bg"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
