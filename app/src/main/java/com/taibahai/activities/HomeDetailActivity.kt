@@ -32,7 +32,10 @@ class HomeDetailActivity : BaseActivity() {
 
         binding.sendBtn.setOnClickListener {
             comment = binding.messageBox.text.toString()
-            viewModel.feedComment(feedId, comment)
+            if(!comment.isNullOrEmpty()){
+                viewModel.feedComment(feedId, comment)
+
+            }
         }
     }
 
@@ -50,6 +53,9 @@ class HomeDetailActivity : BaseActivity() {
 
                 is NetworkResult.Success -> {
                     it.data?.message?.let { it1 -> showToast(it1) }
+                    binding.ii.tvUserName.text=it.data?.data?.user_name
+                    binding.ii.tvDescription.text=it.data?.data?.description
+                    binding.ii.tvTimesAgo.text=it.data?.data?.timesince
                     it?.data?.data?.comments?.let { it1 -> showComments.addAll(it1) }
                     adapter.notifyDataSetChanged()
 

@@ -156,9 +156,9 @@ class BookPDFDetailActivity : BaseActivity() {
 
 
     override fun clicks() {
-      /*  binding.ivBack.setOnClickListener {
+        binding.appbar.ivLeft.setOnClickListener {
             onBackPressed()
-        }*/
+        }
     }
 
     override fun apiAndArgs() {
@@ -172,6 +172,7 @@ class BookPDFDetailActivity : BaseActivity() {
 
                 if (checkInternetConnection(this)) {
                     loadFileFromNetwork(this.fileUrl)
+                    binding.appbar.tvTitle.setText(bookTitle)
                 } else {
                     Toast.makeText(
                         this,

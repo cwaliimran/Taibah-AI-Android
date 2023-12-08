@@ -42,7 +42,7 @@ class AdapterHome(  private var listener: OnItemClick, var showData: MutableList
         holder.binding.tvTimesAgo.text = userData.timesince
         holder.binding.tvDescription.text = userData.description
         holder.binding.likesCounting.text = userData.likes.toString()
-        holder.binding.commentCounts.text = userData.comments.toString()
+        holder.binding.commentCounts.text = "${userData.comments.toString()} Comments"
         Glide.with(holder.itemView.context).load(userData.feed_attachments.firstOrNull()?.file).into(holder.binding.ivUploadImage)
 
         holder.binding.tvLike.setOnClickListener {

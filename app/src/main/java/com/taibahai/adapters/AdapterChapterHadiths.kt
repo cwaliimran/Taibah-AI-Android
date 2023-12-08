@@ -4,13 +4,14 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.network.models.ModelDBSearch
 import com.taibahai.databinding.ItemChatpersHadithBinding
 import com.taibahai.databinding.ItemHadithChapterBinding
 import com.taibahai.hadiths.HadithDetailsActivity4
 import com.taibahai.models.ModelChapterHadiths
 import com.taibahai.models.ModelHadithChapter
 
-class AdapterChapterHadiths(var showData: MutableList<ModelChapterHadiths>):RecyclerView.Adapter<AdapterChapterHadiths.ViewHolder>()
+class AdapterChapterHadiths(var showData: MutableList<ModelDBSearch.Data>):RecyclerView.Adapter<AdapterChapterHadiths.ViewHolder>()
 {
     lateinit var binding: ItemChatpersHadithBinding
 
@@ -19,7 +20,7 @@ class AdapterChapterHadiths(var showData: MutableList<ModelChapterHadiths>):Recy
         return AdapterChapterHadiths.ViewHolder(binding)
     }
 
-    fun setDate(list: ArrayList<ModelChapterHadiths>) {
+    fun setDate(list: ArrayList<ModelDBSearch.Data>) {
         showData = list
         notifyDataSetChanged()
     }
@@ -27,11 +28,16 @@ class AdapterChapterHadiths(var showData: MutableList<ModelChapterHadiths>):Recy
     override fun onBindViewHolder(holder: AdapterChapterHadiths.ViewHolder, position: Int) {
         val hadithChapter = showData[position]
         holder.binding.model = hadithChapter
-        holder.binding.tvHadithNo.text= showData[position].hadithNo.toString()
-        holder.binding.tvBookName.text=showData[position].bookName
-        holder.binding.tvHadithType.text=showData[position].hadithType
-        holder.binding.tvArbiAyat.text=showData[position].arbiAyat
-        holder.binding.tvTranslation.text=showData[position].translation
+        holder.binding.tvHadithNo.text = "Hadith No: ${hadithChapter.hadith_no}"
+        val parts = hadithChapter.reference.split("\t : ")
+        if (parts.size > 1) {
+            holder.binding.tvBookName.text = parts[1]
+        } else {
+            holder.binding.tvBookName.text = hadithChapter.reference
+        }
+        //holder.binding.tvHadithType.text=hadithChapter.reference
+        holder.binding.tvArbiAyat.text=hadithChapter.arabic
+        holder.binding.tvTranslation.text=hadithChapter.english_translation
 
         binding.btnReadMore.setOnClickListener {
             val intent= Intent(holder.itemView.context,HadithDetailsActivity4::class.java)

@@ -2,6 +2,8 @@ package com.taibahai.search_database_tablayout
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.databinding.adapters.RadioGroupBindingAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
@@ -43,10 +45,16 @@ class SearchDatabaseActivity : BaseActivity() {
                 binding.tabLayout.selectTab(binding.tabLayout.getTabAt(position))
             }
         })
+
+
+
+
     }
 
+
+
     override fun clicks() {
-binding.ivBack.setOnClickListener {
+        binding.ivBack.setOnClickListener {
     onBackPressed()
 }
 

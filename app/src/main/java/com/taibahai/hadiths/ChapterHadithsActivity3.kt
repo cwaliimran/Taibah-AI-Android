@@ -29,12 +29,12 @@ class ChapterHadithsActivity3 : BaseActivity() {
 
     override fun initAdapter() {
         super.initAdapter()
-        adapter= AdapterChapterHadiths(showList)
+        //adapter= AdapterChapterHadiths(showList)
         showList.add(ModelChapterHadiths("Hadith No: 1", "Sahih al-Bukhari","al-Bukhari","\"إنما الأعمال بالنيات.\"","\"The reward of deeds depends upon the intentions.\""))
         showList.add(ModelChapterHadiths("Hadith No: 1", "Sahih al-Bukhari","al-Bukhari","\"إنما الأعمال بالنيات.\"","\"The reward of deeds depends upon the intentions.\""))
 
 
-        adapter.setDate(showList)
+      //  adapter.setDate(showList)
         binding.rvChapterHadiths.adapter=adapter
 
     }
