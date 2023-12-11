@@ -6,13 +6,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.network.models.ModelBooks
-import com.network.models.ModelDBSearch
+import com.network.models.ModelDBSearchAll
 import com.network.models.ModelDailyAlert
 import com.network.models.ModelGetFeeds
 import com.network.models.ModelHome
+import com.network.models.ModelInheritanceLaw
 import com.network.models.ModelPostFeed
 import com.network.models.ModelPrivacyTerms
 import com.network.models.ModelScholars
+import com.network.models.ModelToday
 import com.network.models.ModelUpcoming
 import com.network.models.ModelUploadFile
 import com.network.models.ModelUser
@@ -83,7 +85,7 @@ class MainViewModel constructor(application: Application) : AndroidViewModel(app
     }
 
 
-    fun feedReport(feedId:Int)
+    fun feedReport(feedId:String)
     {
         viewModelScope.launch {
             repository.feedReport(feedId)
@@ -129,16 +131,18 @@ class MainViewModel constructor(application: Application) : AndroidViewModel(app
     }
 
 
-
-    val aboutILPrivacyTermLiveData: MutableLiveData<NetworkResult<ModelPrivacyTerms>>
-        get() = repository.aboutILPrivacyTermMutableLiveData
-
+    val inheritanceLawLiveData: MutableLiveData<NetworkResult<ModelInheritanceLaw>>
+        get() = repository.inheritanceLawMutableLiveData
     fun getInheritanceLaw() {
         viewModelScope.launch {
             repository.getInheritanceLaw()
         }
     }
 
+
+
+    val aboutILPrivacyTermLiveData: MutableLiveData<NetworkResult<ModelPrivacyTerms>>
+        get() = repository.aboutILPrivacyTermMutableLiveData
 
     fun about() {
         viewModelScope.launch {
@@ -161,7 +165,7 @@ class MainViewModel constructor(application: Application) : AndroidViewModel(app
     }
 
 
-    val dbSearchLiveData: MutableLiveData<NetworkResult<ModelDBSearch>>
+    val dbSearchLiveData: MutableLiveData<NetworkResult<Any>>
         get() = repository.dbSearchMutableLiveData
 
     fun dbSearch(type:String, keyword: String )
@@ -197,6 +201,17 @@ class MainViewModel constructor(application: Application) : AndroidViewModel(app
     {
         viewModelScope.launch {
             repository.dailyAlert()
+        }
+    }
+
+
+    val todayLiveData: MutableLiveData<NetworkResult<ModelToday>>
+        get() = repository.todayMutableLiveData
+
+    fun today()
+    {
+        viewModelScope.launch {
+            repository.today()
         }
     }
 

@@ -192,8 +192,8 @@
 
 
                 <include
-                    android:id="@+id/ii"
-                    layout="@layout/item_quran_chapter_detail"
+                    android:id="@+id/inTodayVerse"
+                    layout="@layout/item_today_verse"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -204,14 +204,16 @@
                     android:layout_marginTop="20dp"/>
 
                 <include
-                    layout="@layout/item_chatpers_hadith"
+                    android:id="@+id/inTodayHadith"
+                    layout="@layout/item_today_hadith"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     android:layout_marginBottom="20dp"
+                    android:layout_marginHorizontal="20dp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/ii"/>
+                    app:layout_constraintTop_toBottomOf="@id/inTodayVerse"/>
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

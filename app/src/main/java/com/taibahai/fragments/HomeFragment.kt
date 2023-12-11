@@ -28,6 +28,7 @@ import com.taibahai.utils.showToast
 
 class HomeFragment : BaseFragment(),OnItemClick {
     lateinit var binding: FragmentHomeBinding
+    var feedId=""
 
 
     lateinit var adapter: AdapterHome
@@ -71,8 +72,29 @@ class HomeFragment : BaseFragment(),OnItemClick {
                 }
 
                 is NetworkResult.Success -> {
+                    feedId= it.data?.data?.firstOrNull()?.feed_id.toString()
                     showList.addAll((it.data?.data ?: listOf()))
                     adapter.notifyDataSetChanged()
+                }
+
+                is NetworkResult.Error -> {
+                    showToast(it.message.toString())
+                }
+            }
+        }
+
+        viewModel.simpleResponseLiveData.observe(this) {
+            if (it == null) {
+                return@observe
+            }
+            activity?.displayLoading(false)
+            when (it) {
+                is NetworkResult.Loading -> {
+                    activity?. displayLoading(true)
+                }
+
+                is NetworkResult.Success -> {
+                    it.data?.message?.let { it1 -> showToast(it1) }
                 }
 
                 is NetworkResult.Error -> {
@@ -112,12 +134,11 @@ class HomeFragment : BaseFragment(),OnItemClick {
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
 
-        // Set up click listener for the menu item
-      /*  val reportMenuItem = popupView.findViewById<View>(R.id.menu_report)
+        val reportMenuItem = popupView.findViewById<View>(R.id.menuReport)
         reportMenuItem.setOnClickListener {
-            // Handle menu item click here
+            viewModel.feedReport(feedId)
             popupWindow.dismiss()
-        }*/
+        }
 
         // Show the popup menu at a specific location
         val anchorView = view?.findViewById<View>(R.id.ivDots)

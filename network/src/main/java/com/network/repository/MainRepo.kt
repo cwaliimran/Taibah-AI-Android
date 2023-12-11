@@ -2,13 +2,15 @@ package com.network.repository
 
 import android.util.Log
 import com.network.models.ModelBooks
-import com.network.models.ModelDBSearch
+import com.network.models.ModelDBSearchAll
 import com.network.models.ModelDailyAlert
 import com.network.models.ModelGetFeeds
 import com.network.models.ModelHome
+import com.network.models.ModelInheritanceLaw
 import com.network.models.ModelPostFeed
 import com.network.models.ModelPrivacyTerms
 import com.network.models.ModelScholars
+import com.network.models.ModelToday
 import com.network.models.ModelUpcoming
 import com.network.models.ModelUploadFile
 import com.network.models.ModelUser
@@ -110,7 +112,7 @@ class MainRepo : BaseApiResponse() {
         })
     }
 
-    suspend fun feedReport(feedId:Int)
+    suspend fun feedReport(feedId:String)
     {
         simpleResponseMutableLiveData.value = null
         simpleResponseMutableLiveData.postValue(NetworkResult.Loading())
@@ -175,10 +177,14 @@ class MainRepo : BaseApiResponse() {
         SingleLiveEvent()
     }
 
+    val inheritanceLawMutableLiveData: SingleLiveEvent<NetworkResult<ModelInheritanceLaw>> by lazy {
+        SingleLiveEvent()
+    }
+
     suspend fun getInheritanceLaw() {
-        aboutILPrivacyTermMutableLiveData.value = null
-        aboutILPrivacyTermMutableLiveData.postValue(NetworkResult.Loading())
-        aboutILPrivacyTermMutableLiveData.postValue(safeApiCall {
+        inheritanceLawMutableLiveData.value = null
+        inheritanceLawMutableLiveData.postValue(NetworkResult.Loading())
+        inheritanceLawMutableLiveData.postValue(safeApiCall {
             apiService.getInheritanceLaw()
         })
     }
@@ -211,11 +217,11 @@ class MainRepo : BaseApiResponse() {
 
 
 
-    val dbSearchMutableLiveData: SingleLiveEvent<NetworkResult<ModelDBSearch>> by lazy {
+    val dbSearchMutableLiveData: SingleLiveEvent<NetworkResult<Any>> by lazy {
         SingleLiveEvent()
     }
 
-    suspend fun dbSearch(type: String,keyword: String,)
+    suspend fun dbSearch(type: String,keyword:String)
     {
         dbSearchMutableLiveData.value = null
         dbSearchMutableLiveData.postValue(NetworkResult.Loading())
@@ -264,6 +270,21 @@ class MainRepo : BaseApiResponse() {
             apiService.dailyAlert()
         })
     }
+
+    val todayMutableLiveData: SingleLiveEvent<NetworkResult<ModelToday>> by lazy {
+        SingleLiveEvent()
+    }
+
+    suspend fun today()
+    {
+        todayMutableLiveData.value = null
+        todayMutableLiveData.postValue(NetworkResult.Loading())
+        todayMutableLiveData.postValue(safeApiCall {
+            apiService.today()
+        })
+    }
+
+
 
 
     val upcomingMutableLiveData: SingleLiveEvent<NetworkResult<ModelUpcoming>> by lazy {

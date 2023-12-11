@@ -6,8 +6,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/more_bg"
-    tools:context=".activities.InheritanceLawActivity">
+    tools:context=".activities.InheritanceLawDetailActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clTopBar"
@@ -59,17 +58,34 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvInheritanceLaw"
+    <TextView
+        android:id="@+id/tvDescription"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/clTopBar"/>
+        app:layout_constraintTop_toBottomOf="@id/clTopBar" />
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/pdfView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-
+    <com.rajat.pdfviewer.PdfRendererView
+        android:id="@+id/pdfView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:pdfView_divider="@drawable/divider"
+        app:pdfView_engine="internal"
+        app:pdfView_showDivider="false" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -4,18 +4,17 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.network.models.ModelDBSearchAll
 import com.network.models.ModelDbSearchHadith
 import com.taibahai.databinding.ItemChatpersHadithBinding
 import com.taibahai.hadiths.HadithDetailsActivity4
 
-class AdapterChapterHadiths(var showData: ArrayList<ModelDbSearchHadith.Data>):RecyclerView.Adapter<AdapterChapterHadiths.ViewHolder>()
+class AdapterDBSearchHadith(var showData: ArrayList<ModelDbSearchHadith.Data>): RecyclerView.Adapter<AdapterDBSearchHadith.ViewHolder>()
 {
     lateinit var binding: ItemChatpersHadithBinding
 
-    override fun onCreateViewHolder(parent: ViewGroup,viewType: Int): AdapterChapterHadiths.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AdapterDBSearchHadith.ViewHolder {
         binding = ItemChatpersHadithBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return AdapterChapterHadiths.ViewHolder(binding)
+        return AdapterDBSearchHadith.ViewHolder(binding)
     }
 
     fun setDate(list: ArrayList<ModelDbSearchHadith.Data>) {
@@ -23,7 +22,7 @@ class AdapterChapterHadiths(var showData: ArrayList<ModelDbSearchHadith.Data>):R
         notifyDataSetChanged()
     }
 
-    override fun onBindViewHolder(holder: AdapterChapterHadiths.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: AdapterDBSearchHadith.ViewHolder, position: Int) {
         val hadithChapter = showData[position]
         holder.binding.model = hadithChapter
         holder.binding.tvHadithNo.text="Hadith No: ${hadithChapter.hadith_no}"
@@ -37,7 +36,7 @@ class AdapterChapterHadiths(var showData: ArrayList<ModelDbSearchHadith.Data>):R
         holder.binding.tvTranslation.text=hadithChapter.english_translation
 
         binding.btnReadMore.setOnClickListener {
-            val intent= Intent(holder.itemView.context,HadithDetailsActivity4::class.java)
+            val intent= Intent(holder.itemView.context, HadithDetailsActivity4::class.java)
             holder.itemView.context.startActivity(intent)
 
         }

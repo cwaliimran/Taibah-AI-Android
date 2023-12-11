@@ -3,15 +3,19 @@ package com.taibahai.activities
 import android.os.Bundle
 import androidx.activity.viewModels
 import com.network.base.BaseActivity
+import com.network.models.ModelInheritanceLaw
 import com.network.network.NetworkResult
 import com.network.utils.ProgressLoading.displayLoading
 import com.network.viewmodels.MainViewModel
+import com.taibahai.adapters.AdapterInheritanceLaw
 import com.taibahai.databinding.ActivityInheritanceLawBinding
 import com.taibahai.utils.showToast
 
 class InheritanceLawActivity : BaseActivity() {
     lateinit var binding:ActivityInheritanceLawBinding
     val viewModel : MainViewModel by viewModels()
+    val showList=ArrayList<ModelInheritanceLaw.Data>()
+    lateinit var adapter:AdapterInheritanceLaw
 
 
 
@@ -26,9 +30,16 @@ class InheritanceLawActivity : BaseActivity() {
         }
     }
 
+    override fun initAdapter() {
+        super.initAdapter()
+        adapter= AdapterInheritanceLaw(showList)
+        binding.rvInheritanceLaw.adapter=adapter
+
+    }
+
     override fun initObservers() {
         super.initObservers()
-        viewModel.aboutILPrivacyTermLiveData.observe(this) {
+        viewModel.inheritanceLawLiveData.observe(this) {
             if (it == null) {
                 return@observe
             }
@@ -39,7 +50,8 @@ class InheritanceLawActivity : BaseActivity() {
                 }
 
                 is NetworkResult.Success -> {
-
+                    it.data?.data?.let { it1 -> showList.addAll(it1) }
+                    adapter.notifyDataSetChanged()
                 }
 
                 is NetworkResult.Error -> {
@@ -47,5 +59,10 @@ class InheritanceLawActivity : BaseActivity() {
                 }
             }
         }
+    }
+
+    override fun apiAndArgs() {
+        super.apiAndArgs()
+        viewModel.getInheritanceLaw()
     }
 }

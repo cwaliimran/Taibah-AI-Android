@@ -1,19 +1,15 @@
 package com.taibahai.fragments
 
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.network.base.BaseFragment
 import com.taibahai.R
 import com.taibahai.adapters.AdapterAISearch
-import com.taibahai.databinding.FragmentHomeBinding
 import com.taibahai.databinding.FragmentSearchBinding
 import com.taibahai.models.ModelSearchAI
 import com.taibahai.room_database.ChatDatabase
@@ -30,8 +26,9 @@ import okhttp3.Request
 import androidx.lifecycle.Observer
 import com.network.interfaces.OnItemClick
 import com.network.utils.AppClass
-import com.network.utils.SharedPref
 import com.taibahai.activities.HistoryActivity
+import com.taibahai.adapters.AdapterChatPopups
+import com.taibahai.models.ModelChatPopups
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
 import org.json.JSONArray
@@ -46,6 +43,8 @@ class SearchFragment : BaseFragment(),OnItemClick {
     private val client = OkHttpClient()
     private lateinit var chatDatabase: ChatDatabase
     private lateinit var chatMessageDao: ChatMessageDao
+    val showMessagePopups=ArrayList<ModelChatPopups>()
+    lateinit var adapterMessagePopups:AdapterChatPopups
     private var userQuestion: String = ""
     private var botResponse: String? = null
     private var currentChatId: String? = null
@@ -68,6 +67,11 @@ class SearchFragment : BaseFragment(),OnItemClick {
         isArchived=AppClass.sharedPref.getIsArchived()?:false
         chatDatabase = ChatDatabase.getDatabase(requireContext())
         chatMessageDao = chatDatabase.chatMessageDao()
+        adapterMessagePopups = AdapterChatPopups(showMessagePopups) { message ->
+            binding.messageBox.setText(message)
+        }
+
+        showTopMessagePopups()
         getAllMessages()
 
         if (isArchived) {
@@ -318,6 +322,25 @@ class SearchFragment : BaseFragment(),OnItemClick {
         archiveMessageId = null
         isNewMessage = false
         getAllMessages()
+    }
+
+    private fun showTopMessagePopups()
+    {
+        showMessagePopups.clear()
+        showMessagePopups.add(ModelChatPopups("Merry Christmas"))
+        showMessagePopups.add(ModelChatPopups("Happy Birthday"))
+        showMessagePopups.add(ModelChatPopups("English Teacher"))
+        showMessagePopups.add(ModelChatPopups("Cat-Friend"))
+        showMessagePopups.add(ModelChatPopups("Happy Valentine's day"))
+        showMessagePopups.add(ModelChatPopups("Horoscope"))
+        showMessagePopups.add(ModelChatPopups("Quick Meal"))
+        showMessagePopups.add(ModelChatPopups("Plan my Vacation"))
+        showMessagePopups.add(ModelChatPopups("Business Idea"))
+        showMessagePopups.add(ModelChatPopups("Tell Me a Joke"))
+
+        adapterMessagePopups.setDate(showMessagePopups)
+        binding.rvTopMessagePopups.adapter=adapterMessagePopups
+
     }
 
 

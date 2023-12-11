@@ -1,9 +1,9 @@
 package com.network.models
 
-data class ModelDBSearch(
+data class ModelDbSearchHadith(
     var status: Int = 0,
     var message: String = "",
-    var `data`: List<Data> = listOf()
+    var data: List<Data> = listOf()
 ) {
     data class Data(
         var chapter_name: String = "",

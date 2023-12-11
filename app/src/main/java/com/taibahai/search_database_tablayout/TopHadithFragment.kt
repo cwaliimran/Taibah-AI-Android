@@ -3,29 +3,30 @@ package com.taibahai.search_database_tablayout
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import com.google.gson.Gson
 import com.network.base.BaseFragment
-import com.network.models.ModelDBSearch
+import com.network.models.ModelDbSearchHadith
+import com.network.models.ModelDbSearchQuran
 import com.network.network.NetworkResult
 import com.network.utils.ProgressLoading.displayLoading
 import com.network.viewmodels.MainViewModel
 import com.taibahai.R
 import com.taibahai.adapters.AdapterChapterHadiths
+import com.taibahai.adapters.AdapterDBSearchHadith
 import com.taibahai.databinding.FragmentTopHadithBinding
-import com.taibahai.models.ModelChapterHadiths
 import com.taibahai.utils.showToast
 
 
 class TopHadithFragment : BaseFragment() {
     lateinit var binding: FragmentTopHadithBinding
-    val showList=ArrayList<ModelDBSearch.Data>()
+    val hadithData=ArrayList<ModelDbSearchHadith.Data>()
     val viewModel:MainViewModel by viewModels()
-    lateinit var adapter:AdapterChapterHadiths
+    lateinit var adapter:AdapterDBSearchHadith
 
 
 
@@ -55,7 +56,7 @@ class TopHadithFragment : BaseFragment() {
 
        override fun afterTextChanged(editable: Editable?) {
            if (binding.etSearch.text.toString()!=""){
-               viewModel.dbSearch(type = "hadith", keyword = binding.etSearch.text.toString())
+               viewModel.dbSearch( type = "hadith", keyword = binding.etSearch.text.toString())
            }
 
        }
@@ -64,7 +65,7 @@ class TopHadithFragment : BaseFragment() {
 
     override fun initAdapter() {
         super.initAdapter()
-        adapter= AdapterChapterHadiths(showList)
+        adapter= AdapterDBSearchHadith(hadithData)
         binding.rvSearchHadith.adapter=adapter
     }
 
@@ -82,8 +83,10 @@ class TopHadithFragment : BaseFragment() {
                 }
 
                 is NetworkResult.Success -> {
-                    showList.clear()
-                showList.addAll(it.data?.data?: listOf())
+                    hadithData.clear()
+                    val gson = Gson()
+                    val responseData = gson.fromJson(gson.toJson(it.data), ModelDbSearchHadith::class.java)
+                    hadithData.addAll(responseData.data)
                     adapter.notifyDataSetChanged()
                 }
 
@@ -93,16 +96,4 @@ class TopHadithFragment : BaseFragment() {
             }
         }
     }
-
-
-
-    override fun apiAndArgs() {
-        super.apiAndArgs()
-
-
-
-    }
-
-
-
 }
