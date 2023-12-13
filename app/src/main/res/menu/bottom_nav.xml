@@ -6,8 +6,8 @@
     <item android:title="AI Search"
         android:id="@+id/search"
         android:icon="@drawable/search_ai_icon"/>
-    <item android:title="Recite"
-        android:id="@+id/recite"
+    <item android:title="Explore"
+        android:id="@+id/explore"
         android:icon="@drawable/recite_icon"/>
     <item android:title="More"
         android:id="@+id/more"

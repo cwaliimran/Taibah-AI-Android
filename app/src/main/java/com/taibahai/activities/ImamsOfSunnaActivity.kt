@@ -1,8 +1,6 @@
 package com.taibahai.activities
 
-import android.app.Activity
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import com.network.base.BaseActivity
 import com.network.models.ModelScholars
@@ -11,13 +9,11 @@ import com.network.utils.ProgressLoading.displayLoading
 import com.network.viewmodels.MainViewModel
 import com.taibahai.R
 import com.taibahai.adapters.Adapter100Scholars
-import com.taibahai.databinding.ActivityActivity100ScholarsBinding
-import com.taibahai.models.Model100Scholars
-import com.taibahai.models.ModelSettings
+import com.taibahai.databinding.ActivityImamsOfSunnaBinding
 import com.taibahai.utils.showToast
 
-class Activity100Scholars : BaseActivity() {
-    lateinit var binding:ActivityActivity100ScholarsBinding
+class ImamsOfSunnaActivity : BaseActivity() {
+    lateinit var binding:ActivityImamsOfSunnaBinding
     lateinit  var adapter:Adapter100Scholars
     val scholarList:MutableList<ModelScholars.Data> =mutableListOf()
     val viewModel : MainViewModel by viewModels()
@@ -25,12 +21,12 @@ class Activity100Scholars : BaseActivity() {
 
 
     override fun onCreate() {
-        binding= ActivityActivity100ScholarsBinding.inflate(layoutInflater)
+        binding= ActivityImamsOfSunnaBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
 
     override fun clicks() {
-        binding.ivBack.setOnClickListener {
+        binding.appbar.ivLeft.setOnClickListener {
             onBackPressed()
         }
     }
@@ -70,6 +66,14 @@ class Activity100Scholars : BaseActivity() {
     override fun apiAndArgs() {
         super.apiAndArgs()
         viewModel.scholars()
+    }
+
+
+    override fun initData() {
+        super.initData()
+        binding.appbar.tvTitle.setText("4 major imams of Sunna")
+        binding.appbar.ivLeft.setImageDrawable(resources.getDrawable(R.drawable.arrow_back_24))
+        binding.appbar.ivRight.setVisibility(View.GONE)
     }
 
 

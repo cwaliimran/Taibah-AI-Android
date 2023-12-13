@@ -66,7 +66,9 @@ class InheritanceLawDetailActivity : BaseActivity() {
     }
 
     override fun clicks() {
-
+        binding.appbar.ivLeft.setOnClickListener {
+            onBackPressed()
+        }
     }
 
 
@@ -150,5 +152,13 @@ class InheritanceLawDetailActivity : BaseActivity() {
     override fun onDestroy() {
         super.onDestroy()
         binding.pdfView.closePdfRender()
+    }
+
+
+    override fun initData() {
+        super.initData()
+        binding.appbar.tvTitle.setText("Islamic Law of Inheritance")
+        binding.appbar.ivLeft.setImageDrawable(resources.getDrawable(R.drawable.arrow_back_24))
+        binding.appbar.ivRight.setVisibility(View.GONE)
     }
 }

@@ -17,14 +17,14 @@ import com.network.utils.ProgressLoading.displayLoading
 import com.network.viewmodels.MainViewModel
 import com.taibahai.R
 import com.taibahai.activities.QuranChaptersActivity
-import com.taibahai.databinding.FragmentReciteBinding
+import com.taibahai.databinding.FragmentExploreBinding
 import com.taibahai.hadiths.HadithBooksActivity1
 import com.taibahai.utils.showToast
 
 
-class ReciteFragment : BaseFragment() {
+class ExploreFragment : BaseFragment() {
 
-    lateinit var binding: FragmentReciteBinding
+    lateinit var binding: FragmentExploreBinding
     val viewModel:MainViewModel by viewModels()
 
     override fun onCreateView(
@@ -32,7 +32,7 @@ class ReciteFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding = DataBindingUtil.inflate<FragmentReciteBinding>(inflater, R.layout.fragment_recite, container, false)
+        binding = DataBindingUtil.inflate<FragmentExploreBinding>(inflater, R.layout.fragment_explore, container, false)
 
         return binding.root
     }
@@ -105,7 +105,12 @@ class ReciteFragment : BaseFragment() {
     override fun apiAndArgs() {
         super.apiAndArgs()
         viewModel.today()
+        binding.appbar.tvTitle.setText("Explore")
+        binding.appbar.ivLeft.setVisibility(View.GONE)
+        binding.appbar.ivRight.setVisibility(View.GONE)
+
     }
+
 
 
 }

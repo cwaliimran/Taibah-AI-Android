@@ -8,7 +8,7 @@ import com.taibahai.databinding.ActivityBottomNavigationBinding
 import com.taibahai.fragments.HomeFragment
 import com.taibahai.fragments.SearchFragment
 import com.taibahai.fragments.MoreFragment
-import com.taibahai.fragments.ReciteFragment
+import com.taibahai.fragments.ExploreFragment
 
 class BottomNavigation : AppCompatActivity() {
     private lateinit var binding: ActivityBottomNavigationBinding
@@ -25,7 +25,7 @@ class BottomNavigation : AppCompatActivity() {
 
                 R.id.home -> replaceFragment(HomeFragment())
                 R.id.search -> replaceFragment(SearchFragment())
-                R.id.recite -> replaceFragment(ReciteFragment())
+                R.id.explore -> replaceFragment(ExploreFragment())
                 R.id.more -> replaceFragment(MoreFragment())
 
                 else -> {

@@ -68,6 +68,15 @@ class MainRepo : BaseApiResponse() {
     }
 
 
+    suspend fun postProfile(name:String, image:String) {
+        socialLoginMutableLiveData.value = null
+        socialLoginMutableLiveData.postValue(NetworkResult.Loading())
+        socialLoginMutableLiveData.postValue(safeApiCall {
+            apiService.postProfile(name,image)
+        })
+    }
+
+
 
     val postFeedMutableLiveData: SingleLiveEvent<NetworkResult<ModelPostFeed>> by lazy {
         SingleLiveEvent()

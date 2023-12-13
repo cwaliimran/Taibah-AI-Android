@@ -2,6 +2,7 @@ package com.taibahai.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import com.network.base.BaseActivity
 import com.taibahai.R
 import com.taibahai.adapters.AdapterQuranChapter
@@ -19,7 +20,7 @@ class QuranChaptersActivity : BaseActivity() {
         setContentView(binding.root)    }
 
     override fun clicks() {
-        binding.ivBack.setOnClickListener {
+        binding.appbar.ivLeft.setOnClickListener {
             onBackPressed()
         }
     }
@@ -34,6 +35,13 @@ class QuranChaptersActivity : BaseActivity() {
         adapter.setDate(showList)
         binding.rvQuranChapter.adapter=adapter
 
+    }
+
+    override fun initData() {
+        super.initData()
+        binding.appbar.tvTitle.setText("Quran")
+        binding.appbar.ivLeft.setImageDrawable(resources.getDrawable(R.drawable.arrow_back_24))
+        binding.appbar.ivRight.setImageDrawable(resources.getDrawable(R.drawable.heartt))
     }
 
 }

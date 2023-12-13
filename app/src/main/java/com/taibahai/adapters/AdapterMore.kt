@@ -7,22 +7,22 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
+import com.network.interfaces.OnItemClick
 import com.taibahai.R
-import com.taibahai.activities.Activity100Scholars
-import com.taibahai.activities.BookPDFDetailActivity
+import com.taibahai.activities.ImamsOfSunnaActivity
 import com.taibahai.activities.BooksAndPDFActivity
 import com.taibahai.activities.InheritanceLawActivity
 import com.taibahai.activities.QuranChaptersActivity
+import com.taibahai.activities.UpgradeActivity
 import com.taibahai.activities.ZakatCalculatorActivity
-import com.taibahai.databinding.ItemHomeBinding
 import com.taibahai.databinding.ItemMoreBinding
 import com.taibahai.hadiths.HadithBooksActivity1
-import com.taibahai.models.ModelHome
 import com.taibahai.models.ModelMore
 import com.taibahai.models.ModelMoreLevels
 import com.taibahai.search_database_tablayout.SearchDatabaseActivity
 
-class AdapterMore(private val context: Context, var showData: MutableList<ModelMore>):RecyclerView.Adapter<AdapterMore.ViewHolder>() {
+class AdapterMore(private val context: Context, var showData: MutableList<ModelMore>) :
+    RecyclerView.Adapter<AdapterMore.ViewHolder>() {
     lateinit var binding: ItemMoreBinding
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AdapterMore.ViewHolder {
@@ -38,11 +38,14 @@ class AdapterMore(private val context: Context, var showData: MutableList<ModelM
     override fun onBindViewHolder(holder: AdapterMore.ViewHolder, position: Int) {
         val moreData = showData[position]
         holder.binding.model = moreData
-        holder.binding.tvLevel.text=showData[position].level
-        holder.binding.tvPackege.text=showData[position].packageName
-        val adapter = AdapterMoreLevels({ navigateToActivity(it) }, moreData.levelsList)
+        holder.binding.tvLevel.text = showData[position].level
+        holder.binding.tvPackege.text = showData[position].packageName
+        val adapter = AdapterMoreLevels(moreData.levelsList, object : OnItemClick {
+            override fun onClick(position: Int, type: String?, data: Any?) {
+                navigateToActivity(moreData.levelsList[position])
+            }
+        })
         holder.rvMoreLevelsList.adapter = adapter
-        holder.rvMoreLevelsList.adapter=adapter
         if (position == 0) {
             holder.binding.tvFree.visibility = View.VISIBLE
             holder.binding.tvLevel.visibility = View.INVISIBLE
@@ -59,48 +62,50 @@ class AdapterMore(private val context: Context, var showData: MutableList<ModelM
 
         }
 
-
+        binding.btnUpgrade.setOnClickListener {
+            context.startActivity(Intent(context, UpgradeActivity::class.java))
+        }
 
     }
 
     private fun navigateToActivity(model: ModelMoreLevels) {
-        when (model.title) {
+        when (model.key) {
 
-            "Quran" -> {
-
-                 val intent = Intent(context, QuranChaptersActivity::class.java)
-                 context.startActivity(intent)
+            "quran" -> {
+                val intent = Intent(context, QuranChaptersActivity::class.java)
+                context.startActivity(intent)
             }
 
-            "Hadith" -> {
+            "hadith" -> {
 
                 val intent = Intent(context, HadithBooksActivity1::class.java)
                 context.startActivity(intent)
             }
-            "Zakat Calculator" -> {
+
+            "zakat_calculator" -> {
                 val intent = Intent(context, ZakatCalculatorActivity::class.java)
                 context.startActivity(intent)
             }
-            "100 Scholars" -> {
-                val intent = Intent(context, Activity100Scholars::class.java)
+
+            "imams" -> {
+                val intent = Intent(context, ImamsOfSunnaActivity::class.java)
                 context.startActivity(intent)
             }
-            "Books & PDF" -> {
+
+            "books_pdfs" -> {
                 val intent = Intent(context, BooksAndPDFActivity::class.java)
                 context.startActivity(intent)
             }
 
-            "Inheritance Law" -> {
+            "inheritance_law" -> {
                 val intent = Intent(context, InheritanceLawActivity::class.java)
                 context.startActivity(intent)
             }
 
-            "Search Database Hadith, Surah" -> {
+            "searchdb" -> {
                 val intent = Intent(context, SearchDatabaseActivity::class.java)
                 context.startActivity(intent)
             }
-
-
 
 
             else -> {

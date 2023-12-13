@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/more_bg"
+        tools:context=".activities.ImamsOfSunnaActivity">
+
+        <include
+            android:id="@+id/appbar"
+            layout="@layout/appbar" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv100Scholars"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toTopOf="@+id/button7"
+            app:layout_constraintTop_toBottomOf="@+id/appbar"
+            tools:itemCount="5"
+            android:layout_marginBottom="20dp"
+            tools:listitem="@layout/item_100scholars" />
+
+        <Button
+            android:id="@+id/button7"
+            style="@style/button"
+            android:background="@drawable/continue_btn_bg"
+            android:text="Ad 320*90"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

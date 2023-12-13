@@ -2,6 +2,7 @@ package com.taibahai.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import com.network.base.BaseActivity
 import com.network.models.ModelBooks
@@ -32,7 +33,7 @@ class BooksAndPDFActivity : BaseActivity() {
     }
 
     override fun clicks() {
-        binding.ivBack.setOnClickListener {
+        binding.appbar.ivLeft.setOnClickListener {
         onBackPressed()
         }
     }
@@ -73,6 +74,14 @@ class BooksAndPDFActivity : BaseActivity() {
         super.apiAndArgs()
 
         viewModel.books()
+    }
+
+
+    override fun initData() {
+        super.initData()
+        binding.appbar.tvTitle.setText("Books & PDF")
+        binding.appbar.ivLeft.setImageDrawable(resources.getDrawable(R.drawable.arrow_back_24))
+        binding.appbar.ivRight.setVisibility(View.GONE)
     }
 
 

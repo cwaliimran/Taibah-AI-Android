@@ -1,14 +1,12 @@
 package com.taibahai.hadiths
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
+
+import android.view.View
 import com.network.base.BaseActivity
 import com.taibahai.R
 import com.taibahai.adapters.AdapterHadithBooks
-import com.taibahai.adapters.AdapterQuranChapter
 import com.taibahai.databinding.ActivityHadithBooks1Binding
 import com.taibahai.models.ModelHadithBook
-import com.taibahai.models.ModelQuranChapter
 
 class HadithBooksActivity1 : BaseActivity() {
     lateinit var binding:ActivityHadithBooks1Binding
@@ -22,7 +20,7 @@ class HadithBooksActivity1 : BaseActivity() {
     }
 
     override fun clicks() {
-        binding.ivBack.setOnClickListener {
+        binding.appbar.ivLeft.setOnClickListener {
             onBackPressed()
         }
     }
@@ -40,6 +38,13 @@ class HadithBooksActivity1 : BaseActivity() {
         adapter.setDate(showList)
         binding.rvHadithBook.adapter=adapter
 
+    }
+
+    override fun initData() {
+        super.initData()
+        binding.appbar.tvTitle.setText("Hadiths")
+        binding.appbar.ivLeft.setImageDrawable(resources.getDrawable(R.drawable.arrow_back_24))
+        binding.appbar.ivRight.setVisibility(View.GONE)
     }
 
 }

@@ -2,6 +2,7 @@ package com.taibahai.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import com.network.base.BaseActivity
 import com.taibahai.R
 import com.taibahai.adapters.AdapterHome
@@ -23,7 +24,7 @@ class NotificationActivity : BaseActivity() {
     }
 
     override fun clicks() {
-        binding.ivBack.setOnClickListener {
+        binding.appbar.ivLeft.setOnClickListener {
             onBackPressed()
         }
     }
@@ -36,4 +37,12 @@ class NotificationActivity : BaseActivity() {
         adapter.setDate(showList)
         binding.rvNotification.adapter=adapter
     }
+
+    override fun initData() {
+        super.initData()
+        binding.appbar.tvTitle.setText("Notifications")
+        binding.appbar.ivLeft.setImageDrawable(resources.getDrawable(R.drawable.arrow_back_24))
+        binding.appbar.ivRight.setVisibility(View.GONE)
+    }
+
 }

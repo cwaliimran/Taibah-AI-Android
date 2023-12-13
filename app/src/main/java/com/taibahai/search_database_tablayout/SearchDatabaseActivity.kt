@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import androidx.databinding.adapters.RadioGroupBindingAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
@@ -54,9 +55,16 @@ class SearchDatabaseActivity : BaseActivity() {
 
 
     override fun clicks() {
-        binding.ivBack.setOnClickListener {
-    onBackPressed()
-}
+        binding.appbar.ivLeft.setOnClickListener {
+            onBackPressed()
+        }
 
+    }
+
+    override fun initData() {
+        super.initData()
+        binding.appbar.tvTitle.setText("Search Database")
+        binding.appbar.ivLeft.setImageDrawable(resources.getDrawable(R.drawable.arrow_back_24))
+        binding.appbar.ivRight.setVisibility(View.GONE)
     }
 }

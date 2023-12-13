@@ -55,6 +55,13 @@ class MainViewModel constructor(application: Application) : AndroidViewModel(app
     }
 
 
+    fun postProfile(name:String, image:String) {
+        viewModelScope.launch {
+            repository.postProfile(name,image)
+        }
+    }
+
+
     val postFeedLiveData: MutableLiveData<NetworkResult<ModelPostFeed>>
         get() = repository.postFeedMutableLiveData
 

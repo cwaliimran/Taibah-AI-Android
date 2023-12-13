@@ -7,17 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.ConcatAdapter
 import com.network.base.BaseFragment
 import com.network.viewmodels.MainViewModel
 import com.taibahai.R
-import com.taibahai.activities.QuranChaptersActivity
 import com.taibahai.activities.SettingActivity
-import com.taibahai.adapters.AdapterHome
 import com.taibahai.adapters.AdapterMore
-import com.taibahai.adapters.AdapterMoreLevels
 import com.taibahai.databinding.FragmentMoreBinding
-import com.taibahai.models.ModelHome
 import com.taibahai.models.ModelMore
 import com.taibahai.models.ModelMoreLevels
 
@@ -26,7 +21,6 @@ class MoreFragment : BaseFragment() {
     val viewModel: MainViewModel by viewModels()
     lateinit var adapter: AdapterMore
     val showList = ArrayList<ModelMore>()
-    val showLevelList=ArrayList<ModelMoreLevels>()
 
 
     override fun onCreateView(
@@ -45,7 +39,7 @@ class MoreFragment : BaseFragment() {
     }
 
     override fun clicks() {
-        binding.ivSetting.setOnClickListener {
+        binding.appbar.ivRight.setOnClickListener {
             val intent= Intent(requireContext(),SettingActivity::class.java)
             startActivity(intent)
         }
@@ -56,34 +50,34 @@ class MoreFragment : BaseFragment() {
         adapter = AdapterMore(requireContext(),showList)
         val moreFree=ArrayList<ModelMoreLevels>()
 
-        moreFree.add(ModelMoreLevels(R.drawable.search_icon, "30 AI Tokens (monthly)"))
-        moreFree.add(ModelMoreLevels(R.drawable.quran_icon, "Quran"))
-        moreFree.add(ModelMoreLevels(R.drawable.hadih_icon, "Hadith"))
-        moreFree.add(ModelMoreLevels(R.drawable.ads_icon, "Ads"))
+        moreFree.add(ModelMoreLevels("search",R.drawable.search_icon, "30 AI Tokens (monthly)"))
+        moreFree.add(ModelMoreLevels("quran",R.drawable.quran_icon, "Quran"))
+        moreFree.add(ModelMoreLevels("hadith",R.drawable.hadih_icon, "Hadith"))
+        moreFree.add(ModelMoreLevels("",R.drawable.ads_icon, "Ads"))
         showList.add(ModelMore("Free" ,"",moreFree ))
 
             val moreLevel1=ArrayList<ModelMoreLevels>()
 
-        moreLevel1.add(ModelMoreLevels(R.drawable.search_icon, "30 AI Tokens (monthly)"))
-        moreLevel1.add(ModelMoreLevels(R.drawable.ads_icon, "Ads"))
+        moreLevel1.add(ModelMoreLevels("search",R.drawable.search_icon, "30 AI Tokens (monthly)"))
+        moreLevel1.add(ModelMoreLevels("",R.drawable.ads_icon, "Ads"))
         showList.add(ModelMore("Level 1" ,"Basic: Silver Subscription Package",moreLevel1) )
 
 
         val moreLevel2=ArrayList<ModelMoreLevels>()
 
-        moreLevel2.add(ModelMoreLevels(R.drawable.search_icon, "700 AI Tokens (monthly) "))
-        moreLevel2.add(ModelMoreLevels(R.drawable.ads_icon, "Ads"))
-        moreLevel2.add(ModelMoreLevels(R.drawable.zakat_icon, "Zakat Calculator"))
-        moreLevel2.add(ModelMoreLevels(R.drawable.scholar_icon, "100 Scholars"))
+        moreLevel2.add(ModelMoreLevels("search",R.drawable.search_icon, "700 AI Tokens (monthly) "))
+        moreLevel2.add(ModelMoreLevels("",R.drawable.ads_icon, "Ads"))
+        moreLevel2.add(ModelMoreLevels("zakat_calculator",R.drawable.zakat_icon, "Zakat Calculator"))
+        moreLevel2.add(ModelMoreLevels("imams",R.drawable.imams_logo, "4 Imams of Sunna"))
         showList.add(ModelMore("Level 2" ,"Advance Gold Subscription Package",moreLevel2) )
 
         val moreLevel3=ArrayList<ModelMoreLevels>()
 
-        moreLevel3.add(ModelMoreLevels(R.drawable.search_icon, "Unlimited AI Tokens"))
-        moreLevel3.add(ModelMoreLevels(R.drawable.ads_icon, "Ads"))
-        moreLevel3.add(ModelMoreLevels(R.drawable.bookspdf_icon, "Books & PDF"))
-        moreLevel3.add(ModelMoreLevels(R.drawable.inheritancelaw_icon, "Inheritance Law"))
-        moreLevel3.add(ModelMoreLevels(R.drawable.sd_icon, "Search Database Hadith, Surah"))
+        moreLevel3.add(ModelMoreLevels("search",R.drawable.search_icon, "Unlimited AI Tokens"))
+        moreLevel3.add(ModelMoreLevels("",R.drawable.ads_icon, "Ads"))
+        moreLevel3.add(ModelMoreLevels("books_pdfs",R.drawable.bookspdf_icon, "Books & PDF"))
+        moreLevel3.add(ModelMoreLevels("inheritance_law",R.drawable.inheritancelaw_icon, "Inheritance Law"))
+        moreLevel3.add(ModelMoreLevels("searchdb",R.drawable.sd_icon, "Search Database Hadith, Surah"))
         showList.add(ModelMore("Level 3" ,"Exclusive: Diamond Subscription Package",moreLevel3) )
 
 
@@ -92,6 +86,15 @@ class MoreFragment : BaseFragment() {
         adapter.setDate(showList)
         binding.rvMoreList.adapter=adapter
     }
+
+
+    override fun apiAndArgs() {
+        super.apiAndArgs()
+        binding.appbar.tvTitle.setText("More")
+        binding.appbar.ivRight.setImageDrawable(resources.getDrawable(R.drawable.baseline_settings_24))
+        binding.appbar.ivLeft.setVisibility(View.GONE)
+    }
+
 
 
 

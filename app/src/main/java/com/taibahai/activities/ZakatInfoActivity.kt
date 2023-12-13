@@ -2,6 +2,7 @@ package com.taibahai.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil.setContentView
 import com.network.base.BaseActivity
@@ -21,8 +22,15 @@ class ZakatInfoActivity : BaseActivity() {
     }
 
     override fun clicks() {
-        binding.ivBack.setOnClickListener {
+        binding.appbar.ivLeft.setOnClickListener {
             onBackPressed()
         }
+    }
+
+    override fun initData() {
+        super.initData()
+        binding.appbar.tvTitle.setText("Zakat Info")
+        binding.appbar.ivLeft.setImageDrawable(resources.getDrawable(R.drawable.arrow_back_24))
+        binding.appbar.ivRight.setVisibility(View.GONE)
     }
 }

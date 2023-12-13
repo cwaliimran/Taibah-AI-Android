@@ -1,13 +1,11 @@
 package com.taibahai.activities
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
+
 import com.network.base.BaseActivity
 import com.taibahai.R
-import com.taibahai.adapters.AdapterQuranChapter
+
 import com.taibahai.adapters.AdapterQuranDetail
 import com.taibahai.databinding.ActivityChapterDetailBinding
-import com.taibahai.models.ModelQuranChapter
 import com.taibahai.models.ModelQuranDetail
 
 class ChapterDetailActivity : BaseActivity() {
@@ -21,7 +19,7 @@ class ChapterDetailActivity : BaseActivity() {
     }
 
     override fun clicks() {
-        binding.ivBack.setOnClickListener {
+        binding.appbar.ivLeft.setOnClickListener {
             onBackPressed()
         }
     }
@@ -35,5 +33,12 @@ class ChapterDetailActivity : BaseActivity() {
         adapter.setDate(showList)
         binding.rvQuranDetail.adapter=adapter
 
+    }
+
+    override fun initData() {
+        super.initData()
+        binding.appbar.tvTitle.setText("Quran")
+        binding.appbar.ivLeft.setImageDrawable(resources.getDrawable(R.drawable.arrow_back_24))
+        binding.appbar.ivRight.setImageDrawable(resources.getDrawable(R.drawable.heartt))
     }
 }

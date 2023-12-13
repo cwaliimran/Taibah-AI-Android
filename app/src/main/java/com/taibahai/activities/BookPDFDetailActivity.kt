@@ -43,14 +43,16 @@ class BookPDFDetailActivity : BaseActivity() {
 
         engine = PdfEngine.INTERNAL
 
-        init()
+
     }
 
-    private fun init() {
+    override fun initData() {
+        super.initData()
         binding.appbar.tvTitle.setText(bookTitle)
         binding.appbar.ivLeft.setImageDrawable(resources.getDrawable(R.drawable.arrow_back_24))
         binding.appbar.ivRight.setVisibility(GONE)
     }
+
 
     private fun checkInternetConnection(context: Context): Boolean {
         var result = 0 // Returns connection type. 0: none; 1: mobile data; 2: wifi
@@ -172,7 +174,6 @@ class BookPDFDetailActivity : BaseActivity() {
 
                 if (checkInternetConnection(this)) {
                     loadFileFromNetwork(this.fileUrl)
-                    binding.appbar.tvTitle.setText(bookTitle)
                 } else {
                     Toast.makeText(
                         this,

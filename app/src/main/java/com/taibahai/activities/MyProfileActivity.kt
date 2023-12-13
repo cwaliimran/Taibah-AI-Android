@@ -1,7 +1,9 @@
 package com.taibahai.activities
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import com.bumptech.glide.Glide
@@ -31,8 +33,13 @@ class MyProfileActivity : BaseActivity(),OnItemClick {
     }
 
     override fun clicks() {
-        binding.ivBack.setOnClickListener {
+        binding.appbar.ivLeft.setOnClickListener {
             onBackPressed()
+        }
+
+        binding.appbar.ivRight.setOnClickListener {
+            val intent = Intent(this, EditProfileActivity::class.java)
+            startActivity(intent)
         }
     }
 
@@ -81,5 +88,12 @@ class MyProfileActivity : BaseActivity(),OnItemClick {
         binding.tvName.text = profileData.name
         binding.tvEmail.text = profileData.email
         Glide.with(this).load(profileData.image).into(binding.ivProfileImage)
+    }
+
+    override fun initData() {
+        super.initData()
+        binding.appbar.tvTitle.setText("My profile")
+        binding.appbar.ivLeft.setImageDrawable(resources.getDrawable(R.drawable.arrow_back_24))
+        binding.appbar.ivRight.setImageDrawable(resources.getDrawable(R.drawable.pen_new_square))
     }
 }

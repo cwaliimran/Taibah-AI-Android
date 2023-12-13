@@ -1,12 +1,14 @@
 package com.taibahai.activities
 
 
+import android.view.View
 import androidx.activity.viewModels
 import com.bumptech.glide.Glide
 import com.network.base.BaseActivity
 import com.network.network.NetworkResult
 import com.network.utils.ProgressLoading.displayLoading
 import com.network.viewmodels.MainViewModel
+import com.taibahai.R
 import com.taibahai.databinding.ActivityUpcomingFeaturesBinding
 import com.taibahai.utils.showToast
 
@@ -22,7 +24,7 @@ class UpcomingFeaturesActivity : BaseActivity() {
     }
 
     override fun clicks() {
-       binding.ivBack.setOnClickListener {
+       binding.appbar.ivLeft.setOnClickListener {
            onBackPressed()
        }
     }
@@ -55,4 +57,13 @@ class UpcomingFeaturesActivity : BaseActivity() {
         super.apiAndArgs()
         viewModel.upcoming()
     }
+
+
+    override fun initData() {
+        super.initData()
+        binding.appbar.tvTitle.setText("Upcoming Features")
+        binding.appbar.ivLeft.setImageDrawable(resources.getDrawable(R.drawable.arrow_back_24))
+        binding.appbar.ivRight.setVisibility(View.GONE)
+    }
+
 }

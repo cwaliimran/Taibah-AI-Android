@@ -1,12 +1,14 @@
 package com.taibahai.activities
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import com.network.base.BaseActivity
 import com.network.models.ModelInheritanceLaw
 import com.network.network.NetworkResult
 import com.network.utils.ProgressLoading.displayLoading
 import com.network.viewmodels.MainViewModel
+import com.taibahai.R
 import com.taibahai.adapters.AdapterInheritanceLaw
 import com.taibahai.databinding.ActivityInheritanceLawBinding
 import com.taibahai.utils.showToast
@@ -25,7 +27,7 @@ class InheritanceLawActivity : BaseActivity() {
     }
 
     override fun clicks() {
-    binding.ivBack.setOnClickListener {
+    binding.appbar.ivLeft.setOnClickListener {
     onBackPressed()
         }
     }
@@ -64,5 +66,13 @@ class InheritanceLawActivity : BaseActivity() {
     override fun apiAndArgs() {
         super.apiAndArgs()
         viewModel.getInheritanceLaw()
+    }
+
+
+    override fun initData() {
+        super.initData()
+        binding.appbar.tvTitle.setText("Islamic Law of Inheritance")
+        binding.appbar.ivLeft.setImageDrawable(resources.getDrawable(R.drawable.arrow_back_24))
+        binding.appbar.ivRight.setVisibility(View.GONE)
     }
 }
