@@ -4,17 +4,22 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
 import com.network.base.BaseActivity
+import com.network.models.ModelScholars
 import com.network.network.NetworkResult
 import com.network.utils.AppConstants
 import com.network.utils.ProgressLoading.displayLoading
 import com.network.viewmodels.MainViewModel
 import com.taibahai.R
+import com.taibahai.adapters.Adapter100Scholars
+import com.taibahai.adapters.AdapterImamsOfSunnaDetail
 import com.taibahai.databinding.ActivityScholarDetailBinding
 import com.taibahai.utils.showToast
 
 class ScholarDetailActivity : BaseActivity() {
     lateinit var binding:ActivityScholarDetailBinding
     val viewModel:MainViewModel by viewModels()
+    lateinit  var adapter: AdapterImamsOfSunnaDetail
+    val bookList:MutableList<ModelScholars.Data.Book> =mutableListOf()
     private var scholarName = ""
     private var scholarEra = ""
 
@@ -57,6 +62,13 @@ class ScholarDetailActivity : BaseActivity() {
                     binding.tvScholarName.text=scholarName
                     binding.tvScholarEra.text=scholarEra
                     binding.tvScholarDetail.text=it.data?.data?.firstOrNull()?.description
+
+                    bookList.addAll((it.data?.data?.firstOrNull()?.books!!))
+                    adapter.notifyDataSetChanged()
+
+
+
+
                 }
 
                 is NetworkResult.Error -> {
@@ -66,5 +78,11 @@ class ScholarDetailActivity : BaseActivity() {
         }
     }
 
+    override fun initAdapter() {
+        super.initAdapter()
+        bookList.clear()
+        adapter= AdapterImamsOfSunnaDetail(bookList)
+        binding.rvBookList.adapter=adapter
+    }
 
 }

@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -105,7 +106,9 @@ class CreatePostActivity : BaseActivity() {
 
                 is NetworkResult.Success -> {
                     it.data?.message?.let { it1 -> showToast(it1) }
-                    Glide.with(this).load(it.data?.data?.url).into(binding.ivPostUpload)
+                    Glide.with(this).load(it.data?.data?.url).into(binding.ivUserPost)
+                    binding.ivPostUpload.visibility=View.INVISIBLE
+                    binding.tvChooseImage.visibility=View.INVISIBLE
                     upLoadedFile= it.data?.data?.file.toString()
 
                 }

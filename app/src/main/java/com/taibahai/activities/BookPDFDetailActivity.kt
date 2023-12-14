@@ -167,6 +167,7 @@ class BookPDFDetailActivity : BaseActivity() {
 
         super.apiAndArgs()
         if (bundle != null) {
+
             val model: ModelBooks.Data? = intent.getSerializableExtra("model") as? ModelBooks.Data
             if (model != null) {
                 bookTitle = model.title

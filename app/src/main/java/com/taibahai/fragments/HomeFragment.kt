@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
@@ -18,6 +19,8 @@ import com.network.utils.ProgressLoading.displayLoading
 import com.network.viewmodels.MainViewModel
 import com.taibahai.R
 import com.taibahai.activities.CreatePostActivity
+import com.taibahai.activities.LoginActivity
+import com.taibahai.activities.NotificationActivity
 import com.taibahai.adapters.AdapterHome
 import com.taibahai.bottom_navigation.BottomNavigation
 import com.taibahai.databinding.FragmentHomeBinding
@@ -55,6 +58,11 @@ class HomeFragment : BaseFragment(),OnItemClick {
     override fun clicks() {
         binding.ivCreatePostIcon.setOnClickListener {
             val intent= Intent(requireContext(),CreatePostActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.ivNotification.setOnClickListener {
+            val intent = Intent(requireContext(), NotificationActivity::class.java)
             startActivity(intent)
         }
     }
@@ -133,6 +141,8 @@ class HomeFragment : BaseFragment(),OnItemClick {
             ViewGroup.LayoutParams.WRAP_CONTENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
+        popupWindow.isOutsideTouchable = true
+
 
         val reportMenuItem = popupView.findViewById<View>(R.id.menuReport)
         reportMenuItem.setOnClickListener {
@@ -143,6 +153,8 @@ class HomeFragment : BaseFragment(),OnItemClick {
         // Show the popup menu at a specific location
         val anchorView = view?.findViewById<View>(R.id.ivDots)
         popupWindow.showAsDropDown(anchorView, 0, 0)
+
+
     }
 
 

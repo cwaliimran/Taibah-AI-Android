@@ -30,6 +30,7 @@ class EditProfileActivity : BaseActivity() {
         binding=ActivityEditProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
         //image = currentUser?.data?.image.toString()
 
     }

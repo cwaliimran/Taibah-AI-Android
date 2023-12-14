@@ -87,15 +87,42 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
                 android:fontFamily="@font/poppins"
-                android:text=""
+                android:text="This is description"
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 android:layout_marginTop="20dp"
-                app:layout_constraintBottom_toBottomOf="parent"
+
                 android:layout_marginBottom="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvBookTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/poppins_medium"
+                android:text="Books Title"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvScholarDetail" />
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvBookList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                tools:listitem="@layout/item_books_pdf"
+                tools:itemCount="2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintTop_toBottomOf="@id/tvBookTitle"/>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

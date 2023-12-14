@@ -62,4 +62,12 @@
     <string name="inheritance_law">Quranic Basis: The rules of inheritance are primarily derived from specific verses in the Quran, particularly from Surah An-Nisa (Chapter 4), which provides detailed guidance on the distribution of wealth after a persons death \n\n Fixed Shares: In Islam, the shares of the heirs are predetermined and fixed. The Quran specifies the shares for close relatives like spouses, children, parents, and sometimes siblings. \n\n Spousal Share: The surviving spouse is entitled to a share of the inheritance. The share depends on whether there are children or other heirs. In the absence of children, the spouse may receive a larger share. \n\n Childrens Shares: Children, including sons and daughters, have fixed shares. Sons usually receive double the share of daughters. If there are no direct descendants, other relatives may inherit \n\n Parents Shares: Parents are entitled to inherit from their childrens estate, especially in the absence of direct descendants.</string>
     <string name="hadith_english_translation">The Messenger of Allah (ﷺ) said, He who does not thank the people is not thankful to Allah. (Sahih al-Bukhari 5668 Please note that Sahih al-Bukhari is a compilation of Hadiths considered authentic by Sunni Muslims. The numbering of the Hadith may vary slightly between different editions. </string>
 
+
+
+    <string name="facebook_app_id">741513821181094</string>
+    <string name="fb_login_protocol_scheme">fb741513821181094</string>
+    <string name="facebook_client_token">ff05cc382b73837882d7f4a1933e4579</string>
+
+
+
 </resources>

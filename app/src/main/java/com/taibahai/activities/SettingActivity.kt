@@ -4,25 +4,19 @@ import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.Window
 import android.widget.LinearLayout
 import androidx.activity.viewModels
-import androidx.core.content.ContentProviderCompat.requireContext
 import com.network.base.BaseActivity
 import com.network.network.NetworkResult
 import com.network.utils.ProgressLoading.displayLoading
 import com.network.viewmodels.MainViewModel
 import com.taibahai.R
-import com.taibahai.adapters.AdapterMore
-import com.taibahai.adapters.AdapterQuranChapter
 import com.taibahai.adapters.AdapterSettings
 import com.taibahai.databinding.ActivitySettingBinding
 import com.taibahai.databinding.DialogLogoutBinding
-import com.taibahai.models.ModelQuranChapter
 import com.taibahai.models.ModelSettings
 import com.taibahai.utils.showToast
 

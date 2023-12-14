@@ -3,3 +3,4 @@ upgrade screen
 add layout for topbar
 edit profile if only name update not image 403 error
 feed like (GoDaddy Security - Access Denied)
+also signup user if the permissions are denied (google signup)
