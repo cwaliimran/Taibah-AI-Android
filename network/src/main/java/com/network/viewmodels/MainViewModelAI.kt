@@ -6,7 +6,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.network.models.ModelBooks
-import com.network.models.ModelDBSearchAll
 import com.network.models.ModelDailyAlert
 import com.network.models.ModelGetFeeds
 import com.network.models.ModelHome
@@ -20,12 +19,12 @@ import com.network.models.ModelUploadFile
 import com.network.models.ModelUser
 import com.network.network.NetworkResult
 import com.network.network.SimpleResponse
-import com.network.repository.MainRepo
+import com.network.repository.MainRepoAI
 import kotlinx.coroutines.launch
 
-class MainViewModel constructor(application: Application) : AndroidViewModel(application) {
-    private val repository: MainRepo by lazy {
-        MainRepo()
+class MainViewModelAI constructor(application: Application) : AndroidViewModel(application) {
+    private val repository: MainRepoAI by lazy {
+        MainRepoAI()
     }
 
     val simpleResponseLiveData: MutableLiveData<NetworkResult<SimpleResponse>>

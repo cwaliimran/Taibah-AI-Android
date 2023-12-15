@@ -1,13 +1,12 @@
 package com.taibahai.activities
 
-import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
 import com.network.base.BaseActivity
 import com.network.models.ModelInheritanceLaw
 import com.network.network.NetworkResult
 import com.network.utils.ProgressLoading.displayLoading
-import com.network.viewmodels.MainViewModel
+import com.network.viewmodels.MainViewModelAI
 import com.taibahai.R
 import com.taibahai.adapters.AdapterInheritanceLaw
 import com.taibahai.databinding.ActivityInheritanceLawBinding
@@ -15,7 +14,7 @@ import com.taibahai.utils.showToast
 
 class InheritanceLawActivity : BaseActivity() {
     lateinit var binding:ActivityInheritanceLawBinding
-    val viewModel : MainViewModel by viewModels()
+    val viewModel : MainViewModelAI by viewModels()
     val showList=ArrayList<ModelInheritanceLaw.Data>()
     lateinit var adapter:AdapterInheritanceLaw
 

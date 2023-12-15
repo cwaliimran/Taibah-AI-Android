@@ -1,23 +1,18 @@
 package com.taibahai.activities
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import androidx.activity.viewModels
 import com.network.base.BaseActivity
 import com.network.models.ModelScholars
 import com.network.network.NetworkResult
-import com.network.utils.AppConstants
 import com.network.utils.ProgressLoading.displayLoading
-import com.network.viewmodels.MainViewModel
-import com.taibahai.R
-import com.taibahai.adapters.Adapter100Scholars
+import com.network.viewmodels.MainViewModelAI
 import com.taibahai.adapters.AdapterImamsOfSunnaDetail
 import com.taibahai.databinding.ActivityScholarDetailBinding
 import com.taibahai.utils.showToast
 
 class ScholarDetailActivity : BaseActivity() {
     lateinit var binding:ActivityScholarDetailBinding
-    val viewModel:MainViewModel by viewModels()
+    val viewModel:MainViewModelAI by viewModels()
     lateinit  var adapter: AdapterImamsOfSunnaDetail
     val bookList:MutableList<ModelScholars.Data.Book> =mutableListOf()
     private var scholarName = ""

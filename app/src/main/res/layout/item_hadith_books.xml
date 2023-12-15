@@ -6,7 +6,7 @@
     <data>
         <variable
             name="model"
-            type="com.taibahai.models.ModelHadithBook" />
+            type="com.network.models.ModelHadithBooks.Data" />
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"

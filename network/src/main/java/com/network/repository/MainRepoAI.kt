@@ -2,7 +2,6 @@ package com.network.repository
 
 import android.util.Log
 import com.network.models.ModelBooks
-import com.network.models.ModelDBSearchAll
 import com.network.models.ModelDailyAlert
 import com.network.models.ModelGetFeeds
 import com.network.models.ModelHome
@@ -15,11 +14,12 @@ import com.network.models.ModelUpcoming
 import com.network.models.ModelUploadFile
 import com.network.models.ModelUser
 import com.network.network.ApiClient
-import com.network.network.ApiInterface
+import com.network.network.ApiInterfaceAI
 import com.network.network.BaseApiResponse
 import com.network.network.NetworkResult
 import com.network.network.SimpleResponse
 import com.network.network.SingleLiveEvent
+import com.network.network.UrlManager
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -27,9 +27,9 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 
 
-class MainRepo : BaseApiResponse() {
-    private val apiService: ApiInterface by lazy {
-        ApiClient.getInstance()!!.create(ApiInterface::class.java)
+class MainRepoAI : BaseApiResponse() {
+    private val apiService: ApiInterfaceAI by lazy {
+        ApiClient.getInstance(UrlManager.BASE_URL_AI)!!.create(ApiInterfaceAI::class.java)
     }
 
 

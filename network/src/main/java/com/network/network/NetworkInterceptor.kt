@@ -34,7 +34,8 @@ class NetworkInterceptor(private val context: Context) : Interceptor {
                 ) //                .addHeader("Request-Type", "Android")
 //                .addHeader("Content-Type", "application/x-www-form-urlencoded")
                 .addHeader("Content-Type", "application/json")
-                .addHeader("accesstoken", token).build()
+                .addHeader("accesstoken", "giajsdflajlifjwebljcklajsbdlifjwliejkalkjdlajdsifuewbljalurleubalkjekuewi82khhjkj83819sifuewbljalurleub").build()
+//                .addHeader("accesstoken", token).build()
         }
         return chain.proceed(request)
     }

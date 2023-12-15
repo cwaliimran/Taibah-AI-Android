@@ -6,7 +6,7 @@ import com.network.base.BaseActivity
 import com.network.models.ModelComments
 import com.network.network.NetworkResult
 import com.network.utils.ProgressLoading.displayLoading
-import com.network.viewmodels.MainViewModel
+import com.network.viewmodels.MainViewModelAI
 import com.taibahai.adapters.AdapterComments
 import com.taibahai.databinding.ActivityHomeDetailBinding
 import com.taibahai.utils.showToast
@@ -15,7 +15,7 @@ class HomeDetailActivity : BaseActivity() {
     lateinit var adapter: AdapterComments
     val showComments = mutableListOf<ModelComments>()
     lateinit var binding: ActivityHomeDetailBinding
-    val viewModel: MainViewModel by viewModels()
+    val viewModel: MainViewModelAI by viewModels()
     var feedId = ""
     var comment = ""
 

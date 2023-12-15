@@ -1,6 +1,6 @@
 package com.network.network
 
-import com.network.network.UrlManager.BASE_URL
+import com.network.network.UrlManager.BASE_URL_AI
 import com.network.utils.AppClass
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
@@ -13,7 +13,7 @@ object ApiClient {
     //retrofit http client
     private var retrofit: Retrofit? = null
 
-    fun getInstance(): Retrofit? {
+    fun getInstance(baseUrl: String): Retrofit? {
         //network interceptor
         val networkConnectionInterceptor = NetworkInterceptor(AppClass.instance)
 
@@ -29,8 +29,8 @@ object ApiClient {
         //setting gson to lenient true
         val gson = GsonBuilder().setLenient().create()
 
-        if (retrofit == null) {
-            retrofit = Retrofit.Builder().baseUrl(BASE_URL).client(client)
+        if (retrofit == null || baseUrl != retrofit?.baseUrl().toString()) {
+            retrofit = Retrofit.Builder().baseUrl(baseUrl).client(client)
                 .addConverterFactory(GsonConverterFactory.create(gson)).build()
         }
         return retrofit

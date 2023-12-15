@@ -1,29 +1,22 @@
 package com.taibahai.activities
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
 import com.network.base.BaseActivity
 import com.network.models.ModelBooks
 import com.network.network.NetworkResult
 import com.network.utils.ProgressLoading.displayLoading
-import com.network.viewmodels.MainViewModel
+import com.network.viewmodels.MainViewModelAI
 import com.taibahai.R
 import com.taibahai.adapters.AdapterBooksAndPDF
-import com.taibahai.adapters.AdapterHadithBooks
 import com.taibahai.databinding.ActivityBooksAndPdfactivityBinding
-import com.taibahai.databinding.ActivitySettingBinding
-import com.taibahai.models.ModelBooksAndPDF
-import com.taibahai.models.ModelHadithBook
-import com.taibahai.models.ModelSettings
 import com.taibahai.utils.showToast
 
 class BooksAndPDFActivity : BaseActivity() {
     lateinit var binding:ActivityBooksAndPdfactivityBinding
     val showList = ArrayList<ModelBooks.Data>()
     lateinit var adapter:AdapterBooksAndPDF
-    val viewModel:MainViewModel by viewModels()
+    val viewModel:MainViewModelAI by viewModels()
 
 
 

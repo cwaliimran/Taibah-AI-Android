@@ -6,7 +6,7 @@
     <data>
         <variable
             name="model"
-            type="com.taibahai.models.ModelHadithChapter" />
+            type="com.network.models.ModelHadithChapter2.Data" />
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
@@ -74,13 +74,13 @@
                 android:id="@+id/tvLanguage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Arabic"
                 android:fontFamily="@font/poppins_medium"
-                android:textSize="14sp"
+                android:text="Arabic"
                 android:textColor="@color/white"
+                android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@+id/tvChapters" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 

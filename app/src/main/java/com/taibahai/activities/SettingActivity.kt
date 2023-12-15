@@ -12,7 +12,7 @@ import androidx.activity.viewModels
 import com.network.base.BaseActivity
 import com.network.network.NetworkResult
 import com.network.utils.ProgressLoading.displayLoading
-import com.network.viewmodels.MainViewModel
+import com.network.viewmodels.MainViewModelAI
 import com.taibahai.R
 import com.taibahai.adapters.AdapterSettings
 import com.taibahai.databinding.ActivitySettingBinding
@@ -23,7 +23,7 @@ import com.taibahai.utils.showToast
 class SettingActivity : BaseActivity() {
     lateinit var binding: ActivitySettingBinding
     val showList = ArrayList<ModelSettings>()
-    val viewModel : MainViewModel by viewModels()
+    val viewModel : MainViewModelAI by viewModels()
 
 
 

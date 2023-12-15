@@ -4,11 +4,12 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.network.interfaces.OnItemClick
+import com.network.models.ModelSurah
 import com.taibahai.activities.ChapterDetailActivity
 import com.taibahai.databinding.ItemQuranChapterBinding
-import com.taibahai.models.ModelQuranChapter
 
-class AdapterQuranChapter( var showData: MutableList<ModelQuranChapter>):RecyclerView.Adapter<AdapterQuranChapter.ViewHolder>() {
+class AdapterQuranChapter(var showData: MutableList<ModelSurah>, var listener: OnItemClick):RecyclerView.Adapter<AdapterQuranChapter.ViewHolder>() {
     lateinit var binding: ItemQuranChapterBinding
 
     override fun onCreateViewHolder(  parent: ViewGroup,viewType: Int): AdapterQuranChapter.ViewHolder {
@@ -16,17 +17,14 @@ class AdapterQuranChapter( var showData: MutableList<ModelQuranChapter>):Recycle
         return AdapterQuranChapter.ViewHolder(binding)
     }
 
-    fun setDate(list: ArrayList<ModelQuranChapter>) {
+    fun setDate(list: ArrayList<ModelSurah>) {
         showData = list
         notifyDataSetChanged()
     }
 
     override fun onBindViewHolder(holder: AdapterQuranChapter.ViewHolder, position: Int) {
         val chapterData = showData[position]
-        holder.binding.model = chapterData
-        holder.binding.tvCounter.text= showData[position].count.toString()
-        holder.binding.tvQuranChapter.text=showData[position].chapterName
-        holder.binding.tvChapterDes.text=showData[position].chapterDec
+        binding.data = chapterData
 
         holder.itemView.setOnClickListener {
             val context = holder.itemView.context

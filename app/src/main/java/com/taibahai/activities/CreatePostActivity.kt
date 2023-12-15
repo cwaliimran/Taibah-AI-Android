@@ -2,11 +2,8 @@ package com.taibahai.activities
 
 import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -15,8 +12,7 @@ import com.github.dhaval2404.imagepicker.ImagePicker
 import com.network.base.BaseActivity
 import com.network.network.NetworkResult
 import com.network.utils.ProgressLoading.displayLoading
-import com.network.viewmodels.MainViewModel
-import com.taibahai.R
+import com.network.viewmodels.MainViewModelAI
 import com.taibahai.bottom_navigation.BottomNavigation
 import com.taibahai.databinding.ActivityCreatePostBinding
 import com.taibahai.utils.getPicker
@@ -25,7 +21,7 @@ import com.taibahai.utils.showToast
 class CreatePostActivity : BaseActivity() {
     private var description=""
     lateinit var binding:ActivityCreatePostBinding
-    val viewModel : MainViewModel by viewModels()
+    val viewModel : MainViewModelAI by viewModels()
     var upLoadedFile=""
 
 

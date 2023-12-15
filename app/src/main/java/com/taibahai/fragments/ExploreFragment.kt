@@ -12,9 +12,10 @@ import androidx.core.text.HtmlCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import com.network.base.BaseFragment
+import com.network.models.ModelSurah
 import com.network.network.NetworkResult
 import com.network.utils.ProgressLoading.displayLoading
-import com.network.viewmodels.MainViewModel
+import com.network.viewmodels.MainViewModelAI
 import com.taibahai.R
 import com.taibahai.activities.QuranChaptersActivity
 import com.taibahai.databinding.FragmentExploreBinding
@@ -25,8 +26,7 @@ import com.taibahai.utils.showToast
 class ExploreFragment : BaseFragment() {
 
     lateinit var binding: FragmentExploreBinding
-    val viewModel:MainViewModel by viewModels()
-
+    val viewModel:MainViewModelAI by viewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

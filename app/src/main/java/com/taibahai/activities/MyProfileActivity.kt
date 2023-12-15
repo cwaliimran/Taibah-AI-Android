@@ -1,10 +1,6 @@
 package com.taibahai.activities
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.view.View
-import android.widget.Toast
 import androidx.activity.viewModels
 import com.bumptech.glide.Glide
 import com.network.base.BaseActivity
@@ -12,18 +8,17 @@ import com.network.interfaces.OnItemClick
 import com.network.models.ModelUser
 import com.network.network.NetworkResult
 import com.network.utils.ProgressLoading.displayLoading
-import com.network.viewmodels.MainViewModel
+import com.network.viewmodels.MainViewModelAI
 import com.taibahai.R
 import com.taibahai.adapters.AdapterHome
 import com.taibahai.databinding.ActivityMyProfileBinding
-import com.taibahai.models.ModelHome
 import com.taibahai.utils.showToast
 
 class MyProfileActivity : BaseActivity(),OnItemClick {
     lateinit var binding:ActivityMyProfileBinding
     lateinit var adapter: AdapterHome
     private var profileFeedList: MutableList<com.network.models.ModelHome.Data> = mutableListOf()
-    val viewModel : MainViewModel by viewModels()
+    val viewModel : MainViewModelAI by viewModels()
 
 
 

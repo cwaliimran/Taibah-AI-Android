@@ -4,28 +4,21 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.PopupMenu
 import android.widget.PopupWindow
-import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import com.network.base.BaseFragment
 import com.network.interfaces.OnItemClick
 import com.network.network.NetworkResult
 import com.network.utils.ProgressLoading.displayLoading
-import com.network.viewmodels.MainViewModel
+import com.network.viewmodels.MainViewModelAI
 import com.taibahai.R
 import com.taibahai.activities.CreatePostActivity
-import com.taibahai.activities.LoginActivity
 import com.taibahai.activities.NotificationActivity
 import com.taibahai.adapters.AdapterHome
-import com.taibahai.bottom_navigation.BottomNavigation
 import com.taibahai.databinding.FragmentHomeBinding
-import com.taibahai.models.ModelHome
-import com.taibahai.models.ModelHomeSlider
 import com.taibahai.utils.showToast
 
 
@@ -36,7 +29,7 @@ class HomeFragment : BaseFragment(),OnItemClick {
 
     lateinit var adapter: AdapterHome
     private var showList: MutableList<com.network.models.ModelHome.Data> = mutableListOf()
-    val viewModel: MainViewModel by viewModels()
+    val viewModel: MainViewModelAI by viewModels()
 
 
     override fun onCreateView(

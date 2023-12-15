@@ -4,14 +4,12 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.taibahai.activities.ChapterDetailActivity
+import com.network.interfaces.OnItemClick
+import com.network.models.ModelHadithBooks
 import com.taibahai.databinding.ItemHadithBooksBinding
-import com.taibahai.databinding.ItemQuranChapterDetailBinding
 import com.taibahai.hadiths.HadithChaptersActivity2
-import com.taibahai.models.ModelHadithBook
-import com.taibahai.models.ModelQuranDetail
 
-class AdapterHadithBooks(var showData: MutableList<ModelHadithBook>):RecyclerView.Adapter<AdapterHadithBooks.ViewHolder>() {
+class AdapterHadithBooks(var showData: MutableList<ModelHadithBooks.Data>, var listener: OnItemClick):RecyclerView.Adapter<AdapterHadithBooks.ViewHolder>() {
     lateinit var binding: ItemHadithBooksBinding
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int ): AdapterHadithBooks.ViewHolder {
@@ -19,7 +17,7 @@ class AdapterHadithBooks(var showData: MutableList<ModelHadithBook>):RecyclerVie
         return AdapterHadithBooks.ViewHolder(binding)
     }
 
-    fun setDate(list: ArrayList<ModelHadithBook>) {
+    fun setDate(list: ArrayList<ModelHadithBooks.Data>) {
         showData = list
         notifyDataSetChanged()
     }
@@ -27,15 +25,12 @@ class AdapterHadithBooks(var showData: MutableList<ModelHadithBook>):RecyclerVie
     override fun onBindViewHolder(holder: AdapterHadithBooks.ViewHolder, position: Int) {
         val hadithData = showData[position]
         holder.binding.model = hadithData
-        holder.binding.tvCounter.text= showData[position].count.toString()
-        holder.binding.tvBookName.text=showData[position].bookName
-        holder.binding.tvChapter.text=showData[position].chapters
+        holder.binding.tvCounter.text = (position + 1).toString()
+        holder.binding.tvBookName.text=hadithData.title
+        holder.binding.tvChapter.text = "${hadithData.imam}, ${hadithData.total_chapters} Chapters"
 
         holder.itemView.setOnClickListener {
-            val context = holder.itemView.context
-            val intent = Intent(context, HadithChaptersActivity2::class.java)
-
-            context.startActivity(intent)
+            listener.onClick(position)
         }
 
     }

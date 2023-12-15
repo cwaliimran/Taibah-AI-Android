@@ -3,7 +3,6 @@ package com.taibahai.search_database_tablayout
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,25 +10,22 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import com.google.gson.Gson
 import com.network.base.BaseFragment
-import com.network.models.ModelDbSearchHadith
 import com.network.models.ModelDbSearchQuran
+import com.network.models.ModelSurah
 import com.network.network.NetworkResult
 import com.network.utils.ProgressLoading.displayLoading
-import com.network.viewmodels.MainViewModel
+import com.network.viewmodels.MainViewModelAI
 import com.taibahai.R
-import com.taibahai.adapters.AdapterChapterHadiths
 import com.taibahai.adapters.AdapterDbSearchQuran
-import com.taibahai.adapters.AdapterQuranChapter
 import com.taibahai.databinding.FragmentTopQuranBinding
-import com.taibahai.models.ModelQuranChapter
 import com.taibahai.utils.showToast
 
 class TopQuranFragment : BaseFragment() {
     lateinit var binding: FragmentTopQuranBinding
-    val showList=ArrayList<ModelQuranChapter>()
+    val showList=ArrayList<ModelSurah>()
     lateinit var adapter: AdapterDbSearchQuran
     val quranData=ArrayList<ModelDbSearchQuran.Data>()
-    val viewModel: MainViewModel by viewModels()
+    val viewModel: MainViewModelAI by viewModels()
 
 
 

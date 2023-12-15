@@ -1,20 +1,18 @@
 package com.taibahai.activities
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
 import com.network.base.BaseActivity
 import com.network.network.NetworkResult
 import com.network.utils.ProgressLoading.displayLoading
-import com.network.viewmodels.MainViewModel
+import com.network.viewmodels.MainViewModelAI
 import com.taibahai.R
 import com.taibahai.databinding.ActivityAboutUsBinding
 import com.taibahai.utils.showToast
 
 class AboutUsActivity : BaseActivity() {
     lateinit var binding:ActivityAboutUsBinding
-    val viewModel : MainViewModel by viewModels()
+    val viewModel : MainViewModelAI by viewModels()
     var textAboutUs=""
 
 

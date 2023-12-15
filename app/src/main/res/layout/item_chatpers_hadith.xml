@@ -7,7 +7,7 @@
     <data>
         <variable
             name="model"
-            type="com.network.models.ModelDbSearchHadith.Data" />
+            type="com.network.models.ModelChapterHadith3.Data" />
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"

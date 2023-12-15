@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import com.network.base.BaseFragment
-import com.network.viewmodels.MainViewModel
+import com.network.viewmodels.MainViewModelAI
 import com.taibahai.R
 import com.taibahai.activities.SettingActivity
 import com.taibahai.adapters.AdapterMore
@@ -18,7 +18,7 @@ import com.taibahai.models.ModelMoreLevels
 
 class MoreFragment : BaseFragment() {
     lateinit var binding: FragmentMoreBinding
-    val viewModel: MainViewModel by viewModels()
+    val viewModel: MainViewModelAI by viewModels()
     lateinit var adapter: AdapterMore
     val showList = ArrayList<ModelMore>()
 

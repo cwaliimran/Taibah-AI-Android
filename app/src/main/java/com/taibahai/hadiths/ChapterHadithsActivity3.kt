@@ -1,29 +1,28 @@
 package com.taibahai.hadiths
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import androidx.activity.viewModels
-import androidx.fragment.app.viewModels
 import com.google.gson.Gson
 import com.network.base.BaseActivity
+import com.network.models.ModelChapterHadith3
 import com.network.models.ModelDbSearchHadith
 import com.network.network.NetworkResult
 import com.network.utils.ProgressLoading.displayLoading
-import com.network.viewmodels.MainViewModel
-import com.taibahai.R
+import com.network.viewmodels.MainViewModelAI
+import com.network.viewmodels.MainViewModelTaibahIslamic
 import com.taibahai.adapters.AdapterChapterHadiths
-import com.taibahai.adapters.AdapterHadithChapter
 import com.taibahai.databinding.ActivityChapterHadiths3Binding
-import com.taibahai.models.ModelChapterHadiths
-import com.taibahai.models.ModelHadithChapter
 import com.taibahai.utils.showToast
 
 class ChapterHadithsActivity3 : BaseActivity() {
     lateinit var binding:ActivityChapterHadiths3Binding
-    val showList=ArrayList<ModelDbSearchHadith.Data>()
+    val showList=ArrayList<ModelChapterHadith3.Data>()
     lateinit var adapter: AdapterChapterHadiths
-    val viewModel: MainViewModel by viewModels()
-
+    val viewModel: MainViewModelTaibahIslamic by viewModels()
+    var chapter_id=""
+    var chapterName=""
+    var hadithNo=""
+    var title=""
+    var hadithType=""
 
 
     override fun onCreate() {
@@ -39,7 +38,7 @@ class ChapterHadithsActivity3 : BaseActivity() {
 
     override fun initObservers() {
         super.initObservers()
-        viewModel.dbSearchLiveData.observe(this) {
+        viewModel.chapterHadithLiveData.observe(this) {
             if (it == null) {
                 return@observe
             }
@@ -50,9 +49,10 @@ class ChapterHadithsActivity3 : BaseActivity() {
                 }
 
                 is NetworkResult.Success -> {
-                    val gson = Gson()
-                    val responseData = gson.fromJson(gson.toJson(it.data), ModelDbSearchHadith::class.java)
-                    showList.addAll(responseData.data)
+                    it.data?.let { it1 -> showList.addAll(it1.data) }
+                    binding.tvChapterHadith.text=chapterName
+                    binding.tvChaptersFrom.text=hadithNo
+
                     adapter.notifyDataSetChanged()
                 }
 
@@ -63,10 +63,27 @@ class ChapterHadithsActivity3 : BaseActivity() {
         }
     }
 
+
+
     override fun initAdapter() {
         super.initAdapter()
         adapter= AdapterChapterHadiths(showList)
         binding.rvChapterHadiths.adapter=adapter
 
+    }
+
+    override fun apiAndArgs() {
+        super.apiAndArgs()
+        if(bundle!=null)
+        {
+            chapter_id= intent.getStringExtra("book_id").toString()
+            chapterName= intent.getStringExtra("chapter_name").toString()
+            hadithNo= intent.getStringExtra("hadith_number").toString()
+            title= intent.getStringExtra("title").toString()
+
+
+
+        }
+        viewModel.getChapterHadiths(1,chapter_id)
     }
 }

@@ -11,12 +11,10 @@ import androidx.fragment.app.viewModels
 import com.google.gson.Gson
 import com.network.base.BaseFragment
 import com.network.models.ModelDbSearchHadith
-import com.network.models.ModelDbSearchQuran
 import com.network.network.NetworkResult
 import com.network.utils.ProgressLoading.displayLoading
-import com.network.viewmodels.MainViewModel
+import com.network.viewmodels.MainViewModelAI
 import com.taibahai.R
-import com.taibahai.adapters.AdapterChapterHadiths
 import com.taibahai.adapters.AdapterDBSearchHadith
 import com.taibahai.databinding.FragmentTopHadithBinding
 import com.taibahai.utils.showToast
@@ -25,7 +23,7 @@ import com.taibahai.utils.showToast
 class TopHadithFragment : BaseFragment() {
     lateinit var binding: FragmentTopHadithBinding
     val hadithData=ArrayList<ModelDbSearchHadith.Data>()
-    val viewModel:MainViewModel by viewModels()
+    val viewModel:MainViewModelAI by viewModels()
     lateinit var adapter:AdapterDBSearchHadith
 
 

@@ -6,7 +6,7 @@ import com.network.base.BaseActivity
 import com.network.models.ModelScholars
 import com.network.network.NetworkResult
 import com.network.utils.ProgressLoading.displayLoading
-import com.network.viewmodels.MainViewModel
+import com.network.viewmodels.MainViewModelAI
 import com.taibahai.R
 import com.taibahai.adapters.Adapter100Scholars
 import com.taibahai.databinding.ActivityImamsOfSunnaBinding
@@ -16,7 +16,7 @@ class ImamsOfSunnaActivity : BaseActivity() {
     lateinit var binding:ActivityImamsOfSunnaBinding
     lateinit  var adapter:Adapter100Scholars
     val scholarList:MutableList<ModelScholars.Data> =mutableListOf()
-    val viewModel : MainViewModel by viewModels()
+    val viewModel : MainViewModelAI by viewModels()
 
 
 

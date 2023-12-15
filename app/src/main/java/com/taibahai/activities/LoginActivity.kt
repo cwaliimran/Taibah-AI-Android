@@ -33,7 +33,7 @@ import com.google.firebase.auth.FacebookAuthProvider
 import com.network.base.BaseActivity
 import com.network.network.NetworkResult
 import com.network.utils.ProgressLoading.displayLoading
-import com.network.viewmodels.MainViewModel
+import com.network.viewmodels.MainViewModelAI
 import com.taibahai.R
 import com.taibahai.bottom_navigation.BottomNavigation
 import com.taibahai.databinding.ActivityLoginBinding
@@ -61,7 +61,7 @@ class LoginActivity : BaseActivity() {
     lateinit var binding: ActivityLoginBinding
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
-    val viewModel: MainViewModel by viewModels()
+    val viewModel: MainViewModelAI by viewModels()
     var image = ""
     var savedImagePath = ""
     var filename = ""

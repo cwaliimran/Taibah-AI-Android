@@ -6,14 +6,15 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.network.models.ModelDbSearchHadith
 import com.taibahai.databinding.ItemChatpersHadithBinding
+import com.taibahai.databinding.ItemDbSearchHadithBinding
 import com.taibahai.hadiths.HadithDetailsActivity4
 
 class AdapterDBSearchHadith(var showData: ArrayList<ModelDbSearchHadith.Data>): RecyclerView.Adapter<AdapterDBSearchHadith.ViewHolder>()
 {
-    lateinit var binding: ItemChatpersHadithBinding
+    lateinit var binding: ItemDbSearchHadithBinding
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AdapterDBSearchHadith.ViewHolder {
-        binding = ItemChatpersHadithBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        binding = ItemDbSearchHadithBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return AdapterDBSearchHadith.ViewHolder(binding)
     }
 
@@ -46,5 +47,5 @@ class AdapterDBSearchHadith(var showData: ArrayList<ModelDbSearchHadith.Data>): 
     override fun getItemCount(): Int {
         return showData.size
     }
-    class ViewHolder(val binding: ItemChatpersHadithBinding) : RecyclerView.ViewHolder(binding.root) {}
+    class ViewHolder(val binding: ItemDbSearchHadithBinding) : RecyclerView.ViewHolder(binding.root) {}
 }

@@ -4,12 +4,13 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.network.models.ModelChapterHadith3
 import com.network.models.ModelDBSearchAll
 import com.network.models.ModelDbSearchHadith
 import com.taibahai.databinding.ItemChatpersHadithBinding
 import com.taibahai.hadiths.HadithDetailsActivity4
 
-class AdapterChapterHadiths(var showData: ArrayList<ModelDbSearchHadith.Data>):RecyclerView.Adapter<AdapterChapterHadiths.ViewHolder>()
+class AdapterChapterHadiths(var showData: ArrayList<ModelChapterHadith3.Data>):RecyclerView.Adapter<AdapterChapterHadiths.ViewHolder>()
 {
     lateinit var binding: ItemChatpersHadithBinding
 
@@ -18,7 +19,7 @@ class AdapterChapterHadiths(var showData: ArrayList<ModelDbSearchHadith.Data>):R
         return AdapterChapterHadiths.ViewHolder(binding)
     }
 
-    fun setDate(list: ArrayList<ModelDbSearchHadith.Data>) {
+    fun setDate(list: ArrayList<ModelChapterHadith3.Data>) {
         showData = list
         notifyDataSetChanged()
     }
@@ -38,6 +39,10 @@ class AdapterChapterHadiths(var showData: ArrayList<ModelDbSearchHadith.Data>):R
 
         binding.btnReadMore.setOnClickListener {
             val intent= Intent(holder.itemView.context,HadithDetailsActivity4::class.java)
+            intent.putExtra("id",hadithChapter.chapter_id)
+            intent.putExtra("hadith_id",hadithChapter.hadith_no)
+
+
             holder.itemView.context.startActivity(intent)
 
         }
