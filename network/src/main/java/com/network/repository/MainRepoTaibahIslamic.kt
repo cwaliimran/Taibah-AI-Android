@@ -10,12 +10,13 @@ import com.network.network.ApiInterfaceTaibahIslamic
 import com.network.network.BaseApiResponse
 import com.network.network.NetworkResult
 import com.network.network.SingleLiveEvent
+import com.network.network.UrlManager.BASE_URL_AI
 import com.network.network.UrlManager.BASE_URL_TAIBAH_ISLAMIC
 
 
 class MainRepoTaibahIslamic : BaseApiResponse() {
     private val apiService: ApiInterfaceTaibahIslamic by lazy {
-        ApiClient.getInstance(BASE_URL_TAIBAH_ISLAMIC)!!
+        ApiClient.getInstance(BASE_URL_AI)!!
             .create(ApiInterfaceTaibahIslamic::class.java)
     }
 

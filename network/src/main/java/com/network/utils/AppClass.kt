@@ -12,6 +12,8 @@ import java.util.Locale
 
 
 public class AppClass : Application() {
+    val BASE_URL_1 = "https://taibahislamic.com/admin/"
+
     override fun onCreate() {
         super.onCreate()
         myApp = this

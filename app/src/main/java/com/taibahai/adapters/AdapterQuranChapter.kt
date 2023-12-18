@@ -35,6 +35,20 @@ class AdapterQuranChapter(var showData: MutableList<ModelSurah>, var listener: O
 
     }
 
+    fun setOnItemClickListener(listener: OnPlayListener?) {
+        this.listener = listener
+    }
+
+    interface OnPlayListener {
+        fun onDownload(model: SurahListModel?)
+        fun onDelete(model: SurahListModel?)
+        fun onPause(model: SurahListModel?)
+        fun onResume(model: SurahListModel?)
+        fun onRetryDownload(model: SurahListModel?)
+        fun onPlayClick(model: SurahListModel?)
+    }
+
+
     override fun getItemCount(): Int {
         return showData.size
     }
