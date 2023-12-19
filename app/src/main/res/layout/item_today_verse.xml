@@ -31,21 +31,21 @@
                 android:fontFamily="@font/poppins_medium"
                 android:textSize="18sp"
                 android:textColor="@color/black"
-                android:layout_marginHorizontal="20dp"
+                android:layout_marginHorizontal="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 android:text="Today's Verse"/>
 
 
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/clTitle"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvTodaysVerse"
-                app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginTop="20dp"
-                android:layout_marginHorizontal="20dp"
+                android:layout_marginHorizontal="10dp"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -73,23 +73,25 @@
                     android:textSize="14sp"
                     android:textColor="@color/black"/>
 
-                <TextView
-                    android:id="@+id/tvArbiAyat"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins"
-                    android:text="قُلْ هُوَ ٱللَّهُ أَحَدٌ ١"
-                    android:textColor="@color/black"
-                    android:textSize="18sp"
-                    android:textAlignment="textStart"
-                    android:layout_marginStart="20dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/tvCount"
-                    app:layout_constraintTop_toTopOf="parent" />
+
+
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/tvArbiAyat"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/poppins"
+                android:text="قُلْ هُوَ ٱللَّهُ أَحَدٌ ١"
+                android:layout_marginHorizontal="10dp"                android:textAlignment="textStart"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/clTitle"
+                app:layout_constraintTop_toBottomOf="@id/tvTodaysVerse" />
 
             <TextView
                 android:id="@+id/tvEnglishAyat"
@@ -101,9 +103,9 @@
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginHorizontal="20dp"
+                android:layout_marginHorizontal="10dp"
                 android:layout_marginTop="20dp"
-                app:layout_constraintTop_toBottomOf="@id/clTitle"
+                app:layout_constraintTop_toBottomOf="@id/tvArbiAyat"
                 />
 
             <TextView
@@ -116,7 +118,7 @@
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginHorizontal="20dp"
+                android:layout_marginHorizontal="10dp"
                 android:layout_marginTop="10dp"
                 app:layout_constraintTop_toBottomOf="@id/tvEnglishAyat"/>
 
@@ -132,6 +134,7 @@
                 android:layout_marginTop="20dp"
                 android:fontFamily="@font/poppins"
                 android:textSize="14sp"
+                android:layout_marginEnd="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:textColor="@color/primary_green"
                 android:background="@drawable/item_more_upgradebtn"/>

@@ -14,6 +14,8 @@ data class ModelDbSearchHadith(
         var reference: String = "",
         var hadith_no: String = "",
         var is_active: String = "",
-        var chapter_id: String = ""
+        var chapter_id: String = "",
+        var book_name: String = "",
+        var type: String = ""
     )
 }

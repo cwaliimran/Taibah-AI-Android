@@ -1,5 +1,6 @@
 package com.taibahai.search_database_tablayout
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -10,6 +11,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import com.google.gson.Gson
 import com.network.base.BaseFragment
+import com.network.interfaces.OnItemClick
 import com.network.models.ModelDbSearchHadith
 import com.network.network.NetworkResult
 import com.network.utils.ProgressLoading.displayLoading
@@ -22,9 +24,12 @@ import com.taibahai.utils.showToast
 
 class TopHadithFragment : BaseFragment() {
     lateinit var binding: FragmentTopHadithBinding
-    val hadithData=ArrayList<ModelDbSearchHadith.Data>()
     val viewModel:MainViewModelAI by viewModels()
     lateinit var adapter:AdapterDBSearchHadith
+    val hadithData = ArrayList<ModelDbSearchHadith.Data>()
+
+
+
 
 
 
@@ -63,7 +68,17 @@ class TopHadithFragment : BaseFragment() {
 
     override fun initAdapter() {
         super.initAdapter()
-        adapter= AdapterDBSearchHadith(hadithData)
+        adapter= AdapterDBSearchHadith(hadithData,object :OnItemClick{
+            override fun onClick(position: Int, type: String?, data: Any?) {
+                val intent= Intent(context, DbSearchHadithRMActivity::class.java)
+                intent.putExtra("hadith_no",hadithData[position].hadith_no)
+                intent.putExtra("book_name",hadithData[position].book_name)
+                intent.putExtra("type",hadithData[position].type)
+                intent.putExtra("arbi",hadithData[position].arabic)
+                intent.putExtra("translation",hadithData[position].english_translation)
+                startActivity(intent)
+            }
+        })
         binding.rvSearchHadith.adapter=adapter
     }
 
@@ -94,4 +109,6 @@ class TopHadithFragment : BaseFragment() {
             }
         }
     }
+
+
 }

@@ -1,15 +1,14 @@
 package com.taibahai.adapters
 
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.network.interfaces.OnItemClick
 import com.network.models.ModelDbSearchHadith
-import com.taibahai.databinding.ItemChatpersHadithBinding
 import com.taibahai.databinding.ItemDbSearchHadithBinding
-import com.taibahai.hadiths.HadithDetailsActivity4
+import com.taibahai.search_database_tablayout.TopHadithFragment
 
-class AdapterDBSearchHadith(var showData: ArrayList<ModelDbSearchHadith.Data>): RecyclerView.Adapter<AdapterDBSearchHadith.ViewHolder>()
+class AdapterDBSearchHadith(var showData: ArrayList<ModelDbSearchHadith.Data>, var listener: OnItemClick): RecyclerView.Adapter<AdapterDBSearchHadith.ViewHolder>()
 {
     lateinit var binding: ItemDbSearchHadithBinding
 
@@ -27,18 +26,13 @@ class AdapterDBSearchHadith(var showData: ArrayList<ModelDbSearchHadith.Data>): 
         val hadithChapter = showData[position]
         holder.binding.model = hadithChapter
         holder.binding.tvHadithNo.text="Hadith No: ${hadithChapter.hadith_no}"
-        val parts = hadithChapter.reference?.split("\t : ")
-        if (parts?.size!! > 1) {
-            holder.binding.tvBookName.text = parts[1]
-        } else {
-            holder.binding.tvBookName.text = hadithChapter.reference
-        }
+        holder.binding.tvBookName.text=hadithChapter.book_name
+        holder.binding.tvHadithType.text=hadithChapter.type
         holder.binding.tvArbiAyat.text=hadithChapter.arabic
         holder.binding.tvTranslation.text=hadithChapter.english_translation
 
         binding.btnReadMore.setOnClickListener {
-            val intent= Intent(holder.itemView.context, HadithDetailsActivity4::class.java)
-            holder.itemView.context.startActivity(intent)
+          listener.onClick(position)
 
         }
 
