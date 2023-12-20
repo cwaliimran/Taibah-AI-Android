@@ -4,13 +4,14 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.network.interfaces.OnItemClick
 import com.network.models.ModelChapterHadith3
 import com.network.models.ModelDBSearchAll
 import com.network.models.ModelDbSearchHadith
 import com.taibahai.databinding.ItemChatpersHadithBinding
 import com.taibahai.hadiths.HadithDetailsActivity4
 
-class AdapterChapterHadiths(var showData: ArrayList<ModelChapterHadith3.Data>):RecyclerView.Adapter<AdapterChapterHadiths.ViewHolder>()
+class AdapterChapterHadiths(var showData: ArrayList<ModelChapterHadith3.Data>,var listener: OnItemClick):RecyclerView.Adapter<AdapterChapterHadiths.ViewHolder>()
 {
     lateinit var binding: ItemChatpersHadithBinding
 
@@ -28,23 +29,14 @@ class AdapterChapterHadiths(var showData: ArrayList<ModelChapterHadith3.Data>):R
         val hadithChapter = showData[position]
         holder.binding.model = hadithChapter
         holder.binding.tvHadithNo.text="Hadith No: ${hadithChapter.hadith_no}"
-        val parts = hadithChapter.reference?.split("\t : ")
-        if (parts?.size!! > 1) {
-            holder.binding.tvBookName.text = parts[1]
-        } else {
-            holder.binding.tvBookName.text = hadithChapter.reference
-        }
+        holder.binding.tvBookName.text = hadithChapter.book_name
+        holder.binding.tvHadithType.text=hadithChapter.type
         holder.binding.tvArbiAyat.text=hadithChapter.arabic
         holder.binding.tvTranslation.text=hadithChapter.english_translation
 
         binding.btnReadMore.setOnClickListener {
-            val intent= Intent(holder.itemView.context,HadithDetailsActivity4::class.java)
-            intent.putExtra("id",hadithChapter.chapter_id)
-            intent.putExtra("hadith_id",hadithChapter.hadith_no)
 
-
-            holder.itemView.context.startActivity(intent)
-
+            listener.onClick(position)
         }
 
     }

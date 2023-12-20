@@ -16,6 +16,8 @@ class HadithDetailsActivity4 : BaseActivity() {
     var id=""
     var isNext=true
     var hadith_id=""
+    var hadithNo=""
+    var chapterName=""
 
 
 
@@ -54,6 +56,9 @@ class HadithDetailsActivity4 : BaseActivity() {
                 }
 
                 is NetworkResult.Success -> {
+
+                    binding.tvHadithChapter.text=chapterName
+                    binding.tvNoOfHadiths.text=hadithNo
                     binding.tvHadithNo.text = "Hadith No: ${it.data?.data?.hadith_no}"
                     binding.tvArbiAyat.text=it.data?.data?.arabic
                     binding.tvEnglishTranslation.text=it.data?.data?.english_translation
@@ -103,6 +108,8 @@ class HadithDetailsActivity4 : BaseActivity() {
         {
             id=intent.getStringExtra("id").toString()
             hadith_id=intent.getStringExtra("hadith_id").toString()
+            chapterName=intent.getStringExtra("chapter_name").toString()
+           hadithNo= intent.getStringExtra("hadith_number").toString()
 
         }
 

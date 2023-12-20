@@ -1,8 +1,10 @@
 package com.taibahai.hadiths
 
+import android.content.Intent
 import androidx.activity.viewModels
 import com.google.gson.Gson
 import com.network.base.BaseActivity
+import com.network.interfaces.OnItemClick
 import com.network.models.ModelChapterHadith3
 import com.network.models.ModelDbSearchHadith
 import com.network.network.NetworkResult
@@ -67,7 +69,21 @@ class ChapterHadithsActivity3 : BaseActivity() {
 
     override fun initAdapter() {
         super.initAdapter()
-        adapter= AdapterChapterHadiths(showList)
+        adapter= AdapterChapterHadiths(showList, object:OnItemClick{
+            override fun onClick(position: Int, type: String?, data: Any?) {
+                super.onClick(position, type, data)
+                val intent= Intent(context,HadithDetailsActivity4::class.java)
+                intent.putExtra("id",showList[position].chapter_id)
+                intent.putExtra("hadith_id",showList[position].hadith_no)
+                intent.putExtra("hadith_number",hadithNo)
+                intent.putExtra("chapter_name",chapterName)
+
+
+
+           startActivity(intent)
+            }
+
+        })
         binding.rvChapterHadiths.adapter=adapter
 
     }

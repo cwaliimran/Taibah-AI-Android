@@ -106,6 +106,15 @@ class MainRepoAI : BaseApiResponse() {
     }
 
 
+    suspend fun putLike(feedId: String)
+    {
+        simpleResponseMutableLiveData.value = null
+        simpleResponseMutableLiveData.postValue(NetworkResult.Loading())
+        simpleResponseMutableLiveData.postValue(safeApiCall {
+            apiService.putLike(feedId)
+        })
+    }
+
 
 
     val getFeedMutableLiveData: SingleLiveEvent<NetworkResult<ModelGetFeeds>> by lazy {

@@ -156,16 +156,17 @@
 
             <TextView
                 android:id="@+id/tvArbiAyat"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="20dp"
                 android:fontFamily="@font/poppins"
                 android:text="إنما الأعمال بالنيات"
                 android:textColor="@color/black"
                 android:textSize="18sp"
-                android:layout_marginTop="20dp"
-                android:layout_marginHorizontal="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/constraintLayout6" />
 
             <TextView

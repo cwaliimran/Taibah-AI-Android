@@ -2,6 +2,7 @@ package com.taibahai.activities
 
 
 import androidx.activity.viewModels
+import com.bumptech.glide.Glide
 import com.network.base.BaseActivity
 import com.network.models.ModelComments
 import com.network.network.NetworkResult
@@ -18,6 +19,9 @@ class HomeDetailActivity : BaseActivity() {
     val viewModel: MainViewModelAI by viewModels()
     var feedId = ""
     var comment = ""
+    var noOfLikes=0
+    var noOfComments=0
+    var post=""
 
 
     override fun onCreate() {
@@ -52,10 +56,12 @@ class HomeDetailActivity : BaseActivity() {
                 }
 
                 is NetworkResult.Success -> {
-                    it.data?.message?.let { it1 -> showToast(it1) }
                     binding.ii.tvUserName.text=it.data?.data?.user_name
                     binding.ii.tvDescription.text=it.data?.data?.description
                     binding.ii.tvTimesAgo.text=it.data?.data?.timesince
+                    binding.ii.likesCounting.text= "${noOfLikes} Likes"
+                    binding.ii.commentCounts.text= "${noOfComments} Comments"
+                    Glide.with(this).load(post).into(binding.ii.ivUploadImage)
                     it?.data?.data?.comments?.let { it1 -> showComments.addAll(it1) }
                     adapter.notifyDataSetChanged()
 
@@ -79,7 +85,7 @@ class HomeDetailActivity : BaseActivity() {
                 }
 
                 is NetworkResult.Success -> {
-                    it.data?.message?.let { it1 -> showToast(it1) }
+                    binding.messageBox.text.clear()
                 }
 
                 is NetworkResult.Error -> {
@@ -92,7 +98,6 @@ class HomeDetailActivity : BaseActivity() {
     override fun initAdapter() {
         super.initAdapter()
         adapter = AdapterComments(showComments)
-
         binding.rvComments.adapter = adapter
     }
 
@@ -100,6 +105,9 @@ class HomeDetailActivity : BaseActivity() {
         super.apiAndArgs()
         if (bundle != null) {
             feedId = intent.getStringExtra("feedId").toString()
+            noOfLikes = intent.getIntExtra("likes",0)
+            noOfComments = intent.getIntExtra("comments",0)
+            post = intent.getStringExtra("post").toString()
         }
         viewModel.getFeed(feedId)
 

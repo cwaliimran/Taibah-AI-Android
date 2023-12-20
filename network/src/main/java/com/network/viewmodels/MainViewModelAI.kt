@@ -72,12 +72,22 @@ class MainViewModelAI constructor(application: Application) : AndroidViewModel(a
     }
 
 
+
+
     fun feedComment(postId:String, comment: String )
     {
         viewModelScope.launch {
             repository.feedComment(postId,comment)
         }
     }
+
+    fun putLike(feedId: String)
+    {
+        viewModelScope.launch {
+            repository.putLike(feedId)
+        }
+    }
+
 
 
     val getFeedLiveData: MutableLiveData<NetworkResult<ModelGetFeeds>>
