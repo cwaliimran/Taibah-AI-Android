@@ -65,6 +65,7 @@ class HomeDetailActivity : BaseActivity() {
                     it?.data?.data?.comments?.let { it1 -> showComments.addAll(it1) }
                     adapter.notifyDataSetChanged()
 
+
                 }
 
                 is NetworkResult.Error -> {
@@ -99,6 +100,7 @@ class HomeDetailActivity : BaseActivity() {
         super.initAdapter()
         adapter = AdapterComments(showComments)
         binding.rvComments.adapter = adapter
+
     }
 
     override fun apiAndArgs() {

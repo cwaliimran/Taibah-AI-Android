@@ -121,6 +121,16 @@ class HomeFragment : BaseFragment(),OnItemClick {
                 }
             }
 
+            "like" -> {
+                if(data is String)
+                {
+                    viewModel.putLike(data)
+                }
+
+            }
+
+
+
 
             else -> {}
         }

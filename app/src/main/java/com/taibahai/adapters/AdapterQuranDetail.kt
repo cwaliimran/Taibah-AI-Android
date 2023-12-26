@@ -1,20 +1,21 @@
 package com.taibahai.adapters
 
+import android.os.Build
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.taibahai.databinding.ItemQuranChapterBinding
+import com.network.models.ModelSurahDetail
 import com.taibahai.databinding.ItemQuranChapterDetailBinding
-import com.taibahai.models.ModelQuranDetail
 
-class AdapterQuranDetail(var showData: MutableList<ModelQuranDetail>):RecyclerView.Adapter<AdapterQuranDetail.ViewHolder>() {
+class AdapterQuranDetail(var showData: List<ModelSurahDetail>):RecyclerView.Adapter<AdapterQuranDetail.ViewHolder>() {
     lateinit var binding: ItemQuranChapterDetailBinding
 
     override fun onCreateViewHolder( parent: ViewGroup,viewType: Int): AdapterQuranDetail.ViewHolder {
         binding = ItemQuranChapterDetailBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return AdapterQuranDetail.ViewHolder(binding)
     }
-    fun setDate(list: ArrayList<ModelQuranDetail>) {
+    fun setDate(list: List<ModelSurahDetail>) {
         showData = list
         notifyDataSetChanged()
     }
@@ -22,10 +23,19 @@ class AdapterQuranDetail(var showData: MutableList<ModelQuranDetail>):RecyclerVi
     override fun onBindViewHolder(holder: AdapterQuranDetail.ViewHolder, position: Int) {
         val chapterData = showData[position]
         holder.binding.model = chapterData
-        holder.binding.tvCount.text= showData[position].count.toString()
-        holder.binding.tvArbiAyat.text=showData[position].arbiAyat
-        holder.binding.tvEnglishAyat.text=showData[position].englishAyat
-        holder.binding.tvTranslation.text=showData[position].translation
+        holder.binding.tvCount.text= showData[position].position
+        holder.binding.tvArbiAyat.text=showData[position].arabic
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            holder.binding.tvEnglishAyat.setText(
+                Html.fromHtml(
+                    chapterData.english_transliteration,
+                    Html.FROM_HTML_MODE_LEGACY
+                )
+            )
+        } else {
+            holder.binding.tvEnglishAyat.setText(Html.fromHtml(chapterData.english_transliteration))
+        }
+        holder.binding.tvTranslation.text=showData[position].english_translation
 
     }
 

@@ -24,8 +24,9 @@ abstract class BaseActivity : AppCompatActivity() {
         context = this
         bundle = intent.extras
         onCreate()
-        initData()
         initAdapter()
+
+        initData()
         initObservers()
         clicks()
         apiAndArgs()

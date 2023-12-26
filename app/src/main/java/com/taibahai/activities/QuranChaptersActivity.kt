@@ -1,5 +1,6 @@
 package com.taibahai.activities
 
+import android.content.Intent
 import android.util.Log
 import com.cwnextgen.amnames.utils.getJsonDataFromAsset
 import com.network.base.BaseActivity
@@ -9,6 +10,7 @@ import com.network.models.ModelSurahList
 import com.taibahai.R
 import com.taibahai.adapters.AdapterQuranChapter
 import com.taibahai.databinding.ActivityQuranChaptersBinding
+import com.taibahai.utils.FileDownloader
 import org.json.JSONException
 
 
@@ -16,6 +18,8 @@ class QuranChaptersActivity : BaseActivity() {
     lateinit var binding: ActivityQuranChaptersBinding
     lateinit var adapter: AdapterQuranChapter
     var modelSurahList = mutableListOf<ModelSurah>()
+    //val fileDownloader = FileDownloader(context)
+
 
 
     override fun onCreate() {
@@ -41,6 +45,13 @@ class QuranChaptersActivity : BaseActivity() {
             override fun onClick(position: Int, type: String?, data: Any?) {
                 super.onClick(position, type, data)
 
+                val intent= Intent(context, ChapterDetailActivity::class.java)
+                intent.putExtra("ayat_id",modelSurahList[position].id )
+                intent.putExtra("ayat_name",modelSurahList[position].transliteration_en )
+                intent.putExtra("ayat_verse",modelSurahList[position].total_verses )
+                intent.putExtra("ayat_type",modelSurahList[position].revelation_type )
+
+                startActivity(intent)
 
             }
         })
@@ -52,18 +63,26 @@ class QuranChaptersActivity : BaseActivity() {
         loadData()
     }
 
+  /*  private fun initDownload() {
+        val savedDownloadRequest = fileDownloader.getSavedDownloadRequest()
+
+        if (savedDownloadRequest != null) {
+            val (url, title, _) = savedDownloadRequest
+            val downloadId = fileDownloader.downloadFile(url, title, "Download Description")
+
+            // Handle the download or save the downloadId if needed
+            // ...
+
+            // Remove the saved download request after initiating the download
+            fileDownloader.saveDownloadRequest("", "", "")
+        }
+    }*/
+
     private fun loadData() {
         try {
-//                modelSurahList.clear()
-//                jsonArr = JSONArray(JsonUtils.readRawResource(context, R.raw.allsurahlist))
-//                val gson = Gson()
-//                val type = object : TypeToken<List<ModelSurah?>?>() {}.type
-//                modelSurahList = gson.fromJson<ArrayList<ModelSurah>>(jsonArr.toString(), type)
-//                (modelSurahList as ArrayList<ModelSurah>?)?.let { adapter.setDate(it) }
 
             val jsonFileString = getJsonDataFromAsset("allsurahlist")
             Log.d("TAG", "prepareDatabase: $jsonFileString")
-// Convert JSON string to a Data class
             val dataMap = gson.fromJson(jsonFileString, ModelSurahList::class.java)
             modelSurahList.addAll(dataMap.surahList)
             adapter.notifyDataSetChanged()

@@ -34,6 +34,8 @@
                      app:layout_constraintStart_toStartOf="parent"
                      />
 
+
+
                  <androidx.recyclerview.widget.RecyclerView
                      android:id="@+id/rvQuranDetail"
                      android:layout_width="match_parent"

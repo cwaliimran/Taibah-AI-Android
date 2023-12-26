@@ -2,15 +2,15 @@ package com.taibahai.adapters
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.os.Build
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.network.interfaces.OnItemClick
+import com.taibahai.R
 import com.taibahai.activities.HomeDetailActivity
 import com.taibahai.databinding.ItemHomeBinding
-import com.taibahai.models.ModelHome
+
 
 class AdapterHome(  private var listener: OnItemClick, var showData: MutableList<com.network.models.ModelHome.Data>
 ) : RecyclerView.Adapter<AdapterHome.ViewHolder>() {
@@ -45,7 +45,17 @@ class AdapterHome(  private var listener: OnItemClick, var showData: MutableList
         holder.binding.commentCounts.text = "${userData.comments} Comments"
         Glide.with(holder.itemView.context).load(userData.feed_attachments.firstOrNull()?.file).into(holder.binding.ivUploadImage)
 
+        if (holder.isLiked) {
+            holder.binding.tvLike.setCompoundDrawablesWithIntrinsicBounds(R.drawable.like, 0, 0, 0)
+        } else {
+            holder.binding.tvLike.setCompoundDrawablesWithIntrinsicBounds(R.drawable.like_2, 0, 0, 0)
+        }
+
+
         holder.binding.tvLike.setOnClickListener {
+            listener.onClick(position, "like", userData.feed_id)
+            holder.isLiked = !holder.isLiked
+            notifyDataSetChanged()
 
         }
 
@@ -71,5 +81,8 @@ class AdapterHome(  private var listener: OnItemClick, var showData: MutableList
 
 
     class ViewHolder(val binding: ItemHomeBinding) : RecyclerView.ViewHolder(binding.root) {
+
+        var isLiked: Boolean = false
     }
+
 }
