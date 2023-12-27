@@ -5,4 +5,7 @@ object AppConstants {
     val BUNDLE = "bundle"
     val DEVICE_ID = "device_id"
     val CURRENT_USER = "current_user"
+    const val START: Long = 0
+    const val VOICE_DELAY: Long = 1000
+
 }

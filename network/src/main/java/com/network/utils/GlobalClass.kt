@@ -17,4 +17,8 @@ class GlobalClass {
             }
         }
     }
+
+    fun progressToTimer(i: Int, i2: Int): Int {
+        return (i.toDouble() / 100.0 * (i2 / 1000).toDouble()).toInt() * 1000
+    }
 }

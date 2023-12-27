@@ -7,18 +7,27 @@ import android.content.Context
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Build
+import com.network.R
 import com.network.models.ModelUser
+import java.io.File
 import java.util.Locale
 
 
 public class AppClass : Application() {
     val BASE_URL_1 = "https://taibahislamic.com/admin/"
+    var singleton: AppClass? = null
+
 
     override fun onCreate() {
         super.onCreate()
         myApp = this
+        AppClass().singleton = this
         sharedPref = SharedPref(this)
         createNotificationChannel()
+    }
+
+    fun getInstance(): AppClass? {
+        return AppClass().singleton
     }
 
     private fun createNotificationChannel() {
@@ -35,6 +44,37 @@ public class AppClass : Application() {
 
     }
 
+
+    //    public static void deleteFile(String path){
+    //        File fdelete = new File(uri.getPath());
+    //        if (fdelete.exists()) {
+    //            if (fdelete.delete()) {
+    //                System.out.println("file Deleted :" + uri.getPath());
+    //            } else {
+    //                System.out.println("file not Deleted :" + uri.getPath());
+    //            }
+    //        }
+    //
+    //
+    //        File file = new File(path);
+    //        file.delete();
+    //        if(file.exists()){
+    //            file.getCanonicalFile().delete();
+    //            if(file.exists()){
+    //                getApplicationContext().deleteFile(file.getName());
+    //            }
+    //        }
+    //    }
+    fun getAudioOutputDirectory(): File? {
+        val mediaStorageDir: File = File(
+            AppClass.instance.getFilesDir().toString() + "/" +
+                    AppClass.instance.getString(R.string.app_name) + "/Audios"
+        )
+        if (!mediaStorageDir.exists()) {
+            mediaStorageDir.mkdirs()
+        }
+        return mediaStorageDir
+    }
 
     companion object {
         private const val TAG = "AppClass"
@@ -58,6 +98,24 @@ public class AppClass : Application() {
             val conf: Configuration = res.configuration
             conf.setLocale(Locale(locale))
             res.updateConfiguration(conf, res.displayMetrics)
+        }
+
+        fun progressToTimer(i: Int, i2: Int): Int {
+            return (i.toDouble() / 100.0 * (i2 / 1000).toDouble()).toInt() * 1000
+        }
+
+        fun getProgressPercentage(j: Long, j2: Long): Int {
+            java.lang.Double.valueOf(0.0)
+            return java.lang.Double.valueOf(
+                (j / 1000).toInt().toLong().toDouble() / (j2 / 1000).toInt().toLong()
+                    .toDouble() * 100.0
+            ).toInt()
+        }
+
+        fun getTimeString(duration: Int): String? {
+            val minutes = Math.floor((duration / 1000 / 60).toDouble()).toInt()
+            val seconds = (duration / 1000 - minutes * 60).toInt()
+            return minutes.toString() + ":" + String.format("%02d", seconds)
         }
 
     }

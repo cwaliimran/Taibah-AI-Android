@@ -29,34 +29,7 @@ class AdapterQuranChapter(var showData: MutableList<ModelSurah>, var listener: O
         holder.itemView.setOnClickListener {
             listener.onClick(position,"type", chapterData)
 
-          /*  holder.downloadButton.setOnClickListener {
-                listener.onDownload(position)
-            }
 
-            holder.deleteButton.setOnClickListener {
-                listener.onDelete(position)
-            }
-
-            holder.pauseButton.setOnClickListener {
-                listener.onPause(position)
-            }
-
-            holder.resumeButton.setOnClickListener {
-                listener.onResume(position)
-            }
-
-            holder.retryButton.setOnClickListener {
-                listener.onRetryDownload(position)
-            }
-
-            holder.playButton.setOnClickListener {
-                listener.onPlayClick(position)
-            }*/
-
-            /* val context = holder.itemView.context
-             val intent = Intent(context, ChapterDetailActivity::class.java)
-
-             context.startActivity(intent)*/
         }
 
     }

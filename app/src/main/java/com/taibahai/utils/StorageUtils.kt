@@ -31,6 +31,12 @@ fun getFileNameFormUri(uri: Uri, context: Context): String? {
 
 }
 
+fun progressToTimer(i: Int, i2: Int): Int {
+    return (i.toDouble() / 100.0 * (i2 / 1000).toDouble()).toInt() * 1000
+}
+
+
+
 fun getFilePathFormUri(uri: Uri, context: Context): String? {
     val returnCursor = context.contentResolver.query(uri, null, null, null, null)
 

@@ -1,15 +1,28 @@
 package com.taibahai.activities
 
 
+import AudioPlayer
+import AudioPlayer.OnViewClickListener
+import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
+import android.media.MediaPlayer
 import android.os.AsyncTask
-import com.google.zxing.common.StringUtils
+import android.os.Handler
+import android.util.Log
+import android.view.MotionEvent
+import android.view.View
+import android.view.animation.LinearInterpolator
+import android.widget.ScrollView
+import android.widget.SeekBar
 import com.network.base.BaseActivity
 import com.network.models.ModelSurah
 import com.network.models.ModelSurahDetail
+import com.network.utils.AppClass
+import com.network.utils.AppClass.Companion.sharedPref
 import com.taibahai.R
 import com.taibahai.adapters.AdapterQuranDetail
 import com.taibahai.databinding.ActivityChapterDetailBinding
-import com.taibahai.utils.JsonUtils
+import com.taibahai.utils.CustomScrollView
 import com.taibahai.utils.JsonUtilss
 import org.json.JSONArray
 import org.json.JSONException
@@ -18,18 +31,25 @@ class ChapterDetailActivity : BaseActivity() {
     lateinit var binding:ActivityChapterDetailBinding
     val showList=ArrayList<ModelSurahDetail>()
     lateinit var adapter: AdapterQuranDetail
-    private val isFling = false
+    private var isFling = false
     private var totalVerse = 0
     private  var counter:Int = 0
     var surahId=""
     var mPlayerList: List<ModelSurah>? = null
     var name=""
-
+    var objectAnimator: ObjectAnimator? = null
+    private var speed = 1
+    private var scroll = 0
+    private val STANDARD_SPEED = 50
+    private val isRepeat = false
+    var currentFile = ""
 
 
     override fun onCreate() {
         binding=ActivityChapterDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        initScroll()
+        initAudioPlay()
 
     }
 
@@ -37,18 +57,135 @@ class ChapterDetailActivity : BaseActivity() {
         binding.appbar.ivLeft.setOnClickListener {
             onBackPressed()
         }
+
+        binding.playLayout.ivPlay.setOnClickListener { v ->
+            if (!currentFile.isEmpty()) {
+                startPlaying(currentFile)
+            }
+        }
     }
 
     override fun initAdapter() {
         super.initAdapter()
         adapter= AdapterQuranDetail(showList)
-      /*  showList.add(ModelQuranDetail(1, "قُلْ هُوَ ٱللَّهُ أَحَدٌ ١","Qul huwa Allahu Ahad ","Soy, “O Prophet,”He is Allah_One"))
-        showList.add(ModelQuranDetail(2, "ٱللَّهُ ٱلصَّمَدُ ","Allahu As-Samad","Allah—the Sustainer ˹needed by all˺"))
-        showList.add(ModelQuranDetail(3, "لَمْ يَلِدْ وَلَمْ يُولَدْ ٣","Allahu As-Samad","Allah—the Sustainer ˹needed by all˺"))
-        adapter.setDate(showList)*/
+
         binding.rvQuranDetail.adapter=adapter
 
     }
+
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun initScroll() {
+//        binding.scrollView.isFocusableInTouchMode();
+        binding.rvQuranDetail.setOnTouchListener { view: View?, event: MotionEvent ->
+
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    // The user just touched the screen
+                    if (binding.playLayout.ivPlay.isSelected()) startScroll()
+                    startScroll()
+
+                    Log.d(TAG,"initScroll: ACTION_DOWN $isFling"
+                    )
+                }
+
+                MotionEvent.ACTION_UP -> {
+                    // The touch just ended
+
+                    if (!isFling) {
+                        if (binding.playLayout.ivPlay.isSelected()) startScroll()
+                        startScroll()
+
+                    } else {
+                        isFling = false
+                    }
+                }
+            }
+            false
+        }
+        binding.scrollView.setOnFlingListener(object : CustomScrollView.OnFlingListener {
+            override fun onFlingStarted() {
+                isFling = true
+                if (objectAnimator != null) {
+                    objectAnimator!!.cancel()
+                }
+            }
+
+            override fun onFlingStopped() {
+                isFling = false
+              //  Log.d(com.taibah.fragments.al_quran.Al_Quran_Details.TAG, "onFlingStopped: ")
+               // if (binding.playLayout.play.isSelected()) startScroll()
+            }
+        })
+        binding.playLayout.sliderRange.setOnSeekBarChangeListener(object :
+            SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {}
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
+                AudioPlayer.getInstance()?.removeCallbacks()
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+                val seekPosition: Long = seekBar.progress.toLong()
+                AudioPlayer.getInstance()?.seek(seekPosition)
+            }
+        })
+        binding.scrollView.viewTreeObserver.addOnScrollChangedListener {
+            scroll = binding.scrollView.scrollY
+            val view = binding.scrollView.getChildAt(0)
+            val diff =
+                view.bottom - (binding.scrollView.height + binding.scrollView.scrollY)
+        }
+    }
+
+
+    private fun initAudioPlay() {
+        AudioPlayer.getInstance()?.OnItemClickListener(object : OnViewClickListener {
+            override fun onPlayStarted(duration: Int) {
+                val total_duration: String? = AppClass.getTimeString(duration)
+                binding.playLayout.maxValue.setText(total_duration)
+                binding.playLayout.ivPlay.setSelected(true)
+                if (objectAnimator != null) {
+                    if (!objectAnimator!!.isRunning) {
+                        startScroll()
+                    }
+                }
+            }
+
+            override fun updateDuration(duration: Int, currentPosition: Int) {
+                val current_duration: String? = AppClass.getTimeString(currentPosition)
+                binding.playLayout.minValue.setText(current_duration)
+                binding.playLayout.sliderRange.setProgress(duration)
+            }
+
+            override fun onPause() {
+                binding.playLayout.ivPlay.setSelected(false)
+                stopScroll()
+            }
+
+            override fun onCompleted(mp1: MediaPlayer?) {
+
+                binding.playLayout.ivPlay.setSelected(false)
+                binding.playLayout.sliderRange.setProgress(0)
+                stopScroll()
+                if (isRepeat) {
+                    binding.scrollView.fullScroll(ScrollView.FOCUS_UP)
+                    Handler().postDelayed({ binding.playLayout.ivPlay.callOnClick() }, 1000)
+                }/* else {
+                    if (isPlaySuffle) {
+                        binding.playLayout.forward.callOnClick()
+                    }
+                }*/
+            }
+        })
+    }
+
+
+    private fun stopScroll() {
+        if (objectAnimator != null) {
+            objectAnimator!!.cancel()
+        }
+    }
+
 
 
     private fun showAyatList() {
@@ -94,10 +231,18 @@ class ChapterDetailActivity : BaseActivity() {
                 adapter.setDate(tasks)
 
               //  playSurah()
-               // Handler().postDelayed({ this@ChapterDetailActivity.startScroll() }, 1000)
+                Handler().postDelayed({ this@ChapterDetailActivity.startScroll() }, 1000)
             }
         }
         loadAyats().execute()
+    }
+
+    private fun startPlaying(audio_url: String) {
+        AudioPlayer.getInstance()!!.setData(audio_url)
+        AudioPlayer.getInstance()!!.playOrPause()
+        Handler().postDelayed({
+           // MediaNotificationManager.showMediaNotification( surahName)
+        }, 200)
     }
 
 
@@ -111,6 +256,48 @@ class ChapterDetailActivity : BaseActivity() {
         val type = intent.getStringExtra("ayat_type")
 
     }
+
+    fun startScroll() {
+        val scrollSpeed: Int = sharedPref.getInt("scroll_speed")
+        if (scrollSpeed != 0) {
+            speed = scrollSpeed
+        }
+
+        objectAnimator?.cancel()  // Cancel the previous animation if it exists
+
+        objectAnimator = ObjectAnimator.ofInt(
+            binding.scrollView,
+            "scrollY",
+            binding.scrollView.getChildAt(0).height + scroll - binding.scrollView.height
+        )
+
+        val duration: Int = binding.scrollView.getChildAt(0).height / speed
+        val total_duration: Int = duration * STANDARD_SPEED
+
+        Log.d("response", "startScroll: " + total_duration / 1000 + " sec")
+
+        objectAnimator?.duration = total_duration.toLong()
+        objectAnimator?.setInterpolator(LinearInterpolator())
+        objectAnimator?.start()
+    }
+
+
+
+    /* private fun startScroll() {
+         val scrollSpeed = AppClass.sharedPref.getInt("scroll_speed")
+         val recyclerViewHeight = binding.rvQuranDetail.height
+         val scrollViewHeight = binding.nestedScrollView.height
+
+         val totalScrollDistance = recyclerViewHeight + recyclerViewHeight - scrollViewHeight
+
+         if (scrollSpeed != 0) {
+             // Adjust speed if needed
+             objectAnimator = ObjectAnimator.ofInt(binding.nestedScrollView, "scrollY", totalScrollDistance)
+             val duration = totalScrollDistance / scrollSpeed
+             objectAnimator?.duration = duration.toLong()
+             objectAnimator?.start()
+         }
+     }*/
 
 
     override fun initData() {

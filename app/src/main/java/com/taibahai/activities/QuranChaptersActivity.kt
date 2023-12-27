@@ -18,8 +18,7 @@ class QuranChaptersActivity : BaseActivity() {
     lateinit var binding: ActivityQuranChaptersBinding
     lateinit var adapter: AdapterQuranChapter
     var modelSurahList = mutableListOf<ModelSurah>()
-    //val fileDownloader = FileDownloader(context)
-
+    val fileDownloader = FileDownloader(this)
 
 
     override fun onCreate() {
@@ -29,6 +28,7 @@ class QuranChaptersActivity : BaseActivity() {
         binding.appbar.tvTitle.setText("Quran")
         binding.appbar.ivLeft.setImageDrawable(resources.getDrawable(R.drawable.arrow_back_24))
         binding.appbar.ivRight.setImageDrawable(resources.getDrawable(R.drawable.heartt))
+        initDownload()
 
     }
 
@@ -63,7 +63,7 @@ class QuranChaptersActivity : BaseActivity() {
         loadData()
     }
 
-  /*  private fun initDownload() {
+    private fun initDownload() {
         val savedDownloadRequest = fileDownloader.getSavedDownloadRequest()
 
         if (savedDownloadRequest != null) {
@@ -76,7 +76,7 @@ class QuranChaptersActivity : BaseActivity() {
             // Remove the saved download request after initiating the download
             fileDownloader.saveDownloadRequest("", "", "")
         }
-    }*/
+    }
 
     private fun loadData() {
         try {

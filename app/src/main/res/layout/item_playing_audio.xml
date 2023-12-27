@@ -88,11 +88,11 @@
                     android:layout_marginEnd="20dp"
                     android:src="@drawable/heartt2"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/imageView"
+                    app:layout_constraintEnd_toStartOf="@+id/ivPlay"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
-                    android:id="@+id/imageView"
+                    android:id="@+id/ivPlay"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/play_circle"
@@ -118,7 +118,7 @@
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout4"/>
 
         <LinearLayout
-            android:id="@+id/llAges"
+            android:id="@+id/llPlayingMinutes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"

@@ -1,5 +1,7 @@
 package com.network.models
 
+
+
 data class ModelSurah(
     var id: String = "",
     var number: String = "",
@@ -8,5 +10,9 @@ data class ModelSurah(
     var translation_en: String = "",
     var total_verses: String = "",
     var revelation_type: String = "",
-    var audio: String = ""
+    var audio: String = "",
+
+
+
+
 )
