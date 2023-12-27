@@ -70,10 +70,8 @@ class QuranChaptersActivity : BaseActivity() {
             val (url, title, _) = savedDownloadRequest
             val downloadId = fileDownloader.downloadFile(url, title, "Download Description")
 
-            // Handle the download or save the downloadId if needed
-            // ...
 
-            // Remove the saved download request after initiating the download
+
             fileDownloader.saveDownloadRequest("", "", "")
         }
     }
