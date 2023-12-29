@@ -7,5 +7,7 @@ object AppConstants {
     val CURRENT_USER = "current_user"
     const val START: Long = 0
     const val VOICE_DELAY: Long = 1000
+    val CURRENT_DATE = "current_date"
+    val TODAY = "today"
 
 }

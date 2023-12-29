@@ -1,18 +1,29 @@
 package com.taibahai.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.facebook.appevents.codeless.internal.ViewHierarchy.setOnClickListener
+import com.gun0912.tedpermission.provider.TedPermissionProvider.context
 import com.network.interfaces.OnItemClick
 import com.network.models.ModelSurah
 import com.taibahai.databinding.ItemQuranChapterBinding
+import com.taibahai.room_database.FavModel
+import com.taibahai.room_database.SurahDatabase
+import java.util.concurrent.Executors
 
-class AdapterQuranChapter(var showData: MutableList<ModelSurah>, var listener: OnItemClick):RecyclerView.Adapter<AdapterQuranChapter.ViewHolder>() {
+class AdapterQuranChapter(var showData: MutableList<ModelSurah>, var listener: OnItemClick) :
+    RecyclerView.Adapter<AdapterQuranChapter.ViewHolder>() {
     lateinit var binding: ItemQuranChapterBinding
+    var favModel: FavModel? = null
 
-    override fun onCreateViewHolder(  parent: ViewGroup,viewType: Int): AdapterQuranChapter.ViewHolder {
-        binding = ItemQuranChapterBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+
+    override fun onCreateViewHolder(
+        parent: ViewGroup, viewType: Int
+    ): AdapterQuranChapter.ViewHolder {
+        binding =
+            ItemQuranChapterBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return AdapterQuranChapter.ViewHolder(binding)
     }
 
@@ -27,101 +38,42 @@ class AdapterQuranChapter(var showData: MutableList<ModelSurah>, var listener: O
 
         holder.itemView.setOnClickListener {
             // TODO: update model type its dummy value
-            if (chapterData.type=="play"){
-                listener.onClick(position,"play")
-            }else{
-                listener.onClick(position,"download")
+            if (chapterData.type == "play") {
+                listener.onClick(position, "play")
+            } else {
+                listener.onClick(position, "download")
             }
         }
 
-       /* if (chapterData.download != null) {
-            val status: Status = chapterData.download.stat
-            when (status) {
-                COMPLETED -> {
-                    val child: String =
-                        StringUtils.SURAH_FOLDER + StringUtils.getNameFromUrl(chapterData.audio)
-                    if (AppClass.isFileExists(child)) {
-                        holder.binding.imageView.setImageResource(R.drawable.ic_delete)
-                        holder.binding.play.setOnClickListener { v -> listener.onDelete(model) }
-                        holder.itemView.setOnClickListener { v: View? ->
-                            listener.onPlayClick(
-                                model
-                            )
-                        }
-                    } else {
-                        holder.binding.play.setImageResource(R.drawable.ic_download)
-                        holder.binding.playLayout.setOnClickListener { v ->
-                            listener.onDownload(
-                                model
-                            )
-                        }
-                        holder.itemView.setOnClickListener { v: View? ->
-                            listener.onDownload(
-                                model
-                            )
-                        }
-                    }
+        holder.binding.ivFavourite.setOnClickListener {
+            if (!chapterData.fav) {
+                favModel = FavModel(position = chapterData.id.toLong())
+                Executors.newSingleThreadExecutor().execute {
+                    SurahDatabase.getDatabase(context).surahDao().insertFav(favModel)
+                    Log.d("Database", "Audio added to favorites. ID: ${chapterData.id}")
                 }
 
-                PAUSED, ADDED -> {
-                    holder.binding.progress.setVisibility(View.GONE)
-                    holder.binding.play.setImageResource(R.drawable.ic_download)
-                    holder.binding.playLayout.setOnClickListener { v -> listener.onResume(model) }
-                    holder.itemView.setOnClickListener { v: View? ->
-                        listener.onResume(
-                            model
-                        )
-                    }
+                holder.binding.ivFavourite.isSelected = true
+                chapterData.fav = true
+                Toast.makeText(context, "Audio is added to favorites", Toast.LENGTH_SHORT).show()
+            }
+            else {
+                Executors.newSingleThreadExecutor().execute {
+                    SurahDatabase.getDatabase(context).surahDao().deleteFav(chapterData.id.toLong())
+                    Log.d("Database", "Audio removed from favorites. ID: ${chapterData.id}")
                 }
 
-                REMOVED, DELETED -> {
-                    holder.binding.progress.setVisibility(View.GONE)
-                    holder.binding.play.setImageResource(R.drawable.ic_download)
-                    holder.binding.playLayout.setOnClickListener { v -> listener.onDownload(model) }
-                    holder.itemView.setOnClickListener { v: View? ->
-                        listener.onDownload(
-                            model
-                        )
-                    }
-                }
-
-                FAILED -> {
-                    holder.binding.progress.setVisibility(View.GONE)
-                    holder.binding.play.setImageResource(R.drawable.ic_download)
-                    holder.binding.playLayout.setOnClickListener { v ->
-                        listener.onRetryDownload(
-                            model
-                        )
-                    }
-                    holder.itemView.setOnClickListener { v: View? ->
-                        listener.onRetryDownload(
-                            model
-                        )
-                    }
-                }
-
-                DOWNLOADING -> {
-                    holder.binding.progress.setVisibility(View.VISIBLE)
-                    holder.binding.progress.setIndeterminateMode(true)
-                    holder.binding.play.setImageResource(R.drawable.ic_pin)
-                    holder.binding.playLayout.setOnClickListener { v -> listener.onPause(model) }
-                }
-
-                QUEUED -> {
-                    holder.binding.progress.setVisibility(View.VISIBLE)
-                    holder.binding.progress.setIndeterminateMode(false)
-                    holder.binding.play.setImageResource(R.drawable.ic_pin)
-                    holder.binding.playLayout.setOnClickListener { v -> listener.onPause(model) }
-                }
-
-                else -> {}
+                holder.binding.ivFavourite.setSelected(false)
+                chapterData.fav = false
+                Toast.makeText(context, "Audio is removed from favorites", Toast.LENGTH_SHORT) .show()
             }
         }
-*/
-
     }
+
     override fun getItemCount(): Int {
         return showData.size
     }
-    class ViewHolder(val binding: ItemQuranChapterBinding) : RecyclerView.ViewHolder(binding.root) {}
+
+    class ViewHolder(val binding: ItemQuranChapterBinding) :
+        RecyclerView.ViewHolder(binding.root) {}
 }

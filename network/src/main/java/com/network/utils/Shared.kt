@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.network.utils.AppClass
 import com.google.gson.Gson
+import java.util.Date
 
 class SharedPref(myApp: AppClass) {
 
@@ -78,6 +79,20 @@ class SharedPref(myApp: AppClass) {
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    fun storeDate(key: String?, dateValue: Date?) {
+        if (dateValue != null) {
+            val timestamp = dateValue.time
+            editor = sharedPref!!.edit()
+            editor?.putLong(key, timestamp)
+            editor?.apply()
+        }
+    }
+
+    fun getDate(key: String?, defaultDate: Date? = null): Date? {
+        val timestamp = sharedPref!!.getLong(key, -1)
+        return if (timestamp != -1L) Date(timestamp) else defaultDate
     }
 
 

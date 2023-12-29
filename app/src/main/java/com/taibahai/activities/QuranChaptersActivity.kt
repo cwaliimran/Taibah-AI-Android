@@ -148,7 +148,13 @@ class QuranChaptersActivity : BaseActivity() {
                         intent.putExtra("ayat_type",modelSurahList[position].revelation_type )
                         startActivity(intent)
                     }
+
+
+
                     else -> {}
+
+
+
                 }
             }
         })

@@ -15,9 +15,12 @@ data class ModelSurah(
     var revelation_type: String = "",
     var audio: String = "",
     var type: String = "",
+    var fav: Boolean = false
+
 
 //    var download: Download? = null
 ) {
+
     val downloadId: Int
         get() {
             val url: String = StringUtils.SURAH_FOLDER + StringUtils.getNameFromUrl(audio)
