@@ -14,7 +14,6 @@ import java.util.Locale
 
 
 public class AppClass : Application() {
-    val BASE_URL_1 = "https://taibahislamic.com/admin/"
     var singleton: AppClass? = null
 
 
@@ -65,18 +64,11 @@ public class AppClass : Application() {
     //            }
     //        }
     //    }
-    fun getAudioOutputDirectory(): File? {
-        val mediaStorageDir: File = File(
-            AppClass.instance.getFilesDir().toString() + "/" +
-                    AppClass.instance.getString(R.string.app_name) + "/Audios"
-        )
-        if (!mediaStorageDir.exists()) {
-            mediaStorageDir.mkdirs()
-        }
-        return mediaStorageDir
-    }
+
 
     companion object {
+        val BASE_URL_1 = "https://taibahislamic.com/admin/"
+
         private const val TAG = "AppClass"
         var myApp: AppClass? = null
         val instance get() = myApp!!
@@ -116,6 +108,22 @@ public class AppClass : Application() {
             val minutes = Math.floor((duration / 1000 / 60).toDouble()).toInt()
             val seconds = (duration / 1000 - minutes * 60).toInt()
             return minutes.toString() + ":" + String.format("%02d", seconds)
+        }
+
+        fun getAudioOutputDirectory(): File? {
+            val mediaStorageDir: File = File(
+                AppClass.instance.getFilesDir().toString() + "/" +
+                        AppClass.instance.getString(R.string.app_name) + "/Audios"
+            )
+            if (!mediaStorageDir.exists()) {
+                mediaStorageDir.mkdirs()
+            }
+            return mediaStorageDir
+        }
+
+        fun isFileExists(childPath: String?): Boolean {
+            val yourFile = File(getAudioOutputDirectory(), childPath)
+            return yourFile.exists()
         }
 
     }
