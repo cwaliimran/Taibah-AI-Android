@@ -1,14 +1,11 @@
 package com.taibahai.adapters
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.gms.common.api.Status
+import com.facebook.appevents.codeless.internal.ViewHierarchy.setOnClickListener
 import com.network.interfaces.OnItemClick
 import com.network.models.ModelSurah
-import com.network.utils.AppClass
-import com.network.utils.StringUtils
 import com.taibahai.databinding.ItemQuranChapterBinding
 
 class AdapterQuranChapter(var showData: MutableList<ModelSurah>, var listener: OnItemClick):RecyclerView.Adapter<AdapterQuranChapter.ViewHolder>() {
@@ -27,6 +24,15 @@ class AdapterQuranChapter(var showData: MutableList<ModelSurah>, var listener: O
     override fun onBindViewHolder(holder: AdapterQuranChapter.ViewHolder, position: Int) {
         val chapterData = showData[position]
         binding.data = chapterData
+
+        holder.itemView.setOnClickListener {
+            // TODO: update model type its dummy value
+            if (chapterData.type=="play"){
+                listener.onClick(position,"play")
+            }else{
+                listener.onClick(position,"download")
+            }
+        }
 
        /* if (chapterData.download != null) {
             val status: Status = chapterData.download.stat
@@ -113,26 +119,7 @@ class AdapterQuranChapter(var showData: MutableList<ModelSurah>, var listener: O
         }
 */
 
-
-
-
-
-
-
-
-
-
-        holder.itemView.setOnClickListener {
-            listener.onClick(position,"type", chapterData)
-
-
-        }
-
     }
-
-
-
-
     override fun getItemCount(): Int {
         return showData.size
     }

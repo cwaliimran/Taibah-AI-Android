@@ -1,11 +1,8 @@
 package com.network.models
 
 import com.network.utils.AppClass
-import com.network.utils.GlobalClass
 import com.network.utils.StringUtils
 import java.io.File
-import android.app.DownloadManager
-import androidx.media3.exoplayer.offline.Download
 
 
 data class ModelSurah(
@@ -17,8 +14,9 @@ data class ModelSurah(
     var total_verses: String = "",
     var revelation_type: String = "",
     var audio: String = "",
+    var type: String = "",
 
-    var download: Download? = null
+//    var download: Download? = null
 ) {
     val downloadId: Int
         get() {

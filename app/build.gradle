@@ -142,6 +142,9 @@ dependencies {
     implementation 'com.github.dhaval2404:imagepicker:2.1'
     implementation 'com.github.varungulatii:Kdownloader:1.0.4'
 
+    //ask permissions dependencies
+    implementation 'io.github.ParkSangGwon:tedpermission-normal:3.3.0'
+
 
 
 

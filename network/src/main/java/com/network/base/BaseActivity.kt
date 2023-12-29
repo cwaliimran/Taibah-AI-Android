@@ -11,7 +11,6 @@ import com.network.utils.AppClass
 
 abstract class BaseActivity : AppCompatActivity() {
 
-    val TAG = "BaseActivity"
     var bundle: Bundle? = null
     val gson = Gson()
     lateinit var context: Context

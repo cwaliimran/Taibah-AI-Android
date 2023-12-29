@@ -44,7 +44,7 @@ class ChapterDetailActivity : BaseActivity() {
     private val isRepeat = false
     var currentFile = ""
 
-
+    private val TAG = "ChapterDetailActivity"
     override fun onCreate() {
         binding=ActivityChapterDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
