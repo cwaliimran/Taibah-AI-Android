@@ -5,6 +5,7 @@ import AudioPlayer
 import AudioPlayer.OnViewClickListener
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.media.MediaPlayer
 import android.os.AsyncTask
 import android.os.Handler
@@ -44,10 +45,12 @@ class ChapterDetailActivity : BaseActivity() {
     private val isRepeat = false
     var currentFile = ""
 
+
     private val TAG = "ChapterDetailActivity"
     override fun onCreate() {
         binding=ActivityChapterDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        currentFile= intent.getStringExtra("audio_url").toString()
         initScroll()
         initAudioPlay()
 
@@ -280,24 +283,6 @@ class ChapterDetailActivity : BaseActivity() {
         objectAnimator?.setInterpolator(LinearInterpolator())
         objectAnimator?.start()
     }
-
-
-
-    /* private fun startScroll() {
-         val scrollSpeed = AppClass.sharedPref.getInt("scroll_speed")
-         val recyclerViewHeight = binding.rvQuranDetail.height
-         val scrollViewHeight = binding.nestedScrollView.height
-
-         val totalScrollDistance = recyclerViewHeight + recyclerViewHeight - scrollViewHeight
-
-         if (scrollSpeed != 0) {
-             // Adjust speed if needed
-             objectAnimator = ObjectAnimator.ofInt(binding.nestedScrollView, "scrollY", totalScrollDistance)
-             val duration = totalScrollDistance / scrollSpeed
-             objectAnimator?.duration = duration.toLong()
-             objectAnimator?.start()
-         }
-     }*/
 
 
     override fun initData() {

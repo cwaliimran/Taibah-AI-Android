@@ -14,13 +14,10 @@ import com.network.models.ModelSurah
 import com.network.models.ModelSurahList
 import com.network.network.NetworkUtils.isInternetAvailable
 import com.network.utils.AppClass
-import com.network.utils.AppClass.Companion.getAudioOutputDirectory
-import com.network.utils.AppClass.Companion.sharedPref
-import com.network.utils.GlobalClass
-import com.network.utils.StringUtils
 import com.taibahai.R
 import com.taibahai.adapters.AdapterQuranChapter
 import com.taibahai.databinding.ActivityQuranChaptersBinding
+import com.taibahai.utils.DownloadListener
 import com.taibahai.utils.DownloadMusicFile
 import com.taibahai.utils.FileDownloader
 import org.json.JSONException
@@ -193,6 +190,7 @@ class QuranChaptersActivity : BaseActivity() {
 
     }
 
+
     val permissionListener = object : PermissionListener {
         override fun onPermissionGranted() {
             Log.d(TAG, "onPlay: " + AppClass.BASE_URL_1 + model.audio)
@@ -220,7 +218,22 @@ class QuranChaptersActivity : BaseActivity() {
 //        val audio_path = file.absolutePath
 //        Log.d(TAG, "downloadAudio: $audio_path")
         Log.d(TAG, "downloadAudio: $s")
-        val downloadMusicFile = DownloadMusicFile(this)
+        //val downloadMusicFile = DownloadMusicFile(this)
+        val downloadMusicFile = DownloadMusicFile(context, object : DownloadListener {
+            override fun onDownloadComplete(file: File) {
+                // Handle download completion
+                Toast.makeText(context, "Music Download complete.", Toast.LENGTH_SHORT).show()
+                val intent = Intent(context, ChapterDetailActivity::class.java)
+                intent.putExtra("audio_url", s) // Pass the downloaded audio URL
+                context.startActivity(intent)
+            }
+
+            override fun onDownloadFailed(error: String) {
+                // Handle download failure
+                Toast.makeText(context, "Download failed: $error", Toast.LENGTH_SHORT).show()
+            }
+        })
+
         downloadMusicFile.downloadMusicFile(s)
       /*  request = Request(GlobalClass.BASE_URL_1 + s, audio_path)
         request.setPriority(Priority.HIGH)

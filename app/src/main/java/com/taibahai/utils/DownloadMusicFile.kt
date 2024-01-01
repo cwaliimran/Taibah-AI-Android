@@ -14,7 +14,13 @@ import java.net.URL
 import java.net.URLConnection
 import java.util.concurrent.Executors
 
-class DownloadMusicFile(private val context: Context) {
+
+interface DownloadListener {
+    fun onDownloadComplete(file: File)
+    fun onDownloadFailed(error: String)
+}
+
+class DownloadMusicFile(private val context: Context, param: DownloadListener) {
 
     private val mainHandler = Handler(Looper.getMainLooper())
     private val TAG = "DownloadMusicFile"

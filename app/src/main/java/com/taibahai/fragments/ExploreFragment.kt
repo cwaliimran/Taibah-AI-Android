@@ -135,7 +135,7 @@ class ExploreFragment : BaseFragment() {
                 binding.inTodayVerse.tvArbiAyat.text = savedData.data.quran.text
                 binding.inTodayVerse.tvTranslation.text = savedData.data.quran.quran_translation_en
                 binding.inTodayVerse.tvSurah.text = savedData.data.quran.transliteration_en
-                val transliteration = savedData.data.quran?.quran_transliteration_en
+                val transliteration = savedData.data.quran.quran_transliteration_en
                 if (transliteration != null)
 
                 {
