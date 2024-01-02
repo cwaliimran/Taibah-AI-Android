@@ -22,7 +22,7 @@ import com.taibahai.databinding.FragmentHomeBinding
 import com.taibahai.utils.showToast
 
 
-class HomeFragment : BaseFragment(),OnItemClick {
+class HomeFragment : BaseFragment() {
     lateinit var binding: FragmentHomeBinding
     var feedId=""
 
@@ -106,38 +106,34 @@ class HomeFragment : BaseFragment(),OnItemClick {
     }
 
     override fun initAdapter() {
-        adapter = AdapterHome(this,showList)
+        adapter = AdapterHome(showList,isProfileFeed = false, object :OnItemClick{
+
+            override fun onClick(position: Int, type: String?, data: Any?) {
+                when (type) {
+                    "dots" -> {
+                        if(data is String) {
+                            showPopupMenu(position,data)
+                        }
+                    }
+
+                    "like" -> {
+                        if(data is String)
+                        {
+                            viewModel.putLike(data)
+                        }
+                    }
+                    else -> {}
+                }
+            }
+
+        })
         binding.rvHome.adapter = adapter
-
-
     }
 
-    override fun onClick(position: Int, type: String?, data: Any?) {
-        super.onClick(position, type, data)
-        when (type) {
-            "dots" -> {
-                if (data != null) {
-                    showPopupMenu(position, data)
-                }
-            }
 
-            "like" -> {
-                if(data is String)
-                {
-                    viewModel.putLike(data)
-                }
-
-            }
-
-
-
-
-            else -> {}
-        }
-    }
 
     @SuppressLint("MissingInflatedId")
-    private fun showPopupMenu(position: Int, data: Any) {
+    private fun showPopupMenu(position: Int, data: String) {
         val popupView = layoutInflater.inflate(R.layout.item_popup, null)
         val popupWindow = PopupWindow(
             popupView,
@@ -146,18 +142,19 @@ class HomeFragment : BaseFragment(),OnItemClick {
         )
         popupWindow.isOutsideTouchable = true
 
-
         val reportMenuItem = popupView.findViewById<View>(R.id.menuReport)
         reportMenuItem.setOnClickListener {
-            viewModel.feedReport(feedId)
+            viewModel.feedReport(data)
             popupWindow.dismiss()
         }
 
+        // Get the anchor view from the clicked item in the adapter
+        val anchorView = binding.rvHome.findViewHolderForAdapterPosition(position)?.itemView?.findViewById<View>(R.id.ivDots)
+
         // Show the popup menu at a specific location
-        val anchorView = view?.findViewById<View>(R.id.ivDots)
-        popupWindow.showAsDropDown(anchorView, 0, 0)
-
-
+        anchorView?.let {
+            popupWindow.showAsDropDown(it, 0, 0)
+        }
     }
 
 

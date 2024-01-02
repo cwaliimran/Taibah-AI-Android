@@ -1,11 +1,17 @@
 package com.taibahai.fragments
 
+import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.speech.RecognizerIntent
+import android.speech.tts.TextToSpeech
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.network.base.BaseFragment
 import com.taibahai.R
@@ -44,6 +50,7 @@ class SearchFragment : BaseFragment(),OnItemClick {
     private lateinit var chatDatabase: ChatDatabase
     private lateinit var chatMessageDao: ChatMessageDao
     val showMessagePopups=ArrayList<ModelChatPopups>()
+    val showMessage=ArrayList<ModelSearchAI>()
     lateinit var adapterMessagePopups:AdapterChatPopups
     private var userQuestion: String = ""
     private var botResponse: String? = null
@@ -51,6 +58,7 @@ class SearchFragment : BaseFragment(),OnItemClick {
     private val newMessages = mutableListOf<ModelChatMessage>()
     private var isNewMessage = false
     private val SPEECH_REQUEST_CODE = 123
+    private var textToSpeech: TextToSpeech? = null
     private var spokenText: String? = null
     private var archiveMessageId: Long? = null
     private var isArchived: Boolean=false
@@ -61,6 +69,18 @@ class SearchFragment : BaseFragment(),OnItemClick {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate<FragmentSearchBinding>(inflater, R.layout.fragment_search, container, false)
         return binding.getRoot()
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        // Initialize the TextToSpeech instance in onAttach
+        textToSpeech = TextToSpeech(context, TextToSpeech.OnInitListener { status ->
+            if (status != TextToSpeech.ERROR) {
+                // Text-to-Speech is initialized successfully
+            } else {
+                Log.e("YourFragment", "Text-to-Speech initialization failed")
+            }
+        })
     }
 
     override fun viewCreated() {
@@ -111,10 +131,43 @@ class SearchFragment : BaseFragment(),OnItemClick {
                     }
                 }
             }
+
+
+        }
+
+        binding.voiceBtn.setOnClickListener {
+            startSpeechToText()
         }
 
         binding.ivDotsSelect.setOnClickListener {view ->
             showPopupMenu(view)
+        }
+    }
+
+
+    private fun startSpeechToText() {
+        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "en-US") // Change the language if needed
+        //intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Say Something") // Change the language if needed
+
+
+        try {
+            startActivityForResult(intent, SPEECH_REQUEST_CODE)
+        } catch (e: Exception) {
+            Toast.makeText(requireContext(), "Speech recognition not available", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == SPEECH_REQUEST_CODE && resultCode == -1 && data != null) {
+            val results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+            if (results != null && results.isNotEmpty()) {
+                spokenText = results[0]
+                binding?.messageBox?.setText(spokenText)  // Set spoken text in the message box
+            }
         }
     }
 
@@ -188,7 +241,6 @@ class SearchFragment : BaseFragment(),OnItemClick {
     }
     """.trimIndent()
 
-        // Use runOnUiThread to update UI from a background thread and display the typing message
 
 
         val request = Request.Builder()
@@ -201,7 +253,6 @@ class SearchFragment : BaseFragment(),OnItemClick {
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: okhttp3.Call, e: IOException) {
                 e.printStackTrace()
-                // Use runOnUiThread to update UI from a background thread
                 callback(null)
             }
 
@@ -213,7 +264,6 @@ class SearchFragment : BaseFragment(),OnItemClick {
                     if (jsonObject.has("error")) {
                         val errorMessage =
                             jsonObject.getJSONObject("error").optString("message", "")
-                        // Use runOnUiThread to update UI from a background thread
                         callback(errorMessage)
                         return
                     }
@@ -226,19 +276,16 @@ class SearchFragment : BaseFragment(),OnItemClick {
                             val textResult = jsonArray.getJSONObject(0).optString("text", "")
 
                             if (textResult.isNotEmpty()) {
-                                // Use runOnUiThread to update UI from a background thread
                                 callback(textResult)
                                 return
                             }
                         }
                     }
 
-                    // Use runOnUiThread to update UI from a background thread
                     callback(null)
 
                 } catch (e: JSONException) {
                     e.printStackTrace()
-                    // Use runOnUiThread to update UI from a background thread
                     callback(null)
                 }
             }
@@ -260,11 +307,47 @@ class SearchFragment : BaseFragment(),OnItemClick {
         }
     }
 
+
     override fun initAdapter() {
-        val messageAdapter = AdapterAISearch(requireContext(), ArrayList())
+        val messageAdapter = AdapterAISearch(requireContext(), showMessage, object :OnItemClick{
+
+            override fun onClick(position: Int, type: String?, data: Any?) {
+                if (position >= 0 && position < showMessage.size) {
+                    val textToSpeak = showMessage[position].message
+
+                    when (type) {
+                        "speak" -> {
+                            speakText(textToSpeak)
+                        }
+                        else -> {}
+                    }
+                } else {
+                    Log.e("AISearch", "Invalid position: $position")
+                }
+            }
+
+
+        })
         binding.rvSearchAI.adapter = messageAdapter
     }
 
+    private fun speakText(text: String) {
+        textToSpeech?.let { tts ->
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                val params = Bundle()
+                params.putString(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "UniqueUtteranceId")
+                tts.speak(text, TextToSpeech.QUEUE_FLUSH, params, "UniqueUtteranceId")
+            } else {
+                @Suppress("deprecation")
+                tts.speak(text, TextToSpeech.QUEUE_FLUSH, null)
+            }
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        textToSpeech?.stop()
+    }
 
 
 

@@ -14,20 +14,10 @@ import com.network.interfaces.OnItemClick
 import com.taibahai.R
 import com.taibahai.models.ModelSearchAI
 
-class AdapterAISearch( val context: Context, val messageList: ArrayList<ModelSearchAI>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class AdapterAISearch( val context: Context, val messageList: ArrayList<ModelSearchAI>, var listener:OnItemClick) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     val ItemSend = 1
     val ItemReceive = 2
-    private var textToSpeech: TextToSpeech? = null
-
-    init {
-        textToSpeech = TextToSpeech(context, TextToSpeech.OnInitListener { status ->
-            if (status != TextToSpeech.ERROR) {
-            }
-        })
-    }
-
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         if (viewType == ItemSend) {
@@ -41,7 +31,6 @@ class AdapterAISearch( val context: Context, val messageList: ArrayList<ModelSea
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val currentMessage = messageList[position]
-        val textToSpeak = currentMessage.message
         if (holder.itemViewType == ItemSend) {
             val viewHolder = holder as SentMessageViewHolder
             viewHolder.sendMessage.text = currentMessage.message
@@ -51,30 +40,11 @@ class AdapterAISearch( val context: Context, val messageList: ArrayList<ModelSea
 
             holder.ivSpeak.setOnClickListener {
 
-                speakText(textToSpeak)
-
-
+                listener.onClick(position,  "speak")
             }
         }
     }
 
-    private fun speakText(text: String) {
-        textToSpeech?.let { tts ->
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                val params = Bundle()
-                params.putString(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "UniqueUtteranceId")
-                tts.speak(text, TextToSpeech.QUEUE_FLUSH, params, "UniqueUtteranceId")
-            } else {
-                @Suppress("deprecation")
-                tts.speak(text, TextToSpeech.QUEUE_FLUSH, null)
-            }
-        }
-    }
-
-    // Method to stop TextToSpeech
-    fun stopTextToSpeech() {
-        textToSpeech?.stop()
-    }
 
 
 

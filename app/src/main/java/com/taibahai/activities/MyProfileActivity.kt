@@ -14,7 +14,7 @@ import com.taibahai.adapters.AdapterHome
 import com.taibahai.databinding.ActivityMyProfileBinding
 import com.taibahai.utils.showToast
 
-class MyProfileActivity : BaseActivity(),OnItemClick {
+class MyProfileActivity : BaseActivity() {
     lateinit var binding:ActivityMyProfileBinding
     lateinit var adapter: AdapterHome
     private var profileFeedList: MutableList<com.network.models.ModelHome.Data> = mutableListOf()
@@ -68,7 +68,9 @@ class MyProfileActivity : BaseActivity(),OnItemClick {
     }
 
     override fun initAdapter() {
-        adapter = AdapterHome(this,profileFeedList)
+        adapter = AdapterHome(profileFeedList,isProfileFeed = true,object :OnItemClick{
+
+        })
         binding.rvProfile.adapter = adapter
     }
 

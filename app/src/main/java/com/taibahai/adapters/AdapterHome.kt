@@ -3,6 +3,7 @@ package com.taibahai.adapters
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -12,10 +13,11 @@ import com.taibahai.activities.HomeDetailActivity
 import com.taibahai.databinding.ItemHomeBinding
 
 
-class AdapterHome(  private var listener: OnItemClick, var showData: MutableList<com.network.models.ModelHome.Data>
-) : RecyclerView.Adapter<AdapterHome.ViewHolder>() {
+class AdapterHome( var showData: MutableList<com.network.models.ModelHome.Data>, private var isProfileFeed: Boolean = false,
+                   private var listener: OnItemClick) : RecyclerView.Adapter<AdapterHome.ViewHolder>() {
 
     lateinit var binding: ItemHomeBinding
+
 
     @SuppressLint("SuspiciousIndentation")
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -32,7 +34,7 @@ class AdapterHome(  private var listener: OnItemClick, var showData: MutableList
         return showData.size
     }
 
-    @SuppressLint("ResourceAsColor", "SuspiciousIndentation")
+    @SuppressLint("ResourceAsColor", "SuspiciousIndentation", "NotifyDataSetChanged")
     override fun onBindViewHolder(holder: ViewHolder, @SuppressLint("RecyclerView") position: Int) {
         val userData = showData[position]
         holder.binding.model = userData
@@ -50,13 +52,22 @@ class AdapterHome(  private var listener: OnItemClick, var showData: MutableList
         } else {
             holder.binding.tvLike.setCompoundDrawablesWithIntrinsicBounds(R.drawable.like_2, 0, 0, 0)
         }
+        if (isProfileFeed) {
+            holder.binding.ivDots.visibility = View.GONE
+            holder.binding.ivDelete.visibility = View.VISIBLE
 
+            holder.binding.ivDelete.setOnClickListener {
+                listener.onClick(position, "delete", userData.feed_id)
+                notifyDataSetChanged()
+            }
+        }else {
+            holder.binding.ivDots.visibility = View.VISIBLE
+            holder.binding.ivDelete.visibility = View.GONE
 
-        holder.binding.tvLike.setOnClickListener {
-            listener.onClick(position, "like", userData.feed_id)
-            holder.isLiked = !holder.isLiked
-            notifyDataSetChanged()
+            holder.binding.ivDots.setOnClickListener {
+                listener.onClick(position, "dots", userData.feed_id)
 
+            }
         }
 
         holder.binding.tvAddComment.setOnClickListener {
@@ -72,7 +83,7 @@ class AdapterHome(  private var listener: OnItemClick, var showData: MutableList
         }
 
         holder.binding.ivDots.setOnClickListener {
-            listener.onClick(position, "dots", userData)
+            listener.onClick(position, "dots",userData.feed_id)
 
         }
 

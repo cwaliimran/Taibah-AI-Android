@@ -9,6 +9,7 @@ import androidx.activity.viewModels
 import com.bumptech.glide.Glide
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.network.base.BaseActivity
+import com.network.models.ModelUser
 import com.network.network.NetworkResult
 import com.network.utils.ProgressLoading.displayLoading
 import com.network.viewmodels.MainViewModelAI
@@ -28,8 +29,6 @@ class EditProfileActivity : BaseActivity() {
         binding=ActivityEditProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
-        //image = currentUser?.data?.image.toString()
 
     }
 
@@ -91,6 +90,12 @@ class EditProfileActivity : BaseActivity() {
 
                 is NetworkResult.Success -> {
                     it.data?.message?.let { it1 -> showToast(it1) }
+                    val profileData: ModelUser.Data = it.data!!.data
+
+                    updateUI(profileData)
+
+
+
 
 
                 }
@@ -101,6 +106,13 @@ class EditProfileActivity : BaseActivity() {
             }
         }
 
+    }
+
+    private fun updateUI(profileData: ModelUser.Data) {
+
+        binding.etName.setText(profileData.name)
+        binding.tvEmail.text = profileData.email
+        Glide.with(this).load(profileData.image).into(binding.ivProfile)
     }
 
 
@@ -137,6 +149,10 @@ class EditProfileActivity : BaseActivity() {
         binding.appbar.tvTitle.setText("Edit Profile")
         binding.appbar.ivLeft.setImageDrawable(resources.getDrawable(R.drawable.arrow_back_24))
         binding.appbar.ivRight.setVisibility(View.GONE)
+    }
+
+    override fun apiAndArgs() {
+        super.apiAndArgs()
     }
 
 

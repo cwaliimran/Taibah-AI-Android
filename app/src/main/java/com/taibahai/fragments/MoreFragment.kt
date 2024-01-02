@@ -50,7 +50,7 @@ class MoreFragment : BaseFragment() {
         adapter = AdapterMore(requireContext(),showList)
         val moreFree=ArrayList<ModelMoreLevels>()
 
-        moreFree.add(ModelMoreLevels("search",R.drawable.search_icon, "30 AI Tokens (monthly)"))
+        moreFree.add(ModelMoreLevels("searchFree",R.drawable.search_icon, "30 AI Tokens (monthly)"))
         moreFree.add(ModelMoreLevels("quran",R.drawable.quran_icon, "Quran"))
         moreFree.add(ModelMoreLevels("hadith",R.drawable.hadih_icon, "Hadith"))
         moreFree.add(ModelMoreLevels("",R.drawable.ads_icon, "Ads"))
@@ -58,14 +58,14 @@ class MoreFragment : BaseFragment() {
 
             val moreLevel1=ArrayList<ModelMoreLevels>()
 
-        moreLevel1.add(ModelMoreLevels("search",R.drawable.search_icon, "30 AI Tokens (monthly)"))
+        moreLevel1.add(ModelMoreLevels("searchLevel1",R.drawable.search_icon, "30 AI Tokens (monthly)"))
         moreLevel1.add(ModelMoreLevels("",R.drawable.ads_icon, "Ads"))
         showList.add(ModelMore("Level 1" ,"Basic: Silver Subscription Package",moreLevel1) )
 
 
         val moreLevel2=ArrayList<ModelMoreLevels>()
 
-        moreLevel2.add(ModelMoreLevels("search",R.drawable.search_icon, "700 AI Tokens (monthly) "))
+        moreLevel2.add(ModelMoreLevels("searchLevel2",R.drawable.search_icon, "700 AI Tokens (monthly) "))
         moreLevel2.add(ModelMoreLevels("",R.drawable.ads_icon, "Ads"))
         moreLevel2.add(ModelMoreLevels("zakat_calculator",R.drawable.zakat_icon, "Zakat Calculator"))
         moreLevel2.add(ModelMoreLevels("imams",R.drawable.imams_logo, "4 Imams of Sunna"))
@@ -73,7 +73,7 @@ class MoreFragment : BaseFragment() {
 
         val moreLevel3=ArrayList<ModelMoreLevels>()
 
-        moreLevel3.add(ModelMoreLevels("search",R.drawable.search_icon, "Unlimited AI Tokens"))
+        moreLevel3.add(ModelMoreLevels("searchLevel3",R.drawable.search_icon, "Unlimited AI Tokens"))
         moreLevel3.add(ModelMoreLevels("",R.drawable.ads_icon, "Ads"))
         moreLevel3.add(ModelMoreLevels("books_pdfs",R.drawable.bookspdf_icon, "Books & PDF"))
         moreLevel3.add(ModelMoreLevels("inheritance_law",R.drawable.inheritancelaw_icon, "Inheritance Law"))

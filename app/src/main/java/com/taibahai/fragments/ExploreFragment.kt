@@ -80,8 +80,7 @@ class ExploreFragment : BaseFragment() {
                     AppClass.sharedPref.storeObject(AppConstants.TODAY, it.data?.data)
                     AppClass.sharedPref.storeDate(AppConstants.CURRENT_DATE, Date())
                     binding.inTodayVerse.tvArbiAyat.text = it.data?.data?.quran?.text
-                    binding.inTodayVerse.tvTranslation.text =
-                        it.data?.data?.quran?.quran_translation_en
+                    binding.inTodayVerse.tvTranslation.text = it.data?.data?.quran?.quran_translation_en
                     binding.inTodayVerse.tvSurah.text = it.data?.data?.quran?.transliteration_en
                     val transliteration = it.data?.data?.quran?.quran_transliteration_en
                     if (transliteration != null) {

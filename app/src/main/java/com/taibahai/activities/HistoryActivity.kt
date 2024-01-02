@@ -1,7 +1,13 @@
 package com.taibahai.activities
 
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.Window
+import android.widget.LinearLayout
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.Observer
 import com.network.base.BaseActivity
@@ -9,10 +15,14 @@ import com.network.interfaces.OnItemClick
 import com.taibahai.R
 import com.taibahai.adapters.AdapterAISearch
 import com.taibahai.databinding.ActivityHistoryBinding
+import com.taibahai.databinding.DialogHistoryBinding
+import com.taibahai.databinding.DialogLogoutBinding
 import com.taibahai.models.ModelSearchAI
 import com.taibahai.room_database.ChatDatabase
 import com.taibahai.room_database.ChatMessageDao
 import com.taibahai.room_database.ModelChatMessage
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class HistoryActivity : BaseActivity() {
     lateinit var binding:ActivityHistoryBinding
@@ -28,6 +38,13 @@ class HistoryActivity : BaseActivity() {
     }
 
     override fun clicks() {
+        binding.ivBack.setOnClickListener {
+            onBackPressed()
+        }
+
+        binding.ivDeleteHistory.setOnClickListener {
+            showDeleteDialog()
+        }
 
     }
 
@@ -39,7 +56,9 @@ class HistoryActivity : BaseActivity() {
 
     override fun initAdapter() {
         super.initAdapter()
-        val messageAdapter = AdapterAISearch(this, ArrayList())
+        val messageAdapter = AdapterAISearch(this, ArrayList(),object :OnItemClick{
+
+        })
         binding?.rvHistory?.adapter = messageAdapter
     }
 
@@ -54,5 +73,31 @@ class HistoryActivity : BaseActivity() {
         }
 
         binding?.rvHistory?.adapter?.notifyDataSetChanged()
+    }
+
+    private fun showDeleteDialog() {
+        val dialog = Dialog(this)
+        val layoutInflater = LayoutInflater.from(this)
+        val binding = DialogHistoryBinding.inflate(layoutInflater)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(binding.root)
+        dialog.setCancelable(false)
+        binding.btnCancel.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        binding.btnYes.setOnClickListener {
+            GlobalScope.launch {
+                chatDatabase.chatMessageDao().deleteAllMessages()
+            }
+            dialog.dismiss()
+        }
+
+        dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.window!!.setLayout(
+            LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+
+        dialog.show()
     }
 }

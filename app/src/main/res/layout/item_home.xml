@@ -89,7 +89,15 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/dots_black"
-                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/ivDelete"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/delete"
+                        android:visibility="invisible"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 

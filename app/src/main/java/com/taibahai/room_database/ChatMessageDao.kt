@@ -13,8 +13,8 @@ interface ChatMessageDao {
     @Insert
     fun insertMessage(message: ModelChatMessage)
 
-    @Query("DELETE FROM chat_messages WHERE conversationId = :conversationId")
-    fun deleteMessage(conversationId: String)
+    @Query("DELETE FROM chat_messages")
+    fun deleteAllMessages()
 
     @Query("SELECT * FROM chat_messages ORDER BY id DESC LIMIT 1")
     fun getLastMessage(): ModelChatMessage?

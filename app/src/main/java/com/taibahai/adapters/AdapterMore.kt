@@ -16,6 +16,7 @@ import com.taibahai.activities.QuranChaptersActivity
 import com.taibahai.activities.UpgradeActivity
 import com.taibahai.activities.ZakatCalculatorActivity
 import com.taibahai.databinding.ItemMoreBinding
+import com.taibahai.fragments.SearchFragment
 import com.taibahai.hadiths.HadithBooksActivity1
 import com.taibahai.models.ModelMore
 import com.taibahai.models.ModelMoreLevels
@@ -81,6 +82,7 @@ class AdapterMore(private val context: Context, var showData: MutableList<ModelM
                 val intent = Intent(context, HadithBooksActivity1::class.java)
                 context.startActivity(intent)
             }
+
 
             "zakat_calculator" -> {
                 val intent = Intent(context, ZakatCalculatorActivity::class.java)
