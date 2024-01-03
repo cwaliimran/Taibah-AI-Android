@@ -40,7 +40,6 @@ class QuranChaptersActivity : BaseActivity() {
         binding.appbar.tvTitle.setText("Quran")
         binding.appbar.ivLeft.setImageDrawable(resources.getDrawable(R.drawable.arrow_back_24))
         binding.appbar.ivRight.setImageDrawable(resources.getDrawable(R.drawable.heartt))
-        initDownload()
 
     }
 
@@ -62,81 +61,30 @@ class QuranChaptersActivity : BaseActivity() {
                     "download" -> {
                         isDownload  = true
 
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                            TedPermission.create()
-                                .setPermissionListener(permissionListener)
-                                .setDeniedMessage("If you reject permission, you cannot use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
-                                .setPermissions(
-                                    Manifest.permission.READ_MEDIA_AUDIO,
-                                    Manifest.permission.POST_NOTIFICATIONS
-                                )
-                                .check()
-                        } else {
-                            TedPermission.create()
-                                .setPermissionListener(permissionListener)
-                                .setDeniedMessage("If you reject permission, you cannot use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
-                                .setPermissions(
-                                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                                    Manifest.permission.READ_EXTERNAL_STORAGE
-                                )
-                                .check()
-                        }
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                TedPermission.create()
+                                    .setPermissionListener(permissionListener)
+                                    .setDeniedMessage("If you reject permission, you cannot use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
+                                    .setPermissions(
+                                        Manifest.permission.READ_MEDIA_AUDIO,
+                                        Manifest.permission.POST_NOTIFICATIONS
+                                    )
+                                    .check()
+                            } else {
+                                TedPermission.create()
+                                    .setPermissionListener(permissionListener)
+                                    .setDeniedMessage("If you reject permission, you cannot use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
+                                    .setPermissions(
+                                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                        Manifest.permission.READ_EXTERNAL_STORAGE
+                                    )
+                                    .check()
+                            }
 
-                     /*   if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
 
-                            TedPermission.with(context)
-                                .setPermissionListener(object : PermissionListener() {
-                                    fun onPermissionGranted() {
-                                        Log.d(
-                                            TAG,
-                                            "onPlay: " + GlobalClass.BASE_URL_1 + model.getAudio()
-                                        )
-                                        if (GlobalClass.isOnline(context)) {
-                                            if (isDownload) downloadAudio(model.getAudio())
-                                        } else {
-                                            Toast.makeText(
-                                                context,
-                                                context.getString(R.string.turn_on_internet),
-                                                Toast.LENGTH_LONG
-                                            ).show()
-                                        }
-                                    }
-
-                                    fun onPermissionDenied(deniedPermissions: List<String?>?) {}
-                                })
-                                .setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
-                                .setPermissions(
-                                    Manifest.permission.READ_MEDIA_AUDIO,
-                                    Manifest.permission.POST_NOTIFICATIONS
-                                ).check()
-                        } else {
-                            TedPermission.with(context)
-                                .setPermissionListener(object : PermissionListener() {
-                                    fun onPermissionGranted() {
-                                        Log.d(
-                                            TAG,
-                                            "onPlay: " + GlobalClass.BASE_URL_1 + model.getAudio()
-                                        )
-                                        if (GlobalClass.isOnline(context)) {
-                                            if (isDownload) downloadAudio(model.getAudio())
-                                        } else {
-                                            Toast.makeText(
-                                                context,
-                                                context.getString(R.string.turn_on_internet),
-                                                Toast.LENGTH_LONG
-                                            ).show()
-                                        }
-                                    }
-
-                                    fun onPermissionDenied(deniedPermissions: List<String?>?) {}
-                                })
-                                .setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
-                                .setPermissions(
-                                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                                    Manifest.permission.READ_EXTERNAL_STORAGE
-                                ).check()
-                        }*/
                     }
+
+
                     "play"->{
                         val intent= Intent(context, ChapterDetailActivity::class.java)
                         intent.putExtra("ayat_id",modelSurahList[position].id )
@@ -163,18 +111,7 @@ class QuranChaptersActivity : BaseActivity() {
         loadData()
     }
 
-    private fun initDownload() {
-        val savedDownloadRequest = fileDownloader.getSavedDownloadRequest()
 
-        if (savedDownloadRequest != null) {
-            val (url, title, _) = savedDownloadRequest
-            val downloadId = fileDownloader.downloadFile(url, title, "Download Description")
-
-
-
-            fileDownloader.saveDownloadRequest("", "", "")
-        }
-    }
 
     private fun loadData() {
         try {
@@ -195,14 +132,9 @@ class QuranChaptersActivity : BaseActivity() {
         override fun onPermissionGranted() {
             Log.d(TAG, "onPlay: " + AppClass.BASE_URL_1 + model.audio)
             if (isInternetAvailable()) {
-//                if (isDownload) downloadAudio(model.audio)
                 if (isDownload) downloadAudio(AppClass.BASE_URL_1 + model.audio)
             } else {
-                Toast.makeText(
-                    context,
-                    context.getString(R.string.turn_on_internet),
-                    Toast.LENGTH_LONG
-                ).show()
+                Toast.makeText(context,  context.getString(R.string.turn_on_internet), Toast.LENGTH_LONG).show()
             }
         }
 
@@ -213,19 +145,11 @@ class QuranChaptersActivity : BaseActivity() {
     }
 
     fun downloadAudio(s: String) {
-//        val child: String = StringUtils.SURAH_FOLDER + StringUtils.getNameFromUrl(s)
-//        val file: File = File(getAudioOutputDirectory(), child)
-//        val audio_path = file.absolutePath
-//        Log.d(TAG, "downloadAudio: $audio_path")
+
         Log.d(TAG, "downloadAudio: $s")
-        //val downloadMusicFile = DownloadMusicFile(this)
         val downloadMusicFile = DownloadMusicFile(context, object : DownloadListener {
             override fun onDownloadComplete(file: File) {
-                // Handle download completion
                 Toast.makeText(context, "Music Download complete.", Toast.LENGTH_SHORT).show()
-                val intent = Intent(context, ChapterDetailActivity::class.java)
-                intent.putExtra("audio_url", s) // Pass the downloaded audio URL
-                context.startActivity(intent)
             }
 
             override fun onDownloadFailed(error: String) {
@@ -235,15 +159,9 @@ class QuranChaptersActivity : BaseActivity() {
         })
 
         downloadMusicFile.downloadMusicFile(s)
-      /*  request = Request(GlobalClass.BASE_URL_1 + s, audio_path)
-        request.setPriority(Priority.HIGH)
-        request.setNetworkType(NetworkType.ALL)
-        request.setGroupId(StringUtils.SURAH_GROUP_ID)
-        //        request.addHeader(CLIENT_KEY, StringUtils.CLIENT_KEY_HEADER);
-        sharedPref.storeString(StringUtils.PREV_SURAH_URL, request.getUrl())
-        sharedPref.storeString(StringUtils.PREV_SURAH_FILEPATH, request.getFile())
-        fetch.enqueue(request, { updatedRequest -> }) { error -> }*/
+
     }
+
 
 
 }

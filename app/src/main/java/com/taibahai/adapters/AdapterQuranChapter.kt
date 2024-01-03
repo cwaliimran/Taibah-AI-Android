@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gun0912.tedpermission.provider.TedPermissionProvider.context
 import com.network.interfaces.OnItemClick
 import com.network.models.ModelSurah
+import com.taibahai.R
 import com.taibahai.databinding.ItemQuranChapterBinding
 import com.taibahai.room_database.FavModel
 import com.taibahai.room_database.SurahDatabase
@@ -37,12 +38,21 @@ class AdapterQuranChapter(var showData: MutableList<ModelSurah>, var listener: O
         binding.data = chapterData
 
         holder.itemView.setOnClickListener {
-            // TODO: update model type its dummy value
             if (chapterData.type == "play") {
                 listener.onClick(position, "play")
             } else {
                 listener.onClick(position, "download")
             }
+        }
+
+        holder.binding.ivPlay.setOnClickListener {
+            listener.onClick(position, "play")
+
+        }
+
+        holder.binding.ivPlay.setOnClickListener {
+            listener.onClick(position, "play")
+
         }
 
         holder.binding.ivFavourite.setOnClickListener {
@@ -53,7 +63,7 @@ class AdapterQuranChapter(var showData: MutableList<ModelSurah>, var listener: O
                     Log.d("Database", "Audio added to favorites. ID: ${chapterData.id}")
                 }
 
-                holder.binding.ivFavourite.isSelected = true
+                holder.binding.ivFavourite.setImageResource(R.drawable.heart3)
                 chapterData.fav = true
                 Toast.makeText(context, "Audio is added to favorites", Toast.LENGTH_SHORT).show()
             }
@@ -63,7 +73,7 @@ class AdapterQuranChapter(var showData: MutableList<ModelSurah>, var listener: O
                     Log.d("Database", "Audio removed from favorites. ID: ${chapterData.id}")
                 }
 
-                holder.binding.ivFavourite.setSelected(false)
+                holder.binding.ivFavourite.setImageResource(R.drawable.heartt2)
                 chapterData.fav = false
                 Toast.makeText(context, "Audio is removed from favorites", Toast.LENGTH_SHORT) .show()
             }

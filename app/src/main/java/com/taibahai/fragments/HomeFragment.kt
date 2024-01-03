@@ -43,6 +43,9 @@ class HomeFragment : BaseFragment() {
         return binding.getRoot()
     }
 
+    override fun onResume() {
+        super.onResume()
+    }
 
     override fun viewCreated() {
         viewModel.home(pageno = 1)

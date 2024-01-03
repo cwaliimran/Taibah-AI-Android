@@ -77,8 +77,12 @@ class ExploreFragment : BaseFragment() {
                 }
 
                 is NetworkResult.Success -> {
+                    val todayDate = Date()
+
+                    val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+                    val formattedTodayDate = dateFormat.format(todayDate)
                     AppClass.sharedPref.storeObject(AppConstants.TODAY, it.data?.data)
-                    AppClass.sharedPref.storeDate(AppConstants.CURRENT_DATE, Date())
+                    AppClass.sharedPref.storeString(AppConstants.CURRENT_DATE, formattedTodayDate)
                     binding.inTodayVerse.tvArbiAyat.text = it.data?.data?.quran?.text
                     binding.inTodayVerse.tvTranslation.text = it.data?.data?.quran?.quran_translation_en
                     binding.inTodayVerse.tvSurah.text = it.data?.data?.quran?.transliteration_en
@@ -122,13 +126,17 @@ class ExploreFragment : BaseFragment() {
     override fun apiAndArgs() {
         super.apiAndArgs()
         val todayDate = Date()
-        val savedTodayDate = AppClass.sharedPref.getDate(AppConstants.CURRENT_DATE)
+        val savedData =AppClass.sharedPref.getObject(AppConstants.TODAY, ModelToday::class.java)
+        val savedTodayDate = AppClass.sharedPref.getString(AppConstants.CURRENT_DATE,"")
 
-        if (todayDate.toString() != savedTodayDate.toString()) {
+        val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+        val formattedTodayDate = dateFormat.format(todayDate)
+
+
+        if (formattedTodayDate != savedTodayDate) {
             viewModel.today()
         }
         else {
-            val savedData =AppClass.sharedPref.getObject(AppConstants.TODAY, ModelToday::class.java)
             if (savedData != null)
             {
                 binding.inTodayVerse.tvArbiAyat.text = savedData.data.quran.text
