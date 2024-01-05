@@ -44,13 +44,14 @@ class ChapterDetailActivity : BaseActivity() {
     private val STANDARD_SPEED = 50
     private val isRepeat = false
     var currentFile = ""
+    var model=ModelSurah()
 
 
     private val TAG = "ChapterDetailActivity"
     override fun onCreate() {
         binding=ActivityChapterDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        currentFile= intent.getStringExtra("audio_url").toString()
+        currentFile= intent.getStringExtra("audio_path").toString()
         initScroll()
         initAudioPlay()
 
@@ -233,12 +234,19 @@ class ChapterDetailActivity : BaseActivity() {
                 counter = 0
                 adapter.setDate(tasks)
 
-              //  playSurah()
+                playSurah()
                 Handler().postDelayed({ this@ChapterDetailActivity.startScroll() }, 1000)
             }
         }
         loadAyats().execute()
     }
+
+    private fun playSurah()
+    {
+        //currentFile=model.downloadId.toString()
+        startPlaying(currentFile)
+    }
+
 
     private fun startPlaying(audio_url: String) {
         AudioPlayer.getInstance()!!.setData(audio_url)

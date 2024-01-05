@@ -1,8 +1,10 @@
 package com.network.models
 
+import androidx.media3.exoplayer.offline.Download
 import com.network.utils.AppClass
 import com.network.utils.StringUtils
 import java.io.File
+import java.io.Serializable
 
 
 data class ModelSurah(
@@ -15,16 +17,16 @@ data class ModelSurah(
     var revelation_type: String = "",
     var audio: String = "",
     var type: String = "",
-    var fav: Boolean = false
+    var fav: Boolean = false,
+    var download: Download? = null
 
 
-//    var download: Download? = null
-) {
+):Serializable {
 
     val downloadId: Int
         get() {
             val url: String = StringUtils.SURAH_FOLDER + StringUtils.getNameFromUrl(audio)
-            val yourFile: File = File(AppClass.getAudioOutputDirectory(), url)
+            val yourFile= File(AppClass.getAudioOutputDirectory(), url)
             return getUniqueId(AppClass.BASE_URL_1 + audio, yourFile.absolutePath)
         }
 

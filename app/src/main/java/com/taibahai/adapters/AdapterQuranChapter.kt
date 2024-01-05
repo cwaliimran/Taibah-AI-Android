@@ -50,10 +50,6 @@ class AdapterQuranChapter(var showData: MutableList<ModelSurah>, var listener: O
 
         }
 
-        holder.binding.ivPlay.setOnClickListener {
-            listener.onClick(position, "play")
-
-        }
 
         holder.binding.ivFavourite.setOnClickListener {
             if (!chapterData.fav) {
@@ -76,6 +72,16 @@ class AdapterQuranChapter(var showData: MutableList<ModelSurah>, var listener: O
                 holder.binding.ivFavourite.setImageResource(R.drawable.heartt2)
                 chapterData.fav = false
                 Toast.makeText(context, "Audio is removed from favorites", Toast.LENGTH_SHORT) .show()
+            }
+        }
+    }
+
+    fun updateView(downloadId: Long) {
+        for (position in 0 until showData.size) {
+            val downloadData = showData[position]
+            if (downloadData.downloadId.toLong() == downloadId) {
+                notifyItemChanged(position)
+                return
             }
         }
     }

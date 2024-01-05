@@ -12,7 +12,6 @@ import androidx.core.text.HtmlCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import com.network.base.BaseFragment
-import com.network.models.ModelSurah
 import com.network.models.ModelToday
 import com.network.network.NetworkResult
 import com.network.utils.AppClass

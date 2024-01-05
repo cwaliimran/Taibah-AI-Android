@@ -28,6 +28,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".activities.QuranChaptersActivity"
+            android:exported="false" />
+        <activity
             android:name=".search_database_tablayout.DbSearchHadithRMActivity"
             android:exported="false" />
         <activity
@@ -121,8 +124,9 @@
             android:name=".activities.ChapterDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.QuranChaptersActivity"
-            android:exported="false" />
+            android:name="activities.QuranChaptersActivity"
+            android:exported="false"
+            tools:ignore="MissingClass" />
         <activity
             android:name=".activities.HistoryActivity"
             android:exported="false" />

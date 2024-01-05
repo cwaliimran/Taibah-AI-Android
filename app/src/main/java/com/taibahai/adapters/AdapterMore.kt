@@ -16,7 +16,6 @@ import com.taibahai.activities.QuranChaptersActivity
 import com.taibahai.activities.UpgradeActivity
 import com.taibahai.activities.ZakatCalculatorActivity
 import com.taibahai.databinding.ItemMoreBinding
-import com.taibahai.fragments.SearchFragment
 import com.taibahai.hadiths.HadithBooksActivity1
 import com.taibahai.models.ModelMore
 import com.taibahai.models.ModelMoreLevels
