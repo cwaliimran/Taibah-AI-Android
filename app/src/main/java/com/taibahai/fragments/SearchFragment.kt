@@ -10,8 +10,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.databinding.DataBindingUtil
 import com.network.base.BaseFragment
 import com.taibahai.R
@@ -62,6 +64,10 @@ class SearchFragment : BaseFragment(),OnItemClick {
     private var spokenText: String? = null
     private var archiveMessageId: Long? = null
     private var isArchived: Boolean=false
+    private var isAudioPlaying: Boolean = false
+    private lateinit var messageAdapter: AdapterAISearch
+
+
 
 
 
@@ -87,6 +93,8 @@ class SearchFragment : BaseFragment(),OnItemClick {
         isArchived=AppClass.sharedPref.getIsArchived()?:false
         chatDatabase = ChatDatabase.getDatabase(requireContext())
         chatMessageDao = chatDatabase.chatMessageDao()
+        messageAdapter = AdapterAISearch(requireContext(),showMessage,this)
+
         adapterMessagePopups = AdapterChatPopups(showMessagePopups) { message ->
             binding.messageBox.setText(message)
         }
@@ -309,16 +317,28 @@ class SearchFragment : BaseFragment(),OnItemClick {
 
 
     override fun initAdapter() {
-        val messageAdapter = AdapterAISearch(requireContext(), showMessage, object :OnItemClick{
+        messageAdapter = AdapterAISearch(requireContext(), showMessage, object :OnItemClick{
 
             override fun onClick(position: Int, type: String?, data: Any?) {
                 if (position >= 0 && position < showMessage.size) {
                     val textToSpeak = showMessage[position].message
 
                     when (type) {
-                        "speak" -> {
+                        "play" -> {
                             speakText(textToSpeak)
+                            isAudioPlaying = true
+                            updateVisibility(position)
+
                         }
+
+
+                        "pause" ->{
+                            textToSpeech?.stop()
+                            isAudioPlaying = false
+                            updateVisibility(position)
+                        }
+
+
                         else -> {}
                     }
                 } else {
@@ -347,9 +367,27 @@ class SearchFragment : BaseFragment(),OnItemClick {
     override fun onStop() {
         super.onStop()
         textToSpeech?.stop()
+        isAudioPlaying = false
+
     }
 
+    private fun updateVisibility(position:Int) {
+        val itemView = binding.rvSearchAI.findViewHolderForAdapterPosition(position)?.itemView
 
+        if (itemView != null) {
+            val ivPlay = itemView.findViewById<ImageView>(R.id.ivPlay)
+            val ivPause = itemView.findViewById<ImageView>(R.id.ivPause)
+
+            if (isAudioPlaying) {
+                 ivPlay.visibility = View.INVISIBLE
+                 ivPause.visibility = View.VISIBLE
+            } else {
+
+                 ivPlay.visibility = View.VISIBLE
+                 ivPause.visibility = View.INVISIBLE
+            }
+        }
+    }
 
 
     private fun showPopupMenu(view: View) {

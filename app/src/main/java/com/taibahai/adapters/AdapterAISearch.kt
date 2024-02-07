@@ -19,6 +19,7 @@ class AdapterAISearch( val context: Context, val messageList: ArrayList<ModelSea
     val ItemSend = 1
     val ItemReceive = 2
 
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         if (viewType == ItemSend) {
             val view: View = LayoutInflater.from(context).inflate(R.layout.item_send_message, parent, false)
@@ -38,10 +39,15 @@ class AdapterAISearch( val context: Context, val messageList: ArrayList<ModelSea
             val viewHolder = holder as ReceiveMessageViewHolder
             viewHolder.receiveMessage.text = currentMessage.message
 
-            holder.ivSpeak.setOnClickListener {
+            holder.ivPlay.setOnClickListener {
 
-                listener.onClick(position,  "speak")
+                listener.onClick(position,  "play")
             }
+
+            holder.ivPause.setOnClickListener {
+                listener.onClick(position,  "pause")
+            }
+
         }
     }
 
@@ -70,7 +76,8 @@ class AdapterAISearch( val context: Context, val messageList: ArrayList<ModelSea
 
     class ReceiveMessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val receiveMessage = itemView.findViewById<TextView>(R.id.tvResponse)
-        val ivSpeak=itemView.findViewById<ImageView>(R.id.ivSpeak)
+        val ivPlay=itemView.findViewById<ImageView>(R.id.ivPlay)
+        val ivPause=itemView.findViewById<ImageView>(R.id.ivPause)
 
     }
 }

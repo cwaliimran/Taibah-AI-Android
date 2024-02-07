@@ -51,7 +51,7 @@ class ChapterDetailActivity : BaseActivity() {
     override fun onCreate() {
         binding=ActivityChapterDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        currentFile= intent.getStringExtra("audio_path").toString()
+        currentFile= intent.getStringExtra("audio_url").toString()
         initScroll()
         initAudioPlay()
 
@@ -243,8 +243,9 @@ class ChapterDetailActivity : BaseActivity() {
 
     private fun playSurah()
     {
-        //currentFile=model.downloadId.toString()
-        startPlaying(currentFile)
+       if(currentFile!=null) {
+           startPlaying(currentFile)
+       }
     }
 
 

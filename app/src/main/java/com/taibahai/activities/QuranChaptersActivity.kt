@@ -6,15 +6,18 @@ import android.app.DownloadManager
 import android.content.Context
 import android.content.Intent
 import android.database.Cursor
+import android.media.AudioManager
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
+import android.os.Handler
 import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat.startActivityForResult
+import androidx.core.content.FileProvider
 import androidx.databinding.DataBindingUtil.setContentView
 import androidx.media3.exoplayer.offline.Download
 import com.cwnextgen.amnames.utils.getJsonDataFromAsset
@@ -36,6 +39,7 @@ import com.taibahai.utils.FileDownloader
 import com.taibahai.utils.StorageUtils
 import org.json.JSONException
 import java.io.File
+import java.io.IOException
 import java.io.Serializable
 
 class QuranChaptersActivity : BaseActivity() {
@@ -48,7 +52,10 @@ class QuranChaptersActivity : BaseActivity() {
     var isDownload = false
     private val TAG = "QuranChaptersActivity"
     val ACTIVITY_RESULT_CODE = 123
-    var audio_path = ""
+    var audioUrl = ""
+    var audio_path=""
+    var child=""
+    var mediaPlayer:MediaPlayer?=null
 
 
     override fun onCreate() {
@@ -64,6 +71,10 @@ class QuranChaptersActivity : BaseActivity() {
     override fun clicks() {
         binding.appbar.ivLeft.setOnClickListener {
             onBackPressed()
+        }
+
+        binding.ii.ivPlay.setOnClickListener {
+            startPlaying()
         }
     }
 
@@ -167,6 +178,7 @@ class QuranChaptersActivity : BaseActivity() {
         intent.putExtra("ayat_name", model.transliteration_en)
         intent.putExtra("ayat_verse", model.total_verses)
         intent.putExtra("ayat_type", model.type)
+        intent.putExtra("ayat_url", audioUrl)
 
 
         if (!modelSurahList.isEmpty()) {
@@ -255,9 +267,9 @@ class QuranChaptersActivity : BaseActivity() {
     }
 
     fun downloadAudio(s: String) {
-        val audioUrl = s
+         audioUrl = s
 
-        val child: String = StringUtils.SURAH_FOLDER + StringUtils.getNameFromUrl(s)
+         child=  StringUtils.SURAH_FOLDER + StringUtils.getNameFromUrl(s)
         val file = File(getAudioOutputDirectory(), child)
         audio_path = file.absolutePath
         Log.d(TAG, "downloadAudio: $audio_path")
@@ -297,6 +309,33 @@ class QuranChaptersActivity : BaseActivity() {
         //    downloadMusicFile.downloadMusicFile(s)
 
     }
+
+    private fun startPlaying() {
+        val path = audio_path
+        val file = File(context.filesDir, child)
+        val uri = FileProvider.getUriForFile(context, "com.taibahai.provider.cartoonprovider", file)
+
+        // Use a File object to check if the file exists
+       // val file = File(path)
+
+        if (file.exists()) {
+            mediaPlayer = MediaPlayer()
+            mediaPlayer!!.setAudioStreamType(AudioManager.STREAM_MUSIC)
+
+            try {
+                mediaPlayer!!.setDataSource(context, uri)
+                mediaPlayer!!.prepare()
+                mediaPlayer!!.start()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        } else {
+            // Handle the case where the file doesn't exist
+            Log.e(TAG, "File not found at path: $path")
+            // You may want to show a message to the user or take appropriate action
+        }
+    }
+
 
 
 }
