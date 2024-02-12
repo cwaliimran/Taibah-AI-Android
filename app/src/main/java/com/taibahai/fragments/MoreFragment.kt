@@ -60,25 +60,23 @@ class MoreFragment : BaseFragment() {
 
         moreLevel1.add(ModelMoreLevels("searchLevel1",R.drawable.search_icon, "30 AI Tokens (monthly)"))
         moreLevel1.add(ModelMoreLevels("",R.drawable.ads_icon, "Ads"))
-        showList.add(ModelMore("Level 1" ,"Basic: Silver Subscription Package",moreLevel1) )
+        showList.add(ModelMore("Level 1" ,"Silver Subscription Package",moreLevel1) )
 
 
         val moreLevel2=ArrayList<ModelMoreLevels>()
 
         moreLevel2.add(ModelMoreLevels("searchLevel2",R.drawable.search_icon, "700 AI Tokens (monthly) "))
-        moreLevel2.add(ModelMoreLevels("",R.drawable.ads_icon, "Ads"))
         moreLevel2.add(ModelMoreLevels("zakat_calculator",R.drawable.zakat_icon, "Zakat Calculator"))
         moreLevel2.add(ModelMoreLevels("imams",R.drawable.imams_logo, "4 Imams of Sunna"))
-        showList.add(ModelMore("Level 2" ,"Advance Gold Subscription Package",moreLevel2) )
+        showList.add(ModelMore("Level 2" ,"Gold Subscription Package",moreLevel2) )
 
         val moreLevel3=ArrayList<ModelMoreLevels>()
 
         moreLevel3.add(ModelMoreLevels("searchLevel3",R.drawable.search_icon, "Unlimited AI Tokens"))
-        moreLevel3.add(ModelMoreLevels("",R.drawable.ads_icon, "Ads"))
         moreLevel3.add(ModelMoreLevels("books_pdfs",R.drawable.bookspdf_icon, "Books & PDF"))
         moreLevel3.add(ModelMoreLevels("inheritance_law",R.drawable.inheritancelaw_icon, "Inheritance Law"))
         moreLevel3.add(ModelMoreLevels("searchdb",R.drawable.sd_icon, "Search Database Hadith, Surah"))
-        showList.add(ModelMore("Level 3" ,"Exclusive: Diamond Subscription Package",moreLevel3) )
+        showList.add(ModelMore("Level 3" ,"Diamond Subscription Package",moreLevel3) )
 
 
 

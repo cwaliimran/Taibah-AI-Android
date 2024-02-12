@@ -111,8 +111,8 @@ class LoginActivity : BaseActivity() {
         }
 
         binding.clAppleBtn.setOnClickListener {
-            val intent = Intent(this, BottomNavigation::class.java)
-            startActivity(intent)
+           /* val intent = Intent(this, BottomNavigation::class.java)
+            startActivity(intent)*/
         }
 
         binding.clFacebookBtn.setOnClickListener {
@@ -335,7 +335,7 @@ class LoginActivity : BaseActivity() {
     private fun uploadFile(fos: OutputStream) {
         fos?.use {
 //            bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, it)
-            Toast.makeText(this, "Saved to Gallery", Toast.LENGTH_SHORT).show()
+           // Toast.makeText(this, "Saved to Gallery", Toast.LENGTH_SHORT).show()
 
             viewModel.uploadFile(savedImagePath)
         }

@@ -86,6 +86,11 @@ class AdapterHome( var showData: MutableList<com.network.models.ModelHome.Data>,
             listener.onClick(position, "dots",userData.feed_id)
 
         }
+        holder.binding.tvLike.setOnClickListener {
+            listener.onClick(position, "like",userData.feed_id)
+
+        }
+
 
 
     }

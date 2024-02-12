@@ -99,6 +99,7 @@ class HomeFragment : BaseFragment() {
 
                 is NetworkResult.Success -> {
                     it.data?.message?.let { it1 -> showToast(it1) }
+
                 }
 
                 is NetworkResult.Error -> {
