@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import android.widget.PopupWindow
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.network.base.BaseFragment
 import com.network.interfaces.OnItemClick
 import com.network.network.NetworkResult
@@ -24,12 +26,14 @@ import com.taibahai.utils.showToast
 
 class HomeFragment : BaseFragment() {
     lateinit var binding: FragmentHomeBinding
-    var feedId=""
-
+    var feedId = ""
+    var currentItemAction = -1
 
     lateinit var adapter: AdapterHome
     private var showList: MutableList<com.network.models.ModelHome.Data> = mutableListOf()
     val viewModel: MainViewModelAI by viewModels()
+    private var currentPageNo = 1
+    private var totalPages: Int = 0
 
 
     override fun onCreateView(
@@ -48,12 +52,11 @@ class HomeFragment : BaseFragment() {
     }
 
     override fun viewCreated() {
-        viewModel.home(pageno = 1)
     }
 
     override fun clicks() {
         binding.ivCreatePostIcon.setOnClickListener {
-            val intent= Intent(requireContext(),CreatePostActivity::class.java)
+            val intent = Intent(requireContext(), CreatePostActivity::class.java)
             startActivity(intent)
         }
 
@@ -61,6 +64,23 @@ class HomeFragment : BaseFragment() {
             val intent = Intent(requireContext(), NotificationActivity::class.java)
             startActivity(intent)
         }
+
+        binding.rvHome.addOnScrollListener(object :
+            RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val linearLayoutManager = (recyclerView.layoutManager as LinearLayoutManager?)!!
+                if (dy > 0) {
+                    if (linearLayoutManager.findLastCompletelyVisibleItemPosition() == showList.size - 1) {
+                        if (currentPageNo < totalPages) {
+                            currentPageNo += 1
+                            viewModel.home(pageno = currentPageNo)
+                        }
+                    }
+
+                }
+            }
+        })
     }
 
     override fun initObservers() {
@@ -76,7 +96,7 @@ class HomeFragment : BaseFragment() {
                 }
 
                 is NetworkResult.Success -> {
-                    feedId= it.data?.data?.firstOrNull()?.feed_id.toString()
+                    feedId = it.data?.data?.firstOrNull()?.feed_id.toString()
                     showList.addAll((it.data?.data ?: listOf()))
                     adapter.notifyDataSetChanged()
                 }
@@ -87,6 +107,7 @@ class HomeFragment : BaseFragment() {
             }
         }
 
+        //only used for likes
         viewModel.simpleResponseLiveData.observe(this) {
             if (it == null) {
                 return@observe
@@ -94,12 +115,17 @@ class HomeFragment : BaseFragment() {
             activity?.displayLoading(false)
             when (it) {
                 is NetworkResult.Loading -> {
-                    activity?. displayLoading(true)
+                    activity?.displayLoading(true)
                 }
 
                 is NetworkResult.Success -> {
                     it.data?.message?.let { it1 -> showToast(it1) }
-
+                    if (showList[currentItemAction].likes==1){
+                        showList[currentItemAction].likes == 0
+                        showList[currentItemAction].likes == 0
+                    }else{
+                        showList[currentItemAction].likes == 1
+                    }
                 }
 
                 is NetworkResult.Error -> {
@@ -110,22 +136,23 @@ class HomeFragment : BaseFragment() {
     }
 
     override fun initAdapter() {
-        adapter = AdapterHome(showList,isProfileFeed = false, object :OnItemClick{
+        adapter = AdapterHome(showList, isProfileFeed = false, object : OnItemClick {
 
             override fun onClick(position: Int, type: String?, data: Any?) {
+                currentItemAction = position
                 when (type) {
                     "dots" -> {
-                        if(data is String) {
-                            showPopupMenu(position,data)
+                        if (data is String) {
+                            showPopupMenu(position, data)
                         }
                     }
 
                     "like" -> {
-                        if(data is String)
-                        {
+                        if (data is String) {
                             viewModel.putLike(data)
                         }
                     }
+
                     else -> {}
                 }
             }
@@ -133,7 +160,6 @@ class HomeFragment : BaseFragment() {
         })
         binding.rvHome.adapter = adapter
     }
-
 
 
     @SuppressLint("MissingInflatedId")
@@ -153,7 +179,10 @@ class HomeFragment : BaseFragment() {
         }
 
         // Get the anchor view from the clicked item in the adapter
-        val anchorView = binding.rvHome.findViewHolderForAdapterPosition(position)?.itemView?.findViewById<View>(R.id.ivDots)
+        val anchorView =
+            binding.rvHome.findViewHolderForAdapterPosition(position)?.itemView?.findViewById<View>(
+                R.id.ivDots
+            )
 
         // Show the popup menu at a specific location
         anchorView?.let {
@@ -161,7 +190,12 @@ class HomeFragment : BaseFragment() {
         }
     }
 
+    override fun apiAndArgs() {
+        super.apiAndArgs()
+        viewModel.home(pageno = 1)
 
+
+    }
 
 
 }

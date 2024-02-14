@@ -38,7 +38,7 @@
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/hassan" />
+                android:src="@{model.user_image}" />
 
         </androidx.cardview.widget.CardView>
 
@@ -70,10 +70,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins"
-                tools:text="I really liked the one with “replace with name"
+                tools:text=""
                 android:text="@{model.comment, default=``}"
                 android:textColor="#1B1E28"
-                android:textSize="12sp"
+                android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvName" />
 
@@ -89,7 +89,7 @@
             android:fontFamily="@font/poppins"
             android:text="1 hr"
             android:textColor="@color/silver"
-            android:textSize="14sp"
+            android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/cvImage"
             app:layout_constraintTop_toBottomOf="@id/cl" />

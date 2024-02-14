@@ -28,7 +28,6 @@ class AdapterUpgrade(var showData: List<ModelUpgrade>):RecyclerView.Adapter<Adap
         val upgradeData = showData[position]
         holder.binding.model = upgradeData
         holder.binding.tvCount.text=showData[position].tvCount
-        holder.binding.tvTitle.text=showData[position].title
         holder.binding.tvPackage.text=showData[position].packageName
         val adapter = AdapterUpgradeList( upgradeData.upgradeList)
         holder.rvMoreLevelsList.adapter = adapter

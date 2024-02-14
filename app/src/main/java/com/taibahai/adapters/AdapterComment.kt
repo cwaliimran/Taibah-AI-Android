@@ -3,6 +3,7 @@ package com.taibahai.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.network.models.ModelComments
 import com.taibahai.databinding.ItemCommentBinding
 
@@ -21,7 +22,9 @@ class AdapterComments(var showData: MutableList<ModelComments>): RecyclerView.Ad
 
     override fun onBindViewHolder(holder: AdapterComments.ViewHolder, position: Int) {
         val userData = showData[position]
+
         holder.view.model = userData
+
     }
 
     override fun getItemCount(): Int {

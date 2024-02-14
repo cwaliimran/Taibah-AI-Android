@@ -19,6 +19,7 @@ class HomeDetailActivity : BaseActivity() {
     val viewModel: MainViewModelAI by viewModels()
     var feedId = ""
     var comment = ""
+    var profile_image=""
     var noOfLikes=0
     var noOfComments=0
     var post=""
@@ -30,6 +31,9 @@ class HomeDetailActivity : BaseActivity() {
     }
 
     override fun clicks() {
+
+
+
         binding.ivBackArrow.setOnClickListener {
             onBackPressed()
         }
@@ -62,6 +66,7 @@ class HomeDetailActivity : BaseActivity() {
                     binding.ii.likesCounting.text= "${noOfLikes} Likes"
                     binding.ii.commentCounts.text= "${noOfComments} Comments"
                     Glide.with(this).load(post).into(binding.ii.ivUploadImage)
+                    Glide.with(this).load(profile_image).into(binding.ii.ivProfileImage)
                     it?.data?.data?.comments?.let { it1 -> showComments.addAll(it1) }
                     adapter.notifyDataSetChanged()
 
@@ -86,7 +91,9 @@ class HomeDetailActivity : BaseActivity() {
                 }
 
                 is NetworkResult.Success -> {
+                    it.data?.message?.let { it1 -> showToast(it1) }
                     binding.messageBox.text.clear()
+
                 }
 
                 is NetworkResult.Error -> {
@@ -106,10 +113,12 @@ class HomeDetailActivity : BaseActivity() {
     override fun apiAndArgs() {
         super.apiAndArgs()
         if (bundle != null) {
+            profile_image = intent.getStringExtra("profile_image").toString()
             feedId = intent.getStringExtra("feedId").toString()
             noOfLikes = intent.getIntExtra("likes",0)
             noOfComments = intent.getIntExtra("comments",0)
             post = intent.getStringExtra("post").toString()
+
         }
         viewModel.getFeed(feedId)
 

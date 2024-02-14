@@ -47,7 +47,7 @@ class AdapterHome( var showData: MutableList<com.network.models.ModelHome.Data>,
         holder.binding.commentCounts.text = "${userData.comments} Comments"
         Glide.with(holder.itemView.context).load(userData.feed_attachments.firstOrNull()?.file).into(holder.binding.ivUploadImage)
 
-        if (holder.isLiked) {
+        if (userData.likes==1) {
             holder.binding.tvLike.setCompoundDrawablesWithIntrinsicBounds(R.drawable.like, 0, 0, 0)
         } else {
             holder.binding.tvLike.setCompoundDrawablesWithIntrinsicBounds(R.drawable.like_2, 0, 0, 0)
@@ -77,6 +77,7 @@ class AdapterHome( var showData: MutableList<com.network.models.ModelHome.Data>,
             intent.putExtra("likes", userData.likes)
             intent.putExtra("comments", userData.comments)
             intent.putExtra("post", userData.feed_attachments.firstOrNull()?.file)
+            intent.putExtra("profile_image",userData.user_image)
             holder.itemView.context.startActivity(intent)
 
 
@@ -89,6 +90,7 @@ class AdapterHome( var showData: MutableList<com.network.models.ModelHome.Data>,
         holder.binding.tvLike.setOnClickListener {
             listener.onClick(position, "like",userData.feed_id)
 
+
         }
 
 
@@ -98,7 +100,6 @@ class AdapterHome( var showData: MutableList<com.network.models.ModelHome.Data>,
 
     class ViewHolder(val binding: ItemHomeBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        var isLiked: Boolean = false
     }
 
 }

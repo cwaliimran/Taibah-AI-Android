@@ -37,7 +37,6 @@
                     android:id="@+id/constraintLayout8"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:layout_marginTop="40dp"
                     android:background="@drawable/group"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
@@ -62,27 +61,17 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="20dp"
-                    android:layout_marginTop="40dp"
                     android:orientation="vertical"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/constraintLayout8"
                     app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
-                        android:id="@+id/tvTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/poppins_medium"
-                        android:text="Basic"
-                        android:visibility="gone"
-                        android:textColor="@color/white"
-                        android:textSize="14sp" />
-
-                    <TextView
                         android:id="@+id/tvPackage"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins"
+                        android:paddingVertical="5dp"
                         android:text="Silver Subscription Package"
                         android:textColor="@color/white"
                         android:textSize="12sp" />
@@ -96,7 +85,6 @@
                 android:id="@+id/rvUpgradeList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="10dp"
                 android:orientation="vertical"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
@@ -127,8 +115,7 @@
                     android:backgroundTint="#009045"
                     android:fontFamily="@font/poppins_semibold"
                     android:gravity="center"
-                    android:paddingHorizontal="20dp"
-                    android:paddingTop="20dp"
+
                     android:text="$2.99/month"
                     android:textColor="@color/white"
                     android:textSize="26sp" />
@@ -143,6 +130,7 @@
                     android:backgroundTint="#009045"
                     android:fontFamily="@font/poppins_medium"
                     android:text="Subscribe"
+                    android:layout_marginTop="10dp"
                     android:textColor="@color/white"
                     android:textSize="10sp" />
 

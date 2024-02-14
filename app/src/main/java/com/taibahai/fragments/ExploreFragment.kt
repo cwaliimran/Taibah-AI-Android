@@ -83,7 +83,8 @@ class ExploreFragment : BaseFragment() {
                     AppClass.sharedPref.storeObject(AppConstants.TODAY, it.data?.data)
                     AppClass.sharedPref.storeString(AppConstants.CURRENT_DATE, formattedTodayDate)
                     binding.inTodayVerse.tvArbiAyat.text = it.data?.data?.quran?.text
-                    binding.inTodayVerse.tvTranslation.text = it.data?.data?.quran?.quran_translation_en
+                    binding.inTodayVerse.tvTranslation.text =
+                        it.data?.data?.quran?.quran_translation_en
                     binding.inTodayVerse.tvSurah.text = it.data?.data?.quran?.transliteration_en
                     val transliteration = it.data?.data?.quran?.quran_transliteration_en
                     if (transliteration != null) {
@@ -124,7 +125,8 @@ class ExploreFragment : BaseFragment() {
 
     override fun apiAndArgs() {
         super.apiAndArgs()
-        val todayDate = Date()
+        viewModel.today()
+        /*  val todayDate = Date()
         val savedData =AppClass.sharedPref.getObject(AppConstants.TODAY, ModelToday::class.java)
         val savedTodayDate = AppClass.sharedPref.getString(AppConstants.CURRENT_DATE,"")
 
@@ -185,5 +187,6 @@ class ExploreFragment : BaseFragment() {
         return cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) && cal1.get(Calendar.MONTH) == cal2.get(
             Calendar.MONTH
         ) && cal1.get(Calendar.DAY_OF_MONTH) == cal2.get(Calendar.DAY_OF_MONTH)
+    }*/
     }
 }

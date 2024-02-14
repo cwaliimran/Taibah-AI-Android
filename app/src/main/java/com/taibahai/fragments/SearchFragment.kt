@@ -6,6 +6,7 @@ import android.os.Build
 import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.speech.tts.TextToSpeech
+import android.speech.tts.Voice
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -43,6 +44,7 @@ import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
+import java.util.Locale
 import java.util.UUID
 
 
@@ -74,20 +76,32 @@ class SearchFragment : BaseFragment(),OnItemClick {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate<FragmentSearchBinding>(inflater, R.layout.fragment_search, container, false)
+
         return binding.getRoot()
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        // Initialize the TextToSpeech instance in onAttach
+
         textToSpeech = TextToSpeech(context, TextToSpeech.OnInitListener { status ->
             if (status != TextToSpeech.ERROR) {
-                // Text-to-Speech is initialized successfully
+
+                val availableVoices = textToSpeech!!.voices
+                for (voice in availableVoices) {
+                    Log.d("YourFragment", "Available Voice: ${voice.name}, Locale: ${voice.locale}")
+                }
+                val locale = Locale("ar", "SA") // Arabic, Saudi Arabia
+                textToSpeech!!.language = locale
+
+                textToSpeech!!.setPitch(1.0f) // Adjust pitch if needed
+                textToSpeech!!.setSpeechRate(1.0f) // Adjust speech rate if needed
             } else {
                 Log.e("YourFragment", "Text-to-Speech initialization failed")
             }
         })
     }
+
+
 
     override fun viewCreated() {
         isArchived=AppClass.sharedPref.getIsArchived()?:false
@@ -156,7 +170,7 @@ class SearchFragment : BaseFragment(),OnItemClick {
     private fun startSpeechToText() {
         val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "en-US") // Change the language if needed
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ar-SA")
         //intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Say Something") // Change the language if needed
 
 
