@@ -106,13 +106,6 @@ class LoginActivity : BaseActivity() {
         binding.clGooglebtn.setOnClickListener {
             // Declaring and initializing an Executor and a Handler
             signInWithGoogle()
-
-
-        }
-
-        binding.clAppleBtn.setOnClickListener {
-           /* val intent = Intent(this, BottomNavigation::class.java)
-            startActivity(intent)*/
         }
 
         binding.clFacebookBtn.setOnClickListener {
