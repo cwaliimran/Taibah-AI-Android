@@ -71,14 +71,17 @@
 
             <TextView
                 android:id="@+id/tvLanguage"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_medium"
                 android:text="Arabic"
                 android:textColor="@color/white"
                 android:textSize="14sp"
+                android:gravity="start"
+                android:layout_marginStart="5dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tvChapters"
                 app:layout_constraintTop_toTopOf="@+id/tvChapters" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 

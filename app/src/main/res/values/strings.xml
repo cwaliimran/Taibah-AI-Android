@@ -67,6 +67,7 @@
     <string name="fb_login_protocol_scheme">fb741513821181094</string>
     <string name="facebook_client_token">ff05cc382b73837882d7f4a1933e4579</string>
     <string name="turn_on_internet">No internet</string>
+    <string name="dash">-</string>
 
 
 </resources>

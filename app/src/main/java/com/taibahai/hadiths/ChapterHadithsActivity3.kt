@@ -107,9 +107,6 @@ class ChapterHadithsActivity3 : BaseActivity() {
                 intent.putExtra("hadith_id", showList[position].hadith_no)
                 intent.putExtra("hadith_number", hadithNo)
                 intent.putExtra("chapter_name", chapterName)
-
-
-
                 startActivity(intent)
             }
 

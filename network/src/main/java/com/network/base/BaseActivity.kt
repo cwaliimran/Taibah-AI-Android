@@ -14,7 +14,7 @@ abstract class BaseActivity : AppCompatActivity() {
     var bundle: Bundle? = null
     val gson = Gson()
     lateinit var context: Context
-    var currentUser: ModelUser? = ModelUser()
+    var currentUser: ModelUser.Data? = ModelUser.Data()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // GlobalClass.updateStatusBar(window)

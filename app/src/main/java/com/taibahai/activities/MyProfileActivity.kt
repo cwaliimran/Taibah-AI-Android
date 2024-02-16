@@ -24,7 +24,13 @@ class MyProfileActivity : BaseActivity() {
 
     override fun onCreate() {
         binding=ActivityMyProfileBinding.inflate(layoutInflater)
+        binding.appbar.tvTitle.setText("My profile")
+        binding.appbar.ivLeft.setImageDrawable(resources.getDrawable(R.drawable.arrow_back_24))
+        binding.appbar.ivRight.setImageDrawable(resources.getDrawable(R.drawable.pen_new_square))
         setContentView(binding.root)
+
+
+
     }
 
     override fun clicks() {
@@ -52,10 +58,9 @@ class MyProfileActivity : BaseActivity() {
 
                 is NetworkResult.Success -> {
                     showToast(it.data?.message.toString())
-
+                    //val profileData=currentUser!!.data
                     val profileData: ModelUser.Data = it.data!!.data
                     profileFeedList.addAll(profileData.feed)
-                    updateUI(profileData)
                     adapter.notifyDataSetChanged()
 
                 }
@@ -74,23 +79,20 @@ class MyProfileActivity : BaseActivity() {
         binding.rvProfile.adapter = adapter
     }
 
-    override fun apiAndArgs() {
 
-        viewModel.profile()
-
-    }
-
-    private fun updateUI(profileData: ModelUser.Data) {
-
-        binding.tvName.text = profileData.name
-        binding.tvEmail.text = profileData.email
-        Glide.with(this).load(profileData.image).into(binding.ivProfileImage)
-    }
 
     override fun initData() {
         super.initData()
-        binding.appbar.tvTitle.setText("My profile")
-        binding.appbar.ivLeft.setImageDrawable(resources.getDrawable(R.drawable.arrow_back_24))
-        binding.appbar.ivRight.setImageDrawable(resources.getDrawable(R.drawable.pen_new_square))
+        currentUser.let {
+            binding.tvName.text=it!!.name
+            binding.tvEmail.text=it.email
+            Glide.with(this).load(it.image).placeholder(R.drawable.splashlogo).into(binding.ivProfileImage)
+        }
     }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.profile()
+    }
+
 }

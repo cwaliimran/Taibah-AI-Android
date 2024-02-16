@@ -93,16 +93,19 @@
                 android:layout_marginTop="20dp"
                 app:layout_constraintTop_toBottomOf="@id/tvNoOfHadiths"
                 android:layout_marginHorizontal="20dp">
+
                 <TextView
                     android:id="@+id/tvHadithNo"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Hadith No: 1"
                     android:fontFamily="@font/poppins_medium"
-                    android:textSize="16sp"
+                    android:text="Hadith No: 1"
+                    android:layout_marginEnd="10dp"
                     android:textColor="@color/black"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"/>
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toStartOf="@+id/tvBookName"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
 
                 <TextView

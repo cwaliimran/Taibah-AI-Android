@@ -20,7 +20,7 @@ abstract class BaseFragment : Fragment() {
     var bundle: Bundle? = null
     val gson = Gson()
     var lastClickTime: Long = 0
-    var currentUser: ModelUser? = ModelUser()
+    var currentUser: ModelUser.Data? = ModelUser.Data()
 
     protected val mContext: Context by lazy {
         requireActivity()

@@ -50,6 +50,14 @@ class CreatePostActivity : BaseActivity() {
             }
 
         }
+
+        binding.ivCross.setOnClickListener {
+            binding.ivUserPost.visibility = View.GONE
+            binding.ivPostUpload.visibility = View.VISIBLE
+            binding.tvChooseImage.visibility = View.VISIBLE
+            binding.ivCross.visibility = View.INVISIBLE
+            upLoadedFile = ""
+        }
     }
 
     private fun isFieldChecked():Boolean
@@ -105,7 +113,9 @@ class CreatePostActivity : BaseActivity() {
                     Glide.with(this).load(it.data?.data?.url).into(binding.ivUserPost)
                     binding.ivPostUpload.visibility=View.INVISIBLE
                     binding.tvChooseImage.visibility=View.INVISIBLE
+                    binding.ivCross.visibility=View.VISIBLE
                     upLoadedFile= it.data?.data?.file.toString()
+
 
                 }
 

@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.speech.RecognizerIntent
 import android.speech.tts.TextToSpeech
 import android.speech.tts.Voice
@@ -339,7 +341,7 @@ class SearchFragment : BaseFragment(),OnItemClick {
 
                     when (type) {
                         "play" -> {
-                            speakText(textToSpeak)
+                            speakText(textToSpeak,position)
                             isAudioPlaying = true
                             updateVisibility(position)
 
@@ -365,11 +367,24 @@ class SearchFragment : BaseFragment(),OnItemClick {
         binding.rvSearchAI.adapter = messageAdapter
     }
 
-    private fun speakText(text: String) {
+    private var handler = Handler(Looper.getMainLooper())
+
+    private fun speakText(text: String, position: Int) {
         textToSpeech?.let { tts ->
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 val params = Bundle()
                 params.putString(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "UniqueUtteranceId")
+
+                tts.setOnUtteranceCompletedListener { utteranceId ->
+                    if (utteranceId == "UniqueUtteranceId") {
+                        isAudioPlaying = false
+                        // Delay the visibility update for 500 milliseconds
+                        handler.postDelayed({
+                            updateVisibility(position)
+                        }, 200)
+                    }
+                }
+
                 tts.speak(text, TextToSpeech.QUEUE_FLUSH, params, "UniqueUtteranceId")
             } else {
                 @Suppress("deprecation")
@@ -378,6 +393,25 @@ class SearchFragment : BaseFragment(),OnItemClick {
         }
     }
 
+    private fun updateVisibility(position: Int) {
+        val itemView = binding.rvSearchAI.findViewHolderForAdapterPosition(position)?.itemView
+
+        if (itemView != null) {
+            val ivPlay = itemView.findViewById<ImageView>(R.id.ivPlay)
+            val ivPause = itemView.findViewById<ImageView>(R.id.ivPause)
+
+            if (!isAudioPlaying) {
+                ivPlay.visibility = View.VISIBLE
+                ivPause.visibility = View.INVISIBLE
+            } else {
+                ivPlay.visibility = View.INVISIBLE
+                ivPause.visibility = View.VISIBLE
+            }
+        }
+    }
+
+
+
     override fun onStop() {
         super.onStop()
         textToSpeech?.stop()
@@ -385,23 +419,7 @@ class SearchFragment : BaseFragment(),OnItemClick {
 
     }
 
-    private fun updateVisibility(position:Int) {
-        val itemView = binding.rvSearchAI.findViewHolderForAdapterPosition(position)?.itemView
 
-        if (itemView != null) {
-            val ivPlay = itemView.findViewById<ImageView>(R.id.ivPlay)
-            val ivPause = itemView.findViewById<ImageView>(R.id.ivPause)
-
-            if (isAudioPlaying) {
-                 ivPlay.visibility = View.INVISIBLE
-                 ivPause.visibility = View.VISIBLE
-            } else {
-
-                 ivPlay.visibility = View.VISIBLE
-                 ivPause.visibility = View.INVISIBLE
-            }
-        }
-    }
 
 
     private fun showPopupMenu(view: View) {

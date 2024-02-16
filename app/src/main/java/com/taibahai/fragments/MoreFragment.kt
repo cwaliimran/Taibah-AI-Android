@@ -67,7 +67,7 @@ class MoreFragment : BaseFragment() {
 
         moreLevel2.add(ModelMoreLevels("searchLevel2",R.drawable.search_icon, "700 AI Tokens (monthly) "))
         moreLevel2.add(ModelMoreLevels("zakat_calculator",R.drawable.zakat_icon, "Zakat Calculator"))
-        moreLevel2.add(ModelMoreLevels("imams",R.drawable.imams_logo, "4 Imams of Sunna"))
+        moreLevel2.add(ModelMoreLevels("imams",R.drawable.imams_logo, "4 Sunni Madhabs"))
         showList.add(ModelMore("Level 2" ,"Gold Subscription Package",moreLevel2) )
 
         val moreLevel3=ArrayList<ModelMoreLevels>()

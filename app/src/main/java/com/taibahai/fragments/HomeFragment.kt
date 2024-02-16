@@ -96,9 +96,15 @@ class HomeFragment : BaseFragment() {
                 }
 
                 is NetworkResult.Success -> {
+                    totalPages = it.data?.total_pages!!
+                    val oldSize = showList.size
                     feedId = it.data?.data?.firstOrNull()?.feed_id.toString()
                     showList.addAll((it.data?.data ?: listOf()))
-                    adapter.notifyDataSetChanged()
+                    if (oldSize == 0) {
+                        initAdapter()
+                    } else {
+                        adapter.notifyItemRangeInserted(oldSize, showList.size)
+                    }
                 }
 
                 is NetworkResult.Error -> {

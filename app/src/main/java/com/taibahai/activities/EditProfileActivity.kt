@@ -1,6 +1,7 @@
 package com.taibahai.activities
 
 import android.app.Activity
+import android.content.Intent
 import android.util.Log
 import android.view.View
 import androidx.activity.result.ActivityResult
@@ -11,9 +12,12 @@ import com.github.dhaval2404.imagepicker.ImagePicker
 import com.network.base.BaseActivity
 import com.network.models.ModelUser
 import com.network.network.NetworkResult
+import com.network.utils.AppClass
+import com.network.utils.AppConstants
 import com.network.utils.ProgressLoading.displayLoading
 import com.network.viewmodels.MainViewModelAI
 import com.taibahai.R
+import com.taibahai.bottom_navigation.BottomNavigation
 import com.taibahai.databinding.ActivityEditProfileBinding
 import com.taibahai.utils.getPicker
 import com.taibahai.utils.showToast
@@ -27,9 +31,10 @@ class EditProfileActivity : BaseActivity() {
 
     override fun onCreate() {
         binding=ActivityEditProfileBinding.inflate(layoutInflater)
+        binding.appbar.tvTitle.setText("Edit Profile")
+        binding.appbar.ivLeft.setImageDrawable(resources.getDrawable(R.drawable.arrow_back_24))
+        binding.appbar.ivRight.setVisibility(View.GONE)
         setContentView(binding.root)
-
-
     }
 
     override fun clicks() {
@@ -70,6 +75,7 @@ class EditProfileActivity : BaseActivity() {
                     it.data?.message?.let { it1 -> showToast(it1) }
                     Glide.with(this).load(it.data?.data?.url).into(binding.ivProfile)
                     image= it.data?.data?.file.toString()
+
                 }
 
                 is NetworkResult.Error -> {
@@ -90,13 +96,8 @@ class EditProfileActivity : BaseActivity() {
 
                 is NetworkResult.Success -> {
                     it.data?.message?.let { it1 -> showToast(it1) }
-                    val profileData: ModelUser.Data = it.data!!.data
-
-                    updateUI(profileData)
-
-
-
-
+                    AppClass.sharedPref.storeObject(AppConstants.CURRENT_USER, it.data?.data)
+                    onBackPressed()
 
                 }
 
@@ -108,12 +109,7 @@ class EditProfileActivity : BaseActivity() {
 
     }
 
-    private fun updateUI(profileData: ModelUser.Data) {
 
-        binding.etName.setText(profileData.name)
-        binding.tvEmail.text = profileData.email
-        Glide.with(this).load(profileData.image).into(binding.ivProfile)
-    }
 
 
 
@@ -146,9 +142,11 @@ class EditProfileActivity : BaseActivity() {
 
     override fun initData() {
         super.initData()
-        binding.appbar.tvTitle.setText("Edit Profile")
-        binding.appbar.ivLeft.setImageDrawable(resources.getDrawable(R.drawable.arrow_back_24))
-        binding.appbar.ivRight.setVisibility(View.GONE)
+        currentUser.let {
+            binding.etName.setText(it!!.name)
+            binding.tvEmail.text=it.email
+            Glide.with(this).load(it.image).placeholder(R.drawable.splashlogo).into(binding.ivProfile)
+        }
     }
 
     override fun apiAndArgs() {

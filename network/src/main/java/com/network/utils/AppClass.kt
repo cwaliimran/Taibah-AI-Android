@@ -76,8 +76,8 @@ public class AppClass : Application() {
 
         //for storing data
         //    AppClass.sharedPref?.storeObject(AppConstants.CURRENT_USER, responseData.body)
-        fun getCurrentUser(): ModelUser? {
-            return sharedPref.getObject(AppConstants.CURRENT_USER, ModelUser::class.java)
+        fun getCurrentUser(): ModelUser.Data? {
+            return sharedPref.getObject(AppConstants.CURRENT_USER, ModelUser.Data::class.java)
         }
 
 

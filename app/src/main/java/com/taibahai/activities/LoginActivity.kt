@@ -158,8 +158,7 @@ class LoginActivity : BaseActivity() {
                     showToast(it.data?.message.toString())
                     AppClass.sharedPref.storeObject(AppConstants.CURRENT_USER, it.data?.data)
                     AppClass.sharedPref.storeString(
-                        AppConstants.ACCESS_TOKEN,
-                        it.data?.data?.accesstoken
+                        AppConstants.ACCESS_TOKEN,it.data?.data?.accesstoken
                     )
                     val intent = Intent(this, BottomNavigation::class.java)
                     startActivity(intent)
