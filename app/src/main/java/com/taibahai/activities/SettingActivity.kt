@@ -4,13 +4,16 @@ import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.Window
+import android.view.WindowManager
 import android.widget.LinearLayout
 import androidx.activity.viewModels
 import com.network.base.BaseActivity
 import com.network.network.NetworkResult
+import com.network.utils.AppClass
 import com.network.utils.ProgressLoading.displayLoading
 import com.network.viewmodels.MainViewModelAI
 import com.taibahai.R
@@ -18,6 +21,7 @@ import com.taibahai.adapters.AdapterSettings
 import com.taibahai.databinding.ActivitySettingBinding
 import com.taibahai.databinding.DialogLogoutBinding
 import com.taibahai.models.ModelSettings
+import com.taibahai.utils.Constants
 import com.taibahai.utils.showToast
 
 class SettingActivity : BaseActivity() {
@@ -115,7 +119,13 @@ class SettingActivity : BaseActivity() {
                 }
 
                 is NetworkResult.Success -> {
-
+                    AppClass.sharedPref?.clearAllPreferences()
+                    startActivity(
+                        Intent(
+                            this, LoginActivity::class.java
+                        )
+                    )
+                    this.finishAffinity()
                 }
 
                 is NetworkResult.Error -> {
@@ -125,21 +135,23 @@ class SettingActivity : BaseActivity() {
         }
     }
 
-
     private fun showLogoutDialog() {
+
+
         val dialog = Dialog(this)
         val layoutInflater = LayoutInflater.from(this)
         val binding = DialogLogoutBinding.inflate(layoutInflater)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(binding.root)
         dialog.setCancelable(false)
+
         binding.btnCancel.setOnClickListener {
             dialog.dismiss()
         }
 
         binding.btnLogout.setOnClickListener {
-
-           // currentUser?.data?.device_id?.let { it1 -> viewModel.logout(it1) }
+            viewModel.logout(AppClass.sharedPref.getString(Constants.DEVICE_ID, "").toString(), "android")
+            dialog.dismiss() // Dismiss dialog after initiating the logout action
         }
 
         dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -148,5 +160,8 @@ class SettingActivity : BaseActivity() {
         )
 
         dialog.show()
+
     }
+
+
 }

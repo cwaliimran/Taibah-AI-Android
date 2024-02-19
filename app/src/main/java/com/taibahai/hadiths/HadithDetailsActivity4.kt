@@ -59,7 +59,7 @@ class HadithDetailsActivity4 : BaseActivity() {
 
                     binding.tvHadithChapter.text=chapterName
                     binding.tvNoOfHadiths.text=hadithNo
-                    binding.tvHadithNo.text = "Hadith No: ${it.data?.data?.hadith_no}"
+                    binding.tvHadithNo.text = "Hadith No: ${hadith_id}"
                     binding.tvArbiAyat.text=it.data?.data?.arabic
                     binding.tvEnglishTranslation.text=it.data?.data?.english_translation
                     hadith_id = it.data?.data?.hadith_no.toString()
@@ -110,10 +110,9 @@ class HadithDetailsActivity4 : BaseActivity() {
             hadith_id=intent.getStringExtra("hadith_id").toString()
             chapterName=intent.getStringExtra("chapter_name").toString()
            hadithNo= intent.getStringExtra("hadith_number").toString()
-
+            viewModel.getHadithDetail(hadith_id)
         }
 
-        viewModel.getHadithDetail(id)
 
     }
 }

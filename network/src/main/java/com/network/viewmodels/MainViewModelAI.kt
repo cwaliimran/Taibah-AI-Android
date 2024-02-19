@@ -242,6 +242,12 @@ class MainViewModelAI constructor(application: Application) : AndroidViewModel(a
         }
     }
 
+    fun logout(device_id: String, device_type: String )
+    {
+        viewModelScope.launch {
+            repository.logout(device_id,device_type)
+        }
+    }
 
 
 }

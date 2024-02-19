@@ -319,5 +319,15 @@ class MainRepoAI : BaseApiResponse() {
     }
 
 
+    suspend fun logout(device_id: String,device_type: String)
+    {
+        simpleResponseMutableLiveData.value = null
+        simpleResponseMutableLiveData.postValue(NetworkResult.Loading())
+        simpleResponseMutableLiveData.postValue(safeApiCall {
+            apiService.logout(device_id, device_type)
+        })
+    }
+
+
 
 }

@@ -12,6 +12,7 @@ import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.provider.MediaStore
+import android.util.Log
 
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -29,6 +30,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FacebookAuthProvider
 import com.network.base.BaseActivity
 import com.network.network.NetworkResult
@@ -41,9 +43,11 @@ import com.taibahai.utils.showToast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.messaging.FirebaseMessaging
 import com.network.network.NetworkUtils
 import com.network.utils.AppClass
 import com.network.utils.AppConstants
+import com.taibahai.utils.Constants
 import java.io.BufferedInputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -72,6 +76,8 @@ class LoginActivity : BaseActivity() {
     var name = ""
     var socialType = ""
     private val callbackManager = CallbackManager.Factory.create()
+    var deviceID = "123"
+
 
 
 
@@ -104,6 +110,9 @@ class LoginActivity : BaseActivity() {
 
     override fun clicks() {
         binding.clGooglebtn.setOnClickListener {
+            if (deviceID == "") {
+                deviceId()
+            }
             // Declaring and initializing an Executor and a Handler
             signInWithGoogle()
         }
@@ -229,7 +238,7 @@ class LoginActivity : BaseActivity() {
         viewModel.socialLogin(
             user.uid ?: "",
             socialType,
-            "dummy token",
+            deviceID,
             "android",
             user.email ?: "",
             NetworkUtils.timeZone(),
@@ -442,6 +451,18 @@ class LoginActivity : BaseActivity() {
                     Toast.makeText(this, "Facebook authentication failed", Toast.LENGTH_SHORT).show()
                 }
             }
+    }
+
+
+    private fun deviceId() {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.d("EEE", "" + task.exception)
+                return@OnCompleteListener
+            }
+            deviceID = task.result
+            AppClass.sharedPref?.storeString(Constants.DEVICE_ID, deviceID)
+        })
     }
 
 
