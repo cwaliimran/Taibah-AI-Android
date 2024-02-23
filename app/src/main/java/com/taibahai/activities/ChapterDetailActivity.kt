@@ -5,9 +5,12 @@ import AudioPlayer
 import AudioPlayer.OnViewClickListener
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
-import android.content.Intent
+import android.app.DownloadManager
+import android.content.Context
 import android.media.MediaPlayer
+import android.net.Uri
 import android.os.AsyncTask
+import android.os.Build
 import android.os.Handler
 import android.util.Log
 import android.view.MotionEvent
@@ -15,11 +18,13 @@ import android.view.View
 import android.view.animation.LinearInterpolator
 import android.widget.ScrollView
 import android.widget.SeekBar
+import androidx.core.content.FileProvider.getUriForFile
 import com.network.base.BaseActivity
 import com.network.models.ModelSurah
 import com.network.models.ModelSurahDetail
 import com.network.utils.AppClass
 import com.network.utils.AppClass.Companion.sharedPref
+import com.network.utils.StringUtils
 import com.taibahai.R
 import com.taibahai.adapters.AdapterQuranDetail
 import com.taibahai.databinding.ActivityChapterDetailBinding
@@ -27,6 +32,7 @@ import com.taibahai.utils.CustomScrollView
 import com.taibahai.utils.JsonUtilss
 import org.json.JSONArray
 import org.json.JSONException
+import java.io.File
 
 class ChapterDetailActivity : BaseActivity() {
     lateinit var binding:ActivityChapterDetailBinding
@@ -51,7 +57,7 @@ class ChapterDetailActivity : BaseActivity() {
     override fun onCreate() {
         binding=ActivityChapterDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        currentFile= intent.getStringExtra("audio_url").toString()
+       // currentFile= intent.getStringExtra("ayat_url").toString()
         initScroll()
         initAudioPlay()
 
@@ -241,21 +247,85 @@ class ChapterDetailActivity : BaseActivity() {
         loadAyats().execute()
     }
 
-    private fun playSurah()
-    {
-       if(currentFile!=null) {
-           startPlaying(currentFile)
-       }
+    private fun playSurah() {
+        val downloadId = sharedPref.getLong(StringUtils.PREV_SURAH_URL, -1)
+        if (downloadId != -1L) {
+            // Check download status before playing
+            val status = getDownloadStatus(downloadId!!)
+            if (status == DownloadManager.STATUS_SUCCESSFUL) {
+                // Download completed successfully, get the content Uri
+                val contentUri = getDownloadContentUri(downloadId)
+                if (contentUri != null) {
+                    startPlaying(contentUri.toString())
+                } else {
+                    Log.e("MediaPlayer", "Content Uri is null")
+                }
+            } else {
+                Log.e("MediaPlayer", "Download not completed. Status: $status")
+            }
+        } else {
+            Log.e("MediaPlayer", "Download ID not found in SharedPreferences")
+        }
     }
 
+
+
+    private var mediaPlayer: MediaPlayer? = null
 
     private fun startPlaying(audio_url: String) {
-        AudioPlayer.getInstance()!!.setData(audio_url)
-        AudioPlayer.getInstance()!!.playOrPause()
-        Handler().postDelayed({
-           // MediaNotificationManager.showMediaNotification( surahName)
-        }, 200)
+        val player = AudioPlayer.getInstance() ?: return
+
+        val file = File(audio_url)
+        val dataSource = if (file.exists()) {
+            // Use content Uri for Android 10 and above
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                getUriForFile(context, "com.taibahai.provider", file)
+            } else {
+                Uri.fromFile(file)
+            }.toString()
+        } else {
+            audio_url // Assuming it's a URL
+        }
+
+        Log.d("MediaPlayer", "Setting data source: $dataSource")
+
+        try {
+            player.setData(dataSource)
+            player.playOrPause()
+        } catch (e: Exception) {
+            Log.e("MediaPlayer", "Error during playback: ${e.message}")
+            e.printStackTrace()
+        }
     }
+
+
+    @SuppressLint("Range")
+    private fun getDownloadStatus(downloadId: Long): Int {
+        val query = DownloadManager.Query().setFilterById(downloadId)
+        val cursor = (context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager).query(query)
+        if (cursor != null && cursor.moveToFirst()) {
+            val status = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
+            cursor.close()
+            return status
+        }
+        return -1
+    }
+
+    @SuppressLint("Range")
+    private fun getDownloadContentUri(downloadId: Long): Uri? {
+        val query = DownloadManager.Query().setFilterById(downloadId)
+        val cursor = (context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager).query(query)
+        if (cursor != null && cursor.moveToFirst()) {
+            val uriString = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI))
+            cursor.close()
+            return Uri.parse(uriString)
+        }
+        return null
+    }
+
+
+
+
 
 
     private fun loadJson() {

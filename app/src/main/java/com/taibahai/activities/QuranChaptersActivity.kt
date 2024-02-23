@@ -1,24 +1,19 @@
 package com.taibahai.activities
 
+import AudioPlayer
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.DownloadManager
 import android.content.Context
 import android.content.Intent
 import android.database.Cursor
-import android.media.AudioManager
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
-import android.os.Handler
 import android.util.Log
 import android.widget.Toast
-import androidx.core.app.ActivityCompat.startActivityForResult
-import androidx.core.content.FileProvider
-import androidx.databinding.DataBindingUtil.setContentView
 import androidx.media3.exoplayer.offline.Download
 import com.cwnextgen.amnames.utils.getJsonDataFromAsset
 import com.gun0912.tedpermission.PermissionListener
@@ -35,17 +30,18 @@ import com.network.utils.StringUtils
 import com.taibahai.R
 import com.taibahai.adapters.AdapterQuranChapter
 import com.taibahai.databinding.ActivityQuranChaptersBinding
+import com.taibahai.utils.Constants
 import com.taibahai.utils.FileDownloader
 import com.taibahai.utils.StorageUtils
 import org.json.JSONException
 import java.io.File
-import java.io.IOException
 import java.io.Serializable
 
 class QuranChaptersActivity : BaseActivity() {
     lateinit var binding: ActivityQuranChaptersBinding
     lateinit var adapter: AdapterQuranChapter
     var modelSurahList = mutableListOf<ModelSurah>()
+    var mPlayerList = mutableListOf<ModelSurah>()
     var mData = mutableListOf<ModelSurah>()
     var model = ModelSurah()
     val fileDownloader = FileDownloader(this)
@@ -55,7 +51,11 @@ class QuranChaptersActivity : BaseActivity() {
     var audioUrl = ""
     var audio_path=""
     var child=""
+    var currentFile=""
     var mediaPlayer:MediaPlayer?=null
+    var surahId=""
+    var surahName=""
+    var currentIndex = 0
 
 
     override fun onCreate() {
@@ -66,6 +66,7 @@ class QuranChaptersActivity : BaseActivity() {
         binding.appbar.ivLeft.setImageDrawable(resources.getDrawable(R.drawable.arrow_back_24))
         binding.appbar.ivRight.setImageDrawable(resources.getDrawable(R.drawable.heartt))
 
+
     }
 
     override fun clicks() {
@@ -74,7 +75,10 @@ class QuranChaptersActivity : BaseActivity() {
         }
 
         binding.ii.ivPlay.setOnClickListener {
-            startPlaying()
+            if (!currentFile.isEmpty()) {
+                startPlaying(currentFile)
+                adapter.updateView(surahId)
+            }
         }
     }
 
@@ -84,6 +88,14 @@ class QuranChaptersActivity : BaseActivity() {
         if (!modelSurahList.isEmpty()) {
             getDownloads()
         }
+    }
+    private fun updateUI()
+    {
+        surahId = model.id
+        currentFile = model.getCurrentFile(context).toString()
+        surahName = model.transliteration_en
+        binding.ii.tvSurahName.setText(surahName)
+        adapter.updateView(surahId)
     }
 
 
@@ -100,7 +112,7 @@ class QuranChaptersActivity : BaseActivity() {
 
             override fun onPause() {
                 binding.ii.ivPlay.setSelected(false)
-                //adapter.updateView(StringUtils.NO_INDEX)
+               // adapter.updateView(StringUtils.NO_INDEX)
             }
 
             override fun onCompleted(mp1: MediaPlayer?) {
@@ -150,7 +162,8 @@ class QuranChaptersActivity : BaseActivity() {
                     }
 
                     "play" -> {
-                        getPlayerList()
+
+                        //getPlayerList()
                         gotoDetails()
                     }
 
@@ -178,7 +191,8 @@ class QuranChaptersActivity : BaseActivity() {
         intent.putExtra("ayat_name", model.transliteration_en)
         intent.putExtra("ayat_verse", model.total_verses)
         intent.putExtra("ayat_type", model.type)
-        intent.putExtra("ayat_url", audioUrl)
+      // intent.putExtra("ayat_url", audio_path)
+
 
 
         if (!modelSurahList.isEmpty()) {
@@ -205,6 +219,18 @@ class QuranChaptersActivity : BaseActivity() {
         }
 
         return playerList
+    }
+
+    fun updateCurrentIndex() {
+        for (i in mPlayerList.indices) {
+            val model: ModelSurah = mPlayerList.get(i)
+            if (!surahId.isEmpty()) {
+                if (surahId == model.id) {
+                    currentIndex = i
+                    break
+                }
+            }
+        }
     }
 
 
@@ -267,20 +293,16 @@ class QuranChaptersActivity : BaseActivity() {
     }
 
     fun downloadAudio(s: String) {
-         audioUrl = s
+        audioUrl = s
 
-         child=  StringUtils.SURAH_FOLDER + StringUtils.getNameFromUrl(s)
-        val file = File(getAudioOutputDirectory(), child)
+        child = StringUtils.SURAH_FOLDER + StringUtils.getNameFromUrl(s)
+        val directory = context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
+        val file = File(directory, child)
         audio_path = file.absolutePath
         Log.d(TAG, "downloadAudio: $audio_path")
 
         val request = DownloadManager.Request(Uri.parse(audioUrl))
-        val destinationUri = Uri.fromFile(
-            File(
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
-                child
-            )
-        )
+        val destinationUri = Uri.fromFile(file)
         request.setDestinationUri(destinationUri)
 
         // Enqueue the download request
@@ -290,30 +312,19 @@ class QuranChaptersActivity : BaseActivity() {
         // Save the download ID and file path in SharedPreferences
         sharedPref.storeLong(StringUtils.PREV_SURAH_URL, downloadId)
         sharedPref.storeString(StringUtils.PREV_SURAH_FILEPATH, destinationUri.toString())
-
-
-        /* val downloadMusicFile = DownloadMusicFile(context, object : DownloadListener {
-             override fun onDownloadComplete(file: File) {
-                 val filePath = file.absolutePath
-                 Log.d(TAG, "Downloaded audio file path: $filePath")
-                 Toast.makeText(context, "Completed.", Toast.LENGTH_SHORT).show()
-
-             }
-
-             override fun onDownloadFailed(error: String) {
-                 // Handle download failure
-                 Toast.makeText(context, "Download failed: $error", Toast.LENGTH_SHORT).show()
-             }
-         })*/
-
-        //    downloadMusicFile.downloadMusicFile(s)
-
     }
 
-    private fun startPlaying() {
+
+    private fun startPlaying(audio_url: String) {
+        val player = AudioPlayer.getInstance() ?: return
+        player.setData(audio_url)
+        player.playOrPause()
+    }
+
+    /*private fun startPlaying() {
         val path = audio_path
         val file = File(context.filesDir, child)
-        val uri = FileProvider.getUriForFile(context, "com.taibahai.provider.cartoonprovider", file)
+        val uri = FileProvider.getUriForFile(context, "com.taibahai.provider", file)
 
         // Use a File object to check if the file exists
        // val file = File(path)
@@ -333,6 +344,17 @@ class QuranChaptersActivity : BaseActivity() {
             // Handle the case where the file doesn't exist
             Log.e(TAG, "File not found at path: $path")
             // You may want to show a message to the user or take appropriate action
+        }
+    }*/
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == Constants.ACTIVITY_RESULT_CODE && resultCode == RESULT_OK) {
+            if (data!!.hasExtra(StringUtils.OBJECT)) {
+                model = (data.getSerializableExtra(StringUtils.OBJECT) as ModelSurah?)!!
+                updateUI()
+                updateCurrentIndex()
+            }
         }
     }
 

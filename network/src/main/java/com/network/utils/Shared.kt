@@ -2,7 +2,6 @@ package com.network.utils
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.network.utils.AppClass
 import com.google.gson.Gson
 import java.util.Date
 
@@ -96,7 +95,7 @@ class SharedPref(myApp: AppClass) {
     }
 
 
-    fun getLong(key: String?): Long? {
+    fun getLong(key: String?, i: Int): Long? {
         return sharedPref?.getLong(key, 0)
     }
 

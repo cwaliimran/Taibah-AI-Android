@@ -18,6 +18,7 @@ class AdapterQuranChapter(var showData: MutableList<ModelSurah>, var listener: O
     RecyclerView.Adapter<AdapterQuranChapter.ViewHolder>() {
     lateinit var binding: ItemQuranChapterBinding
     var favModel: FavModel? = null
+    private var selected = "-1"
 
 
     override fun onCreateViewHolder(
@@ -84,6 +85,11 @@ class AdapterQuranChapter(var showData: MutableList<ModelSurah>, var listener: O
                 return
             }
         }
+    }
+
+    fun updateView(id: String) {
+        selected = id
+        notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int {
