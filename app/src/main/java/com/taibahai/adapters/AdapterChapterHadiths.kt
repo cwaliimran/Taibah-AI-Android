@@ -29,7 +29,7 @@ class AdapterChapterHadiths(var showData: ArrayList<ModelChapterHadith3.Data>,va
     override fun onBindViewHolder(holder: AdapterChapterHadiths.ViewHolder, position: Int) {
         val hadithChapter = showData[position]
         holder.binding.model = hadithChapter
-        holder.binding.tvHadithNo.text="Hadith No: ${hadithChapter.hadith_no}"
+        holder.binding.tvHadithNo.text=hadithChapter.hadith_no
         holder.binding.tvBookName.text = hadithChapter.book_name
         holder.binding.tvHadithType.text=hadithChapter.type
         holder.binding.tvArbiAyat.text=hadithChapter.arabic

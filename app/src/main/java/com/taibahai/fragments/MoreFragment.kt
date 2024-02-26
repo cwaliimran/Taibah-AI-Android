@@ -72,9 +72,9 @@ class MoreFragment : BaseFragment() {
 
         val moreLevel3=ArrayList<ModelMoreLevels>()
 
+        moreLevel3.add(ModelMoreLevels("inheritance_law",R.drawable.inheritancelaw_icon, "Inheritance Law"))
         moreLevel3.add(ModelMoreLevels("searchLevel3",R.drawable.search_icon, "Unlimited AI Tokens"))
         moreLevel3.add(ModelMoreLevels("books_pdfs",R.drawable.bookspdf_icon, "Books & PDF"))
-        moreLevel3.add(ModelMoreLevels("inheritance_law",R.drawable.inheritancelaw_icon, "Inheritance Law"))
         moreLevel3.add(ModelMoreLevels("searchdb",R.drawable.sd_icon, "Search Database Hadith, Surah"))
         showList.add(ModelMore("Level 3" ,"Diamond Subscription Package",moreLevel3) )
 
