@@ -1,5 +1,8 @@
 package com.taibahai.activities
 
+import android.os.Build
+import android.text.Html
+import android.text.Spanned
 import android.view.View
 import androidx.activity.viewModels
 import com.network.base.BaseActivity
@@ -42,10 +45,16 @@ class PrivacyPolicyActivity : BaseActivity() {
 
                 is NetworkResult.Success -> {
                     textPrivacy= it.data?.data.toString()
-                    if(!textPrivacy.isNullOrEmpty())
-                        {
-                            binding.tvPrivacyPolicy.text=textPrivacy
+                    if (!textPrivacy.isNullOrEmpty()) {
+                        val spannedText: Spanned = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            Html.fromHtml(textPrivacy, Html.FROM_HTML_MODE_COMPACT)
+                        } else {
+                            @Suppress("DEPRECATION")
+                            Html.fromHtml(textPrivacy)
                         }
+
+                        binding.tvPrivacyPolicy.text = spannedText
+                    }
                 }
 
                 is NetworkResult.Error -> {

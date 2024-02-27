@@ -102,7 +102,31 @@
                     android:layout_marginEnd="20dp"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/ivPlay" />
+                    app:layout_constraintEnd_toStartOf="@+id/play_layout" />
+
+                <FrameLayout
+                    android:id="@+id/play_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginEnd="12dp">
+
+                <com.mikhaellopez.circularprogressbar.CircularProgressBar
+                    android:id="@+id/progress"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:visibility="gone"
+                    app:cpb_background_progressbar_color="#E0E0E0"
+                    app:cpb_background_progressbar_width="12dp"
+                    app:cpb_indeterminate_mode="false"
+                    app:cpb_progress="0"
+                    app:cpb_progress_max="100"
+                    app:cpb_progressbar_color="#F6AD03"
+                    app:cpb_progressbar_width="12dp"
+                    app:cpb_round_border="false" />
 
                 <ImageView
                     android:id="@+id/ivPlay"
@@ -112,6 +136,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+                </FrameLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

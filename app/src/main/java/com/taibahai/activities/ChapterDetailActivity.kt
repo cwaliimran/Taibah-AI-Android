@@ -277,14 +277,13 @@ class ChapterDetailActivity : BaseActivity() {
 
         val file = File(audio_url)
         val dataSource = if (file.exists()) {
-            // Use content Uri for Android 10 and above
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 getUriForFile(context, "com.taibahai.provider", file)
             } else {
                 Uri.fromFile(file)
             }.toString()
         } else {
-            audio_url // Assuming it's a URL
+            audio_url
         }
 
         Log.d("MediaPlayer", "Setting data source: $dataSource")

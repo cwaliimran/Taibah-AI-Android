@@ -317,29 +317,7 @@ class QuranChaptersActivity : BaseActivity() {
         sharedPref.storeLong(StringUtils.PREV_SURAH_URL, downloadId)
         sharedPref.storeString(StringUtils.PREV_SURAH_FILEPATH, destinationUri.toString())
 
-
     }
- /*   fun downloadAudio(s: String) {
-        audioUrl = s
-
-        child = StringUtils.SURAH_FOLDER + StringUtils.getNameFromUrl(s)
-        val directory = context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
-        val file = File(directory, child)
-        audio_path = file.absolutePath
-        Log.d(TAG, "downloadAudio: $audio_path")
-
-        val request = DownloadManager.Request(Uri.parse(audioUrl))
-        val destinationUri = Uri.fromFile(file)
-        request.setDestinationUri(destinationUri)
-
-        // Enqueue the download request
-        val downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
-        val downloadId = downloadManager.enqueue(request)
-
-        // Save the download ID and file path in SharedPreferences
-        sharedPref.storeLong(StringUtils.PREV_SURAH_URL, downloadId)
-        sharedPref.storeString(StringUtils.PREV_SURAH_FILEPATH, destinationUri.toString())
-    }*/
 
 
     private fun startPlaying(audio_url: String) {

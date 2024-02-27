@@ -52,7 +52,6 @@ class ChapterHadithsActivity3 : BaseActivity() {
                             viewModel.getChapterHadiths(currentPageNo, chapter_id)
                         }
                     }
-
                 }
             }
         })
@@ -103,9 +102,12 @@ class ChapterHadithsActivity3 : BaseActivity() {
             override fun onClick(position: Int, type: String?, data: Any?) {
                 super.onClick(position, type, data)
                 val intent = Intent(context, HadithDetailsActivity4::class.java)
-                intent.putExtra("id", showList[position].chapter_id)
-                intent.putExtra("hadith_id", showList[position].hadith_no)
-                intent.putExtra("hadith_number", hadithNo)
+                intent.putExtra("ayat_id", showList[position].id)
+                intent.putExtra("hadith_number", showList[position].hadith_no)
+                intent.putExtra("total_hadith_number", hadithNo)
+              /*  intent.putExtra("arabic_text", showList[position].arabic)
+                intent.putExtra("english_text", showList[position].english_translation)*/
+                intent.putExtra("chapter_id",showList[position].chapter_id )
                 intent.putExtra("chapter_name", chapterName)
                 startActivity(intent)
             }

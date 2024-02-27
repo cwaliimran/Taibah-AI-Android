@@ -146,6 +146,9 @@ dependencies {
     //ask permissions dependencies
     implementation 'io.github.ParkSangGwon:tedpermission-normal:3.3.0'
 
+    implementation 'com.mikhaellopez:circularprogressbar:3.1.0'
+
+
 
 
 
