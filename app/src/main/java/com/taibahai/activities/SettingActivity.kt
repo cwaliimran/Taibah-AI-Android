@@ -11,6 +11,9 @@ import android.view.Window
 import android.view.WindowManager
 import android.widget.LinearLayout
 import androidx.activity.viewModels
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.network.base.BaseActivity
 import com.network.network.NetworkResult
 import com.network.utils.AppClass
@@ -28,11 +31,19 @@ class SettingActivity : BaseActivity() {
     lateinit var binding: ActivitySettingBinding
     val showList = ArrayList<ModelSettings>()
     val viewModel : MainViewModelAI by viewModels()
+    private lateinit var googleSignInClient: GoogleSignInClient
+
 
 
 
     override fun onCreate() {
         binding = ActivitySettingBinding.inflate(layoutInflater)
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+        googleSignInClient = GoogleSignIn.getClient(this, gso)
+
         setContentView(binding.root)
     }
 
@@ -149,9 +160,13 @@ class SettingActivity : BaseActivity() {
             dialog.dismiss()
         }
 
+
         binding.btnLogout.setOnClickListener {
+            AppClass.sharedPref.clearAllPreferences()
             viewModel.logout(AppClass.sharedPref.getString(Constants.DEVICE_ID, "").toString(), "android")
-            dialog.dismiss() // Dismiss dialog after initiating the logout action
+            googleSignInClient.signOut().addOnCompleteListener {
+                dialog.dismiss() // Dismiss dialog after initiating the logout action
+            }
         }
 
         dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))

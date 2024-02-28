@@ -1,6 +1,7 @@
 package com.taibahai.hadiths
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
 import com.google.android.play.integrity.internal.t
 import com.network.base.BaseActivity
@@ -11,38 +12,37 @@ import com.taibahai.databinding.ActivityHadithDetails4Binding
 import com.taibahai.utils.showToast
 
 class HadithDetailsActivity4 : BaseActivity() {
-    lateinit var binding:ActivityHadithDetails4Binding
+    lateinit var binding: ActivityHadithDetails4Binding
     val viewModel: MainViewModelTaibahIslamic by viewModels()
-    var id=""
-    var isNext=true
-    var hadith_id=""
-    var totalHadithNo=""
-    var hadithNo=""
-    var chapterName=""
-
-    var arabic=""
-    var english=""
-
+    var id = ""
+    var isNext = true
+    var totalHadithNo = ""
+    var the_id = ""
+    var hadithNo = ""
+    var chapterName = ""
+    var chapterId = ""
+    var bookName=""
+    var type=""
 
 
     override fun onCreate() {
-        binding=ActivityHadithDetails4Binding.inflate(layoutInflater)
+        binding = ActivityHadithDetails4Binding.inflate(layoutInflater)
         setContentView(binding.root)
     }
 
     override fun clicks() {
-       binding.ivBack.setOnClickListener {
-           onBackPressed()
-       }
+        binding.ivBack.setOnClickListener {
+            onBackPressed()
+        }
 
         binding.ivNext.setOnClickListener {
-            isNext= true
-            viewModel.nextPreviousHadith(id,hadith_id,isNext)
+            isNext = true
+            viewModel.nextPreviousHadith(chapterId, the_id, isNext)
         }
 
         binding.ivPrevious.setOnClickListener {
-            isNext=false
-            viewModel.nextPreviousHadith(id,hadith_id,isNext)
+            isNext = false
+            viewModel.nextPreviousHadith(chapterId, the_id, isNext)
 
         }
     }
@@ -61,12 +61,14 @@ class HadithDetailsActivity4 : BaseActivity() {
 
                 is NetworkResult.Success -> {
 
-                    binding.tvHadithChapter.text=chapterName
-                    binding.tvNoOfHadiths.text=totalHadithNo
+                    binding.tvHadithChapter.text = chapterName
+                    binding.tvNoOfHadiths.text = totalHadithNo
                     binding.tvHadithNo.text = "Hadith No: ${it.data!!.data.hadith_no}"
-                    binding.tvArbiAyat.text=it.data?.data?.arabic
-                    binding.tvEnglishTranslation.text=it.data?.data?.english_translation
-                    hadith_id = it.data?.data?.hadith_no.toString()
+                    binding.tvArbiAyat.text = it.data?.data?.arabic
+                    binding.tvEnglishTranslation.text = it.data?.data?.english_translation
+                    binding.tvBookName.text=bookName
+                    binding.tvHadithType.text=type
+                    the_id = it.data?.data?.id.toString()
 
                 }
 
@@ -77,39 +79,46 @@ class HadithDetailsActivity4 : BaseActivity() {
         }
 
 
-        viewModel.nextPreviouslLiveData.observe(this) {
-            if (it == null) {
+        viewModel.nextPreviouslLiveData.observe(this) { result ->
+            if (result == null) {
                 return@observe
             }
             displayLoading(false)
-            when (it) {
+
+            when (result) {
                 is NetworkResult.Loading -> {
                     displayLoading(true)
                 }
 
                 is NetworkResult.Success -> {
-                    binding.tvHadithNo.text = "Hadith No: ${hadithNo}"
-                    binding.tvArbiAyat.text=arabic
-                    binding.tvEnglishTranslation.text=english
-                    hadith_id = it.data?.data?.hadith_no.toString()
+
+                    binding.tvHadithNo.text = "Hadith No: ${result.data!!.data.hadith_no}"
+                    binding.tvArbiAyat.text = result.data?.data?.arabic
+                    binding.tvEnglishTranslation.text = result.data?.data?.english_translation
+                    binding.tvBookName.text=bookName
+                    binding.tvHadithType.text=type
+                    the_id = result.data?.data?.id.toString()
                 }
 
                 is NetworkResult.Error -> {
-                    showToast(it.message.toString())
+                    Toast.makeText(this, "No More Hadith", Toast.LENGTH_SHORT).show()
                 }
             }
         }
+
 
     }
 
     override fun apiAndArgs() {
         super.apiAndArgs()
-        if(bundle!=null)
-        {
-            id=intent.getStringExtra("ayat_id").toString()
-            chapterName=intent.getStringExtra("chapter_name").toString()
-            totalHadithNo= intent.getStringExtra("total_hadith_number").toString()
-            hadithNo= intent.getStringExtra("hadith_number").toString()
+        if (bundle != null) {
+            id = intent.getStringExtra("ayat_id").toString()
+            chapterName = intent.getStringExtra("chapter_name").toString()
+            totalHadithNo = intent.getStringExtra("sequence").toString()
+            hadithNo = intent.getStringExtra("hadith_number").toString()
+            chapterId = intent.getStringExtra("chapter_id").toString()
+            bookName = intent.getStringExtra("book_name").toString()
+            type = intent.getStringExtra("type").toString()
 
 
             viewModel.getHadithDetail(id)

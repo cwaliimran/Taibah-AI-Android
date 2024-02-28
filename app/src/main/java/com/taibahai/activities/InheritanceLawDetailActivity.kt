@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Html
 import android.text.TextUtils
 import android.view.View
 import android.widget.TextView
@@ -37,7 +38,8 @@ class InheritanceLawDetailActivity : BaseActivity() {
         val type = intent.getStringExtra("type")
         when (type) {
             "text" -> {
-                val description = intent.getStringExtra("description")
+                val rawDescription = intent.getStringExtra("description")
+                val description = Html.fromHtml(rawDescription).toString()
                 binding.tvDescription.text = description
                 false.showProgressBar()
             }

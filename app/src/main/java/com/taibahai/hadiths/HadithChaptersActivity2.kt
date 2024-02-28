@@ -20,6 +20,7 @@ class HadithChaptersActivity2 : BaseActivity() {
     var imam_name = ""
     var total_chapter = ""
     var title = ""
+    var imamHeading=""
     private val viewModel: MainViewModelTaibahIslamic by viewModels()
 
 
@@ -44,9 +45,9 @@ class HadithChaptersActivity2 : BaseActivity() {
 
 
                 val intent = Intent(context, ChapterHadithsActivity3::class.java)
-                intent.putExtra("book_id", showList[position].id)
+                intent.putExtra("ayat_id", showList[position].id)
                 intent.putExtra("chapter_name", showList[position].chapter_name)
-                intent.putExtra("hadith_number", showList[position].hadith_number)
+                intent.putExtra("sequence", showList[position].hadith_number)
                 intent.putExtra("title", title)
                 context.startActivity(intent)
             }
@@ -71,6 +72,7 @@ class HadithChaptersActivity2 : BaseActivity() {
                 is NetworkResult.Success -> {
                     it.data?.data?.let { it1 -> showList.addAll(it1) }
                     binding.tvHadithChapter.text = title
+                    binding.tvImamHeading.text=imamHeading
 
                     adapter.notifyDataSetChanged()
                 }
@@ -85,10 +87,12 @@ class HadithChaptersActivity2 : BaseActivity() {
     override fun apiAndArgs() {
         super.apiAndArgs()
         if (bundle != null) {
-            book_id = intent.getStringExtra("book_id").toString()
+            book_id = intent.getStringExtra("ayat_id").toString()
             imam_name = intent.getStringExtra("imam_name").toString()
             total_chapter = intent.getStringExtra("total_chapter").toString()
             title = intent.getStringExtra("title").toString()
+            imamHeading = intent.getStringExtra("imam_heading").toString()
+
 
 
         }

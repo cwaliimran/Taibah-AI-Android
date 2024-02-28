@@ -24,6 +24,9 @@ class HadithBooksActivity1 : BaseActivity() {
 
     override fun onCreate() {
         binding = ActivityHadithBooks1Binding.inflate(layoutInflater)
+        binding.appbar.tvTitle.setText("Hadiths")
+        binding.appbar.ivLeft.setImageDrawable(resources.getDrawable(R.drawable.arrow_back_24))
+        binding.appbar.ivRight.setVisibility(View.GONE)
         setContentView(binding.root)
     }
 
@@ -39,10 +42,11 @@ class HadithBooksActivity1 : BaseActivity() {
             override fun onClick(position: Int, type: String?, data: Any?) {
 
                 val intent = Intent(context, HadithChaptersActivity2::class.java)
-                intent.putExtra("book_id", showList[position].id)
+                intent.putExtra("ayat_id", showList[position].id)
                 intent.putExtra("imam_name",showList[position].imam)
                 intent.putExtra("total_chapter",showList[position].total_chapters)
                 intent.putExtra("title",showList[position].title)
+                intent.putExtra("imam_heading","${showList[position].imam}, ${showList[position].total_chapters} Chapters" )
                 startActivity(intent)
             }
         })
@@ -52,12 +56,7 @@ class HadithBooksActivity1 : BaseActivity() {
 
     }
 
-    override fun initData() {
-        super.initData()
-        binding.appbar.tvTitle.setText("Hadiths")
-        binding.appbar.ivLeft.setImageDrawable(resources.getDrawable(R.drawable.arrow_back_24))
-        binding.appbar.ivRight.setVisibility(View.GONE)
-    }
+
 
     override fun initObservers() {
         super.initObservers()

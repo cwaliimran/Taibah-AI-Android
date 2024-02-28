@@ -24,9 +24,7 @@ class ChapterHadithsActivity3 : BaseActivity() {
     val viewModel: MainViewModelTaibahIslamic by viewModels()
     var chapter_id = ""
     var chapterName = ""
-    var hadithNo = ""
-    var title = ""
-    var hadithType = ""
+    var sequenceNo = ""
     private var currentPageNo = 1
     private var totalPages: Int = 1
 
@@ -46,7 +44,7 @@ class ChapterHadithsActivity3 : BaseActivity() {
                 super.onScrolled(recyclerView, dx, dy)
                 val linearLayoutManager = (recyclerView.layoutManager as LinearLayoutManager?)!!
                 if (dy > 0) {
-                    if (linearLayoutManager.findLastCompletelyVisibleItemPosition() == showList.size) {
+                    if (linearLayoutManager.findLastCompletelyVisibleItemPosition() == showList.size - 1) {
                         if (currentPageNo < totalPages) {
                             currentPageNo += 1
                             viewModel.getChapterHadiths(currentPageNo, chapter_id)
@@ -79,7 +77,7 @@ class ChapterHadithsActivity3 : BaseActivity() {
                     val oldSize = showList.size
                     it.data?.let { it1 -> showList.addAll(it1.data) }
                     binding.tvChapterHadith.text = chapterName
-                    binding.tvChaptersFrom.text = hadithNo
+                    binding.tvChaptersFrom.text = sequenceNo
                     if (oldSize == 0) {
                         initAdapter()
                     } else {
@@ -102,13 +100,14 @@ class ChapterHadithsActivity3 : BaseActivity() {
             override fun onClick(position: Int, type: String?, data: Any?) {
                 super.onClick(position, type, data)
                 val intent = Intent(context, HadithDetailsActivity4::class.java)
-                intent.putExtra("ayat_id", showList[position].id)
-                intent.putExtra("hadith_number", showList[position].hadith_no)
-                intent.putExtra("total_hadith_number", hadithNo)
-              /*  intent.putExtra("arabic_text", showList[position].arabic)
-                intent.putExtra("english_text", showList[position].english_translation)*/
+                val currentPosition=showList[position].id
+                intent.putExtra("ayat_id",currentPosition)
                 intent.putExtra("chapter_id",showList[position].chapter_id )
+                intent.putExtra("hadith_number", showList[position].hadith_no)
+                intent.putExtra("sequence", sequenceNo)
                 intent.putExtra("chapter_name", chapterName)
+                intent.putExtra("book_name", showList[position].book_name)
+                intent.putExtra("type", showList[position].type)
                 startActivity(intent)
             }
 
@@ -120,10 +119,9 @@ class ChapterHadithsActivity3 : BaseActivity() {
     override fun apiAndArgs() {
         super.apiAndArgs()
         if (bundle != null) {
-            chapter_id = intent.getStringExtra("book_id").toString()
+            chapter_id = intent.getStringExtra("ayat_id").toString()
             chapterName = intent.getStringExtra("chapter_name").toString()
-            hadithNo = intent.getStringExtra("hadith_number").toString()
-            title = intent.getStringExtra("title").toString()
+            sequenceNo = intent.getStringExtra("sequence").toString()
         }
         viewModel.getChapterHadiths(currentPageNo, chapter_id)
     }
