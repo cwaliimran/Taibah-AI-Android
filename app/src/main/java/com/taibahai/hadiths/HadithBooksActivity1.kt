@@ -4,6 +4,8 @@ package com.taibahai.hadiths
 import android.content.Intent
 import android.view.View
 import androidx.activity.viewModels
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.MobileAds
 import com.network.base.BaseActivity
 import com.network.interfaces.OnItemClick
 import com.network.models.ModelHadithBooks
@@ -27,8 +29,10 @@ class HadithBooksActivity1 : BaseActivity() {
         binding.appbar.tvTitle.setText("Hadiths")
         binding.appbar.ivLeft.setImageDrawable(resources.getDrawable(R.drawable.arrow_back_24))
         binding.appbar.ivRight.setVisibility(View.GONE)
+        loadAd()
         setContentView(binding.root)
     }
+
 
     override fun clicks() {
         binding.appbar.ivLeft.setOnClickListener {
@@ -87,5 +91,28 @@ class HadithBooksActivity1 : BaseActivity() {
     override fun apiAndArgs() {
         super.apiAndArgs()
         viewModel.getHadithBooks()
+    }
+
+    private fun loadAd() {
+        //load ad
+        MobileAds.initialize(this) {}
+        val adRequest = AdRequest.Builder().build()
+        binding.adView.loadAd(adRequest)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.adView.resume()
+    }
+
+
+    public override fun onPause() {
+        super.onPause()
+        binding.adView.pause()
+    }
+
+    public override fun onDestroy() {
+        super.onDestroy()
+        binding.adView.destroy()
     }
 }

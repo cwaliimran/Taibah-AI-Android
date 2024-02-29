@@ -3,6 +3,8 @@ package com.taibahai.activities
 import android.content.Intent
 import androidx.activity.viewModels
 import com.bumptech.glide.Glide
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.MobileAds
 import com.network.base.BaseActivity
 import com.network.interfaces.OnItemClick
 import com.network.models.ModelUser
@@ -27,6 +29,7 @@ class MyProfileActivity : BaseActivity() {
         binding.appbar.tvTitle.setText("My profile")
         binding.appbar.ivLeft.setImageDrawable(resources.getDrawable(R.drawable.arrow_back_24))
         binding.appbar.ivRight.setImageDrawable(resources.getDrawable(R.drawable.pen_new_square))
+        loadAd()
         setContentView(binding.root)
 
 
@@ -58,8 +61,12 @@ class MyProfileActivity : BaseActivity() {
 
                 is NetworkResult.Success -> {
                     showToast(it.data?.message.toString())
-                    //val profileData=currentUser!!.data
                     val profileData: ModelUser.Data = it.data!!.data
+
+                        binding.tvName.text= profileData.name
+                        binding.tvEmail.text=profileData.email
+                        Glide.with(this).load(profileData.image).placeholder(R.drawable.splashlogo).into(binding.ivProfileImage)
+
                     profileFeedList.addAll(profileData.feed)
                     adapter.notifyDataSetChanged()
 
@@ -81,18 +88,29 @@ class MyProfileActivity : BaseActivity() {
 
 
 
-    override fun initData() {
-        super.initData()
-        currentUser.let {
-            binding.tvName.text=it!!.name
-            binding.tvEmail.text=it.email
-            Glide.with(this).load(it.image).placeholder(R.drawable.splashlogo).into(binding.ivProfileImage)
-        }
+    private fun loadAd() {
+        //load ad
+        MobileAds.initialize(this) {}
+        val adRequest = AdRequest.Builder().build()
+        binding.adView.loadAd(adRequest)
     }
 
     override fun onResume() {
         super.onResume()
+        binding.adView.resume()
         viewModel.profile()
+
+    }
+
+
+    public override fun onPause() {
+        super.onPause()
+        binding.adView.pause()
+    }
+
+    public override fun onDestroy() {
+        super.onDestroy()
+        binding.adView.destroy()
     }
 
 }

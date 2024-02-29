@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.MobileAds
 import com.network.base.BaseFragment
 import com.network.viewmodels.MainViewModelAI
 import com.taibahai.R
@@ -36,6 +38,7 @@ class MoreFragment : BaseFragment() {
 
 
     override fun viewCreated() {
+        loadAd()
     }
 
     override fun clicks() {
@@ -73,9 +76,9 @@ class MoreFragment : BaseFragment() {
         val moreLevel3=ArrayList<ModelMoreLevels>()
 
         moreLevel3.add(ModelMoreLevels("inheritance_law",R.drawable.inheritancelaw_icon, "Inheritance Law"))
+        moreLevel3.add(ModelMoreLevels("searchdb",R.drawable.sd_icon, "Search Database Hadith, Surah"))
         moreLevel3.add(ModelMoreLevels("searchLevel3",R.drawable.search_icon, "Unlimited AI Tokens"))
         moreLevel3.add(ModelMoreLevels("books_pdfs",R.drawable.bookspdf_icon, "Books & PDF"))
-        moreLevel3.add(ModelMoreLevels("searchdb",R.drawable.sd_icon, "Search Database Hadith, Surah"))
         showList.add(ModelMore("Level 3" ,"Diamond Subscription Package",moreLevel3) )
 
 
@@ -91,6 +94,29 @@ class MoreFragment : BaseFragment() {
         binding.appbar.tvTitle.setText("More")
         binding.appbar.ivRight.setImageDrawable(resources.getDrawable(R.drawable.baseline_settings_24))
         binding.appbar.ivLeft.setVisibility(View.GONE)
+    }
+
+    private fun loadAd() {
+        //load ad
+        MobileAds.initialize(requireContext()) {}
+        val adRequest = AdRequest.Builder().build()
+        binding.adView.loadAd(adRequest)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.adView.resume()
+    }
+
+
+    public override fun onPause() {
+        super.onPause()
+        binding.adView.pause()
+    }
+
+    public override fun onDestroy() {
+        super.onDestroy()
+        binding.adView.destroy()
     }
 
 

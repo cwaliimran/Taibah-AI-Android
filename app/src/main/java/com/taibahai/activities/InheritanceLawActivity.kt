@@ -2,6 +2,8 @@ package com.taibahai.activities
 
 import android.view.View
 import androidx.activity.viewModels
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.MobileAds
 import com.network.base.BaseActivity
 import com.network.models.ModelInheritanceLaw
 import com.network.network.NetworkResult
@@ -22,6 +24,7 @@ class InheritanceLawActivity : BaseActivity() {
 
     override fun onCreate() {
         binding=ActivityInheritanceLawBinding.inflate(layoutInflater)
+        loadAd()
         setContentView(binding.root)
     }
 
@@ -73,5 +76,28 @@ class InheritanceLawActivity : BaseActivity() {
         binding.appbar.tvTitle.setText("Islamic Law of Inheritance")
         binding.appbar.ivLeft.setImageDrawable(resources.getDrawable(R.drawable.arrow_back_24))
         binding.appbar.ivRight.setVisibility(View.GONE)
+    }
+
+    private fun loadAd() {
+        //load ad
+        MobileAds.initialize(this) {}
+        val adRequest = AdRequest.Builder().build()
+        binding.adView.loadAd(adRequest)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.adView.resume()
+    }
+
+
+    public override fun onPause() {
+        super.onPause()
+        binding.adView.pause()
+    }
+
+    public override fun onDestroy() {
+        super.onDestroy()
+        binding.adView.destroy()
     }
 }

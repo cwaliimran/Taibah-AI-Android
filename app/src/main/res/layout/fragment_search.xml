@@ -125,7 +125,7 @@
         android:layout_marginHorizontal="20dp"
         android:background="@drawable/edittext_bg"
         android:layout_marginBottom="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/button4"
+        app:layout_constraintBottom_toTopOf="@+id/adView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
@@ -176,15 +176,13 @@
         </RelativeLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-    <Button
-        android:id="@+id/button4"
-        style="@style/button"
-        android:background="@drawable/continue_btn_bg"
-        android:fontFamily="@font/poppins_medium"
-        android:text="Ad 320*90"
-        android:textColor="@color/white"
-        android:textSize="16sp"
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        app:adSize="BANNER"
+        app:adUnitId="@string/banner_ad_unit_id"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

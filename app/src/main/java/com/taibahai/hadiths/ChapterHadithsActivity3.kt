@@ -4,6 +4,8 @@ import android.content.Intent
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.MobileAds
 import com.google.gson.Gson
 import com.network.base.BaseActivity
 import com.network.interfaces.OnItemClick
@@ -31,7 +33,7 @@ class ChapterHadithsActivity3 : BaseActivity() {
 
     override fun onCreate() {
         binding = ActivityChapterHadiths3Binding.inflate(layoutInflater)
-
+        loadAd()
         setContentView(binding.root)
     }
 
@@ -124,5 +126,28 @@ class ChapterHadithsActivity3 : BaseActivity() {
             sequenceNo = intent.getStringExtra("sequence").toString()
         }
         viewModel.getChapterHadiths(currentPageNo, chapter_id)
+    }
+
+    private fun loadAd() {
+        //load ad
+        MobileAds.initialize(this) {}
+        val adRequest = AdRequest.Builder().build()
+        binding.adView.loadAd(adRequest)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.adView.resume()
+    }
+
+
+    public override fun onPause() {
+        super.onPause()
+        binding.adView.pause()
+    }
+
+    public override fun onDestroy() {
+        super.onDestroy()
+        binding.adView.destroy()
     }
 }

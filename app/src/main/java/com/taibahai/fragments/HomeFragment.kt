@@ -49,6 +49,8 @@ class HomeFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
+        viewModel.home(pageno = 1)
+
     }
 
     override fun viewCreated() {
@@ -132,6 +134,7 @@ class HomeFragment : BaseFragment() {
                     }else{
                         showList[currentItemAction].likes == 1
                     }
+
                 }
 
                 is NetworkResult.Error -> {
@@ -184,13 +187,11 @@ class HomeFragment : BaseFragment() {
             popupWindow.dismiss()
         }
 
-        // Get the anchor view from the clicked item in the adapter
         val anchorView =
             binding.rvHome.findViewHolderForAdapterPosition(position)?.itemView?.findViewById<View>(
                 R.id.ivDots
             )
 
-        // Show the popup menu at a specific location
         anchorView?.let {
             popupWindow.showAsDropDown(it, 0, 0)
         }
@@ -198,7 +199,6 @@ class HomeFragment : BaseFragment() {
 
     override fun apiAndArgs() {
         super.apiAndArgs()
-        viewModel.home(pageno = 1)
 
 
     }

@@ -8,7 +8,6 @@ import android.os.Handler
 import android.os.Looper
 import android.speech.RecognizerIntent
 import android.speech.tts.TextToSpeech
-import android.speech.tts.Voice
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -16,12 +15,19 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.Toast
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.MobileAds
 import com.network.base.BaseFragment
+import com.network.interfaces.OnItemClick
+import com.network.utils.AppClass
 import com.taibahai.R
+import com.taibahai.activities.HistoryActivity
 import com.taibahai.adapters.AdapterAISearch
+import com.taibahai.adapters.AdapterChatPopups
 import com.taibahai.databinding.FragmentSearchBinding
+import com.taibahai.models.ModelChatPopups
 import com.taibahai.models.ModelSearchAI
 import com.taibahai.room_database.ChatDatabase
 import com.taibahai.room_database.ChatMessageDao
@@ -34,12 +40,6 @@ import okhttp3.Callback
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import androidx.lifecycle.Observer
-import com.network.interfaces.OnItemClick
-import com.network.utils.AppClass
-import com.taibahai.activities.HistoryActivity
-import com.taibahai.adapters.AdapterChatPopups
-import com.taibahai.models.ModelChatPopups
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
 import org.json.JSONArray
@@ -50,14 +50,14 @@ import java.util.Locale
 import java.util.UUID
 
 
-class SearchFragment : BaseFragment(),OnItemClick {
+class SearchFragment : BaseFragment(), OnItemClick {
     lateinit var binding: FragmentSearchBinding
     private val client = OkHttpClient()
     private lateinit var chatDatabase: ChatDatabase
     private lateinit var chatMessageDao: ChatMessageDao
-    val showMessagePopups=ArrayList<ModelChatPopups>()
-    val showMessage=ArrayList<ModelSearchAI>()
-    lateinit var adapterMessagePopups:AdapterChatPopups
+    val showMessagePopups = ArrayList<ModelChatPopups>()
+    val showMessage = ArrayList<ModelSearchAI>()
+    lateinit var adapterMessagePopups: AdapterChatPopups
     private var userQuestion: String = ""
     private var botResponse: String? = null
     private var currentChatId: String? = null
@@ -67,19 +67,26 @@ class SearchFragment : BaseFragment(),OnItemClick {
     private var textToSpeech: TextToSpeech? = null
     private var spokenText: String? = null
     private var archiveMessageId: Long? = null
-    private var isArchived: Boolean=false
+    private var isArchived: Boolean = false
     private var isAudioPlaying: Boolean = false
     private lateinit var messageAdapter: AdapterAISearch
 
 
-
-
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View? {
         // Inflate the layout for this fragment
-        binding = DataBindingUtil.inflate<FragmentSearchBinding>(inflater, R.layout.fragment_search, container, false)
+        binding = DataBindingUtil.inflate<FragmentSearchBinding>(
+            inflater, R.layout.fragment_search, container, false
+        )
 
         return binding.getRoot()
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        loadAd()
+
     }
 
     override fun onAttach(context: Context) {
@@ -104,12 +111,11 @@ class SearchFragment : BaseFragment(),OnItemClick {
     }
 
 
-
     override fun viewCreated() {
-        isArchived=AppClass.sharedPref.getIsArchived()?:false
+        isArchived = AppClass.sharedPref.getIsArchived() ?: false
         chatDatabase = ChatDatabase.getDatabase(requireContext())
         chatMessageDao = chatDatabase.chatMessageDao()
-        messageAdapter = AdapterAISearch(requireContext(),showMessage,this)
+        messageAdapter = AdapterAISearch(requireContext(), showMessage, this)
 
         adapterMessagePopups = AdapterChatPopups(showMessagePopups) { message ->
             binding.messageBox.setText(message)
@@ -137,9 +143,7 @@ class SearchFragment : BaseFragment(),OnItemClick {
 
                     // Save the user's message to the Room database
                     val userMessage = ModelChatMessage(
-                        message = userQuestion,
-                        isUser = true,
-                        conversationId = currentChatId!!
+                        message = userQuestion, isUser = true, conversationId = currentChatId!!
                     )
 
                     GlobalScope.launch {
@@ -163,7 +167,7 @@ class SearchFragment : BaseFragment(),OnItemClick {
             startSpeechToText()
         }
 
-        binding.ivDotsSelect.setOnClickListener {view ->
+        binding.ivDotsSelect.setOnClickListener { view ->
             showPopupMenu(view)
         }
     }
@@ -171,7 +175,9 @@ class SearchFragment : BaseFragment(),OnItemClick {
 
     private fun startSpeechToText() {
         val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+        intent.putExtra(
+            RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
+        )
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ar-SA")
         //intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Say Something") // Change the language if needed
 
@@ -179,7 +185,8 @@ class SearchFragment : BaseFragment(),OnItemClick {
         try {
             startActivityForResult(intent, SPEECH_REQUEST_CODE)
         } catch (e: Exception) {
-            Toast.makeText(requireContext(), "Speech recognition not available", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Speech recognition not available", Toast.LENGTH_SHORT)
+                .show()
         }
     }
 
@@ -196,7 +203,6 @@ class SearchFragment : BaseFragment(),OnItemClick {
     }
 
 
-
     private fun updateUI(messages: List<ModelChatMessage>) {
         (binding.rvSearchAI.adapter as AdapterAISearch).messageList.clear()
 
@@ -206,8 +212,7 @@ class SearchFragment : BaseFragment(),OnItemClick {
                 val modelMessage = ModelSearchAI(message.message, message.isUser)
                 (binding.rvSearchAI.adapter as AdapterAISearch).messageList.add(modelMessage)
             }
-        }
-        else {
+        } else {
             // Display the entire chat
             for (message in messages) {
                 val modelMessage = ModelSearchAI(message.message, message.isUser)
@@ -224,14 +229,10 @@ class SearchFragment : BaseFragment(),OnItemClick {
     }
 
 
-
-
     private suspend fun getLastMessageId(): Long? = withContext(Dispatchers.IO) {
         val lastUserMessage = chatDatabase.chatMessageDao().getLastMessage()
         lastUserMessage?.id
     }
-
-
 
 
     private fun getAllMessages() {
@@ -266,13 +267,9 @@ class SearchFragment : BaseFragment(),OnItemClick {
     """.trimIndent()
 
 
-
-        val request = Request.Builder()
-            .url(url)
-            .header("Content-Type", "application/json")
+        val request = Request.Builder().url(url).header("Content-Type", "application/json")
             .addHeader("Authorization", "Bearer $apiKey")
-            .post(requestBody.toRequestBody("application/json".toMediaTypeOrNull()))
-            .build()
+            .post(requestBody.toRequestBody("application/json".toMediaTypeOrNull())).build()
 
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: okhttp3.Call, e: IOException) {
@@ -317,12 +314,11 @@ class SearchFragment : BaseFragment(),OnItemClick {
     }
 
 
-
-    private fun displayBotResponse()
-    {
+    private fun displayBotResponse() {
         // Save the bot response
         botResponse?.let {
-            val botMessage = ModelChatMessage(message = it, isUser = false, conversationId = currentChatId ?: "")
+            val botMessage =
+                ModelChatMessage(message = it, isUser = false, conversationId = currentChatId ?: "")
             GlobalScope.launch {
                 chatMessageDao.insertMessage(botMessage)
             }
@@ -333,7 +329,7 @@ class SearchFragment : BaseFragment(),OnItemClick {
 
 
     override fun initAdapter() {
-        messageAdapter = AdapterAISearch(requireContext(), showMessage, object :OnItemClick{
+        messageAdapter = AdapterAISearch(requireContext(), showMessage, object : OnItemClick {
 
             override fun onClick(position: Int, type: String?, data: Any?) {
                 if (position >= 0 && position < showMessage.size) {
@@ -341,14 +337,14 @@ class SearchFragment : BaseFragment(),OnItemClick {
 
                     when (type) {
                         "play" -> {
-                            speakText(textToSpeak,position)
+                            speakText(textToSpeak, position)
                             isAudioPlaying = true
                             updateVisibility(position)
 
                         }
 
 
-                        "pause" ->{
+                        "pause" -> {
                             textToSpeech?.stop()
                             isAudioPlaying = false
                             updateVisibility(position)
@@ -387,8 +383,7 @@ class SearchFragment : BaseFragment(),OnItemClick {
 
                 tts.speak(text, TextToSpeech.QUEUE_FLUSH, params, "UniqueUtteranceId")
             } else {
-                @Suppress("deprecation")
-                tts.speak(text, TextToSpeech.QUEUE_FLUSH, null)
+                @Suppress("deprecation") tts.speak(text, TextToSpeech.QUEUE_FLUSH, null)
             }
         }
     }
@@ -411,7 +406,6 @@ class SearchFragment : BaseFragment(),OnItemClick {
     }
 
 
-
     override fun onStop() {
         super.onStop()
         textToSpeech?.stop()
@@ -420,6 +414,28 @@ class SearchFragment : BaseFragment(),OnItemClick {
     }
 
 
+    private fun loadAd() {
+        //load ad
+        MobileAds.initialize(requireActivity()) {}
+        val adRequest = AdRequest.Builder().build()
+        binding.adView.loadAd(adRequest)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.adView.resume()
+    }
+
+
+    public override fun onPause() {
+        super.onPause()
+        binding.adView.pause()
+    }
+
+    public override fun onDestroy() {
+        super.onDestroy()
+        binding.adView.destroy()
+    }
 
 
     private fun showPopupMenu(view: View) {
@@ -437,6 +453,7 @@ class SearchFragment : BaseFragment(),OnItemClick {
                     startActivity(intent)
                     true
                 }
+
                 R.id.menu_archive -> {
                     if (isArchived) {
                         unarchiveChat()
@@ -446,13 +463,13 @@ class SearchFragment : BaseFragment(),OnItemClick {
                     archiveMenuItem.title = if (isArchived) "Unarchive" else "Archive"
                     true
                 }
+
                 else -> false
             }
         }
 
         popupMenu.show()
     }
-
 
 
     private fun archiveChat() {
@@ -477,8 +494,7 @@ class SearchFragment : BaseFragment(),OnItemClick {
         getAllMessages()
     }
 
-    private fun showTopMessagePopups()
-    {
+    private fun showTopMessagePopups() {
         showMessagePopups.clear()
         showMessagePopups.add(ModelChatPopups("Merry Christmas"))
         showMessagePopups.add(ModelChatPopups("Happy Birthday"))
@@ -492,12 +508,9 @@ class SearchFragment : BaseFragment(),OnItemClick {
         showMessagePopups.add(ModelChatPopups("Tell Me a Joke"))
 
         adapterMessagePopups.setDate(showMessagePopups)
-        binding.rvTopMessagePopups.adapter=adapterMessagePopups
+        binding.rvTopMessagePopups.adapter = adapterMessagePopups
 
     }
-
-
-
 
 
 }

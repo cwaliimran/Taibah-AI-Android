@@ -15,6 +15,7 @@ data class ModelHome(
         var timesince: String = "",
         var feed_attachments: List<FeedAttachment> = listOf(),
         var comments: Int = 0,
+//        var is_like: Boolean = false,
         var likes: Int = 0
     ) {
         data class FeedAttachment(

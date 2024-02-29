@@ -3,6 +3,8 @@ package com.taibahai.hadiths
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.MobileAds
 import com.google.android.play.integrity.internal.t
 import com.network.base.BaseActivity
 import com.network.network.NetworkResult
@@ -27,6 +29,7 @@ class HadithDetailsActivity4 : BaseActivity() {
 
     override fun onCreate() {
         binding = ActivityHadithDetails4Binding.inflate(layoutInflater)
+        loadAd()
         setContentView(binding.root)
     }
 
@@ -123,7 +126,28 @@ class HadithDetailsActivity4 : BaseActivity() {
 
             viewModel.getHadithDetail(id)
         }
+    }
+
+    private fun loadAd() {
+        //load ad
+        MobileAds.initialize(this) {}
+        val adRequest = AdRequest.Builder().build()
+        binding.adView.loadAd(adRequest)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.adView.resume()
+    }
 
 
+    public override fun onPause() {
+        super.onPause()
+        binding.adView.pause()
+    }
+
+    public override fun onDestroy() {
+        super.onDestroy()
+        binding.adView.destroy()
     }
 }
