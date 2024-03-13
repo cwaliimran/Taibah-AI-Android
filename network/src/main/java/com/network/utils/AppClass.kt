@@ -80,6 +80,10 @@ public class AppClass : Application() {
             return sharedPref.getObject(AppConstants.CURRENT_USER, ModelUser.Data::class.java)
         }
 
+        fun isGuest(): Boolean {
+            return getCurrentUser()?.social_type == "guest"
+        }
+
 
         fun getAccessToken(): String? {
             return sharedPref.getString(AppConstants.ACCESS_TOKEN, "")
@@ -112,8 +116,8 @@ public class AppClass : Application() {
 
         fun getAudioOutputDirectory(): File? {
             val mediaStorageDir: File = File(
-                AppClass.instance.getFilesDir().toString() + "/" +
-                        AppClass.instance.getString(R.string.app_name) + "/Audios"
+                AppClass.instance.getFilesDir()
+                    .toString() + "/" + AppClass.instance.getString(R.string.app_name) + "/Audios"
             )
             if (!mediaStorageDir.exists()) {
                 mediaStorageDir.mkdirs()

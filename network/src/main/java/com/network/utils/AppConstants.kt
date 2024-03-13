@@ -1,6 +1,7 @@
 package com.network.utils
 
 object AppConstants {
+    val GUEST = "guest"
     val ACCESS_TOKEN = "access_token"
     val BUNDLE = "bundle"
     val DEVICE_ID = "device_id"

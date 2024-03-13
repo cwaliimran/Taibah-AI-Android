@@ -1,7 +1,9 @@
 package com.taibahai.activities
 
 import android.content.Intent
+import android.view.View
 import androidx.activity.viewModels
+import androidx.core.content.ContentProviderCompat.requireContext
 import com.bumptech.glide.Glide
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
@@ -9,11 +11,16 @@ import com.network.base.BaseActivity
 import com.network.interfaces.OnItemClick
 import com.network.models.ModelUser
 import com.network.network.NetworkResult
+import com.network.utils.AppClass
+import com.network.utils.AppClass.Companion.isGuest
+import com.network.utils.AppConstants
 import com.network.utils.ProgressLoading.displayLoading
 import com.network.viewmodels.MainViewModelAI
 import com.taibahai.R
 import com.taibahai.adapters.AdapterHome
 import com.taibahai.databinding.ActivityMyProfileBinding
+import com.taibahai.utils.Constants
+import com.taibahai.utils.genericDialog
 import com.taibahai.utils.showToast
 
 class MyProfileActivity : BaseActivity() {
@@ -21,6 +28,7 @@ class MyProfileActivity : BaseActivity() {
     lateinit var adapter: AdapterHome
     private var profileFeedList: MutableList<com.network.models.ModelHome.Data> = mutableListOf()
     val viewModel : MainViewModelAI by viewModels()
+    var currentItemAction = -1
 
 
 
@@ -42,8 +50,13 @@ class MyProfileActivity : BaseActivity() {
         }
 
         binding.appbar.ivRight.setOnClickListener {
-            val intent = Intent(this, EditProfileActivity::class.java)
-            startActivity(intent)
+
+            if (isGuest()) {
+                handleGuestLogic()
+                return@setOnClickListener
+            }
+                val intent = Intent(this, EditProfileActivity::class.java)
+                startActivity(intent)
         }
     }
 
@@ -77,12 +90,68 @@ class MyProfileActivity : BaseActivity() {
                 }
             }
         }
+
+        //only used for likes
+        viewModel.simpleResponseLiveData.observe(this) {
+            if (it == null) {
+                return@observe
+            }
+            displayLoading(false)
+            when (it) {
+                is NetworkResult.Loading -> {
+                    displayLoading(true)
+                }
+
+                is NetworkResult.Success -> {
+                    it.data?.message?.let { it1 -> showToast(it1) }
+                    // TODO: handle likes 
+                    if (profileFeedList[currentItemAction].likes == 1) {
+                        profileFeedList[currentItemAction].likes == 0
+                    } else {
+                        profileFeedList[currentItemAction].likes == 1
+                    }
+
+                }
+
+                is NetworkResult.Error -> {
+                    showToast(it.message.toString())
+                }
+            }
+        }
     }
 
     override fun initAdapter() {
         adapter = AdapterHome(profileFeedList,isProfileFeed = true,object :OnItemClick{
+            override fun onClick(position: Int, type: String?, data: Any?, view: View?) {
 
-        })
+                if (isGuest()) {
+                    handleGuestLogic()
+                    return
+                }
+                currentItemAction = position
+                when (type) {
+                    "like" -> {
+                        if (data is String) {
+                            viewModel.putLike(data)
+                        }
+                    }
+
+                    "comment" -> {
+                        val intent = Intent(this@MyProfileActivity, HomeDetailActivity::class.java)
+                        intent.putExtra(AppConstants.BUNDLE, profileFeedList[position])
+                        startActivity(intent)
+                    }
+                    "delete" -> {
+                            //delete post
+
+                    }
+                    else -> {}
+                }
+                
+            }
+        }){data, menuItem ->
+            false
+        }
         binding.rvProfile.adapter = adapter
     }
 
@@ -113,4 +182,16 @@ class MyProfileActivity : BaseActivity() {
         binding.adView.destroy()
     }
 
+    val handleGuestLogic: () -> Unit = {
+      genericDialog(object : OnItemClick {
+            override fun onClick(position: Int, type: String?, data: Any?, view: View?) {
+                super.onClick(position, type, data, view)
+                AppClass.sharedPref.clearAllPreferences()
+                viewModel.logout(
+                    AppClass.sharedPref.getString(Constants.DEVICE_ID, "").toString(),
+                    "android"
+                )
+            }
+        })
+    }
 }

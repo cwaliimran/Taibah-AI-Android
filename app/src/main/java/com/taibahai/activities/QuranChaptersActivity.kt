@@ -13,6 +13,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.media3.exoplayer.offline.Download
 import com.cwnextgen.amnames.utils.getJsonDataFromAsset
@@ -128,8 +129,7 @@ class QuranChaptersActivity : BaseActivity() {
         super.initAdapter()
 
         adapter = AdapterQuranChapter(modelSurahList, object : OnItemClick {
-            override fun onClick(position: Int, type: String?, data: Any?) {
-                super.onClick(position, type, data)
+            override fun onClick(position: Int, type: String?, data: Any?, view: View?) {
                 isDownload = false
                 model = modelSurahList[position]
                 when (type) {

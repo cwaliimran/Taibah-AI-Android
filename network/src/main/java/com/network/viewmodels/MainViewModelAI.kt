@@ -30,6 +30,12 @@ class MainViewModelAI constructor(application: Application) : AndroidViewModel(a
     val simpleResponseLiveData: MutableLiveData<NetworkResult<SimpleResponse>>
         get() = repository.simpleResponseMutableLiveData
 
+    val logoutLiveData: MutableLiveData<NetworkResult<SimpleResponse>>
+        get() = repository.logoutMutableLiveData
+
+    val reportFeedLiveData: MutableLiveData<NetworkResult<SimpleResponse>>
+        get() = repository.reportFeedMutableLiveData
+
     val socialLoginLiveData: MutableLiveData<NetworkResult<ModelUser>>
         get() = repository.socialLoginMutableLiveData
 

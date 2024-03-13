@@ -4,11 +4,9 @@ import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.Window
-import android.view.WindowManager
 import android.widget.LinearLayout
 import androidx.activity.viewModels
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -25,15 +23,12 @@ import com.taibahai.databinding.ActivitySettingBinding
 import com.taibahai.databinding.DialogLogoutBinding
 import com.taibahai.models.ModelSettings
 import com.taibahai.utils.Constants
-import com.taibahai.utils.showToast
 
 class SettingActivity : BaseActivity() {
     lateinit var binding: ActivitySettingBinding
     val showList = ArrayList<ModelSettings>()
-    val viewModel : MainViewModelAI by viewModels()
+    val viewModel: MainViewModelAI by viewModels()
     private lateinit var googleSignInClient: GoogleSignInClient
-
-
 
 
     override fun onCreate() {
@@ -61,7 +56,6 @@ class SettingActivity : BaseActivity() {
     }
 
 
-
     override fun initAdapter() {
         super.initAdapter()
         showList.add(ModelSettings(R.drawable.profileicon, "My Profile"))
@@ -79,27 +73,35 @@ class SettingActivity : BaseActivity() {
                 0 -> {
                     startActivity(Intent(this, MyProfileActivity::class.java))
                 }
+
                 1 -> {
                     startActivity(Intent(this, NotificationActivity::class.java))
                 }
+
                 2 -> {
                     startActivity(Intent(this, AIVoiceFeedbackActivity::class.java))
                 }
+
                 3 -> {
                     startActivity(Intent(this, UpcomingFeaturesActivity::class.java))
                 }
+
                 4 -> {
                     startActivity(Intent(this, ShareActivity::class.java))
                 }
+
                 5 -> {
                     startActivity(Intent(this, RateAppActivity::class.java))
                 }
+
                 6 -> {
                     startActivity(Intent(this, AboutUsActivity::class.java))
                 }
+
                 7 -> {
                     startActivity(Intent(this, PrivacyPolicyActivity::class.java))
                 }
+
                 8 -> {
                     startActivity(Intent(this, ContactSupportActivity::class.java))
                 }
@@ -119,7 +121,7 @@ class SettingActivity : BaseActivity() {
 
     override fun initObservers() {
         super.initObservers()
-        viewModel.simpleResponseLiveData.observe(this) {
+        viewModel.logoutLiveData.observe(this) {
             if (it == null) {
                 return@observe
             }
@@ -140,7 +142,12 @@ class SettingActivity : BaseActivity() {
                 }
 
                 is NetworkResult.Error -> {
-                    showToast(it.message.toString())
+                    startActivity(
+                        Intent(
+                            this, LoginActivity::class.java
+                        )
+                    )
+                    this.finishAffinity()
                 }
             }
         }
@@ -163,7 +170,10 @@ class SettingActivity : BaseActivity() {
 
         binding.btnLogout.setOnClickListener {
             AppClass.sharedPref.clearAllPreferences()
-            viewModel.logout(AppClass.sharedPref.getString(Constants.DEVICE_ID, "").toString(), "android")
+            viewModel.logout(
+                AppClass.sharedPref.getString(Constants.DEVICE_ID, "").toString(),
+                "android"
+            )
             googleSignInClient.signOut().addOnCompleteListener {
                 dialog.dismiss() // Dismiss dialog after initiating the logout action
             }

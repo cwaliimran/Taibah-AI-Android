@@ -1,12 +1,10 @@
 package com.taibahai.fragments
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.PopupWindow
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,13 +12,20 @@ import androidx.recyclerview.widget.RecyclerView
 import com.network.base.BaseFragment
 import com.network.interfaces.OnItemClick
 import com.network.network.NetworkResult
+import com.network.utils.AppClass
+import com.network.utils.AppClass.Companion.isGuest
+import com.network.utils.AppConstants
 import com.network.utils.ProgressLoading.displayLoading
 import com.network.viewmodels.MainViewModelAI
 import com.taibahai.R
 import com.taibahai.activities.CreatePostActivity
+import com.taibahai.activities.HomeDetailActivity
+import com.taibahai.activities.LoginActivity
 import com.taibahai.activities.NotificationActivity
 import com.taibahai.adapters.AdapterHome
 import com.taibahai.databinding.FragmentHomeBinding
+import com.taibahai.utils.Constants
+import com.taibahai.utils.genericDialog
 import com.taibahai.utils.showToast
 
 
@@ -34,6 +39,7 @@ class HomeFragment : BaseFragment() {
     val viewModel: MainViewModelAI by viewModels()
     private var currentPageNo = 1
     private var totalPages: Int = 0
+    private var reportedPos: Int = 0
 
 
     override fun onCreateView(
@@ -49,7 +55,7 @@ class HomeFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        viewModel.home(pageno = 1)
+
 
     }
 
@@ -58,6 +64,10 @@ class HomeFragment : BaseFragment() {
 
     override fun clicks() {
         binding.ivCreatePostIcon.setOnClickListener {
+            if (isGuest()) {
+                handleGuestLogic()
+                return@setOnClickListener
+            }
             val intent = Intent(requireContext(), CreatePostActivity::class.java)
             startActivity(intent)
         }
@@ -67,8 +77,7 @@ class HomeFragment : BaseFragment() {
             startActivity(intent)
         }
 
-        binding.rvHome.addOnScrollListener(object :
-            RecyclerView.OnScrollListener() {
+        binding.rvHome.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 val linearLayoutManager = (recyclerView.layoutManager as LinearLayoutManager?)!!
@@ -128,10 +137,10 @@ class HomeFragment : BaseFragment() {
 
                 is NetworkResult.Success -> {
                     it.data?.message?.let { it1 -> showToast(it1) }
-                    if (showList[currentItemAction].likes==1){
+                    // TODO: handle likes 
+                    if (showList[currentItemAction].likes == 1) {
                         showList[currentItemAction].likes == 0
-                        showList[currentItemAction].likes == 0
-                    }else{
+                    } else {
                         showList[currentItemAction].likes == 1
                     }
 
@@ -142,66 +151,120 @@ class HomeFragment : BaseFragment() {
                 }
             }
         }
+
+        viewModel.reportFeedLiveData.observe(this) {
+            if (it == null) {
+                return@observe
+            }
+            activity?.displayLoading(false)
+            when (it) {
+                is NetworkResult.Loading -> {
+                    activity?.displayLoading(true)
+                }
+
+                is NetworkResult.Success -> {
+                    showToast(it.data?.message.toString())
+                    adapter.notifyItemRemoved(reportedPos)
+                }
+
+                is NetworkResult.Error -> {
+                    showToast(it.message.toString())
+                }
+            }
+        }
+
+        viewModel.logoutLiveData.observe(this) {
+            if (it == null) {
+                return@observe
+            }
+            activity?.displayLoading(false)
+            when (it) {
+                is NetworkResult.Loading -> {
+                    activity?.displayLoading(true)
+                }
+
+                is NetworkResult.Success -> {
+                    AppClass.sharedPref.clearAllPreferences()
+                    startActivity(
+                        Intent(
+                            requireActivity(), LoginActivity::class.java
+                        )
+                    )
+                    requireActivity().finishAffinity()
+                }
+
+                is NetworkResult.Error -> {
+                    startActivity(
+                        Intent(
+                            requireActivity(), LoginActivity::class.java
+                        )
+                    )
+                    requireActivity().finishAffinity()
+                }
+            }
+        }
     }
 
     override fun initAdapter() {
         adapter = AdapterHome(showList, isProfileFeed = false, object : OnItemClick {
 
-            override fun onClick(position: Int, type: String?, data: Any?) {
+            override fun onClick(position: Int, type: String?, data: Any?, view: View?) {
+                if (isGuest()) {
+                    handleGuestLogic()
+                    return
+                }
                 currentItemAction = position
                 when (type) {
-                    "dots" -> {
-                        if (data is String) {
-                            showPopupMenu(position, data)
-                        }
-                    }
-
                     "like" -> {
                         if (data is String) {
                             viewModel.putLike(data)
                         }
                     }
 
+                    "comment" -> {
+                        val intent = Intent(requireContext(), HomeDetailActivity::class.java)
+                        intent.putExtra(AppConstants.BUNDLE, showList[position])
+                        startActivity(intent)
+                    }
+
                     else -> {}
                 }
             }
 
-        })
+        }) { data, menuItem ->
+
+                when (menuItem.itemId) {
+                    R.id.menu_report -> {
+                        if (isGuest()) {
+                            handleGuestLogic()
+                        } else {
+                            viewModel.feedReport(data.feed_id)
+                        }
+                        true
+                    }
+
+                    else -> false
+                }
+        }
         binding.rvHome.adapter = adapter
-    }
-
-
-    @SuppressLint("MissingInflatedId")
-    private fun showPopupMenu(position: Int, data: String) {
-        val popupView = layoutInflater.inflate(R.layout.item_popup, null)
-        val popupWindow = PopupWindow(
-            popupView,
-            ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        )
-        popupWindow.isOutsideTouchable = true
-
-        val reportMenuItem = popupView.findViewById<View>(R.id.menuReport)
-        reportMenuItem.setOnClickListener {
-            viewModel.feedReport(data)
-            popupWindow.dismiss()
-        }
-
-        val anchorView =
-            binding.rvHome.findViewHolderForAdapterPosition(position)?.itemView?.findViewById<View>(
-                R.id.ivDots
-            )
-
-        anchorView?.let {
-            popupWindow.showAsDropDown(it, 0, 0)
-        }
     }
 
     override fun apiAndArgs() {
         super.apiAndArgs()
-
+        viewModel.home(pageno = 1)
 
     }
-
+    val handleGuestLogic: () -> Unit = {
+        activity?.genericDialog(object : OnItemClick {
+            override fun onClick(position: Int, type: String?, data: Any?, view: View?) {
+                super.onClick(position, type, data, view)
+                AppClass.sharedPref.clearAllPreferences()
+                viewModel.logout(
+                    AppClass.sharedPref.getString(Constants.DEVICE_ID, "").toString(),
+                    "android"
+                )
+            }
+        })
+    }
 
 }

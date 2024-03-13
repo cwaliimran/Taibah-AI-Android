@@ -43,7 +43,7 @@ class HadithBooksActivity1 : BaseActivity() {
     override fun initAdapter() {
         super.initAdapter()
         adapter = AdapterHadithBooks(showList, object : OnItemClick{
-            override fun onClick(position: Int, type: String?, data: Any?) {
+            override fun onClick(position: Int, type: String?, data: Any?, view: View?) {
 
                 val intent = Intent(context, HadithChaptersActivity2::class.java)
                 intent.putExtra("ayat_id", showList[position].id)

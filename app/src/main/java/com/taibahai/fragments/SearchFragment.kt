@@ -85,7 +85,6 @@ class SearchFragment : BaseFragment(), OnItemClick {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        loadAd()
 
     }
 
@@ -331,7 +330,7 @@ class SearchFragment : BaseFragment(), OnItemClick {
     override fun initAdapter() {
         messageAdapter = AdapterAISearch(requireContext(), showMessage, object : OnItemClick {
 
-            override fun onClick(position: Int, type: String?, data: Any?) {
+            override fun onClick(position: Int, type: String?, data: Any?, view: View?) {
                 if (position >= 0 && position < showMessage.size) {
                     val textToSpeak = showMessage[position].message
 
@@ -413,29 +412,6 @@ class SearchFragment : BaseFragment(), OnItemClick {
 
     }
 
-
-    private fun loadAd() {
-        //load ad
-        MobileAds.initialize(requireActivity()) {}
-        val adRequest = AdRequest.Builder().build()
-        binding.adView.loadAd(adRequest)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        binding.adView.resume()
-    }
-
-
-    public override fun onPause() {
-        super.onPause()
-        binding.adView.pause()
-    }
-
-    public override fun onDestroy() {
-        super.onDestroy()
-        binding.adView.destroy()
-    }
 
 
     private fun showPopupMenu(view: View) {

@@ -69,7 +69,7 @@ class TopHadithFragment : BaseFragment() {
     override fun initAdapter() {
         super.initAdapter()
         adapter= AdapterDBSearchHadith(hadithData,object :OnItemClick{
-            override fun onClick(position: Int, type: String?, data: Any?) {
+            override fun onClick(position: Int, type: String?, data: Any?, view: View?) {
                 val intent= Intent(context, DbSearchHadithRMActivity::class.java)
                 intent.putExtra("hadith_no",hadithData[position].hadith_no)
                 intent.putExtra("book_name",hadithData[position].book_name)

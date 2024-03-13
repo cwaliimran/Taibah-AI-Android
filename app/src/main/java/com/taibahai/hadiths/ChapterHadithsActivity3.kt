@@ -1,6 +1,7 @@
 package com.taibahai.hadiths
 
 import android.content.Intent
+import android.view.View
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -99,8 +100,8 @@ class ChapterHadithsActivity3 : BaseActivity() {
     override fun initAdapter() {
         super.initAdapter()
         adapter = AdapterChapterHadiths(showList, object : OnItemClick {
-            override fun onClick(position: Int, type: String?, data: Any?) {
-                super.onClick(position, type, data)
+            override fun onClick(position: Int, type: String?, data: Any?, view: View?) {
+
                 val intent = Intent(context, HadithDetailsActivity4::class.java)
                 val currentPosition=showList[position].id
                 intent.putExtra("ayat_id",currentPosition)

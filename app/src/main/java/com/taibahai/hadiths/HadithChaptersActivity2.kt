@@ -42,10 +42,13 @@ class HadithChaptersActivity2 : BaseActivity() {
     override fun initAdapter() {
         super.initAdapter()
         adapter = AdapterHadithChapter(showList, object : OnItemClick {
-            override fun onClick(position: Int, type: String?, data: Any?) {
-                super.onClick(position, type, data)
-
-
+            override fun onClick(
+                position: kotlin.Int,
+                type: kotlin.String?,
+                data: kotlin.Any?,
+                view: android.view.View?
+            ) {
+                super.onClick(position, type, data, view)
                 val intent = Intent(context, ChapterHadithsActivity3::class.java)
                 intent.putExtra("ayat_id", showList[position].id)
                 intent.putExtra("chapter_name", showList[position].chapter_name)

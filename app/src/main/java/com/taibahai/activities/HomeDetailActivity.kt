@@ -2,14 +2,17 @@ package com.taibahai.activities
 
 
 import androidx.activity.viewModels
-import com.bumptech.glide.Glide
 import com.network.base.BaseActivity
 import com.network.models.ModelComments
+import com.network.models.ModelHome
 import com.network.network.NetworkResult
+import com.network.utils.AppConstants
 import com.network.utils.ProgressLoading.displayLoading
 import com.network.viewmodels.MainViewModelAI
+import com.taibahai.R
 import com.taibahai.adapters.AdapterComments
 import com.taibahai.databinding.ActivityHomeDetailBinding
+import com.taibahai.utils.showOptionsMenu
 import com.taibahai.utils.showToast
 
 class HomeDetailActivity : BaseActivity() {
@@ -17,12 +20,8 @@ class HomeDetailActivity : BaseActivity() {
     val showComments = mutableListOf<ModelComments>()
     lateinit var binding: ActivityHomeDetailBinding
     val viewModel: MainViewModelAI by viewModels()
-    var feedId = ""
     var comment = ""
-    var profile_image=""
-    var noOfLikes=0
-    var noOfComments=0
-    var post=""
+    var model = ModelHome.Data()
 
 
     override fun onCreate() {
@@ -33,15 +32,26 @@ class HomeDetailActivity : BaseActivity() {
     override fun clicks() {
 
 
-
         binding.ivBackArrow.setOnClickListener {
             onBackPressed()
+        }
+        binding.ii.ivDots.setOnClickListener { view ->
+            context.showOptionsMenu(view, R.menu.popup_report) {
+                when (it.itemId) {
+                    R.id.menu_report -> {
+                        viewModel.feedReport(model.feed_id)
+                        true
+                    }
+
+                    else -> false
+                }
+            }
         }
 
         binding.sendBtn.setOnClickListener {
             comment = binding.messageBox.text.toString()
-            if(!comment.isNullOrEmpty()){
-                viewModel.feedComment(feedId, comment)
+            if (!comment.isNullOrEmpty()) {
+                viewModel.feedComment(model.feed_id, comment)
 
             }
         }
@@ -53,24 +63,19 @@ class HomeDetailActivity : BaseActivity() {
             if (it == null) {
                 return@observe
             }
-            displayLoading(false)
+            //displayLoading(false)
+            hideGone(binding.progressBar)
             when (it) {
                 is NetworkResult.Loading -> {
-                    displayLoading(true)
+                    // displayLoading(true)
+                    show(binding.progressBar)
                 }
 
                 is NetworkResult.Success -> {
-                    binding.ii.tvUserName.text=it.data?.data?.user_name
-                    binding.ii.tvDescription.text=it.data?.data?.description
-                    binding.ii.tvTimesAgo.text=it.data?.data?.timesince
-                    binding.ii.likesCounting.text= "${noOfLikes} Likes"
-                    binding.ii.commentCounts.text= "${noOfComments} Comments"
-                    Glide.with(this).load(post).into(binding.ii.ivUploadImage)
-                    Glide.with(this).load(profile_image).into(binding.ii.ivProfileImage)
-                    it?.data?.data?.comments?.let { it1 -> showComments.addAll(it1) }
-                    adapter.notifyDataSetChanged()
-
-
+                    it.data?.data?.comments?.let { it1 -> showComments.addAll(it1) }
+                    if (showComments.isNotEmpty()) {
+                        adapter.notifyItemRangeInserted(0, showComments.size)
+                    }
                 }
 
                 is NetworkResult.Error -> {
@@ -79,8 +84,7 @@ class HomeDetailActivity : BaseActivity() {
             }
         }
 
-
-        viewModel.simpleResponseLiveData.observe(this) {
+        viewModel.reportFeedLiveData.observe(this) {
             if (it == null) {
                 return@observe
             }
@@ -91,7 +95,38 @@ class HomeDetailActivity : BaseActivity() {
                 }
 
                 is NetworkResult.Success -> {
+                    showToast(it.data?.message.toString())
+                    finish()
+                }
+
+                is NetworkResult.Error -> {
+                    showToast(it.message.toString())
+                }
+            }
+        }
+
+        viewModel.simpleResponseLiveData.observe(this) {
+            if (it == null) {
+                return@observe
+            }
+            hideGone(binding.progressBar)
+            when (it) {
+                is NetworkResult.Loading -> {
+                    show(binding.progressBar)
+                }
+
+                is NetworkResult.Success -> {
                     it.data?.message?.let { it1 -> showToast(it1) }
+                    showComments.add(
+                        0, ModelComments(
+                            binding.messageBox.text.toString(),
+                            currentUser?.name.toString(),
+                            currentUser?.image.toString()
+                        )
+                    )
+                    adapter.notifyItemInserted(0)
+                    model.comments += 1
+                    binding.ii.commentCounts.text = "${model.comments} Comments"
                     binding.messageBox.text.clear()
 
                 }
@@ -113,14 +148,10 @@ class HomeDetailActivity : BaseActivity() {
     override fun apiAndArgs() {
         super.apiAndArgs()
         if (bundle != null) {
-            profile_image = intent.getStringExtra("profile_image").toString()
-            feedId = intent.getStringExtra("feedId").toString()
-            noOfLikes = intent.getIntExtra("likes",0)
-            noOfComments = intent.getIntExtra("comments",0)
-            post = intent.getStringExtra("post").toString()
-
+            model = intent.getSerializableExtra(AppConstants.BUNDLE) as ModelHome.Data
+            binding.ii.data = model
         }
-        viewModel.getFeed(feedId)
+        viewModel.getFeed(model.feed_id)
 
     }
 

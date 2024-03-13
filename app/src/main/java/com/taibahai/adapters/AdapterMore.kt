@@ -41,7 +41,7 @@ class AdapterMore(private val context: Context, var showData: MutableList<ModelM
         holder.binding.tvLevel.text = showData[position].level
         holder.binding.tvPackege.text = showData[position].packageName
         val adapter = AdapterMoreLevels(moreData.levelsList, object : OnItemClick {
-            override fun onClick(position: Int, type: String?, data: Any?) {
+            override fun onClick(position: Int, type: String?, data: Any?, view: View?) {
                 navigateToActivity(moreData.levelsList[position])
             }
         })

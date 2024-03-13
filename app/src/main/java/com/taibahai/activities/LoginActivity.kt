@@ -13,7 +13,6 @@ import android.os.Handler
 import android.os.Looper
 import android.provider.MediaStore
 import android.util.Log
-
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
@@ -32,22 +31,22 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FacebookAuthProvider
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.messaging.FirebaseMessaging
 import com.network.base.BaseActivity
 import com.network.network.NetworkResult
+import com.network.network.NetworkUtils
+import com.network.utils.AppClass
+import com.network.utils.AppConstants
 import com.network.utils.ProgressLoading.displayLoading
 import com.network.viewmodels.MainViewModelAI
 import com.taibahai.R
 import com.taibahai.bottom_navigation.BottomNavigation
 import com.taibahai.databinding.ActivityLoginBinding
-import com.taibahai.utils.showToast
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.messaging.FirebaseMessaging
-import com.network.network.NetworkUtils
-import com.network.utils.AppClass
-import com.network.utils.AppConstants
 import com.taibahai.utils.Constants
+import com.taibahai.utils.showToast
 import java.io.BufferedInputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -79,8 +78,6 @@ class LoginActivity : BaseActivity() {
     var deviceID = "123"
 
 
-
-
     override fun onCreate() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -100,9 +97,7 @@ class LoginActivity : BaseActivity() {
             finish()
         } else {
             val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build()
+                .requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build()
             googleSignInClient = GoogleSignIn.getClient(this, gso)
 
         }
@@ -118,7 +113,19 @@ class LoginActivity : BaseActivity() {
         }
 
         binding.clFacebookBtn.setOnClickListener {
-           // signInWithFacebook()
+            // signInWithFacebook()
+        }
+        binding.clGuestBtn.setOnClickListener {
+            viewModel.socialLogin(
+                "abc",
+                "guest",
+                deviceID,
+                "android",
+                "guest@taibahai.com",
+                NetworkUtils.timeZone(),
+                "Guest",
+                "noimg.png"
+            )
         }
     }
 
@@ -160,7 +167,7 @@ class LoginActivity : BaseActivity() {
                     showToast(it.data?.message.toString())
                     AppClass.sharedPref.storeObject(AppConstants.CURRENT_USER, it.data?.data)
                     AppClass.sharedPref.storeString(
-                        AppConstants.ACCESS_TOKEN,it.data?.data?.accesstoken
+                        AppConstants.ACCESS_TOKEN, it.data?.data?.accesstoken
                     )
                     val intent = Intent(this, BottomNavigation::class.java)
                     startActivity(intent)
@@ -201,13 +208,12 @@ class LoginActivity : BaseActivity() {
     private fun firebaseAuthWithGoogle(idToken: String) {
         socialType = "google"
         val credential = GoogleAuthProvider.getCredential(idToken, null)
-        auth.signInWithCredential(credential)
-            .addOnCompleteListener(this) { task ->
+        auth.signInWithCredential(credential).addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
 
                     user = auth.currentUser!!
                     val googleSignInAccount = GoogleSignIn.getLastSignedInAccount(this)
-                     name = googleSignInAccount?.displayName.toString()
+                    name = googleSignInAccount?.displayName.toString()
                     val profileImageUri = googleSignInAccount?.photoUrl
 
 
@@ -309,8 +315,7 @@ class LoginActivity : BaseActivity() {
             // Code for Android versions below 10 (Legacy storage model)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (ContextCompat.checkSelfPermission(
-                        this,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                        this, Manifest.permission.WRITE_EXTERNAL_STORAGE
                     ) != PackageManager.PERMISSION_GRANTED
                 ) {
                     // Request the permission
@@ -336,7 +341,7 @@ class LoginActivity : BaseActivity() {
     private fun uploadFile(fos: OutputStream) {
         fos?.use {
 //            bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, it)
-           // Toast.makeText(this, "Saved to Gallery", Toast.LENGTH_SHORT).show()
+            // Toast.makeText(this, "Saved to Gallery", Toast.LENGTH_SHORT).show()
 
             viewModel.uploadFile(savedImagePath)
         }
@@ -370,9 +375,7 @@ class LoginActivity : BaseActivity() {
     }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
+        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
@@ -390,44 +393,50 @@ class LoginActivity : BaseActivity() {
 
 
     private fun signInWithFacebook() {
-        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("email","public_profile"))
-        LoginManager.getInstance().registerCallback(callbackManager, object :
-            FacebookCallback<LoginResult> {
-            override fun onSuccess(result: LoginResult) {
-                // Check if 'email' permission is granted
-                if (result.recentlyGrantedPermissions.contains("email")) {
-                    // Continue with the login process
-                    handleFacebookAccessToken(result.accessToken)
-                } else {
-                    // Handle the case where 'email' permission is not granted
-                    Toast.makeText(this@LoginActivity, "Email permission not granted", Toast.LENGTH_SHORT).show()
+        LoginManager.getInstance()
+            .logInWithReadPermissions(this, Arrays.asList("email", "public_profile"))
+        LoginManager.getInstance()
+            .registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
+                override fun onSuccess(result: LoginResult) {
+                    // Check if 'email' permission is granted
+                    if (result.recentlyGrantedPermissions.contains("email")) {
+                        // Continue with the login process
+                        handleFacebookAccessToken(result.accessToken)
+                    } else {
+                        // Handle the case where 'email' permission is not granted
+                        Toast.makeText(
+                            this@LoginActivity, "Email permission not granted", Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
-            }
 
 
-            override fun onCancel() {
-                // User canceled the login process
-                Toast.makeText(this@LoginActivity, "Facebook login canceled", Toast.LENGTH_SHORT).show()
-            }
+                override fun onCancel() {
+                    // User canceled the login process
+                    Toast.makeText(
+                        this@LoginActivity,
+                        "Facebook login canceled",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
 
-            override fun onError(error: FacebookException) {
-                Toast.makeText(this@LoginActivity, "Facebook login error", Toast.LENGTH_SHORT).show()
-            }
+                override fun onError(error: FacebookException) {
+                    Toast.makeText(this@LoginActivity, "Facebook login error", Toast.LENGTH_SHORT)
+                        .show()
+                }
 
 
-        })
+            })
     }
 
     private fun handleFacebookAccessToken(token: AccessToken) {
         val credential = FacebookAuthProvider.getCredential(token.token)
-        auth.signInWithCredential(credential)
-            .addOnCompleteListener(this) { task ->
+        auth.signInWithCredential(credential).addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     // Facebook authentication successful
                     val user = auth.currentUser
-                     name = user?.displayName ?: ""
+                    name = user?.displayName ?: ""
                     val profileImageUri = user?.photoUrl
-
 
 
                     val myExecutor = Executors.newSingleThreadExecutor()
@@ -448,7 +457,8 @@ class LoginActivity : BaseActivity() {
 
                 } else {
                     // If sign in fails, display a message to the user.
-                    Toast.makeText(this, "Facebook authentication failed", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Facebook authentication failed", Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
     }
@@ -464,12 +474,6 @@ class LoginActivity : BaseActivity() {
             AppClass.sharedPref?.storeString(Constants.DEVICE_ID, deviceID)
         })
     }
-
-
-
-
-
-
 
 
 }

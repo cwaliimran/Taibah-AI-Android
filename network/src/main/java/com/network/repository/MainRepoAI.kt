@@ -87,12 +87,19 @@ class MainRepoAI : BaseApiResponse() {
         postFeedMutableLiveData.value = null
         postFeedMutableLiveData.postValue(NetworkResult.Loading())
         postFeedMutableLiveData.postValue(safeApiCall {
-            apiService.postFeed(description, file)
+            if (file.isEmpty()){
+                apiService.postFeedNoImage(description)
+            }else{
+                apiService.postFeed(description, file)
+            }
         })
     }
 
 
     val simpleResponseMutableLiveData: SingleLiveEvent<NetworkResult<SimpleResponse>> by lazy {
+        SingleLiveEvent()
+    }
+    val logoutMutableLiveData: SingleLiveEvent<NetworkResult<SimpleResponse>> by lazy {
         SingleLiveEvent()
     }
 
@@ -130,11 +137,16 @@ class MainRepoAI : BaseApiResponse() {
         })
     }
 
+
+    val reportFeedMutableLiveData: SingleLiveEvent<NetworkResult<SimpleResponse>> by lazy {
+        SingleLiveEvent()
+    }
+
     suspend fun feedReport(feedId:String)
     {
-        simpleResponseMutableLiveData.value = null
-        simpleResponseMutableLiveData.postValue(NetworkResult.Loading())
-        simpleResponseMutableLiveData.postValue(safeApiCall {
+        reportFeedMutableLiveData.value = null
+        reportFeedMutableLiveData.postValue(NetworkResult.Loading())
+        reportFeedMutableLiveData.postValue(safeApiCall {
             apiService.feedReport(feedId)
         })
     }
@@ -319,11 +331,12 @@ class MainRepoAI : BaseApiResponse() {
     }
 
 
+
     suspend fun logout(device_id: String,device_type: String)
     {
-        simpleResponseMutableLiveData.value = null
-        simpleResponseMutableLiveData.postValue(NetworkResult.Loading())
-        simpleResponseMutableLiveData.postValue(safeApiCall {
+        logoutMutableLiveData.value = null
+        logoutMutableLiveData.postValue(NetworkResult.Loading())
+        logoutMutableLiveData.postValue(safeApiCall {
             apiService.logout(device_id, device_type)
         })
     }

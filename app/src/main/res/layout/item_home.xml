@@ -4,9 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
-            name="model"
+            name="data"
             type="com.network.models.ModelHome.Data" />
+
+        <import type="com.taibahai.utils.BindingUtils" />
+
+        <import type="android.view.View" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -16,20 +22,20 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
 
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="20dp">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cvImage"
@@ -45,6 +51,7 @@
                         android:id="@+id/ivProfileImage"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
+                        android:loadImage="@{data.user_image}"
                         android:scaleType="centerCrop" />
                 </androidx.cardview.widget.CardView>
 
@@ -63,42 +70,43 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins"
-                        android:text="@string/dash"
-                        tools:text="Hassan Ali"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
+                        android:text="@{data.user_name, default=``}"
                         android:textColor="@color/black_russian"
                         android:textSize="16sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="Hassan Ali" />
 
                     <TextView
                         android:id="@+id/tvTimesAgo"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/poppins"
-                        android:text="@string/dash"
-                        tools:text="2 hours ago"
                         android:layout_marginEnd="20dp"
+                        android:fontFamily="@font/poppins"
+                        android:text="@{data.timesince, default=``}"
                         android:textColor="@color/silver"
                         android:textSize="14sp"
                         app:layout_constraintEnd_toStartOf="@+id/ivDots"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tvUserName" />
+                        app:layout_constraintTop_toBottomOf="@id/tvUserName"
+                        tools:text="2 hours ago" />
 
                     <ImageView
                         android:id="@+id/ivDots"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:padding="10dp"
                         android:src="@drawable/dots_black"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageView
                         android:id="@+id/ivDelete"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:src="@drawable/delete"
-                        android:visibility="invisible"
+                        android:visibility="gone"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -110,13 +118,14 @@
                 android:id="@+id/ivUploadImage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="10dp"
                 android:adjustViewBounds="true"
-                android:layout_marginHorizontal="20dp"
-                android:src="@drawable/rectangle_92"
-                app:layout_constraintTop_toBottomOf="@id/constraintLayout"/>
+                android:loadImage="@{data.feed_attachments != null &amp;&amp; data.feed_attachments.size() > 0 ? data.feed_attachments[0].file : null}"
+                android:visibility="@{data.feed_attachments != null &amp;&amp; data.feed_attachments.size() > 0 ? View.VISIBLE : View.GONE}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/constraintLayout" />
 
             <TextView
                 android:id="@+id/tvDescription"
@@ -125,39 +134,41 @@
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="20dp"
                 android:fontFamily="@font/poppins"
-                android:text="Discover the spiritual depths and wisdom that illuminate your path with insights on Islamicteachings and practices."
+                android:text="@{data.description, default=``}"
                 android:textColor="@color/black"
-                android:textSize="14dp"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/ivUploadImage" />
+                app:layout_constraintTop_toBottomOf="@id/ivUploadImage"
+                tools:text="Discover the spiritual depths and wisdom that illuminate your path with insights on Islamicteachings and practices." />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/clLikes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintStart_toEndOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginTop="10dp"
                 android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvDescription">
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent">
+                    app:layout_constraintTop_toTopOf="parent">
+
                     <TextView
                         android:id="@+id/likesCounting"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text=""
-                        android:fontFamily="@font/poppins"
-                        android:textSize="14sp"
-                        android:textColor="@color/silver"
+                        android:drawableStart="@drawable/likes_icon"
                         android:drawablePadding="10dp"
-                        android:drawableStart="@drawable/likes_icon"/>
+                        android:fontFamily="@font/poppins"
+                        android:text="@{data.likes+``, default=``}"
+                        android:textColor="@color/silver"
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/commentCounts"
@@ -166,7 +177,7 @@
                         android:layout_alignParentEnd="true"
                         android:drawablePadding="10dp"
                         android:fontFamily="@font/poppins"
-                        android:text=""
+                        android:text="@{data.comments+``, default=``}"
                         android:textColor="@color/silver"
                         android:textSize="14sp" />
                 </RelativeLayout>
@@ -177,73 +188,72 @@
                 android:id="@+id/view"
                 android:layout_width="match_parent"
                 android:layout_height="1.5dp"
-                app:layout_constraintTop_toBottomOf="@id/clLikes"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:background="#F7F7F9"
                 android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="10dp"/>
+                android:layout_marginTop="10dp"
+                android:background="#F7F7F9"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/clLikes" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraint"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/view"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="20dp">
+                android:layout_marginTop="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/view">
 
                 <RelativeLayout
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
                         android:id="@+id/tvLike"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Like"
-                        android:fontFamily="@font/poppins"
-                        android:textSize="16dp"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
-                        android:textColor="@color/silver"
                         android:drawableStart="@drawable/like_2"
-                        android:drawablePadding="10dp"/>
+                        android:drawablePadding="10dp"
+                        android:fontFamily="@font/poppins"
+                        android:text="Like"
+                        android:textColor="@color/silver"
+                        android:textSize="16dp" />
 
                     <TextView
                         android:id="@+id/tvAddComment"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Comment"
-                        android:textSize="16dp"
-                        android:visibility="visible"
-                        android:fontFamily="@font/poppins"
-                        android:layout_alignParentEnd="true"
-                        android:drawablePadding="10dp"
                         android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
+                        android:drawableStart="@drawable/comment"
+                        android:drawablePadding="10dp"
+                        android:fontFamily="@font/poppins"
+                        android:text="Comment"
                         android:textColor="@color/silver"
-                        android:drawableStart="@drawable/comment"/>
+                        android:textSize="16dp"
+                        android:visibility="visible" />
 
                 </RelativeLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-           <!-- <View
-                android:layout_width="match_parent"
-                android:layout_height="10dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:background="@color/lightgrey"
-                android:layout_marginTop="10dp"
-                app:layout_constraintTop_toBottomOf="@id/constraint"/>-->
+            <!-- <View
+                 android:layout_width="match_parent"
+                 android:layout_height="10dp"
+                 app:layout_constraintStart_toStartOf="parent"
+                 app:layout_constraintEnd_toEndOf="parent"
+                 android:background="@color/lightgrey"
+                 android:layout_marginTop="10dp"
+                 app:layout_constraintTop_toBottomOf="@id/constraint"/>-->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
