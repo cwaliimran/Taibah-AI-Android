@@ -10,6 +10,7 @@ import com.network.models.ModelDailyAlert
 import com.network.models.ModelGetFeeds
 import com.network.models.ModelHome
 import com.network.models.ModelInheritanceLaw
+import com.network.models.ModelNotifications
 import com.network.models.ModelPostFeed
 import com.network.models.ModelPrivacyTerms
 import com.network.models.ModelScholars
@@ -29,6 +30,12 @@ class MainViewModelAI constructor(application: Application) : AndroidViewModel(a
 
     val simpleResponseLiveData: MutableLiveData<NetworkResult<SimpleResponse>>
         get() = repository.simpleResponseMutableLiveData
+
+    val likeLiveData: MutableLiveData<NetworkResult<SimpleResponse>>
+        get() = repository.likeMutableLiveData
+
+    val deleteFeedLiveData: MutableLiveData<NetworkResult<SimpleResponse>>
+            get() = repository.deleteFeedMutableLiveData
 
     val logoutLiveData: MutableLiveData<NetworkResult<SimpleResponse>>
         get() = repository.logoutMutableLiveData
@@ -91,6 +98,13 @@ class MainViewModelAI constructor(application: Application) : AndroidViewModel(a
     {
         viewModelScope.launch {
             repository.putLike(feedId)
+        }
+    }
+
+    fun deleteFeed(feedId: String)
+    {
+        viewModelScope.launch {
+            repository.deleteFeed(feedId)
         }
     }
 
@@ -245,6 +259,15 @@ class MainViewModelAI constructor(application: Application) : AndroidViewModel(a
     {
         viewModelScope.launch {
             repository.upcoming()
+        }
+    }
+    val notificationsLiveData: MutableLiveData<NetworkResult<ModelNotifications>>
+        get() = repository.notificationsMutableLiveData
+
+    fun notifications()
+    {
+        viewModelScope.launch {
+            repository.notifications()
         }
     }
 

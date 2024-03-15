@@ -84,7 +84,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="20dp"
                         android:fontFamily="@font/poppins"
-                        android:text="@{data.timesince, default=``}"
                         android:textColor="@color/silver"
                         android:textSize="14sp"
                         app:layout_constraintEnd_toStartOf="@+id/ivDots"
@@ -177,7 +176,8 @@
                         android:layout_alignParentEnd="true"
                         android:drawablePadding="10dp"
                         android:fontFamily="@font/poppins"
-                        android:text="@{data.comments+``, default=``}"
+                        tools:text="@string/dash"
+                        android:text="@{data.comments+` Comments`, default=``}"
                         android:textColor="@color/silver"
                         android:textSize="14sp" />
                 </RelativeLayout>
@@ -219,12 +219,13 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
-                        android:drawableStart="@drawable/like_2"
                         android:drawablePadding="10dp"
+                        app:drawableStartFromBoolean="@{data._like}"
                         android:fontFamily="@font/poppins"
                         android:text="Like"
                         android:textColor="@color/silver"
-                        android:textSize="16dp" />
+                        android:textSize="16sp"
+                        app:drawableStartCompat="@drawable/like_2" />
 
                     <TextView
                         android:id="@+id/tvAddComment"

@@ -1,12 +1,18 @@
 package com.taibahai.activities
 
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.view.LayoutInflater
 import android.view.View
+import android.view.Window
+import android.widget.LinearLayout
 import androidx.activity.viewModels
-import androidx.core.content.ContentProviderCompat.requireContext
 import com.bumptech.glide.Glide
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
+import com.google.android.play.integrity.internal.t
 import com.network.base.BaseActivity
 import com.network.interfaces.OnItemClick
 import com.network.models.ModelUser
@@ -19,27 +25,26 @@ import com.network.viewmodels.MainViewModelAI
 import com.taibahai.R
 import com.taibahai.adapters.AdapterHome
 import com.taibahai.databinding.ActivityMyProfileBinding
+import com.taibahai.databinding.DialogHistoryBinding
 import com.taibahai.utils.Constants
 import com.taibahai.utils.genericDialog
 import com.taibahai.utils.showToast
 
 class MyProfileActivity : BaseActivity() {
-    lateinit var binding:ActivityMyProfileBinding
+    lateinit var binding: ActivityMyProfileBinding
     lateinit var adapter: AdapterHome
     private var profileFeedList: MutableList<com.network.models.ModelHome.Data> = mutableListOf()
-    val viewModel : MainViewModelAI by viewModels()
+    val viewModel: MainViewModelAI by viewModels()
     var currentItemAction = -1
 
 
-
     override fun onCreate() {
-        binding=ActivityMyProfileBinding.inflate(layoutInflater)
+        binding = ActivityMyProfileBinding.inflate(layoutInflater)
         binding.appbar.tvTitle.setText("My profile")
         binding.appbar.ivLeft.setImageDrawable(resources.getDrawable(R.drawable.arrow_back_24))
         binding.appbar.ivRight.setImageDrawable(resources.getDrawable(R.drawable.pen_new_square))
         loadAd()
         setContentView(binding.root)
-
 
 
     }
@@ -55,8 +60,8 @@ class MyProfileActivity : BaseActivity() {
                 handleGuestLogic()
                 return@setOnClickListener
             }
-                val intent = Intent(this, EditProfileActivity::class.java)
-                startActivity(intent)
+            val intent = Intent(this, EditProfileActivity::class.java)
+            startActivity(intent)
         }
     }
 
@@ -76,9 +81,10 @@ class MyProfileActivity : BaseActivity() {
                     showToast(it.data?.message.toString())
                     val profileData: ModelUser.Data = it.data!!.data
 
-                        binding.tvName.text= profileData.name
-                        binding.tvEmail.text=profileData.email
-                        Glide.with(this).load(profileData.image).placeholder(R.drawable.splashlogo).into(binding.ivProfileImage)
+                    binding.tvName.text = profileData.name
+                    binding.tvEmail.text = profileData.email
+                    Glide.with(this).load(profileData.image).placeholder(R.drawable.splashlogo)
+                        .into(binding.ivProfileImage)
 
                     profileFeedList.addAll(profileData.feed)
                     adapter.notifyDataSetChanged()
@@ -91,7 +97,6 @@ class MyProfileActivity : BaseActivity() {
             }
         }
 
-        //only used for likes
         viewModel.simpleResponseLiveData.observe(this) {
             if (it == null) {
                 return@observe
@@ -118,10 +123,30 @@ class MyProfileActivity : BaseActivity() {
                 }
             }
         }
+        viewModel.deleteFeedLiveData.observe(this) {
+            if (it == null) {
+                return@observe
+            }
+            displayLoading(false)
+            when (it) {
+                is NetworkResult.Loading -> {
+                    displayLoading(true)
+                }
+
+                is NetworkResult.Success -> {
+                   adapter.notifyItemRemoved(currentItemAction)
+
+                }
+
+                is NetworkResult.Error -> {
+                    showToast(it.message.toString())
+                }
+            }
+        }
     }
 
     override fun initAdapter() {
-        adapter = AdapterHome(profileFeedList,isProfileFeed = true,object :OnItemClick{
+        adapter = AdapterHome(profileFeedList, isProfileFeed = true, object : OnItemClick {
             override fun onClick(position: Int, type: String?, data: Any?, view: View?) {
 
                 if (isGuest()) {
@@ -141,20 +166,21 @@ class MyProfileActivity : BaseActivity() {
                         intent.putExtra(AppConstants.BUNDLE, profileFeedList[position])
                         startActivity(intent)
                     }
-                    "delete" -> {
-                            //delete post
 
+                    "delete" -> {
+                        //delete post
+                        viewModel.deleteFeed(data.toString())
                     }
+
                     else -> {}
                 }
-                
+
             }
-        }){data, menuItem ->
+        }) { data, menuItem ->
             false
         }
         binding.rvProfile.adapter = adapter
     }
-
 
 
     private fun loadAd() {
@@ -183,7 +209,7 @@ class MyProfileActivity : BaseActivity() {
     }
 
     val handleGuestLogic: () -> Unit = {
-      genericDialog(object : OnItemClick {
+        genericDialog(object : OnItemClick {
             override fun onClick(position: Int, type: String?, data: Any?, view: View?) {
                 super.onClick(position, type, data, view)
                 AppClass.sharedPref.clearAllPreferences()
@@ -194,4 +220,10 @@ class MyProfileActivity : BaseActivity() {
             }
         })
     }
+
+
+            private fun confirmDelete() {
+          }
+
+
 }

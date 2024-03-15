@@ -7,9 +7,10 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import com.github.marlonlom.utilities.timeago.TimeAgo
 import com.network.interfaces.OnItemClick
 import com.network.models.ModelHome
+import com.network.utils.convertDateToLong
 import com.taibahai.R
 import com.taibahai.databinding.ItemHomeBinding
 import com.taibahai.utils.showOptionsMenu
@@ -45,31 +46,12 @@ class AdapterHome(
         return showData.size
     }
 
-    @SuppressLint("ResourceAsColor", "SuspiciousIndentation", "NotifyDataSetChanged")
     override fun onBindViewHolder(holder: ViewHolder, @SuppressLint("RecyclerView") position: Int) {
         val userData = showData[position]
         holder.binding.data = userData
 
-        Glide.with(holder.itemView.context).load(userData.user_image)
-            .into(holder.binding.ivProfileImage)
-        holder.binding.tvUserName.text = userData.user_name
-        holder.binding.tvTimesAgo.text = userData.timesince
-        holder.binding.tvDescription.text = userData.description
-        holder.binding.likesCounting.text = userData.likes.toString()
-        holder.binding.commentCounts.text = "${userData.comments} Comments"
-        Glide.with(holder.itemView.context).load(userData.feed_attachments.firstOrNull()?.file)
-            .into(holder.binding.ivUploadImage)
+        holder.binding.tvTimesAgo.text = TimeAgo.using(userData.timesince.convertDateToLong())
 
-        if (userData.likes == 1) {
-            holder.binding.tvLike.setCompoundDrawablesWithIntrinsicBounds(R.drawable.like, 0, 0, 0)
-        } else {
-            holder.binding.tvLike.setCompoundDrawablesWithIntrinsicBounds(
-                R.drawable.like_2,
-                0,
-                0,
-                0
-            )
-        }
         if (isProfileFeed) {
             holder.binding.ivDots.visibility = View.GONE
             holder.binding.ivDelete.visibility = View.VISIBLE

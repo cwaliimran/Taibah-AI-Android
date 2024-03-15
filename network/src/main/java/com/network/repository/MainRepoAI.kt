@@ -6,6 +6,7 @@ import com.network.models.ModelDailyAlert
 import com.network.models.ModelGetFeeds
 import com.network.models.ModelHome
 import com.network.models.ModelInheritanceLaw
+import com.network.models.ModelNotifications
 import com.network.models.ModelPostFeed
 import com.network.models.ModelPrivacyTerms
 import com.network.models.ModelScholars
@@ -99,6 +100,12 @@ class MainRepoAI : BaseApiResponse() {
     val simpleResponseMutableLiveData: SingleLiveEvent<NetworkResult<SimpleResponse>> by lazy {
         SingleLiveEvent()
     }
+    val likeMutableLiveData: SingleLiveEvent<NetworkResult<SimpleResponse>> by lazy {
+        SingleLiveEvent()
+    }
+    val deleteFeedMutableLiveData: SingleLiveEvent<NetworkResult<SimpleResponse>> by lazy {
+        SingleLiveEvent()
+    }
     val logoutMutableLiveData: SingleLiveEvent<NetworkResult<SimpleResponse>> by lazy {
         SingleLiveEvent()
     }
@@ -115,10 +122,19 @@ class MainRepoAI : BaseApiResponse() {
 
     suspend fun putLike(feedId: String)
     {
-        simpleResponseMutableLiveData.value = null
-        simpleResponseMutableLiveData.postValue(NetworkResult.Loading())
-        simpleResponseMutableLiveData.postValue(safeApiCall {
+        likeMutableLiveData.value = null
+        likeMutableLiveData.postValue(NetworkResult.Loading())
+        likeMutableLiveData.postValue(safeApiCall {
             apiService.putLike(feedId)
+        })
+    }
+
+        suspend fun deleteFeed(feedId: String)
+    {
+        deleteFeedMutableLiveData.value = null
+        deleteFeedMutableLiveData.postValue(NetworkResult.Loading())
+        deleteFeedMutableLiveData.postValue(safeApiCall {
+            apiService.deleteFeed(feedId)
         })
     }
 
@@ -321,12 +337,26 @@ class MainRepoAI : BaseApiResponse() {
         SingleLiveEvent()
     }
 
+
     suspend fun upcoming()
     {
         upcomingMutableLiveData.value = null
         upcomingMutableLiveData.postValue(NetworkResult.Loading())
         upcomingMutableLiveData.postValue(safeApiCall {
             apiService.upcoming()
+        })
+    }
+
+    val notificationsMutableLiveData: SingleLiveEvent<NetworkResult<ModelNotifications>> by lazy {
+        SingleLiveEvent()
+    }
+
+    suspend fun notifications()
+    {
+        notificationsMutableLiveData.value = null
+        notificationsMutableLiveData.postValue(NetworkResult.Loading())
+        notificationsMutableLiveData.postValue(safeApiCall {
+            apiService.notifications()
         })
     }
 

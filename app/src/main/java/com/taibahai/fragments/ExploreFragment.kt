@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import androidx.core.text.HtmlCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import com.facebook.appevents.codeless.internal.ViewHierarchy.setOnClickListener
 import com.network.base.BaseFragment
 import com.network.models.ModelToday
 import com.network.network.NetworkResult
@@ -22,6 +23,7 @@ import com.taibahai.R
 import com.taibahai.activities.QuranChaptersActivity
 import com.taibahai.databinding.FragmentExploreBinding
 import com.taibahai.hadiths.HadithBooksActivity1
+import com.taibahai.utils.ShareImage.getBitmapFromView
 import com.taibahai.utils.showToast
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -60,6 +62,10 @@ class ExploreFragment : BaseFragment() {
         binding.clHadith.setOnClickListener {
             val intent = Intent(requireContext(), HadithBooksActivity1::class.java)
             startActivity(intent)
+        }
+
+        binding.inTodayVerse.ivShare.setOnClickListener {
+            requireActivity().getBitmapFromView(binding.inTodayVerse.cardTodayVerse)
         }
     }
 
@@ -125,9 +131,9 @@ class ExploreFragment : BaseFragment() {
 
     override fun apiAndArgs() {
         super.apiAndArgs()
-        viewModel.today()
-        /*  val todayDate = Date()
-        val savedData =AppClass.sharedPref.getObject(AppConstants.TODAY, ModelToday::class.java)
+       // viewModel.today()
+          val todayDate = Date()
+        val savedData =AppClass.sharedPref.getObject(AppConstants.TODAY, ModelToday.Data::class.java)
         val savedTodayDate = AppClass.sharedPref.getString(AppConstants.CURRENT_DATE,"")
 
         val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
@@ -140,10 +146,10 @@ class ExploreFragment : BaseFragment() {
         else {
             if (savedData != null)
             {
-                binding.inTodayVerse.tvArbiAyat.text = savedData.data.quran.text
-                binding.inTodayVerse.tvTranslation.text = savedData.data.quran.quran_translation_en
-                binding.inTodayVerse.tvSurah.text = savedData.data.quran.transliteration_en
-                val transliteration = savedData.data.quran.quran_transliteration_en
+                binding.inTodayVerse.tvArbiAyat.text = savedData.quran.text
+                binding.inTodayVerse.tvTranslation.text = savedData.quran.quran_translation_en
+                binding.inTodayVerse.tvSurah.text = savedData.quran.transliteration_en
+                val transliteration = savedData.quran.quran_transliteration_en
                 if (transliteration != null)
 
                 {
@@ -158,9 +164,9 @@ class ExploreFragment : BaseFragment() {
                 }
 
 
-                binding.inTodayHadith.tvArbiHadith.text = savedData.data.hadith.arabic
-                binding.inTodayHadith.tvTranslation.text = savedData.data.hadith.english_translation
-                val reference = savedData.data.hadith.reference
+                binding.inTodayHadith.tvArbiHadith.text = savedData.hadith.arabic
+                binding.inTodayHadith.tvTranslation.text = savedData.hadith.english_translation
+                val reference = savedData.hadith.reference
                 if (reference != null) {
                     val parts = reference.split("\t : ")
                     if (parts.size > 1) {
@@ -169,7 +175,6 @@ class ExploreFragment : BaseFragment() {
                     }
                 }
             }
-
 
         }
 
@@ -187,6 +192,5 @@ class ExploreFragment : BaseFragment() {
         return cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) && cal1.get(Calendar.MONTH) == cal2.get(
             Calendar.MONTH
         ) && cal1.get(Calendar.DAY_OF_MONTH) == cal2.get(Calendar.DAY_OF_MONTH)
-    }*/
     }
 }

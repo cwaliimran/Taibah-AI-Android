@@ -124,8 +124,7 @@ class HomeFragment : BaseFragment() {
             }
         }
 
-        //only used for likes
-        viewModel.simpleResponseLiveData.observe(this) {
+        viewModel.likeLiveData.observe(this) {
             if (it == null) {
                 return@observe
             }
@@ -136,16 +135,14 @@ class HomeFragment : BaseFragment() {
                 }
 
                 is NetworkResult.Success -> {
-                    it.data?.message?.let { it1 -> showToast(it1) }
-                    // TODO: handle likes 
-                    if (showList[currentItemAction].likes == 1) {
-                        showList[currentItemAction].likes == 0
-                    } else {
-                        showList[currentItemAction].likes == 1
+                    showList[currentItemAction].is_like = !showList[currentItemAction].is_like
+                    if (showList[currentItemAction].is_like){
+                        showList[currentItemAction].likes+=1
+                    }else{
+                        showList[currentItemAction].likes-=1
                     }
-
+                    adapter.notifyItemChanged(currentItemAction)
                 }
-
                 is NetworkResult.Error -> {
                     showToast(it.message.toString())
                 }
@@ -233,18 +230,18 @@ class HomeFragment : BaseFragment() {
 
         }) { data, menuItem ->
 
-                when (menuItem.itemId) {
-                    R.id.menu_report -> {
-                        if (isGuest()) {
-                            handleGuestLogic()
-                        } else {
-                            viewModel.feedReport(data.feed_id)
-                        }
-                        true
+            when (menuItem.itemId) {
+                R.id.menu_report -> {
+                    if (isGuest()) {
+                        handleGuestLogic()
+                    } else {
+                        viewModel.feedReport(data.feed_id)
                     }
-
-                    else -> false
+                    true
                 }
+
+                else -> false
+            }
         }
         binding.rvHome.adapter = adapter
     }
@@ -254,6 +251,7 @@ class HomeFragment : BaseFragment() {
         viewModel.home(pageno = 1)
 
     }
+
     val handleGuestLogic: () -> Unit = {
         activity?.genericDialog(object : OnItemClick {
             override fun onClick(position: Int, type: String?, data: Any?, view: View?) {

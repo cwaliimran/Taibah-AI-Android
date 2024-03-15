@@ -1,6 +1,6 @@
 package com.network.models
 
-data class ModelNotificaitons(
+data class ModelNotifications(
     var `data`: List<Data> = listOf(),
     var meta: Meta = Meta()
 ) {

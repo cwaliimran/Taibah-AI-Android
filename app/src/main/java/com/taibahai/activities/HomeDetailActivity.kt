@@ -16,9 +16,9 @@ import com.taibahai.utils.showOptionsMenu
 import com.taibahai.utils.showToast
 
 class HomeDetailActivity : BaseActivity() {
+    lateinit var binding: ActivityHomeDetailBinding
     lateinit var adapter: AdapterComments
     val showComments = mutableListOf<ModelComments>()
-    lateinit var binding: ActivityHomeDetailBinding
     val viewModel: MainViewModelAI by viewModels()
     var comment = ""
     var model = ModelHome.Data()
@@ -55,6 +55,9 @@ class HomeDetailActivity : BaseActivity() {
 
             }
         }
+        binding.ii.tvLike.setOnClickListener {
+            viewModel.putLike(model.feed_id)
+        }
     }
 
     override fun initObservers() {
@@ -76,6 +79,9 @@ class HomeDetailActivity : BaseActivity() {
                     if (showComments.isNotEmpty()) {
                         adapter.notifyItemRangeInserted(0, showComments.size)
                     }
+                    model.comments = showComments.size
+                    binding.ii.commentCounts.text = "${model.comments} Comments"
+
                 }
 
                 is NetworkResult.Error -> {
@@ -116,7 +122,6 @@ class HomeDetailActivity : BaseActivity() {
                 }
 
                 is NetworkResult.Success -> {
-                    it.data?.message?.let { it1 -> showToast(it1) }
                     showComments.add(
                         0, ModelComments(
                             binding.messageBox.text.toString(),
@@ -129,6 +134,34 @@ class HomeDetailActivity : BaseActivity() {
                     binding.ii.commentCounts.text = "${model.comments} Comments"
                     binding.messageBox.text.clear()
 
+                }
+
+                is NetworkResult.Error -> {
+                    showToast(it.message.toString())
+                }
+            }
+        }
+
+        //only used for likes
+        viewModel.likeLiveData.observe(this) {
+            if (it == null) {
+                return@observe
+            }
+            displayLoading(false)
+            when (it) {
+                is NetworkResult.Loading -> {
+                    displayLoading(true)
+                }
+
+                is NetworkResult.Success -> {
+                    model.is_like = !model.is_like
+                    if (model.is_like) {
+                        model.likes += 1
+                    } else {
+                        model.likes -= 1
+                    }
+
+                    binding.ii.data = model
                 }
 
                 is NetworkResult.Error -> {

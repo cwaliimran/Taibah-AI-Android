@@ -3,20 +3,29 @@ package com.network.utils
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
+import kotlin.math.abs
 
 
-const val DATE_FORMAT = "yyyy/MM/dd : HH:mm:ss"
+const val DATE_FORMAT = "yyyy-MM-dd HH:mm:ss"
+
+//2022-11-11 13:59:00
+const val INPUT_FORMAT = "yyyy-MM-dd HH:mm:ss"
+const val OUT_PUT_DATE_FORMAT = "dd-MM-yyyy"
+const val OUT_PUT_TIME_FORMAT = "hh:mm a"
 fun Long.convertLongToDate(): String {
     val date = Date(this)
     val format = SimpleDateFormat(DATE_FORMAT, Locale.getDefault())
     return format.format(date)
 }
 
-//2022-11-11 13:59:00
-const val INPUT_FORMAT = "yyyy-MM-dd HH:mm:ss"
-const val OUT_PUT_DATE_FORMAT = "dd-MM-yyyy"
-const val OUT_PUT_TIME_FORMAT = "hh:mm a"
 
+
+fun String.convertDateToLong(): Long {
+    val sdf = SimpleDateFormat(DATE_FORMAT, Locale.getDefault())
+    val date = sdf.parse(this)
+    return date?.time ?: 0L
+}
 //format date
 fun String.formatDate(inputFormat: String, outputFormat: String): String {
     return try {
@@ -53,3 +62,6 @@ fun String.convertUtcToLocal(): String {
 
     return localDateTime?.let { localDateFormat.format(it) } ?: ""
 }
+
+
+
