@@ -62,7 +62,7 @@ class SettingActivity : BaseActivity() {
         showList.add(ModelSettings(R.drawable.notification, "Notifications"))
         showList.add(ModelSettings(R.drawable.aivoice, "AI Voice Feedback"))
         showList.add(ModelSettings(R.drawable.upcoming, "Upcoming Features"))
-        showList.add(ModelSettings(R.drawable.share, "Share"))
+        showList.add(ModelSettings(R.drawable.share_icon, "Share"))
         showList.add(ModelSettings(R.drawable.rate, "Rate App"))
         showList.add(ModelSettings(R.drawable.aboutus, "About Us"))
         showList.add(ModelSettings(R.drawable.pp, "Privacy Policy"))

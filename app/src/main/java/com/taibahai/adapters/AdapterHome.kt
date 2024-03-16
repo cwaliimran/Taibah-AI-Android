@@ -55,8 +55,7 @@ class AdapterHome(
         if (isProfileFeed) {
             holder.binding.ivDots.visibility = View.GONE
             holder.binding.ivDelete.visibility = View.VISIBLE
-
-                holder.binding.ivDelete.setOnClickListener {
+            holder.binding.ivDelete.setOnClickListener {
                 listener.onClick(position, "delete", userData.feed_id)
             }
         } else {
