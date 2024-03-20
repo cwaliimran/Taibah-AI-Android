@@ -17,7 +17,7 @@ class AdapterHadithBooks(var showData: MutableList<ModelHadithBooks.Data>, var l
         return AdapterHadithBooks.ViewHolder(binding)
     }
 
-    fun setDate(list: ArrayList<ModelHadithBooks.Data>) {
+    fun setData(list: ArrayList<ModelHadithBooks.Data>) {
         showData = list
         notifyDataSetChanged()
     }

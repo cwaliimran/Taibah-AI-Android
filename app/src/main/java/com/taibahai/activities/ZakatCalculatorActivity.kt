@@ -24,7 +24,7 @@ class ZakatCalculatorActivity : BaseActivity() {
         }
 
         binding.appbar.ivLeft.setOnClickListener {
-            onBackPressed()
+            onBackPressedDispatcher.onBackPressed()
         }
     }
 

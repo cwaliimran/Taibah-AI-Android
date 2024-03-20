@@ -35,7 +35,7 @@ class HadithDetailsActivity4 : BaseActivity() {
 
     override fun clicks() {
         binding.ivBack.setOnClickListener {
-            onBackPressed()
+            onBackPressedDispatcher.onBackPressed()
         }
 
         binding.ivNext.setOnClickListener {

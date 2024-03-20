@@ -89,19 +89,14 @@ class ExploreFragment : BaseFragment() {
                     AppClass.sharedPref.storeObject(AppConstants.TODAY, it.data?.data)
                     AppClass.sharedPref.storeString(AppConstants.CURRENT_DATE, formattedTodayDate)
                     binding.inTodayVerse.tvArbiAyat.text = it.data?.data?.quran?.text
+                    binding.inTodayVerse.tvCount.text = it.data?.data?.quran?.verse_number
                     binding.inTodayVerse.tvTranslation.text =
                         it.data?.data?.quran?.quran_translation_en
                     binding.inTodayVerse.tvSurah.text = it.data?.data?.quran?.transliteration_en
                     val transliteration = it.data?.data?.quran?.quran_transliteration_en
                     if (transliteration != null) {
                         val spannedText: Spanned =
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                                Html.fromHtml(transliteration, Html.FROM_HTML_MODE_LEGACY)
-                            } else {
-                                @Suppress("DEPRECATION") HtmlCompat.fromHtml(
-                                    transliteration, HtmlCompat.FROM_HTML_MODE_LEGACY
-                                )
-                            }
+                            Html.fromHtml(transliteration, Html.FROM_HTML_MODE_LEGACY)
 
                         binding.inTodayVerse.tvEnglishAyat.text = spannedText
                     }
@@ -147,6 +142,7 @@ class ExploreFragment : BaseFragment() {
             if (savedData != null)
             {
                 binding.inTodayVerse.tvArbiAyat.text = savedData.quran.text
+                binding.inTodayVerse.tvCount.text = savedData.quran.verse_number
                 binding.inTodayVerse.tvTranslation.text = savedData.quran.quran_translation_en
                 binding.inTodayVerse.tvSurah.text = savedData.quran.transliteration_en
                 val transliteration = savedData.quran.quran_transliteration_en

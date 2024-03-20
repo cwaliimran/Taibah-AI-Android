@@ -58,7 +58,7 @@ class ChapterHadithsActivity3 : BaseActivity() {
         })
 
         binding.ivBack.setOnClickListener {
-            onBackPressed()
+            onBackPressedDispatcher.onBackPressed()
         }
     }
 

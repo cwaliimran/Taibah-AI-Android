@@ -41,8 +41,8 @@
 
                     <ImageView
                         android:id="@+id/ivQuran"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
                         android:padding="10dp"
                         android:src="@drawable/frame_6981"
                         app:layout_constraintStart_toStartOf="parent"
@@ -106,8 +106,8 @@
 
                     <ImageView
                         android:id="@+id/ivHadith"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
                         android:padding="10dp"
                         android:src="@drawable/frame_6981_2"
                         app:layout_constraintStart_toStartOf="parent"

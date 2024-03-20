@@ -12,6 +12,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.Toast
@@ -19,6 +20,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.network.base.BaseFragment
 import com.network.interfaces.OnItemClick
 import com.network.utils.AppClass
@@ -70,7 +72,8 @@ class SearchFragment : BaseFragment(), OnItemClick {
     private var isArchived: Boolean = false
     private var isAudioPlaying: Boolean = false
     private lateinit var messageAdapter: AdapterAISearch
-
+    private lateinit var bottomNavigationView: BottomNavigationView
+    private var isKeyboardOpen = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -79,12 +82,44 @@ class SearchFragment : BaseFragment(), OnItemClick {
         binding = DataBindingUtil.inflate<FragmentSearchBinding>(
             inflater, R.layout.fragment_search, container, false
         )
+        bottomNavigationView = activity?.findViewById(R.id.bottomNavigationView) ?: return binding.root
 
-        return binding.getRoot()
+        // Add a global layout listener to monitor layout changes, including keyboard visibility changes
+        binding.root.viewTreeObserver.addOnGlobalLayoutListener {
+            // Check if the keyboard is open or closed
+            val screenHeight = binding.getRoot().rootView.height
+            val heightDiff = screenHeight - binding.getRoot().height
+            val keyboardOpenThreshold = screenHeight / 3
+
+            if (heightDiff > keyboardOpenThreshold) {
+                // Keyboard is open
+                if (!isKeyboardOpen) {
+                    isKeyboardOpen = true
+                    hideBottomNavigation()
+                }
+            } else {
+                // Keyboard is closed
+                if (isKeyboardOpen) {
+                    isKeyboardOpen = false
+                    showBottomNavigation()
+                }
+            }
+        }
+        return binding.root
+    }
+
+
+    private fun hideBottomNavigation() {
+        bottomNavigationView.visibility = View.GONE
+    }
+
+    private fun showBottomNavigation() {
+        bottomNavigationView.visibility = View.VISIBLE
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
 
     }
 
@@ -483,7 +518,7 @@ class SearchFragment : BaseFragment(), OnItemClick {
         showMessagePopups.add(ModelChatPopups("Business Idea"))
         showMessagePopups.add(ModelChatPopups("Tell Me a Joke"))
 
-        adapterMessagePopups.setDate(showMessagePopups)
+        adapterMessagePopups.setData(showMessagePopups)
         binding.rvTopMessagePopups.adapter = adapterMessagePopups
 
     }

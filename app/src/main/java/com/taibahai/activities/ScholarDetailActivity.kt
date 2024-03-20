@@ -26,7 +26,7 @@ class ScholarDetailActivity : BaseActivity() {
 
     override fun clicks() {
         binding.ivBack.setOnClickListener {
-            onBackPressed()
+            onBackPressedDispatcher.onBackPressed()
         }
     }
 

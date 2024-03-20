@@ -117,7 +117,7 @@
                     android:layout_height="wrap_content"
                     tools:text="Sahih al-Bukhari"
                     android:text="@string/dash"
-                    android:drawableStart="@drawable/mask_group"
+                    android:drawableStart="@drawable/book_layer"
                     android:drawablePadding="10dp"
                     android:fontFamily="@font/poppins"
                     android:textSize="14sp"

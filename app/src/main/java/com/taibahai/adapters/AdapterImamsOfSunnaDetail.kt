@@ -15,7 +15,7 @@ class AdapterImamsOfSunnaDetail(var showData: MutableList<ModelScholars.Data.Boo
         return AdapterImamsOfSunnaDetail.ViewHolder(binding)
     }
 
-    fun setDate(list: MutableList<ModelScholars.Data.Book>) {
+    fun setData(list: MutableList<ModelScholars.Data.Book>) {
         list.clear()
         list.addAll(showData)
         notifyDataSetChanged()

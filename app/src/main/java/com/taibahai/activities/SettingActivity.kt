@@ -44,7 +44,7 @@ class SettingActivity : BaseActivity() {
 
     override fun clicks() {
         binding.appbar.ivLeft.setOnClickListener {
-            onBackPressed()
+            onBackPressedDispatcher.onBackPressed()
         }
     }
 
@@ -113,7 +113,7 @@ class SettingActivity : BaseActivity() {
 
 
         }
-        adapter.setDate(showList)
+        adapter.setData(showList)
         binding.rvSettings.adapter = adapter
 
     }

@@ -16,7 +16,7 @@ class AdapterSettings(var showData: MutableList<ModelSettings>, private val onIt
         return AdapterSettings.ViewHolder(binding)
     }
 
-    fun setDate(list: ArrayList<ModelSettings>) {
+    fun setData(list: ArrayList<ModelSettings>) {
         showData = list
         notifyDataSetChanged()
     }

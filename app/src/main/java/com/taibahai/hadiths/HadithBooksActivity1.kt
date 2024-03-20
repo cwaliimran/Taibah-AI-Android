@@ -36,7 +36,7 @@ class HadithBooksActivity1 : BaseActivity() {
 
     override fun clicks() {
         binding.appbar.ivLeft.setOnClickListener {
-            onBackPressed()
+            onBackPressedDispatcher.onBackPressed()
         }
     }
 
@@ -75,7 +75,6 @@ class HadithBooksActivity1 : BaseActivity() {
                 }
 
                 is NetworkResult.Success -> {
-                    showToast(it.data?.message.toString())
                     it.data?.data?.let { it1 -> showList.addAll(it1) }
                     adapter.notifyDataSetChanged()
 

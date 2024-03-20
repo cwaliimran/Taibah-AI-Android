@@ -18,9 +18,9 @@
 
         <ImageView
             android:id="@+id/ivCountryFlag"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/flag_arab"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/flag2"
             android:layout_marginStart="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"

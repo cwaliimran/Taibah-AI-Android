@@ -36,7 +36,7 @@ class AdapterHome(
         return ViewHolder(binding, listener)
     }
 
-    fun setDate(list: MutableList<com.network.models.ModelHome.Data>) {
+    fun setData(list: MutableList<com.network.models.ModelHome.Data>) {
         list.clear()
         list.addAll(showData)
         notifyDataSetChanged()

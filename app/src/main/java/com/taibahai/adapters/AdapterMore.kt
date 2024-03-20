@@ -30,7 +30,7 @@ class AdapterMore(private val context: Context, var showData: MutableList<ModelM
         return AdapterMore.ViewHolder(binding)
     }
 
-    fun setDate(list: ArrayList<ModelMore>) {
+    fun setData(list: ArrayList<ModelMore>) {
         showData = list
         notifyDataSetChanged()
     }

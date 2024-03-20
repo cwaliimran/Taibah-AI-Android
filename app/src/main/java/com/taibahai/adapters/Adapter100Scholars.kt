@@ -18,7 +18,7 @@ class Adapter100Scholars(var showData: MutableList<ModelScholars.Data>):Recycler
         return Adapter100Scholars.ViewHolder(binding)
     }
 
-    fun setDate(list: MutableList<ModelScholars.Data>) {
+    fun setData(list: MutableList<ModelScholars.Data>) {
         list.clear()
         list.addAll(showData)
         notifyDataSetChanged()

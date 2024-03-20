@@ -17,7 +17,7 @@ class AdapterDBSearchHadith(var showData: ArrayList<ModelDbSearchHadith.Data>, v
         return AdapterDBSearchHadith.ViewHolder(binding)
     }
 
-    fun setDate(list: ArrayList<ModelDbSearchHadith.Data>) {
+    fun setData(list: ArrayList<ModelDbSearchHadith.Data>) {
         showData = list
         notifyDataSetChanged()
     }

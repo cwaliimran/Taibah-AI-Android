@@ -1,16 +1,20 @@
 package com.taibahai.fragments
 
+import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.network.base.BaseFragment
 import com.network.interfaces.OnItemClick
+import com.network.models.ModelHome
 import com.network.network.NetworkResult
 import com.network.utils.AppClass
 import com.network.utils.AppClass.Companion.isGuest
@@ -131,18 +135,19 @@ class HomeFragment : BaseFragment() {
             activity?.displayLoading(false)
             when (it) {
                 is NetworkResult.Loading -> {
-                    activity?.displayLoading(true)
+                    //  activity?.displayLoading(true)
                 }
 
                 is NetworkResult.Success -> {
                     showList[currentItemAction].is_like = !showList[currentItemAction].is_like
-                    if (showList[currentItemAction].is_like){
-                        showList[currentItemAction].likes+=1
-                    }else{
-                        showList[currentItemAction].likes-=1
+                    if (showList[currentItemAction].is_like) {
+                        showList[currentItemAction].likes += 1
+                    } else {
+                        showList[currentItemAction].likes -= 1
                     }
                     adapter.notifyItemChanged(currentItemAction)
                 }
+
                 is NetworkResult.Error -> {
                     showToast(it.message.toString())
                 }
@@ -221,7 +226,8 @@ class HomeFragment : BaseFragment() {
                     "comment" -> {
                         val intent = Intent(requireContext(), HomeDetailActivity::class.java)
                         intent.putExtra(AppConstants.BUNDLE, showList[position])
-                        startActivity(intent)
+                        detailActivityResultLauncher.launch(intent)
+
                     }
 
                     else -> {}
@@ -245,6 +251,27 @@ class HomeFragment : BaseFragment() {
         }
         binding.rvHome.adapter = adapter
     }
+
+    val detailActivityResultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                // Handle the result
+                val data: Intent? = result.data
+                var model: ModelHome.Data? =
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        data?.getSerializableExtra(AppConstants.BUNDLE, ModelHome.Data::class.java)
+                    } else {
+                        data?.getSerializableExtra(AppConstants.BUNDLE) as ModelHome.Data
+                    }
+
+                if (model != null) {
+                    showList[currentItemAction] = model
+                    adapter.notifyItemChanged(currentItemAction)
+                }
+                // Extract data from the intent if needed
+            }
+        }
+
 
     override fun apiAndArgs() {
         super.apiAndArgs()

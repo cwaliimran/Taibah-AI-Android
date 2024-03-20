@@ -35,7 +35,7 @@ class AdapterQuranChapter(var showData: MutableList<ModelSurah>, var listener: O
         return AdapterQuranChapter.ViewHolder(binding)
     }
 
-    fun setDate(list: ArrayList<ModelSurah>) {
+    fun setData(list: ArrayList<ModelSurah>) {
         showData = list
         notifyDataSetChanged()
     }

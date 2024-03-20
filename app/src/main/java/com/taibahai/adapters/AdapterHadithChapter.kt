@@ -17,7 +17,7 @@ class AdapterHadithChapter(var showData: MutableList<ModelHadithChapter2.Data>, 
         binding = ItemHadithChapterBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return AdapterHadithChapter.ViewHolder(binding)
     }
-    fun setDate(list: ArrayList<ModelHadithChapter2.Data>) {
+    fun setData(list: ArrayList<ModelHadithChapter2.Data>) {
         showData = list
         notifyDataSetChanged()
     }

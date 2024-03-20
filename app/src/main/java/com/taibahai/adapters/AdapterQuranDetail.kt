@@ -15,7 +15,7 @@ class AdapterQuranDetail(var showData: List<ModelSurahDetail>):RecyclerView.Adap
         binding = ItemQuranChapterDetailBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return AdapterQuranDetail.ViewHolder(binding)
     }
-    fun setDate(list: List<ModelSurahDetail>) {
+    fun setData(list: List<ModelSurahDetail>) {
         showData = list
         notifyDataSetChanged()
     }

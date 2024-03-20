@@ -19,7 +19,7 @@ class AdapterUpgrade(var showData: List<ModelUpgrade>):RecyclerView.Adapter<Adap
         return AdapterUpgrade.ViewHolder(binding)
     }
 
-    fun setDate(list: List<ModelUpgrade>) {
+    fun setData(list: List<ModelUpgrade>) {
         showData = list
         notifyDataSetChanged()
     }

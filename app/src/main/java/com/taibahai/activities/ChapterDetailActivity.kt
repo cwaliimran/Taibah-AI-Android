@@ -65,7 +65,7 @@ class ChapterDetailActivity : BaseActivity() {
 
     override fun clicks() {
         binding.appbar.ivLeft.setOnClickListener {
-            onBackPressed()
+            onBackPressedDispatcher.onBackPressed()
         }
 
         binding.playLayout.ivPlay.setOnClickListener { v ->
@@ -230,7 +230,7 @@ class ChapterDetailActivity : BaseActivity() {
             override fun onPreExecute() {
                 super.onPreExecute()
                 showList.clear()
-                adapter.setDate(showList)
+                adapter.setData(showList)
 
             }
 
@@ -238,7 +238,7 @@ class ChapterDetailActivity : BaseActivity() {
             override fun onPostExecute(tasks: List<ModelSurahDetail>) {
                 super.onPostExecute(tasks)
                 counter = 0
-                adapter.setDate(tasks)
+                adapter.setData(tasks)
 
                 playSurah()
                 Handler().postDelayed({ this@ChapterDetailActivity.startScroll() }, 1000)

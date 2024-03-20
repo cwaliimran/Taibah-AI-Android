@@ -84,7 +84,7 @@ class MoreFragment : BaseFragment() {
 
 
 
-        adapter.setDate(showList)
+        adapter.setData(showList)
         binding.rvMoreList.adapter=adapter
     }
 

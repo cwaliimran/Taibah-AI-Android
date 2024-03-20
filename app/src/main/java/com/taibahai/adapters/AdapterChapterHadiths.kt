@@ -16,7 +16,7 @@ class AdapterChapterHadiths(var showData: ArrayList<ModelChapterHadith3.Data>,va
         return ViewHolder(binding, listener)
     }
 
-    fun setDate(list: ArrayList<ModelChapterHadith3.Data>) {
+    fun setData(list: ArrayList<ModelChapterHadith3.Data>) {
         showData = list
         notifyDataSetChanged()
     }

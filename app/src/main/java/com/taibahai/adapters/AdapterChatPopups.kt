@@ -18,7 +18,7 @@ class AdapterChatPopups(var showMessagePopups:ArrayList<ModelChatPopups>, privat
         return AdapterChatPopups.ViewHolder(binding)
     }
 
-    fun setDate(list: ArrayList<ModelChatPopups>) {
+    fun setData(list: ArrayList<ModelChatPopups>) {
         showMessagePopups = list
         notifyDataSetChanged()
     }

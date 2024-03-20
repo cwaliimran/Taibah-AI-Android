@@ -19,7 +19,7 @@ class AdapterDbSearchQuran(var showData: ArrayList<ModelDbSearchQuran.Data>): Re
         return AdapterDbSearchQuran.ViewHolder(binding)
     }
 
-    fun setDate(list: ArrayList<ModelDbSearchQuran.Data>) {
+    fun setData(list: ArrayList<ModelDbSearchQuran.Data>) {
         showData = list
         notifyDataSetChanged()
     }

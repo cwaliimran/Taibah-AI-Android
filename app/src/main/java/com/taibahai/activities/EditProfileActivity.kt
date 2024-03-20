@@ -54,7 +54,7 @@ class EditProfileActivity : BaseActivity() {
         }
 
         binding.appbar.ivLeft.setOnClickListener {
-            onBackPressed()
+            onBackPressedDispatcher.onBackPressed()
         }
     }
 
@@ -97,7 +97,7 @@ class EditProfileActivity : BaseActivity() {
                 is NetworkResult.Success -> {
                     it.data?.message?.let { it1 -> showToast(it1) }
                     AppClass.sharedPref.storeObject(AppConstants.CURRENT_USER, it.data?.data)
-                    onBackPressed()
+                    onBackPressedDispatcher.onBackPressed()
 
                 }
 

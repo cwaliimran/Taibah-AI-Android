@@ -1,6 +1,9 @@
 package com.taibahai.activities
 
 
+import android.app.Activity
+import android.content.Intent
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import com.network.base.BaseActivity
 import com.network.models.ModelComments
@@ -27,13 +30,23 @@ class HomeDetailActivity : BaseActivity() {
     override fun onCreate() {
         binding = ActivityHomeDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val intent = Intent().apply {
+                    putExtra(AppConstants.BUNDLE, model)
+                }
+               setResult(Activity.RESULT_OK, intent)
+               finish()
+            }
+        }
+        onBackPressedDispatcher.addCallback(this, callback)
     }
 
     override fun clicks() {
 
 
         binding.ivBackArrow.setOnClickListener {
-            onBackPressed()
+            onBackPressedDispatcher.onBackPressed()
         }
         binding.ii.ivDots.setOnClickListener { view ->
             context.showOptionsMenu(view, R.menu.popup_report) {
@@ -78,6 +91,8 @@ class HomeDetailActivity : BaseActivity() {
                     it.data?.data?.comments?.let { it1 -> showComments.addAll(it1) }
                     if (showComments.isNotEmpty()) {
                         adapter.notifyItemRangeInserted(0, showComments.size)
+                    } else {
+                        show(binding.noData.root)
                     }
                     model.comments = showComments.size
                     binding.ii.commentCounts.text = "${model.comments} Comments"
@@ -129,6 +144,7 @@ class HomeDetailActivity : BaseActivity() {
                             currentUser?.image.toString()
                         )
                     )
+                    hideGone(binding.noData.root)
                     adapter.notifyItemInserted(0)
                     model.comments += 1
                     binding.ii.commentCounts.text = "${model.comments} Comments"

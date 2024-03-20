@@ -20,7 +20,7 @@ class ZakatInfoActivity : BaseActivity() {
 
     override fun clicks() {
         binding.appbar.ivLeft.setOnClickListener {
-            onBackPressed()
+            onBackPressedDispatcher.onBackPressed()
         }
     }
 

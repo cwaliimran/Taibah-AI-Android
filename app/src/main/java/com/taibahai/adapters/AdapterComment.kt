@@ -15,7 +15,7 @@ class AdapterComments(var showData: MutableList<ModelComments>): RecyclerView.Ad
         return ViewHolder(binding)
     }
 
-    fun setDate(list: MutableList<ModelComments>) {
+    fun setData(list: MutableList<ModelComments>) {
         showData = list
         notifyDataSetChanged()
     }

@@ -18,7 +18,7 @@ class AdapterBooksAndPDF(var showData: MutableList<ModelBooks.Data>):RecyclerVie
         return AdapterBooksAndPDF.ViewHolder(binding)
     }
 
-    fun setDate(list: ArrayList<ModelBooks.Data>) {
+    fun setData(list: ArrayList<ModelBooks.Data>) {
         showData = list
         notifyDataSetChanged()
     }

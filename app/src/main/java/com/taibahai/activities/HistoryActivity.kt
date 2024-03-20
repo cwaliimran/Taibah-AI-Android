@@ -39,7 +39,7 @@ class HistoryActivity : BaseActivity() {
 
     override fun clicks() {
         binding.ivBack.setOnClickListener {
-            onBackPressed()
+            onBackPressedDispatcher.onBackPressed()
         }
 
         binding.ivDeleteHistory.setOnClickListener {
