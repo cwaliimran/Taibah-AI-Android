@@ -133,7 +133,8 @@ class SearchFragment : BaseFragment(), OnItemClick {
                 for (voice in availableVoices) {
                     Log.d("YourFragment", "Available Voice: ${voice.name}, Locale: ${voice.locale}")
                 }
-                val locale = Locale("ar", "SA") // Arabic, Saudi Arabia
+//                val locale = Locale("ar", "SA") // Arabic, Saudi Arabia
+                val locale = Locale("en", "US") // Arabic, Saudi Arabia
                 textToSpeech!!.language = locale
 
                 textToSpeech!!.setPitch(1.0f) // Adjust pitch if needed
@@ -212,7 +213,7 @@ class SearchFragment : BaseFragment(), OnItemClick {
         intent.putExtra(
             RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
         )
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ar-SA")
+//        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ar-SA")
         //intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Say Something") // Change the language if needed
 
 

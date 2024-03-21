@@ -27,8 +27,8 @@ class HadithBooksActivity1 : BaseActivity() {
     override fun onCreate() {
         binding = ActivityHadithBooks1Binding.inflate(layoutInflater)
         binding.appbar.tvTitle.setText("Hadiths")
-        binding.appbar.ivLeft.setImageDrawable(resources.getDrawable(R.drawable.arrow_back_24))
-        binding.appbar.ivRight.setVisibility(View.GONE)
+        
+        
         loadAd()
         setContentView(binding.root)
     }

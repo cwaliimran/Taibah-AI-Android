@@ -59,8 +59,8 @@ class NotificationActivity : BaseActivity() {
     override fun initData() {
         super.initData()
         binding.appbar.tvTitle.setText("Notifications")
-        binding.appbar.ivLeft.setImageDrawable(resources.getDrawable(R.drawable.arrow_back_24))
-        binding.appbar.ivRight.setVisibility(View.GONE)
+        
+        
         loadAd()
     }
 

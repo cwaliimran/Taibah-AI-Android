@@ -75,8 +75,8 @@ class ImamsOfSunnaActivity : BaseActivity() {
     override fun initData() {
         super.initData()
         binding.appbar.tvTitle.setText("4 major imams of Sunna")
-        binding.appbar.ivLeft.setImageDrawable(resources.getDrawable(R.drawable.arrow_back_24))
-        binding.appbar.ivRight.setVisibility(View.GONE)
+        
+        
     }
 
     private fun loadAd() {

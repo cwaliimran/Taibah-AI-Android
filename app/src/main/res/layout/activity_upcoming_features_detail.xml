@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="data"
+            type="com.network.models.ModelUpcoming.Data" />
+
+        <import type="com.taibahai.utils.BindingUtils" />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <include
+                android:id="@+id/appbar"
+                layout="@layout/appbar" />
+
+            <ImageView
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:loadImage="@{data.icon}"
+                android:src="@drawable/splashlogo" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/poppins_medium"
+                android:gravity="center_horizontal"
+                android:paddingHorizontal="16dp"
+                android:text="@{data.title, default=``}"
+                android:textColor="#4F4F4F"
+                android:textSize="16sp"
+                tools:text="Feature 1" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:ellipsize="end"
+                android:fontFamily="@font/poppins"
+                android:paddingHorizontal="16dp"
+                android:text="@{data.details, default=``}"
+                android:textColor="#4F4F4F"
+                android:textSize="14sp"
+                tools:text="Feature 1" />
+        </LinearLayout>
+    </ScrollView>
+
+</layout>

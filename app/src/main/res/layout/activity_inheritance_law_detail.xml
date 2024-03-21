@@ -3,43 +3,48 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".activities.InheritanceLawDetailActivity">
-
-    <include
-        android:id="@+id/appbar"
-        layout="@layout/appbar" />
-
-    <TextView
-        android:id="@+id/tvDescription"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/appbar" />
-
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="@+id/pdfView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <com.rajat.pdfviewer.PdfRendererView
-        android:id="@+id/pdfView"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:pdfView_divider="@drawable/divider"
-        app:pdfView_engine="internal"
-        app:pdfView_showDivider="false" />
+        tools:context=".activities.InheritanceLawDetailActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <include
+            android:id="@+id/appbar"
+            layout="@layout/appbar" />
+
+        <TextView
+            android:id="@+id/tvDescription"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="16dp"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/appbar"
+            tools:text="Islamic laws" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminateTint="@color/primary"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="@+id/pdfView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.rajat.pdfviewer.PdfRendererView
+            android:id="@+id/pdfView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/appbar"
+            app:pdfView_divider="@drawable/divider"
+            app:pdfView_engine="internal"
+            app:pdfView_showDivider="false" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

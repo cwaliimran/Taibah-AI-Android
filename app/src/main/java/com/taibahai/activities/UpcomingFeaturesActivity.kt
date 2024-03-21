@@ -1,11 +1,14 @@
 package com.taibahai.activities
 
 
+import android.content.Intent
 import android.view.View
 import androidx.activity.viewModels
 import com.network.base.BaseActivity
+import com.network.interfaces.OnItemClick
 import com.network.models.ModelUpcoming
 import com.network.network.NetworkResult
+import com.network.utils.AppConstants
 import com.network.utils.ProgressLoading.displayLoading
 import com.network.viewmodels.MainViewModelAI
 import com.taibahai.R
@@ -28,7 +31,12 @@ class UpcomingFeaturesActivity : BaseActivity() {
 
     override fun initAdapter() {
         super.initAdapter()
-        adapter = AdapterFeatures(features)
+        adapter = AdapterFeatures(features, object : OnItemClick{
+            override fun onClick(position: Int, type: String?, data: Any?, view: View?) {
+                super.onClick(position, type, data, view)
+                startActivity(Intent(this@UpcomingFeaturesActivity, UpcomingFeaturesDetailActivity::class.java).putExtra(AppConstants.BUNDLE, features[position]))
+            }
+        })
         binding.recyclerView.adapter = adapter
     }
 
@@ -73,7 +81,7 @@ class UpcomingFeaturesActivity : BaseActivity() {
     override fun initData() {
         super.initData()
         binding.appbar.tvTitle.text = "Upcoming Features"
-        binding.appbar.ivLeft.setImageDrawable(resources.getDrawable(R.drawable.arrow_back_24))
+        
         binding.appbar.ivRight.visibility = View.GONE
     }
 

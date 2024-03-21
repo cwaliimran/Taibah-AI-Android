@@ -72,6 +72,11 @@
     <string name="login_now">Login Now</string>
     <string name="card_share_text">Download Taibah AI app to find more.</string>
     <string name="no_data_found">No Data Found!</string>
+    <string name="feature_details">Feature Details</string>
+    <string name="quran">Quran</string>
+    <string name="more">More</string>
+    <string name="my_profile">My profile</string>
+    <string name="zakat_calculator">Zakat Calculator</string>
 
 
 </resources>

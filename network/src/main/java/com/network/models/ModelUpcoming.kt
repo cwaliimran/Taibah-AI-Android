@@ -1,5 +1,7 @@
 package com.network.models
 
+import java.io.Serializable
+
 data class ModelUpcoming(
     var status: Int = 0,
     var message: String = "",
@@ -11,5 +13,5 @@ data class ModelUpcoming(
         var details: String = "",
         var icon: String = "",
         var created_at: String = ""
-    )
+    ):Serializable
 }

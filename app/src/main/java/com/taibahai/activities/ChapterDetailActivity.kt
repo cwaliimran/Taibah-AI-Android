@@ -18,6 +18,7 @@ import android.view.View
 import android.view.animation.LinearInterpolator
 import android.widget.ScrollView
 import android.widget.SeekBar
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider.getUriForFile
 import com.network.base.BaseActivity
 import com.network.models.ModelSurah
@@ -92,7 +93,7 @@ class ChapterDetailActivity : BaseActivity() {
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
                     // The user just touched the screen
-                    if (binding.playLayout.ivPlay.isSelected()) startScroll()
+                    if (binding.playLayout.ivPlay.isSelected) startScroll()
                     startScroll()
 
                     Log.d(TAG,"initScroll: ACTION_DOWN $isFling"
@@ -103,7 +104,7 @@ class ChapterDetailActivity : BaseActivity() {
                     // The touch just ended
 
                     if (!isFling) {
-                        if (binding.playLayout.ivPlay.isSelected()) startScroll()
+                        if (binding.playLayout.ivPlay.isSelected) startScroll()
                         startScroll()
 
                     } else {
@@ -152,8 +153,8 @@ class ChapterDetailActivity : BaseActivity() {
         AudioPlayer.getInstance()?.OnItemClickListener(object : OnViewClickListener {
             override fun onPlayStarted(duration: Int) {
                 val total_duration: String? = AppClass.getTimeString(duration)
-                binding.playLayout.maxValue.setText(total_duration)
-                binding.playLayout.ivPlay.setSelected(true)
+                binding.playLayout.maxValue.text = total_duration
+                binding.playLayout.ivPlay.isSelected = true
                 if (objectAnimator != null) {
                     if (!objectAnimator!!.isRunning) {
                         startScroll()
@@ -163,19 +164,19 @@ class ChapterDetailActivity : BaseActivity() {
 
             override fun updateDuration(duration: Int, currentPosition: Int) {
                 val current_duration: String? = AppClass.getTimeString(currentPosition)
-                binding.playLayout.minValue.setText(current_duration)
-                binding.playLayout.sliderRange.setProgress(duration)
+                binding.playLayout.minValue.text = current_duration
+                binding.playLayout.sliderRange.progress = duration
             }
 
             override fun onPause() {
-                binding.playLayout.ivPlay.setSelected(false)
+                binding.playLayout.ivPlay.isSelected = false
                 stopScroll()
             }
 
             override fun onCompleted(mp1: MediaPlayer?) {
 
-                binding.playLayout.ivPlay.setSelected(false)
-                binding.playLayout.sliderRange.setProgress(0)
+                binding.playLayout.ivPlay.isSelected = false
+                binding.playLayout.sliderRange.progress = 0
                 stopScroll()
                 if (isRepeat) {
                     binding.scrollView.fullScroll(ScrollView.FOCUS_UP)
@@ -358,16 +359,16 @@ class ChapterDetailActivity : BaseActivity() {
         Log.d("response", "startScroll: " + total_duration / 1000 + " sec")
 
         objectAnimator?.duration = total_duration.toLong()
-        objectAnimator?.setInterpolator(LinearInterpolator())
+        objectAnimator?.interpolator = LinearInterpolator()
         objectAnimator?.start()
     }
 
 
     override fun initData() {
         super.initData()
-        binding.appbar.tvTitle.setText("Quran")
-        binding.appbar.ivLeft.setImageDrawable(resources.getDrawable(R.drawable.arrow_back_24))
-        binding.appbar.ivRight.setImageDrawable(resources.getDrawable(R.drawable.heartt))
+        binding.appbar.tvTitle.text = getString(R.string.quran)
+        show(binding.appbar.ivRight)
+        binding.appbar.ivRight.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.heartt))
         loadJson()
         showAyatList()
     }

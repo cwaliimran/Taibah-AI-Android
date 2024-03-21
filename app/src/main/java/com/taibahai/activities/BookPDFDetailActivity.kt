@@ -49,7 +49,7 @@ class BookPDFDetailActivity : BaseActivity() {
     override fun initData() {
         super.initData()
         binding.appbar.tvTitle.setText(bookTitle)
-        binding.appbar.ivLeft.setImageDrawable(resources.getDrawable(R.drawable.arrow_back_24))
+        
         binding.appbar.ivRight.setVisibility(GONE)
     }
 

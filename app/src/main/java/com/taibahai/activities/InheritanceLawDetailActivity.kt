@@ -13,6 +13,7 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import com.network.base.BaseActivity
+import com.network.network.NetworkUtils
 import com.rajat.pdfviewer.PdfEngine
 import com.rajat.pdfviewer.PdfQuality
 import com.taibahai.R
@@ -46,7 +47,7 @@ class InheritanceLawDetailActivity : BaseActivity() {
 
             "pdf" -> {
                 fileUrl = intent.getStringExtra("pdfUrl")
-                if (checkInternetConnection(this)) {
+                if (NetworkUtils.isInternetAvailable()) {
                     loadFileFromNetwork(this.fileUrl)
                 } else {
                     Toast.makeText(
@@ -75,48 +76,6 @@ class InheritanceLawDetailActivity : BaseActivity() {
 
 
 
-    private fun checkInternetConnection(context: Context): Boolean {
-        var result = 0 // Returns connection type. 0: none; 1: mobile data; 2: wifi
-        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            cm?.run {
-                cm.getNetworkCapabilities(cm.activeNetwork)?.run {
-                    when {
-                        hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> {
-                            result = 2
-                        }
-
-                        hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> {
-                            result = 1
-                        }
-
-                        hasTransport(NetworkCapabilities.TRANSPORT_VPN) -> {
-                            result = 3
-                        }
-                    }
-                }
-            }
-        } else {
-            cm?.run {
-                cm.activeNetworkInfo?.run {
-                    when (type) {
-                        ConnectivityManager.TYPE_WIFI -> {
-                            result = 2
-                        }
-
-                        ConnectivityManager.TYPE_MOBILE -> {
-                            result = 1
-                        }
-
-                        ConnectivityManager.TYPE_VPN -> {
-                            result = 3
-                        }
-                    }
-                }
-            }
-        }
-        return result != 0
-    }
 
 
     private fun loadFileFromNetwork(fileUrl: String?) {
@@ -160,7 +119,5 @@ class InheritanceLawDetailActivity : BaseActivity() {
     override fun initData() {
         super.initData()
         binding.appbar.tvTitle.setText("Islamic Law of Inheritance")
-        binding.appbar.ivLeft.setImageDrawable(resources.getDrawable(R.drawable.arrow_back_24))
-        binding.appbar.ivRight.setVisibility(View.GONE)
     }
 }

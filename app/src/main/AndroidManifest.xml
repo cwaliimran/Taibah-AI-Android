@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
     <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
 
     <uses-feature android:name="android.hardware.camera" />
@@ -29,6 +30,9 @@
         android:usesCleartextTraffic="true"
         android:windowSoftInputMode="adjustResize"
         tools:targetApi="31">
+        <activity
+            android:name=".activities.UpcomingFeaturesDetailActivity"
+            android:exported="false" />
         <activity
             android:name=".activities.QuranChaptersActivity"
             android:exported="false" />
@@ -79,8 +83,8 @@
             android:exported="false" />
         <activity
             android:name=".activities.ZakatCalculatorActivity"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
         <activity
             android:name=".activities.ContactSupportActivity"
             android:exported="false" />
@@ -144,8 +148,7 @@
             android:exported="true" />
         <activity
             android:name=".bottom_navigation.BottomNavigation"
-            android:exported="true"
-            />
+            android:exported="true" />
 
         <meta-data
             android:name="preloaded_fonts"
@@ -176,13 +179,9 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-
-
-
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="@string/admob_app_id" />
-
     </application>
 
 </manifest>

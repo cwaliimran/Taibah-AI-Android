@@ -32,8 +32,8 @@ class EditProfileActivity : BaseActivity() {
     override fun onCreate() {
         binding=ActivityEditProfileBinding.inflate(layoutInflater)
         binding.appbar.tvTitle.setText("Edit Profile")
-        binding.appbar.ivLeft.setImageDrawable(resources.getDrawable(R.drawable.arrow_back_24))
-        binding.appbar.ivRight.setVisibility(View.GONE)
+        
+        
         setContentView(binding.root)
     }
 

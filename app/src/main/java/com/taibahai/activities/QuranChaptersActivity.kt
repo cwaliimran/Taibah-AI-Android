@@ -15,6 +15,7 @@ import android.os.Environment
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.media3.exoplayer.offline.Download
 import com.cwnextgen.amnames.utils.getJsonDataFromAsset
 import com.gun0912.tedpermission.PermissionListener
@@ -50,12 +51,12 @@ class QuranChaptersActivity : BaseActivity() {
     private val TAG = "QuranChaptersActivity"
     val ACTIVITY_RESULT_CODE = 123
     var audioUrl = ""
-    var audio_path=""
-    var child=""
-    var currentFile=""
-    var mediaPlayer:MediaPlayer?=null
-    var surahId=""
-    var surahName=""
+    var audio_path = ""
+    var child = ""
+    var currentFile = ""
+    var mediaPlayer: MediaPlayer? = null
+    var surahId = ""
+    var surahName = ""
     var currentIndex = 0
 
 
@@ -63,9 +64,9 @@ class QuranChaptersActivity : BaseActivity() {
         binding = ActivityQuranChaptersBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.appbar.tvTitle.setText("Quran")
-        binding.appbar.ivLeft.setImageDrawable(resources.getDrawable(R.drawable.arrow_back_24))
-        binding.appbar.ivRight.setImageDrawable(resources.getDrawable(R.drawable.heartt))
+        binding.appbar.tvTitle.text = getString(R.string.quran)
+        show(binding.appbar.ivRight)
+        binding.appbar.ivRight.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.heartt))
 
 
     }
@@ -90,12 +91,12 @@ class QuranChaptersActivity : BaseActivity() {
             getDownloads()
         }
     }
-    private fun updateUI()
-    {
+
+    private fun updateUI() {
         surahId = model.id
         currentFile = model.getCurrentFile(context).toString()
         surahName = model.transliteration_en
-        binding.ii.tvSurahName.setText(surahName)
+        binding.ii.tvSurahName.text = surahName
         adapter.updateView(surahId)
     }
 
@@ -103,21 +104,21 @@ class QuranChaptersActivity : BaseActivity() {
     private fun initAudioPlay() {
         AudioPlayer.getInstance()!!.OnItemClickListener(object : AudioPlayer.OnViewClickListener {
             override fun onPlayStarted(duration: Int) {
-                Log.d(TAG, "onPlayStarted: " + binding.ii.ivPlay.isSelected())
-                binding.ii.ivPlay.setSelected(true)
+                Log.d(TAG, "onPlayStarted: " + binding.ii.ivPlay.isSelected)
+                binding.ii.ivPlay.isSelected = true
             }
 
             override fun updateDuration(duration: Int, currentPosition: Int) {
-                if (!binding.ii.ivPlay.isSelected()) binding.ii.ivPlay.setSelected(true)
+                if (!binding.ii.ivPlay.isSelected) binding.ii.ivPlay.isSelected = true
             }
 
             override fun onPause() {
-                binding.ii.ivPlay.setSelected(false)
-               // adapter.updateView(StringUtils.NO_INDEX)
+                binding.ii.ivPlay.isSelected = false
+                // adapter.updateView(StringUtils.NO_INDEX)
             }
 
             override fun onCompleted(mp1: MediaPlayer?) {
-                binding.ii.ivPlay.setSelected(false)
+                binding.ii.ivPlay.isSelected = false
                 //adapter.updateView(StringUtils.NO_INDEX)
 
             }
@@ -191,8 +192,7 @@ class QuranChaptersActivity : BaseActivity() {
         intent.putExtra("ayat_name", model.transliteration_en)
         intent.putExtra("ayat_verse", model.total_verses)
         intent.putExtra("ayat_type", model.type)
-      // intent.putExtra("ayat_url", audio_path)
-
+        // intent.putExtra("ayat_url", audio_path)
 
 
         if (!modelSurahList.isEmpty()) {
@@ -295,7 +295,7 @@ class QuranChaptersActivity : BaseActivity() {
     fun downloadAudio(s: String) {
         audioUrl = s
 
-        child=  StringUtils.SURAH_FOLDER + StringUtils.getNameFromUrl(s)
+        child = StringUtils.SURAH_FOLDER + StringUtils.getNameFromUrl(s)
         val file = File(getAudioOutputDirectory(), child)
         audio_path = file.absolutePath
         Log.d(TAG, "downloadAudio: $audio_path")
@@ -362,7 +362,6 @@ class QuranChaptersActivity : BaseActivity() {
             }
         }
     }
-
 
 
 }

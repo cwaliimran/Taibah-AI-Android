@@ -49,7 +49,7 @@ class ExploreFragment : BaseFragment() {
     override fun viewCreated() {
         binding.appbar.tvTitle.setText("Explore")
         binding.appbar.ivLeft.setVisibility(View.GONE)
-        binding.appbar.ivRight.setVisibility(View.GONE)
+        
 
     }
 

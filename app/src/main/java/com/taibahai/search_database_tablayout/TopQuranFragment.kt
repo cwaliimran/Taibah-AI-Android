@@ -1,6 +1,8 @@
 package com.taibahai.search_database_tablayout
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -26,8 +28,8 @@ class TopQuranFragment : BaseFragment() {
     lateinit var adapter: AdapterDbSearchQuran
     val quranData=ArrayList<ModelDbSearchQuran.Data>()
     val viewModel: MainViewModelAI by viewModels()
-
-
+    val handler = Handler(Looper.getMainLooper())
+    var searchRunnable: Runnable? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,12 +54,22 @@ class TopQuranFragment : BaseFragment() {
             override fun onTextChanged(charSequence: CharSequence?, start: Int, before: Int, count: Int) {
             }
 
+
             override fun afterTextChanged(editable: Editable?) {
-                if (binding.etSearch.text.toString()!=""){
-                    viewModel.dbSearch( type = "quran", keyword = binding.etSearch.text.toString())
+                // Cancel the previous search runnable if it exists
+                searchRunnable?.let { handler.removeCallbacks(it) }
+
+                // Define a new search runnable
+                searchRunnable = Runnable {
+                    if (!editable.isNullOrEmpty()) {
+                        viewModel.dbSearch(type = "quran", keyword = editable.toString())
+                    }
                 }
 
+                // Post the search runnable with a delay of 2 seconds
+                handler.postDelayed(searchRunnable!!, 2000)
             }
+
         })
     }
 
@@ -96,5 +108,12 @@ class TopQuranFragment : BaseFragment() {
             }
         }
     }
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        searchRunnable?.let { handler.removeCallbacks(it) }
+    }
+
 
 }

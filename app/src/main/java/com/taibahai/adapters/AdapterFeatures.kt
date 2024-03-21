@@ -3,17 +3,17 @@ package com.taibahai.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.network.models.ModelScholars
+import com.network.interfaces.OnItemClick
 import com.network.models.ModelUpcoming
 import com.taibahai.databinding.RowUpcomingFeaturesBinding
 
-class AdapterFeatures(var showData: MutableList<ModelUpcoming.Data>) :
+class AdapterFeatures(var showData: MutableList<ModelUpcoming.Data>, var listener: OnItemClick) :
     RecyclerView.Adapter<AdapterFeatures.ViewHolder>() {
     lateinit var binding: RowUpcomingFeaturesBinding
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         binding =
             RowUpcomingFeaturesBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ViewHolder(binding)
+        return ViewHolder(binding, listener)
     }
 
 
@@ -27,6 +27,12 @@ class AdapterFeatures(var showData: MutableList<ModelUpcoming.Data>) :
         return showData.size
     }
 
-    class ViewHolder(val binding: RowUpcomingFeaturesBinding) :
-        RecyclerView.ViewHolder(binding.root)
+    class ViewHolder(val binding: RowUpcomingFeaturesBinding, var listener: OnItemClick) :
+        RecyclerView.ViewHolder(binding.root) {
+        init {
+            itemView.setOnClickListener {
+                listener.onClick(absoluteAdapterPosition)
+            }
+        }
+    }
 }

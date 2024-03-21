@@ -9,6 +9,7 @@ import android.view.View
 import android.view.Window
 import android.widget.LinearLayout
 import androidx.activity.viewModels
+import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
@@ -40,9 +41,10 @@ class MyProfileActivity : BaseActivity() {
 
     override fun onCreate() {
         binding = ActivityMyProfileBinding.inflate(layoutInflater)
-        binding.appbar.tvTitle.setText("My profile")
-        binding.appbar.ivLeft.setImageDrawable(resources.getDrawable(R.drawable.arrow_back_24))
-        binding.appbar.ivRight.setImageDrawable(resources.getDrawable(R.drawable.pen_new_square))
+        binding.appbar.tvTitle.text = getString(R.string.my_profile)
+
+        show(binding.appbar.ivRight)
+        binding.appbar.ivRight.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.pen_new_square))
         loadAd()
         setContentView(binding.root)
 

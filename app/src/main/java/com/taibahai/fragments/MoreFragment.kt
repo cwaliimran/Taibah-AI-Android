@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import com.google.android.gms.ads.AdRequest
@@ -27,7 +28,7 @@ class MoreFragment : BaseFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate<FragmentMoreBinding>(
             inflater, R.layout.fragment_more, container, false
@@ -61,7 +62,7 @@ class MoreFragment : BaseFragment() {
 
             val moreLevel1=ArrayList<ModelMoreLevels>()
 
-        moreLevel1.add(ModelMoreLevels("searchLevel1",R.drawable.search_icon, "30 AI Tokens (monthly)"))
+        moreLevel1.add(ModelMoreLevels("searchLevel1",R.drawable.search_icon, "300 AI Tokens (monthly)"))
         moreLevel1.add(ModelMoreLevels("",R.drawable.ads_icon, "Ads"))
         showList.add(ModelMore("Level 1" ,"Silver Subscription Package",moreLevel1) )
 
@@ -91,9 +92,10 @@ class MoreFragment : BaseFragment() {
 
     override fun apiAndArgs() {
         super.apiAndArgs()
-        binding.appbar.tvTitle.setText("More")
-        binding.appbar.ivRight.setImageDrawable(resources.getDrawable(R.drawable.baseline_settings_24))
-        binding.appbar.ivLeft.setVisibility(View.GONE)
+        binding.appbar.tvTitle.text = getString(R.string.more)
+        show(binding.appbar.ivRight)
+        binding.appbar.ivRight.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.baseline_settings_24))
+        binding.appbar.ivLeft.visibility = View.GONE
     }
 
     private fun loadAd() {
@@ -109,12 +111,12 @@ class MoreFragment : BaseFragment() {
     }
 
 
-    public override fun onPause() {
+    override fun onPause() {
         super.onPause()
         binding.adView.pause()
     }
 
-    public override fun onDestroy() {
+    override fun onDestroy() {
         super.onDestroy()
         binding.adView.destroy()
     }
