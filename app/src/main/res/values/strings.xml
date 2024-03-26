@@ -77,6 +77,11 @@
     <string name="more">More</string>
     <string name="my_profile">My profile</string>
     <string name="zakat_calculator">Zakat Calculator</string>
+    <string name="no_surah_downloaded">Download surah audios to continue.</string>
+    <string name="mishary_rashid_alafasy">Mishary Rashid Alafasy</string>
+    <string name="play">Play</string>
+    <string name="makki">Makki</string>
+    <string name="madni">Madni</string>
 
 
 </resources>

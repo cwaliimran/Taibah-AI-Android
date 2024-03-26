@@ -29,10 +29,10 @@ class AdapterQuranChapter(var showData: MutableList<ModelSurah>, var listener: O
 
     override fun onCreateViewHolder(
         parent: ViewGroup, viewType: Int
-    ): AdapterQuranChapter.ViewHolder {
+    ): ViewHolder {
         binding =
             ItemQuranChapterBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return AdapterQuranChapter.ViewHolder(binding)
+        return ViewHolder(binding)
     }
 
     fun setData(list: ArrayList<ModelSurah>) {
@@ -40,7 +40,7 @@ class AdapterQuranChapter(var showData: MutableList<ModelSurah>, var listener: O
         notifyDataSetChanged()
     }
 
-    @OptIn(UnstableApi::class) override fun onBindViewHolder(holder: AdapterQuranChapter.ViewHolder, position: Int) {
+    @OptIn(UnstableApi::class) override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val chapterData = showData[position]
         binding.data = chapterData
 
@@ -52,7 +52,7 @@ class AdapterQuranChapter(var showData: MutableList<ModelSurah>, var listener: O
             }
         }
 
-        holder.binding.ivPlay.setOnClickListener {
+        holder.binding.play.setOnClickListener {
             listener.onClick(position, "play")
 
         }
@@ -92,52 +92,51 @@ class AdapterQuranChapter(var showData: MutableList<ModelSurah>, var listener: O
 
                     if (StorageUtils.isFileExists(filePath)) {
                         holder.binding.progress.visibility = View.GONE
-                        holder.binding.ivPlay.setImageResource(R.drawable.ic_delete)
-                       // holder.binding.ivPlay.setOnClickListener { listener.onDelete(chapterData) }
+                        holder.binding.play.setImageResource(R.drawable.ic_delete)
+                       // holder.binding.play.setOnClickListener { listener.onDelete(chapterData) }
                         //holder.itemView.setOnClickListener { listener.onPlayClick(chapterData) }
                     } else {
-                        holder.binding.ivPlay.setImageResource(R.drawable.ic_download)
+                        holder.binding.play.setImageResource(R.drawable.ic_download)
                         //holder.binding.playLayout.setOnClickListener { listener.onDownload(chapterData) }
                         //holder.itemView.setOnClickListener { listener.onDownload(chapterData) }
                     }
                 }
-              /*  Download.STATE_PAUSED, Download.STATE_ADDED -> {
-                    holder.binding.progress.visibility = View.GONE
-                    holder.binding.ivPlay.setImageResource(R.drawable.ic_download)
-                    holder.binding.playLayout.setOnClickListener { listener.onResume(chapterData) }
-                    holder.itemView.setOnClickListener { listener.onResume(chapterData) }
-                }
-                Download.STATE_REMOVING, Download.STATE_DELETED -> {
-                    holder.binding.progress.visibility = View.GONE
-                    holder.binding.ivPlay.setImageResource(R.drawable.ic_download)
-                    holder.binding.playLayout.setOnClickListener { listener.onDownload(chapterData) }
-                    holder.itemView.setOnClickListener { listener.onDownload(chapterData) }
-                }
+//                Download.STATE_PAUSED, Download.STATE_ADDED -> {
+//                    holder.binding.progress.visibility = View.GONE
+//                    holder.binding.play.setImageResource(R.drawable.ic_download)
+//                    holder.binding.playLayout.setOnClickListener { listener.onResume(chapterData) }
+//                    holder.itemView.setOnClickListener { listener.onResume(chapterData) }
+//                }
+//                Download.STATE_REMOVING, Download.STATE_DELETED -> {
+//                    holder.binding.progress.visibility = View.GONE
+//                    holder.binding.play.setImageResource(R.drawable.ic_download)
+//                    holder.binding.playLayout.setOnClickListener { listener.onDownload(chapterData) }
+//                    holder.itemView.setOnClickListener { listener.onDownload(chapterData) }
+//                }
                 Download.STATE_FAILED -> {
                     holder.binding.progress.visibility = View.GONE
-                    holder.binding.ivPlay.setImageResource(R.drawable.ic_download)
-                    holder.binding.playLayout.setOnClickListener { listener.onRetryDownload(chapterData) }
-                    holder.itemView.setOnClickListener { listener.onRetryDownload(chapterData) }
+                    holder.binding.play.setImageResource(R.drawable.ic_download)
+//                    holder.binding.playLayout.setOnClickListener { listener.onRetryDownload(chapterData) }
+//                    holder.itemView.setOnClickListener { listener.onRetryDownload(chapterData) }
                 }
                 Download.STATE_DOWNLOADING -> {
                     holder.binding.progress.visibility = View.VISIBLE
-                    holder.binding.progress.setIndeterminateMode(true)
-                    holder.binding.ivPlay.setImageResource(R.drawable.ic_pin)
-                    holder.binding.playLayout.setOnClickListener { listener.onPause(chapterData) }
+//                    holder.binding.progress.setIndeterminateMode(true)
+//                    holder.binding.playLayout.setOnClickListener { listener.onPause(chapterData) }
                 }
                 Download.STATE_QUEUED -> {
                     holder.binding.progress.visibility = View.VISIBLE
-                    holder.binding.progress.setIndeterminateMode(false)
-                    holder.binding.ivPlay.setImageResource(R.drawable.ic_pin)
-                    holder.binding.playLayout.setOnClickListener { listener.onPause(chapterData) }
-                }*/
+//                    holder.binding.progress.setIndeterminateMode(false)
+//                    holder.binding.play.setImageResource(R.drawable.ic_pin)
+//                    holder.binding.playLayout.setOnClickListener { listener.onPause(chapterData) }
+                }
                 else -> {
                     // Handle other states if needed
                 }
             }
         } else {
             holder.binding.progress.visibility = View.GONE
-            holder.binding.ivPlay.setImageResource(R.drawable.ic_download)
+            holder.binding.play.setImageResource(R.drawable.ic_download)
             //holder.binding.playLayout.setOnClickListener { listener.onDownload(chapterData) }
             //holder.itemView.setOnClickListener { listener.onDownload(chapterData) }
         }
@@ -164,5 +163,5 @@ class AdapterQuranChapter(var showData: MutableList<ModelSurah>, var listener: O
     }
 
     class ViewHolder(val binding: ItemQuranChapterBinding) :
-        RecyclerView.ViewHolder(binding.root) {}
+        RecyclerView.ViewHolder(binding.root)
 }

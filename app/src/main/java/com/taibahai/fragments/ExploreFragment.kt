@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import androidx.core.text.HtmlCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
-import com.facebook.appevents.codeless.internal.ViewHierarchy.setOnClickListener
 import com.network.base.BaseFragment
 import com.network.models.ModelToday
 import com.network.network.NetworkResult
@@ -88,9 +87,9 @@ class ExploreFragment : BaseFragment() {
                     val formattedTodayDate = dateFormat.format(todayDate)
                     AppClass.sharedPref.storeObject(AppConstants.TODAY, it.data?.data)
                     AppClass.sharedPref.storeString(AppConstants.CURRENT_DATE, formattedTodayDate)
-                    binding.inTodayVerse.tvArbiAyat.text = it.data?.data?.quran?.text
-                    binding.inTodayVerse.tvCount.text = it.data?.data?.quran?.verse_number
-                    binding.inTodayVerse.tvTranslation.text =
+                    binding.inTodayVerse.ayatArabicText.text = it.data?.data?.quran?.text
+                    binding.inTodayVerse.ayatNumber.text = it.data?.data?.quran?.verse_number
+                    binding.inTodayVerse.ayatEnglishTranslation.text =
                         it.data?.data?.quran?.quran_translation_en
                     binding.inTodayVerse.tvSurah.text = it.data?.data?.quran?.transliteration_en
                     val transliteration = it.data?.data?.quran?.quran_transliteration_en
@@ -98,12 +97,12 @@ class ExploreFragment : BaseFragment() {
                         val spannedText: Spanned =
                             Html.fromHtml(transliteration, Html.FROM_HTML_MODE_LEGACY)
 
-                        binding.inTodayVerse.tvEnglishAyat.text = spannedText
+                        binding.inTodayVerse.ayatEnglishTranslitration.text = spannedText
                     }
 
 
                     binding.inTodayHadith.tvArbiHadith.text = it.data?.data?.hadith?.arabic
-                    binding.inTodayHadith.tvTranslation.text =
+                    binding.inTodayHadith.ayatEnglishTranslitration.text =
                         it.data?.data?.hadith?.english_translation
                     val reference = it.data?.data?.hadith?.reference
                     if (reference != null) {
@@ -141,9 +140,9 @@ class ExploreFragment : BaseFragment() {
         else {
             if (savedData != null)
             {
-                binding.inTodayVerse.tvArbiAyat.text = savedData.quran.text
-                binding.inTodayVerse.tvCount.text = savedData.quran.verse_number
-                binding.inTodayVerse.tvTranslation.text = savedData.quran.quran_translation_en
+                binding.inTodayVerse.ayatArabicText.text = savedData.quran.text
+                binding.inTodayVerse.ayatNumber.text = savedData.quran.verse_number
+                binding.inTodayVerse.ayatEnglishTranslation.text = savedData.quran.quran_translation_en
                 binding.inTodayVerse.tvSurah.text = savedData.quran.transliteration_en
                 val transliteration = savedData.quran.quran_transliteration_en
                 if (transliteration != null)
@@ -156,12 +155,12 @@ class ExploreFragment : BaseFragment() {
                         @Suppress("DEPRECATION") HtmlCompat.fromHtml(transliteration,HtmlCompat.FROM_HTML_MODE_LEGACY)
                     }
 
-                    binding.inTodayVerse.tvEnglishAyat.text = spannedText
+                    binding.inTodayVerse.ayatEnglishTranslation.text = spannedText
                 }
 
 
                 binding.inTodayHadith.tvArbiHadith.text = savedData.hadith.arabic
-                binding.inTodayHadith.tvTranslation.text = savedData.hadith.english_translation
+                binding.inTodayHadith.ayatEnglishTranslitration.text = savedData.hadith.english_translation
                 val reference = savedData.hadith.reference
                 if (reference != null) {
                     val parts = reference.split("\t : ")

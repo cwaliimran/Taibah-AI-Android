@@ -27,8 +27,8 @@ class AdapterChapterHadiths(var showData: ArrayList<ModelChapterHadith3.Data>,va
         holder.binding.tvHadithNo.text=hadithChapter.hadith_no
         holder.binding.tvBookName.text = hadithChapter.book_name
         holder.binding.tvHadithType.text=hadithChapter.type
-        holder.binding.tvArbiAyat.text=hadithChapter.arabic
-        holder.binding.tvTranslation.text=hadithChapter.english_translation
+        holder.binding.ayatArabicText.text=hadithChapter.arabic
+        holder.binding.ayatEnglishTranslitration.text=hadithChapter.english_translation
 
     }
 

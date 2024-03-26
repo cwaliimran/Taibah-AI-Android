@@ -1,8 +1,6 @@
 package com.taibahai.activities
 
 
-import AudioPlayer
-import AudioPlayer.OnViewClickListener
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.app.DownloadManager
@@ -28,6 +26,7 @@ import com.network.utils.AppClass.Companion.sharedPref
 import com.network.utils.StringUtils
 import com.taibahai.R
 import com.taibahai.adapters.AdapterQuranDetail
+import com.taibahai.audioPlayer.AudioPlayer
 import com.taibahai.databinding.ActivityChapterDetailBinding
 import com.taibahai.utils.CustomScrollView
 import com.taibahai.utils.JsonUtilss
@@ -36,29 +35,29 @@ import org.json.JSONException
 import java.io.File
 
 class ChapterDetailActivity : BaseActivity() {
-    lateinit var binding:ActivityChapterDetailBinding
-    val showList=ArrayList<ModelSurahDetail>()
+    lateinit var binding: ActivityChapterDetailBinding
+    val showList = ArrayList<ModelSurahDetail>()
     lateinit var adapter: AdapterQuranDetail
     private var isFling = false
     private var totalVerse = 0
-    private  var counter:Int = 0
-    var surahId=""
+    private var counter: Int = 0
+    var surahId = ""
     var mPlayerList: List<ModelSurah>? = null
-    var name=""
+    var name = ""
     var objectAnimator: ObjectAnimator? = null
     private var speed = 1
     private var scroll = 0
     private val STANDARD_SPEED = 50
     private val isRepeat = false
     var currentFile = ""
-    var model=ModelSurah()
+    var model = ModelSurah()
 
 
     private val TAG = "ChapterDetailActivity"
     override fun onCreate() {
-        binding=ActivityChapterDetailBinding.inflate(layoutInflater)
+        binding = ActivityChapterDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
-       // currentFile= intent.getStringExtra("ayat_url").toString()
+        // currentFile= intent.getStringExtra("ayat_url").toString()
         initScroll()
         initAudioPlay()
 
@@ -69,7 +68,7 @@ class ChapterDetailActivity : BaseActivity() {
             onBackPressedDispatcher.onBackPressed()
         }
 
-        binding.playLayout.ivPlay.setOnClickListener { v ->
+        binding.playLayout.play.setOnClickListener { v ->
             if (!currentFile.isEmpty()) {
                 startPlaying(currentFile)
             }
@@ -78,9 +77,9 @@ class ChapterDetailActivity : BaseActivity() {
 
     override fun initAdapter() {
         super.initAdapter()
-        adapter= AdapterQuranDetail(showList)
+        adapter = AdapterQuranDetail(showList)
 
-        binding.rvQuranDetail.adapter=adapter
+        binding.rvQuranDetail.adapter = adapter
 
     }
 
@@ -93,10 +92,11 @@ class ChapterDetailActivity : BaseActivity() {
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
                     // The user just touched the screen
-                    if (binding.playLayout.ivPlay.isSelected) startScroll()
+                    if (binding.playLayout.play.isSelected) startScroll()
                     startScroll()
 
-                    Log.d(TAG,"initScroll: ACTION_DOWN $isFling"
+                    Log.d(
+                        TAG, "initScroll: ACTION_DOWN $isFling"
                     )
                 }
 
@@ -104,7 +104,7 @@ class ChapterDetailActivity : BaseActivity() {
                     // The touch just ended
 
                     if (!isFling) {
-                        if (binding.playLayout.ivPlay.isSelected) startScroll()
+                        if (binding.playLayout.play.isSelected) startScroll()
                         startScroll()
 
                     } else {
@@ -124,37 +124,37 @@ class ChapterDetailActivity : BaseActivity() {
 
             override fun onFlingStopped() {
                 isFling = false
-              //  Log.d(com.taibah.fragments.al_quran.Al_Quran_Details.TAG, "onFlingStopped: ")
-               // if (binding.playLayout.play.isSelected()) startScroll()
+                //  Log.d(com.taibah.fragments.al_quran.Al_Quran_Details.TAG, "onFlingStopped: ")
+                // if (binding.playLayout.play.isSelected()) startScroll()
             }
         })
-        binding.playLayout.sliderRange.setOnSeekBarChangeListener(object :
+        binding.playLayout.seekbar.setOnSeekBarChangeListener(object :
             SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {}
             override fun onStartTrackingTouch(seekBar: SeekBar) {
-                AudioPlayer.getInstance()?.removeCallbacks()
+                AudioPlayer.Companion.instance?.removeCallbacks()
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 val seekPosition: Long = seekBar.progress.toLong()
-                AudioPlayer.getInstance()?.seek(seekPosition)
+                AudioPlayer.Companion.instance?.seek(seekPosition)
             }
         })
         binding.scrollView.viewTreeObserver.addOnScrollChangedListener {
             scroll = binding.scrollView.scrollY
             val view = binding.scrollView.getChildAt(0)
-            val diff =
-                view.bottom - (binding.scrollView.height + binding.scrollView.scrollY)
+            val diff = view.bottom - (binding.scrollView.height + binding.scrollView.scrollY)
         }
     }
 
 
     private fun initAudioPlay() {
-        AudioPlayer.getInstance()?.OnItemClickListener(object : OnViewClickListener {
+        AudioPlayer.Companion.instance?.OnItemClickListener(object :
+            AudioPlayer.OnViewClickListener {
             override fun onPlayStarted(duration: Int) {
                 val total_duration: String? = AppClass.getTimeString(duration)
-                binding.playLayout.maxValue.text = total_duration
-                binding.playLayout.ivPlay.isSelected = true
+                binding.playLayout.totalTime.text = total_duration
+                binding.playLayout.play.isSelected = true
                 if (objectAnimator != null) {
                     if (!objectAnimator!!.isRunning) {
                         startScroll()
@@ -164,23 +164,23 @@ class ChapterDetailActivity : BaseActivity() {
 
             override fun updateDuration(duration: Int, currentPosition: Int) {
                 val current_duration: String? = AppClass.getTimeString(currentPosition)
-                binding.playLayout.minValue.text = current_duration
-                binding.playLayout.sliderRange.progress = duration
+                binding.playLayout.currentTime.text = current_duration
+                binding.playLayout.seekbar.progress = duration
             }
 
             override fun onPause() {
-                binding.playLayout.ivPlay.isSelected = false
+                binding.playLayout.play.isSelected = false
                 stopScroll()
             }
 
             override fun onCompleted(mp1: MediaPlayer?) {
 
-                binding.playLayout.ivPlay.isSelected = false
-                binding.playLayout.sliderRange.progress = 0
+                binding.playLayout.play.isSelected = false
+                binding.playLayout.seekbar.progress = 0
                 stopScroll()
                 if (isRepeat) {
                     binding.scrollView.fullScroll(ScrollView.FOCUS_UP)
-                    Handler().postDelayed({ binding.playLayout.ivPlay.callOnClick() }, 1000)
+                    Handler().postDelayed({ binding.playLayout.play.callOnClick() }, 1000)
                 }/* else {
                     if (isPlaySuffle) {
                         binding.playLayout.forward.callOnClick()
@@ -198,10 +198,8 @@ class ChapterDetailActivity : BaseActivity() {
     }
 
 
-
     private fun showAyatList() {
-        class loadAyats :
-            AsyncTask<Void?, Void?, List<ModelSurahDetail>>() {
+        class loadAyats : AsyncTask<Void?, Void?, List<ModelSurahDetail>>() {
             override fun doInBackground(vararg params: Void?): List<ModelSurahDetail> {
                 try {
                     val jsonArr = JSONArray(JsonUtilss.loadQuranJson(context, surahId))
@@ -270,11 +268,10 @@ class ChapterDetailActivity : BaseActivity() {
     }
 
 
-
     private var mediaPlayer: MediaPlayer? = null
 
     private fun startPlaying(audio_url: String) {
-        val player = AudioPlayer.getInstance() ?: return
+        val player = AudioPlayer.instance ?: return
 
         val file = File(audio_url)
         val dataSource = if (file.exists()) {
@@ -302,7 +299,8 @@ class ChapterDetailActivity : BaseActivity() {
     @SuppressLint("Range")
     private fun getDownloadStatus(downloadId: Long): Int {
         val query = DownloadManager.Query().setFilterById(downloadId)
-        val cursor = (context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager).query(query)
+        val cursor =
+            (context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager).query(query)
         if (cursor != null && cursor.moveToFirst()) {
             val status = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
             cursor.close()
@@ -314,18 +312,16 @@ class ChapterDetailActivity : BaseActivity() {
     @SuppressLint("Range")
     private fun getDownloadContentUri(downloadId: Long): Uri? {
         val query = DownloadManager.Query().setFilterById(downloadId)
-        val cursor = (context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager).query(query)
+        val cursor =
+            (context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager).query(query)
         if (cursor != null && cursor.moveToFirst()) {
-            val uriString = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI))
+            val uriString =
+                cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI))
             cursor.close()
             return Uri.parse(uriString)
         }
         return null
     }
-
-
-
-
 
 
     private fun loadJson() {
@@ -368,7 +364,11 @@ class ChapterDetailActivity : BaseActivity() {
         super.initData()
         binding.appbar.tvTitle.text = getString(R.string.quran)
         show(binding.appbar.ivRight)
-        binding.appbar.ivRight.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.heartt))
+        binding.appbar.ivRight.setImageDrawable(
+            ContextCompat.getDrawable(
+                context, R.drawable.heartt
+            )
+        )
         loadJson()
         showAyatList()
     }

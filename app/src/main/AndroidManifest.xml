@@ -128,6 +128,12 @@
             android:name=".hadiths.HadithBooksActivity1"
             android:exported="false" />
         <activity
+            android:name=".quran.AlQuranFragment"
+            android:exported="true" />
+        <activity
+            android:name=".quran.Al_Quran_Details"
+            android:exported="true" />
+        <activity
             android:name=".activities.ChapterDetailActivity"
             android:exported="false" />
         <activity

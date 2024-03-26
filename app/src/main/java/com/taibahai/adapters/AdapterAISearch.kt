@@ -1,9 +1,6 @@
 package com.taibahai.adapters
 
 import android.content.Context
-import android.os.Build
-import android.os.Bundle
-import android.speech.tts.TextToSpeech
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -76,7 +73,7 @@ class AdapterAISearch( val context: Context, val messageList: ArrayList<ModelSea
 
     class ReceiveMessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val receiveMessage = itemView.findViewById<TextView>(R.id.tvResponse)
-        val ivPlay=itemView.findViewById<ImageView>(R.id.ivPlay)
+        val ivPlay=itemView.findViewById<ImageView>(R.id.play)
         val ivPause=itemView.findViewById<ImageView>(R.id.ivPause)
 
     }

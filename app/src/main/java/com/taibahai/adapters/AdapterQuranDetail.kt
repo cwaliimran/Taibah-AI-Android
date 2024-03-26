@@ -23,19 +23,19 @@ class AdapterQuranDetail(var showData: List<ModelSurahDetail>):RecyclerView.Adap
     override fun onBindViewHolder(holder: AdapterQuranDetail.ViewHolder, position: Int) {
         val chapterData = showData[position]
         holder.binding.model = chapterData
-        holder.binding.tvCount.text= showData[position].position
-        holder.binding.tvArbiAyat.text=showData[position].arabic
+        holder.binding.ayatNumber.text= showData[position].position
+        holder.binding.ayatArabicText.text=showData[position].arabic
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            holder.binding.tvEnglishAyat.setText(
+            holder.binding.ayatEnglishTranslitration.setText(
                 Html.fromHtml(
                     chapterData.english_transliteration,
                     Html.FROM_HTML_MODE_LEGACY
                 )
             )
         } else {
-            holder.binding.tvEnglishAyat.setText(Html.fromHtml(chapterData.english_transliteration))
+            holder.binding.ayatEnglishTranslitration.setText(Html.fromHtml(chapterData.english_transliteration))
         }
-        holder.binding.tvTranslation.text=showData[position].english_translation
+        holder.binding.ayatEnglishTranslation.text=showData[position].english_translation
 
     }
 

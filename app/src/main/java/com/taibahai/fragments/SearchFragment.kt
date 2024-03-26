@@ -12,14 +12,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver
 import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.MobileAds
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.network.base.BaseFragment
 import com.network.interfaces.OnItemClick
@@ -427,7 +424,7 @@ class SearchFragment : BaseFragment(), OnItemClick {
         val itemView = binding.rvSearchAI.findViewHolderForAdapterPosition(position)?.itemView
 
         if (itemView != null) {
-            val ivPlay = itemView.findViewById<ImageView>(R.id.ivPlay)
+            val ivPlay = itemView.findViewById<ImageView>(R.id.play)
             val ivPause = itemView.findViewById<ImageView>(R.id.ivPause)
 
             if (!isAudioPlaying) {

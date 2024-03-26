@@ -27,7 +27,7 @@ class AdapterDbSearchQuran(var showData: ArrayList<ModelDbSearchQuran.Data>): Re
     override fun onBindViewHolder(holder: AdapterDbSearchQuran.ViewHolder, position: Int) {
         val quranList = showData[position]
         holder.binding.model = quranList
-        holder.binding.tvSurahName.text=quranList.transliteration_en
+        holder.binding.surahName.text=quranList.transliteration_en
        holder.binding.tvDes.text=quranList.translation_en
         holder.binding.tvCounter.text = (position + 1).toString()
 

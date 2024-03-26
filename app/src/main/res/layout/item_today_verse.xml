@@ -59,7 +59,7 @@
 
 
                 <TextView
-                    android:id="@+id/tvCount"
+                    android:id="@+id/ayatNumber"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
@@ -77,7 +77,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
-                android:id="@+id/tvArbiAyat"
+                android:id="@+id/ayatArabicText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
@@ -92,7 +92,7 @@
                 app:layout_constraintTop_toBottomOf="@id/tvTodaysVerse" />
 
             <TextView
-                android:id="@+id/tvEnglishAyat"
+                android:id="@+id/ayatEnglishTranslation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
@@ -103,10 +103,10 @@
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvArbiAyat" />
+                app:layout_constraintTop_toBottomOf="@id/ayatArabicText" />
 
             <TextView
-                android:id="@+id/tvTranslation"
+                android:id="@+id/ayatEnglishTranslitration"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
@@ -117,7 +117,7 @@
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvEnglishAyat" />
+                app:layout_constraintTop_toBottomOf="@id/ayatEnglishTranslation" />
 
 
             <TextView
@@ -134,7 +134,7 @@
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvTranslation" />
+                app:layout_constraintTop_toBottomOf="@id/ayatEnglishTranslitration" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

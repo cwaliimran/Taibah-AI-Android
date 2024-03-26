@@ -7,7 +7,7 @@ import com.network.utils.AppClass
 
      companion object {
          val NOTIFICATION_CHANNEL_ID: String = AppClass.instance.packageName
-         val CHANNEL_NAME = "TaibahApp"
+         val CHANNEL_NAME = "Taibah AI"
          val CHANNEL_DESCRIPTION = ""
 
 

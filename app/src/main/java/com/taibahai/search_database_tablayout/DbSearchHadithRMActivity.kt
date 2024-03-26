@@ -29,7 +29,7 @@ class DbSearchHadithRMActivity : BaseActivity() {
         binding.tvHadithNo.text = "Hadith No: ${hadithNo}"
         binding.tvBookName.text=bookName
         binding.tvHadithType.text=type
-        binding.tvArbiAyat.text=arabic
+        binding.ayatArabicText.text=arabic
         binding.tvEnglishTranslation.text=translation
         setContentView(binding.root)
     }

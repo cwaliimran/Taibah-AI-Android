@@ -67,7 +67,7 @@ class HadithDetailsActivity4 : BaseActivity() {
                     binding.tvHadithChapter.text = chapterName
                     binding.tvNoOfHadiths.text = totalHadithNo
                     binding.tvHadithNo.text = "Hadith No: ${it.data!!.data.hadith_no}"
-                    binding.tvArbiAyat.text = it.data?.data?.arabic
+                    binding.ayatArabicText.text = it.data?.data?.arabic
                     binding.tvEnglishTranslation.text = it.data?.data?.english_translation
                     binding.tvBookName.text=bookName
                     binding.tvHadithType.text=type
@@ -96,7 +96,7 @@ class HadithDetailsActivity4 : BaseActivity() {
                 is NetworkResult.Success -> {
 
                     binding.tvHadithNo.text = "Hadith No: ${result.data!!.data.hadith_no}"
-                    binding.tvArbiAyat.text = result.data?.data?.arabic
+                    binding.ayatArabicText.text = result.data?.data?.arabic
                     binding.tvEnglishTranslation.text = result.data?.data?.english_translation
                     binding.tvBookName.text=bookName
                     binding.tvHadithType.text=type

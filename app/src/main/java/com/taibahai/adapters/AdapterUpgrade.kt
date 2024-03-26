@@ -27,7 +27,7 @@ class AdapterUpgrade(var showData: List<ModelUpgrade>):RecyclerView.Adapter<Adap
     override fun onBindViewHolder(holder: AdapterUpgrade.ViewHolder, position: Int) {
         val upgradeData = showData[position]
         holder.binding.model = upgradeData
-        holder.binding.tvCount.text=showData[position].tvCount
+        holder.binding.ayatNumber.text=showData[position].tvCount
         holder.binding.tvPackage.text=showData[position].packageName
         val adapter = AdapterUpgradeList( upgradeData.upgradeList)
         holder.rvMoreLevelsList.adapter = adapter

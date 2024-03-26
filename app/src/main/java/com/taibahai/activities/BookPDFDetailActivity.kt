@@ -8,6 +8,7 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.view.View
 import android.view.View.GONE
 import android.widget.Toast
@@ -16,6 +17,7 @@ import com.network.base.BaseActivity
 import com.network.models.ModelBooks
 import com.rajat.pdfviewer.PdfEngine
 import com.rajat.pdfviewer.PdfQuality
+import com.rajat.pdfviewer.PdfRendererView
 import com.rajat.pdfviewer.PdfViewerActivity.Companion.FILE_TITLE
 import com.taibahai.R
 import com.taibahai.databinding.ActivityBookPdfdetailBinding
@@ -51,6 +53,31 @@ class BookPDFDetailActivity : BaseActivity() {
         binding.appbar.tvTitle.setText(bookTitle)
         
         binding.appbar.ivRight.setVisibility(GONE)
+//
+//        binding.pdfView.statusListener = object : PdfRendererView.StatusCallBack {
+//            override fun onPdfLoadStart() {
+//                Log.i("statusCallBack","onPdfLoadStart")
+//            }
+//            override fun onPdfLoadProgress(
+//                progress: Int,
+//                downloadedBytes: Long,
+//                totalBytes: Long?
+//            ) {
+//                //Download is in progress
+//            }
+//
+//            override fun onPdfLoadSuccess(absolutePath: String) {
+//                Log.i("statusCallBack","onPdfLoadSuccess")
+//            }
+//
+//            override fun onError(error: Throwable) {
+//                Log.i("statusCallBack","onError")
+//            }
+//
+//            override fun onPageChanged(currentPage: Int, totalPage: Int) {
+//                //Page change. Not require
+//            }
+//        }
     }
 
 

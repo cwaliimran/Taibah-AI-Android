@@ -163,7 +163,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
-                android:id="@+id/tvArbiAyat"
+                android:id="@+id/ayatArabicText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
@@ -185,7 +185,7 @@
                 android:text="English Translation"
                 android:fontFamily="@font/poppins_medium"
                 android:textSize="18sp"
-                app:layout_constraintTop_toBottomOf="@id/tvArbiAyat"
+                app:layout_constraintTop_toBottomOf="@id/ayatArabicText"
                 android:layout_marginTop="20dp"
                 android:textColor="@color/black"
                 android:layout_marginHorizontal="20dp"

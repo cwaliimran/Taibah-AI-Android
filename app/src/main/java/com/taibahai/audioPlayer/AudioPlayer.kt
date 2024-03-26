@@ -1,3 +1,20 @@
+/*
+ * Copyright 2018 Dmitriy Ponomarenko
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.taibahai.audioPlayer
+
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.media.MediaPlayer.OnPreparedListener
@@ -5,40 +22,36 @@ import android.net.Uri
 import android.os.Handler
 import android.util.Log
 import com.network.utils.AppClass
-import com.network.utils.AppConstants
-import com.taibahai.audio_player.PlayerContract
+import com.taibahai.audioPlayer.PlayerContract.PlayerCallback
+import com.taibahai.notifications.MediaNotificationManager
+import com.taibahai.quran.StringUtils
 import java.io.IOException
 import java.util.Objects
 
-class AudioPlayer : PlayerContract.Player, OnPreparedListener {
+class AudioPlayer private constructor() : PlayerContract.Player, OnPreparedListener {
     var listener: OnViewClickListener? = null
-    private val actionsListeners: MutableList<PlayerContract.PlayerCallback> = mutableListOf()
+    private val actionsListeners: MutableList<PlayerCallback> = ArrayList()
     private var mediaPlayer: MediaPlayer? = null
 
     //	private Timer timerProgress;
     private var isPrepared = false
+    private var isPause = false
     private var seekPos: Long = 0
     private var pausePos: Long = 0
     private var dataSource: String? = null
-
-    fun getInstance(): AudioPlayer? {
-        return SingletonHolder.singleton
-    }
-
-
-    override fun addPlayerCallback(callback: PlayerContract.PlayerCallback?) {
+    override fun addPlayerCallback(callback: PlayerCallback) {
         if (callback != null) {
             actionsListeners.add(callback)
         }
     }
 
-    override fun removePlayerCallback(callback: PlayerContract.PlayerCallback?): Boolean {
+    override fun removePlayerCallback(callback: PlayerCallback): Boolean {
         return if (callback != null) {
             actionsListeners.remove(callback)
         } else false
     }
 
-    override fun setData(data: String?) {
+    override fun setData(data: String) {
         if (mediaPlayer != null && dataSource != null && dataSource == data) {
             Log.d(TAG, "setData: Do nothing ")
         } else {
@@ -56,8 +69,9 @@ class AudioPlayer : PlayerContract.Player, OnPreparedListener {
                 val uri = Uri.parse(dataSource)
                 mediaPlayer!!.setDataSource(AppClass.instance, uri)
                 mediaPlayer!!.setAudioAttributes(
-                    AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                        .build()
+                    AudioAttributes.Builder().setContentType(
+                        AudioAttributes.CONTENT_TYPE_MUSIC
+                    ).build()
                 )
                 //                mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             } catch (e: IOException) {
@@ -69,21 +83,21 @@ class AudioPlayer : PlayerContract.Player, OnPreparedListener {
                 }
             } catch (e: IllegalArgumentException) {
                 e.printStackTrace()
-                if (Objects.requireNonNull(e.message)?.contains("Permission denied") == true) {
+                if (Objects.requireNonNull(e.message)!!.contains("Permission denied")) {
                     Log.d(TAG, "restartPlayer: Permission denied")
                 } else {
                     Log.d(TAG, "restartPlayer: DataSource Exeption")
                 }
             } catch (e: IllegalStateException) {
                 e.printStackTrace()
-                if (Objects.requireNonNull(e.message)?.contains("Permission denied") == true) {
+                if (Objects.requireNonNull(e.message)!!.contains("Permission denied")) {
                     Log.d(TAG, "restartPlayer: Permission denied")
                 } else {
                     Log.d(TAG, "restartPlayer: DataSource Exeption")
                 }
             } catch (e: SecurityException) {
                 e.printStackTrace()
-                if (Objects.requireNonNull(e.message)?.contains("Permission denied") == true) {
+                if (Objects.requireNonNull(e.message)!!.contains("Permission denied")) {
                     Log.d(TAG, "restartPlayer: Permission denied")
                 } else {
                     Log.d(TAG, "restartPlayer: DataSource Exeption")
@@ -91,8 +105,6 @@ class AudioPlayer : PlayerContract.Player, OnPreparedListener {
             }
         }
     }
-
-
 
     override fun playOrPause() {
         try {
@@ -105,13 +117,13 @@ class AudioPlayer : PlayerContract.Player, OnPreparedListener {
                         try {
                             mediaPlayer!!.setOnPreparedListener(this)
                             mediaPlayer!!.prepareAsync()
-                        } catch (ex: java.lang.IllegalStateException) {
+                        } catch (ex: IllegalStateException) {
                             ex.printStackTrace()
                             restartPlayer()
                             mediaPlayer!!.setOnPreparedListener(this)
                             try {
                                 mediaPlayer!!.prepareAsync()
-                            } catch (e: java.lang.IllegalStateException) {
+                            } catch (e: IllegalStateException) {
                                 e.printStackTrace()
                                 restartPlayer()
                             }
@@ -122,16 +134,57 @@ class AudioPlayer : PlayerContract.Player, OnPreparedListener {
                         onStartPlay()
                         mediaPlayer!!.setOnCompletionListener { mp: MediaPlayer? ->
                             stop()
-                            this@AudioPlayer.onStopPlay()
+                            onStopPlay()
                         }
                     }
                     pausePos = 0
                 }
             }
-        } catch (e: java.lang.IllegalStateException) {
+        } catch (e: IllegalStateException) {
             e.printStackTrace()
             Log.d(TAG, "Player is not initialized!")
         }
+    }
+
+    override fun onPrepared(mp: MediaPlayer) {
+        if (mediaPlayer !== mp) {
+            mediaPlayer!!.stop()
+            mediaPlayer!!.release()
+            mediaPlayer = mp
+        }
+        onPreparePlay()
+        isPrepared = true
+        mediaPlayer!!.start()
+        mediaPlayer!!.seekTo(seekPos.toInt())
+        onStartPlay()
+        mediaPlayer!!.setOnCompletionListener { mp1: MediaPlayer? ->
+            if (listener != null) {
+                listener!!.onCompleted(mp1)
+            }
+            MediaNotificationManager.showMediaNotification(
+                AppClass.sharedPref.getString(
+                    StringUtils.SURAH_NAME,
+                    ""
+                )
+            )
+            stop()
+            onStopPlay()
+        }
+
+//		timerProgress = new Timer();
+//		timerProgress.schedule(new TimerTask() {
+//			@Override
+//			public void run() {
+//				try {
+//					if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+//						int curPos = mediaPlayer.getCurrentPosition();
+//						onPlayProgress(curPos);
+//					}
+//				} catch(IllegalStateException e){
+//					Log.d(TAG, "Player is not initialized!");
+//				}
+//			}
+//		}, 0, AppConstants.VISUALIZATION_INTERVAL);
     }
 
     override fun seek(mills: Long) {
@@ -150,27 +203,14 @@ class AudioPlayer : PlayerContract.Player, OnPreparedListener {
 //        } catch (IllegalStateException e) {
 //            Log.d(TAG, "Player is not initialized!");
 //        }
-
-
-//        try {
-//            if (mediaPlayer != null && mediaPlayer.isPlaying()) {
-//                removeCallbacks();
-//                mediaPlayer.seekTo(Utils.progressToTimer((int) seekPos, mediaPlayer.getDuration()));
-//                onSeek((int) seekPos);
-//                updateProgressBar();
-//            }
-//        } catch (IllegalStateException e) {
-//            Log.d(TAG, "Player is not initialized!");
-//        }
         if (mediaPlayer != null) {
             removeCallbacks()
-            mediaPlayer!!.seekTo(AppClass.progressToTimer(mills.toInt(), mediaPlayer!!.duration))
+            mediaPlayer!!.seekTo(progressToTimer(mills.toInt(), mediaPlayer!!.duration))
             updateProgressBar()
         }
     }
 
     override fun pause() {
-
 //		if (timerProgress != null) {
 //			timerProgress.cancel();
 //			timerProgress.purge();
@@ -188,7 +228,6 @@ class AudioPlayer : PlayerContract.Player, OnPreparedListener {
     }
 
     override fun stop() {
-
 //		if (timerProgress != null) {
 //			timerProgress.cancel();
 //			timerProgress.purge();
@@ -200,7 +239,7 @@ class AudioPlayer : PlayerContract.Player, OnPreparedListener {
             onStopPlay()
             mediaPlayer!!.currentPosition
             seekPos = 0
-//            if (listener != null) {
+            //            if (listener != null) {
 //                listener.onStop();
 //            }
         }
@@ -209,22 +248,25 @@ class AudioPlayer : PlayerContract.Player, OnPreparedListener {
         pausePos = 0
     }
 
-    override val isPlaying: Boolean
-        get() {
-            try {
-                return mediaPlayer != null && mediaPlayer!!.isPlaying
-            } catch (e: IllegalStateException) {
-                Log.d(TAG, "Player is not initialized!")
-            }
-            return false
+    override fun isPlaying(): Boolean {
+        try {
+            return mediaPlayer != null && mediaPlayer!!.isPlaying
+        } catch (e: IllegalStateException) {
+            Log.d(TAG, "Player is not initialized!")
         }
+        return false
+    }
 
+    override fun isPause(): Boolean {
+        return isPause
+    }
 
-    override var isPause = false
+    override fun getPauseTime(): Long {
+        return seekPos
+    }
 
-    override val pauseTime: Long
-        get() = seekPos
-
+    val currentPosition: Int
+        get() = mediaPlayer!!.currentPosition
 
     override fun release() {
         stop()
@@ -236,75 +278,6 @@ class AudioPlayer : PlayerContract.Player, OnPreparedListener {
         isPause = false
         dataSource = null
         actionsListeners.clear()
-    }
-
-
-
-    companion object {
-        private const val TAG = "response"
-        fun getInstance(): AudioPlayer? {
-            return SingletonHolder.singleton
-        }
-    }
-
-    override fun onPrepared(mp: MediaPlayer?) {
-        if (mediaPlayer !== mp) {
-            mediaPlayer!!.stop()
-            mediaPlayer!!.release()
-            mediaPlayer = mp
-        }
-        onPreparePlay()
-        isPrepared = true
-        mediaPlayer!!.start()
-        mediaPlayer!!.seekTo(seekPos.toInt())
-        onStartPlay()
-        mediaPlayer!!.setOnCompletionListener { mp1: MediaPlayer? ->
-            if (listener != null) {
-                listener!!.onCompleted(mp1)
-            }
-          /*  MediaNotificationManager.showMediaNotification(
-                GlobalClass.sharedPref.getString(
-                    StringUtils.SURAH_NAME,
-                    ""
-                )
-            )*/
-            stop()
-            onStopPlay()
-        }
-    }
-
-    fun OnItemClickListener(listener: OnViewClickListener?) {
-        this.listener = listener
-    }
-
-    interface OnViewClickListener {
-        //        void onPlay();
-        //staff click
-        fun onCompleted(mp1: MediaPlayer?)
-        fun onPlayStarted(duration: Int)
-        fun updateDuration(duration: Int, currentPosition: Int)
-        fun onPause()
-    }
-
-
-    private object SingletonHolder {
-        val singleton = AudioPlayer()
-    }
-
-    var mHandler = Handler()
-    private val mUpdateTimeTask: Runnable = object : Runnable {
-        override fun run() {
-            if (mediaPlayer != null && mediaPlayer!!.isPlaying) {
-                if (listener != null) {
-                    val progressPercentage: Int = AppClass.getProgressPercentage(
-                        mediaPlayer!!.currentPosition.toLong(),
-                        mediaPlayer!!.duration.toLong()
-                    )
-                    listener!!.updateDuration(progressPercentage, mediaPlayer!!.getCurrentPosition())
-                }
-                mHandler.postDelayed(this, AppConstants.VOICE_DELAY)
-            }
-        }
     }
 
     private fun onPreparePlay() {
@@ -349,13 +322,78 @@ class AudioPlayer : PlayerContract.Player, OnPreparedListener {
         }
     }
 
+    private fun onSeek(mills: Long) {
+        if (!actionsListeners.isEmpty()) {
+            for (i in actionsListeners.indices) {
+                actionsListeners[i].onSeek(mills)
+            }
+        }
+    }
+
+    fun OnItemClickListener(listener: OnViewClickListener?) {
+        this.listener = listener
+    }
+
+    interface OnViewClickListener {
+        //        void onPlay();
+        //staff click
+        fun onCompleted(mp1: MediaPlayer?)
+        fun onPlayStarted(duration: Int)
+        fun updateDuration(duration: Int, currentPosition: Int)
+        fun onPause()
+    }
+
+    private object SingletonHolder {
+        val singleton = AudioPlayer()
+    }
+
+    var mHandler = Handler()
+    private val mUpdateTimeTask: Runnable = object : Runnable {
+        override fun run() {
+            if (mediaPlayer != null && mediaPlayer!!.isPlaying) {
+                if (listener != null) {
+                    val progressPercentage = getProgressPercentage(
+                        mediaPlayer!!.currentPosition.toLong(), mediaPlayer!!.duration.toLong()
+                    )
+                    listener!!.updateDuration(progressPercentage, currentPosition)
+                }
+                mHandler.postDelayed(this, VOICE_DELAY)
+            }
+        }
+    }
 
     fun updateProgressBar() {
         mHandler.removeCallbacks(mUpdateTimeTask)
-        mHandler.postDelayed(mUpdateTimeTask, AppConstants.START)
+        mHandler.postDelayed(mUpdateTimeTask, START)
     }
 
     fun removeCallbacks() {
         mHandler.removeCallbacks(mUpdateTimeTask)
+    } //	private void onError(AppException throwable) {
+
+    //		if (!actionsListeners.isEmpty()) {
+    //			for (int i = 0; i < actionsListeners.size(); i++) {
+    //				actionsListeners.get(i).onError(throwable);
+    //			}
+    //		}
+    //	}
+    companion object {
+        private const val TAG = "response"
+        const val VOICE_DELAY: Long = 1000
+        const val START: Long = 0
+        val instance: AudioPlayer
+            get() = SingletonHolder.singleton
+
+        fun getProgressPercentage(j: Long, j2: Long): Int {
+            java.lang.Double.valueOf(0.0)
+            return java.lang.Double.valueOf(
+                (j / 1000).toInt().toLong().toDouble() / (j2 / 1000).toInt().toLong()
+                    .toDouble() * 100.0
+            ).toInt()
+        }
+
+        fun progressToTimer(i: Int, i2: Int): Int {
+            return (i.toDouble() / 100.0 * (i2 / 1000).toDouble()).toInt() * 1000
+        }
     }
 }

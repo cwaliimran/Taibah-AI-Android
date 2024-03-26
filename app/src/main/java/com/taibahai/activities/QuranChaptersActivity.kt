@@ -1,6 +1,5 @@
 package com.taibahai.activities
 
-import AudioPlayer
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.DownloadManager
@@ -31,6 +30,7 @@ import com.network.utils.AppClass.Companion.sharedPref
 import com.network.utils.StringUtils
 import com.taibahai.R
 import com.taibahai.adapters.AdapterQuranChapter
+import com.taibahai.audioPlayer.AudioPlayer
 import com.taibahai.databinding.ActivityQuranChaptersBinding
 import com.taibahai.utils.Constants
 import com.taibahai.utils.FileDownloader
@@ -76,7 +76,7 @@ class QuranChaptersActivity : BaseActivity() {
             onBackPressedDispatcher.onBackPressed()
         }
 
-        binding.ii.ivPlay.setOnClickListener {
+        binding.ii.play.setOnClickListener {
             if (!currentFile.isEmpty()) {
                 startPlaying(currentFile)
                 adapter.updateView(surahId)
@@ -96,29 +96,29 @@ class QuranChaptersActivity : BaseActivity() {
         surahId = model.id
         currentFile = model.getCurrentFile(context).toString()
         surahName = model.transliteration_en
-        binding.ii.tvSurahName.text = surahName
+        binding.ii.surahName.text = surahName
         adapter.updateView(surahId)
     }
 
 
     private fun initAudioPlay() {
-        AudioPlayer.getInstance()!!.OnItemClickListener(object : AudioPlayer.OnViewClickListener {
+        AudioPlayer.instance.OnItemClickListener(object : AudioPlayer.OnViewClickListener {
             override fun onPlayStarted(duration: Int) {
-                Log.d(TAG, "onPlayStarted: " + binding.ii.ivPlay.isSelected)
-                binding.ii.ivPlay.isSelected = true
+                Log.d(TAG, "onPlayStarted: " + binding.ii.play.isSelected)
+                binding.ii.play.isSelected = true
             }
 
             override fun updateDuration(duration: Int, currentPosition: Int) {
-                if (!binding.ii.ivPlay.isSelected) binding.ii.ivPlay.isSelected = true
+                if (!binding.ii.play.isSelected) binding.ii.play.isSelected = true
             }
 
             override fun onPause() {
-                binding.ii.ivPlay.isSelected = false
+                binding.ii.play.isSelected = false
                 // adapter.updateView(StringUtils.NO_INDEX)
             }
 
             override fun onCompleted(mp1: MediaPlayer?) {
-                binding.ii.ivPlay.isSelected = false
+                binding.ii.play.isSelected = false
                 //adapter.updateView(StringUtils.NO_INDEX)
 
             }
@@ -192,7 +192,6 @@ class QuranChaptersActivity : BaseActivity() {
         intent.putExtra("ayat_name", model.transliteration_en)
         intent.putExtra("ayat_verse", model.total_verses)
         intent.putExtra("ayat_type", model.type)
-        // intent.putExtra("ayat_url", audio_path)
 
 
         if (!modelSurahList.isEmpty()) {
@@ -221,7 +220,7 @@ class QuranChaptersActivity : BaseActivity() {
         return playerList
     }
 
-    fun updateCurrentIndex() {
+    private fun updateCurrentIndex() {
         for (i in mPlayerList.indices) {
             val model: ModelSurah = mPlayerList.get(i)
             if (!surahId.isEmpty()) {
@@ -249,6 +248,7 @@ class QuranChaptersActivity : BaseActivity() {
 
                 adapter.updateView(downloadId)
 
+                Log.d(TAG, "getDownloads: $downloadId")
             } while (cursor.moveToNext())
         }
 
@@ -321,7 +321,7 @@ class QuranChaptersActivity : BaseActivity() {
 
 
     private fun startPlaying(audio_url: String) {
-        val player = AudioPlayer.getInstance() ?: return
+        val player = AudioPlayer.instance ?: return
         player.setData(audio_url)
         player.playOrPause()
     }

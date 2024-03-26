@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primary">
+
+    <RelativeLayout
+        android:id="@+id/top_layout"
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+
+        <TextView
+            android:id="@+id/heading_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="al_quran"
+            android:textSize="25sp" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/select_Fav_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/top_layout"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="favourites"
+            android:textSize="15sp" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/showFav"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp" />
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/select_Fav_layout"
+        android:layout_marginTop="10dp">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="-20dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="0dp">
+
+            <androidx.coordinatorlayout.widget.CoordinatorLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white">
+
+                <androidx.core.widget.NestedScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="20dp"
+                    android:fillViewport="true"
+                    android:layerType="software"
+                    app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/white_upper_rounded_layout">
+
+                        <RelativeLayout
+                            android:id="@+id/profile_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="24dp"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginEnd="24dp">
+
+                            <de.hdodenhof.circleimageview.CircleImageView
+                                android:id="@+id/profile_iv"
+                                android:layout_width="62dp"
+                                android:layout_height="62dp"
+                                android:src="@drawable/mishary_rashid_alafasy"
+                                app:civ_border_color="@color/primary"
+                                app:civ_border_width="2dp" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginStart="16dp"
+                                android:layout_marginEnd="8dp"
+                                android:layout_toEndOf="@id/profile_iv"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="mishary_rashid_alafasy"
+                                    android:textSize="16sp" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="4dp"
+                                    android:text="recoded_114_surah"
+                                    android:textColor="@color/grey"
+                                    android:textSize="12sp" />
+                            </LinearLayout>
+
+                        </RelativeLayout>
+
+                        <LinearLayout
+                            android:id="@+id/buttonsLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/profile_layout"
+                            android:layout_marginTop="12dp"
+                            android:gravity="center"
+                            android:visibility="gone">
+
+                            <Button
+                                android:id="@+id/play_btn"
+                                android:layout_width="120dp"
+                                android:layout_height="45dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginBottom="8dp"
+                                android:background="@drawable/white_rounded_layout"
+                                android:drawableStart="@drawable/ic_play_circle_24dp"
+                                android:drawablePadding="10dp"
+                                android:paddingStart="16dp"
+                                android:paddingEnd="16dp"
+                                android:text="play"
+                                android:textAllCaps="false"
+                                android:textColor="@color/white"
+                                android:textSize="15sp"
+                                app:backgroundTint="@color/greytext" />
+
+                            <Button
+                                android:id="@+id/shuffle_btn"
+                                android:layout_width="120dp"
+                                android:layout_height="45dp"
+                                android:layout_marginStart="40dp"
+                                android:background="@drawable/white_rounded_layout"
+                                android:drawableStart="@drawable/ic_shuffle"
+                                android:drawablePadding="10dp"
+                                android:paddingStart="16dp"
+                                android:paddingEnd="16dp"
+                                android:text="shuffle"
+                                android:textAllCaps="false"
+                                android:textColor="@color/white"
+                                android:textSize="15sp"
+                                app:backgroundTint="@color/greytext"
+                                app:drawableTint="@color/white" />
+                        </LinearLayout>
+
+                        <ProgressBar
+                            android:id="@+id/progressBar"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_alignTop="@id/recyclerView"
+                            android:layout_alignParentEnd="true"
+                            android:layout_margin="15dp"
+                            android:visibility="visible" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/recyclerView"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_below="@id/buttonsLayout"
+                            android:clipToPadding="false"
+                            android:orientation="vertical"
+                            tools:itemCount="3"
+                            android:paddingBottom="90dp"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                            tools:listitem="@layout/al_quran_item">
+
+                        </androidx.recyclerview.widget.RecyclerView>
+
+                        <TextView
+                            android:id="@+id/textView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_centerVertical="true"
+                            android:fontFamily="@font/poppins"
+                            android:text="no_favourites_found"
+                            android:textSize="15sp"
+                            android:visibility="gone">
+
+                        </TextView>
+
+                    </RelativeLayout>
+                </androidx.core.widget.NestedScrollView>
+
+                <FrameLayout
+                    android:id="@+id/play_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="20dp"
+                    android:visibility="gone"
+                    app:layout_anchorGravity="bottom|end|right"
+                    app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior">
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="-20dp"
+                        app:cardCornerRadius="20dp"
+                        app:cardElevation="4dp">
+
+                        <include
+                            android:id="@+id/play_layout"
+                            layout="@layout/layout_play_surah"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="20dp" />
+
+                    </androidx.cardview.widget.CardView>
+                </FrameLayout>
+            </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
+        </androidx.cardview.widget.CardView>
+
+    </FrameLayout>
+
+</RelativeLayout>

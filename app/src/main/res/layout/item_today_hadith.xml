@@ -51,7 +51,7 @@
                 app:layout_constraintTop_toBottomOf="@id/tvTodaysVerse" />
 
             <TextView
-                android:id="@+id/tvTranslation"
+                android:id="@+id/ayatEnglishTranslitration"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
@@ -79,7 +79,7 @@
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvTranslation" />
+                app:layout_constraintTop_toBottomOf="@id/ayatEnglishTranslitration" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

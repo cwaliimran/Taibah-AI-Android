@@ -99,7 +99,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
-                android:id="@+id/tvArbiAyat"
+                android:id="@+id/ayatArabicText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="إنما الأعمال بالنيات"
@@ -113,7 +113,7 @@
 
 
             <TextView
-                android:id="@+id/tvTranslation"
+                android:id="@+id/ayatEnglishTranslitration"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="The reward of deeds depends upon the intentions."
