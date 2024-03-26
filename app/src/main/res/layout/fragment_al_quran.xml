@@ -126,7 +126,7 @@
                             android:layout_below="@id/profile_layout"
                             android:layout_marginTop="12dp"
                             android:gravity="center"
-                            android:visibility="gone">
+                            android:visibility="visible">
 
                             <Button
                                 android:id="@+id/play_btn"
@@ -179,9 +179,9 @@
                             android:layout_below="@id/buttonsLayout"
                             android:clipToPadding="false"
                             android:orientation="vertical"
-                            tools:itemCount="3"
                             android:paddingBottom="90dp"
                             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                            tools:itemCount="3"
                             tools:listitem="@layout/al_quran_item">
 
                         </androidx.recyclerview.widget.RecyclerView>

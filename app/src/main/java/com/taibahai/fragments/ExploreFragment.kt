@@ -19,9 +19,9 @@ import com.network.utils.AppConstants
 import com.network.utils.ProgressLoading.displayLoading
 import com.network.viewmodels.MainViewModelAI
 import com.taibahai.R
-import com.taibahai.activities.QuranChaptersActivity
 import com.taibahai.databinding.FragmentExploreBinding
 import com.taibahai.hadiths.HadithBooksActivity1
+import com.taibahai.quran.QuranChaptersActivity
 import com.taibahai.utils.ShareImage.getBitmapFromView
 import com.taibahai.utils.showToast
 import java.text.SimpleDateFormat

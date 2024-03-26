@@ -34,9 +34,6 @@
             android:name=".activities.UpcomingFeaturesDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.QuranChaptersActivity"
-            android:exported="false" />
-        <activity
             android:name=".search_database_tablayout.DbSearchHadithRMActivity"
             android:exported="false" />
         <activity
@@ -128,7 +125,7 @@
             android:name=".hadiths.HadithBooksActivity1"
             android:exported="false" />
         <activity
-            android:name=".quran.AlQuranFragment"
+            android:name=".quran.QuranChaptersActivity"
             android:exported="true" />
         <activity
             android:name=".quran.Al_Quran_Details"
@@ -136,10 +133,6 @@
         <activity
             android:name=".activities.ChapterDetailActivity"
             android:exported="false" />
-        <activity
-            android:name="activities.QuranChaptersActivity"
-            android:exported="false"
-            tools:ignore="MissingClass" />
         <activity
             android:name=".activities.HistoryActivity"
             android:exported="false" />

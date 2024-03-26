@@ -8,7 +8,7 @@ import java.io.InputStream
 import java.nio.charset.StandardCharsets
 import java.util.Scanner
 
-object JsonUtilss {
+object AppJsonUtils {
 
     // Read raw files method
     fun readRawResource(context: Context, @RawRes res: Int): String {

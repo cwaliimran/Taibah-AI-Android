@@ -10,7 +10,7 @@ import com.network.base.BaseActivity
 import com.taibahai.R
 import com.taibahai.bottom_navigation.BottomNavigation
 import com.taibahai.databinding.ActivitySplashBinding
-import com.taibahai.quran.AlQuranFragment
+import com.taibahai.quran.QuranChaptersActivity
 
 class SplashActivity : BaseActivity() {
     lateinit var binding:ActivitySplashBinding
@@ -29,8 +29,8 @@ class SplashActivity : BaseActivity() {
             finishAffinity()
         } else {
 
-//            val intent = Intent(this, BottomNavigation::class.java)
-            val intent = Intent(this, AlQuranFragment::class.java)
+            val intent = Intent(this, BottomNavigation::class.java)
+//            val intent = Intent(this, QuranChaptersActivity::class.java)
             startActivity(intent)
             finishAffinity()
 

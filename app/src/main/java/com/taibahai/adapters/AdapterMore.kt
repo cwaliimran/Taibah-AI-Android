@@ -12,13 +12,13 @@ import com.taibahai.R
 import com.taibahai.activities.ImamsOfSunnaActivity
 import com.taibahai.activities.BooksAndPDFActivity
 import com.taibahai.activities.InheritanceLawActivity
-import com.taibahai.activities.QuranChaptersActivity
 import com.taibahai.activities.UpgradeActivity
 import com.taibahai.activities.ZakatCalculatorActivity
 import com.taibahai.databinding.ItemMoreBinding
 import com.taibahai.hadiths.HadithBooksActivity1
 import com.taibahai.models.ModelMore
 import com.taibahai.models.ModelMoreLevels
+import com.taibahai.quran.QuranChaptersActivity
 import com.taibahai.search_database_tablayout.SearchDatabaseActivity
 
 class AdapterMore(private val context: Context, var showData: MutableList<ModelMore>) :

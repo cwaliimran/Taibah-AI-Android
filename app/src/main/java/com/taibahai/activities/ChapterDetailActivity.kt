@@ -18,6 +18,7 @@ import android.widget.ScrollView
 import android.widget.SeekBar
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider.getUriForFile
+import com.google.android.gms.common.util.JsonUtils
 import com.network.base.BaseActivity
 import com.network.models.ModelSurah
 import com.network.models.ModelSurahDetail
@@ -28,8 +29,13 @@ import com.taibahai.R
 import com.taibahai.adapters.AdapterQuranDetail
 import com.taibahai.audioPlayer.AudioPlayer
 import com.taibahai.databinding.ActivityChapterDetailBinding
+import com.taibahai.utils.AppJsonUtils
 import com.taibahai.utils.CustomScrollView
-import com.taibahai.utils.JsonUtilss
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONException
 import java.io.File
@@ -198,11 +204,11 @@ class ChapterDetailActivity : BaseActivity() {
     }
 
 
-    private fun showAyatList() {
+   /* private fun showAyatList() {
         class loadAyats : AsyncTask<Void?, Void?, List<ModelSurahDetail>>() {
             override fun doInBackground(vararg params: Void?): List<ModelSurahDetail> {
                 try {
-                    val jsonArr = JSONArray(JsonUtilss.loadQuranJson(context, surahId))
+                    val jsonArr = JSONArray(AppJsonUtils.loadQuranJson(context, surahId))
                     //                    Log.d("response jsonArr: ", jsonArr.toString());
                     for (i in 0 until jsonArr.length()) {
                         val surahModel = ModelSurahDetail()
@@ -244,6 +250,43 @@ class ChapterDetailActivity : BaseActivity() {
             }
         }
         loadAyats().execute()
+    }*/
+
+    private fun showAyatList() {
+        CoroutineScope(Dispatchers.Main).launch {
+            val tasks = withContext(Dispatchers.IO) {
+                loadAyats()
+            }
+            counter = 0
+            adapter.setData(tasks)
+            playSurah()
+            delay(1000)
+            startScroll()
+        }
+    }
+
+    private fun loadAyats(): List<ModelSurahDetail> {
+        val showList = mutableListOf<ModelSurahDetail>()
+        try {
+            val jsonArr = JSONArray(AppJsonUtils.loadQuranJson(context, surahId))
+            for (i in 0 until jsonArr.length()) {
+                val surahModel = ModelSurahDetail()
+                if (surahId == jsonArr.getJSONObject(i).getString("surah_number")) {
+                    surahModel.position = jsonArr.getJSONObject(i).getString("verse_number")
+                    surahModel.arabic = jsonArr.getJSONObject(i).getString("text")
+                    surahModel.english_translation = jsonArr.getJSONObject(i).optString("translation_en")
+                    surahModel.english_transliteration = jsonArr.getJSONObject(i).optString("transliteration_en")
+                    showList.add(surahModel)
+                    counter++
+                    if (counter == totalVerse) {
+                        break
+                    }
+                }
+            }
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+        return showList
     }
 
     private fun playSurah() {
