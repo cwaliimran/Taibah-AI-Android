@@ -5,28 +5,22 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
-import android.view.View
 import android.view.View.GONE
 import android.widget.Toast
-import com.bumptech.glide.Glide.init
 import com.network.base.BaseActivity
 import com.network.models.ModelBooks
+import com.network.utils.ProgressLoading.displayLoading
 import com.rajat.pdfviewer.PdfEngine
 import com.rajat.pdfviewer.PdfQuality
 import com.rajat.pdfviewer.PdfRendererView
-import com.rajat.pdfviewer.PdfViewerActivity.Companion.FILE_TITLE
-import com.taibahai.R
 import com.taibahai.databinding.ActivityBookPdfdetailBinding
-import com.taibahai.databinding.CustomDialogBinding
 
 class BookPDFDetailActivity : BaseActivity() {
-    lateinit var binding:ActivityBookPdfdetailBinding
+    lateinit var binding: ActivityBookPdfdetailBinding
     private var fileUrl: String? = null
-    var bookTitle=""
+    var bookTitle = ""
 
     companion object {
         const val FILE_URL = "pdf_file_url"
@@ -37,11 +31,11 @@ class BookPDFDetailActivity : BaseActivity() {
 
 
     override fun onCreate() {
-        binding=ActivityBookPdfdetailBinding.inflate(layoutInflater)
+        binding = ActivityBookPdfdetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
-       /* intent.extras?.getString(
-            FILE_TITLE, "PDF"
-        )*/
+        /* intent.extras?.getString(
+             FILE_TITLE, "PDF"
+         )*/
 
         engine = PdfEngine.INTERNAL
 
@@ -51,7 +45,7 @@ class BookPDFDetailActivity : BaseActivity() {
     override fun initData() {
         super.initData()
         binding.appbar.tvTitle.setText(bookTitle)
-        
+
         binding.appbar.ivRight.setVisibility(GONE)
 //
 //        binding.pdfView.statusListener = object : PdfRendererView.StatusCallBack {
@@ -136,6 +130,27 @@ class BookPDFDetailActivity : BaseActivity() {
 
         //Initiating PDf Viewer with URL
         try {
+            binding.pdfView.statusListener = object : PdfRendererView.StatusCallBack {
+                override fun onDownloadStart() {
+                    super.onDownloadStart()
+                    displayLoading()
+                }
+
+                override fun onDownloadSuccess() {
+                    super.onDownloadSuccess()
+                    displayLoading(false)
+
+                }
+
+                override fun onError(error: Throwable) {
+                    Log.i("statusCallBack", "onError")
+                    displayLoading(false)
+                }
+
+                override fun onPageChanged(currentPage: Int, totalPage: Int) {
+                    //Page change. Not require
+                }
+            }
             binding.pdfView.initWithUrl(
                 fileUrl!!, PdfQuality.NORMAL, engine
             )
@@ -148,12 +163,7 @@ class BookPDFDetailActivity : BaseActivity() {
 
     private fun onPdfError() {
         Toast.makeText(this, "Pdf has been corrupted", Toast.LENGTH_SHORT).show()
-        false.showProgressBar()
         finish()
-    }
-
-    private fun Boolean.showProgressBar() {
-        binding.progressBar.visibility = if (this) View.VISIBLE else GONE
     }
 
 
@@ -161,27 +171,6 @@ class BookPDFDetailActivity : BaseActivity() {
         super.onDestroy()
         binding.pdfView.closePdfRender()
     }
-
-
-    private fun pdfInfoDialog() {
-        val dialogBinding = CustomDialogBinding.inflate(layoutInflater)
-        val dialogView = dialogBinding.root
-
-        dialogBinding.dialogTitle.text = "Document Info."
-        dialogBinding.dialogSubtitle.text =
-            "This PDF is sourced from the internet and is not the property or creation of Skillzy. All rights belong to their respective owners. Skillzy is designed to compile and organize free resources in a single location."
-
-        val dialog = AlertDialog.Builder(this)
-            .setView(dialogView)
-            .setPositiveButton("Ok") { dialog, _ ->
-                dialog.dismiss()
-            }
-            .create()
-
-        dialog.show()
-    }
-
-
 
 
     override fun clicks() {
@@ -211,7 +200,6 @@ class BookPDFDetailActivity : BaseActivity() {
                 }
             }
         }
-
 
 
     }
