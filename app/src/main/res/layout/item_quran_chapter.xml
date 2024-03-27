@@ -32,19 +32,22 @@
                 android:layout_height="48dp"
                 android:backgroundTint="@color/primary_green"
                 app:cardCornerRadius="8dp"
+                app:cardUseCompatPadding="false"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
                     android:id="@+id/number"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:autoSizeTextType="uniform"
+                    android:gravity="center"
                     android:fontFamily="@font/poppins_medium"
                     android:textColor="@color/white"
                     android:textSize="24sp"
-                    tools:text="1" />
+                    android:autoSizeMaxTextSize="30sp"
+                    android:text="114" />
 
 
             </androidx.cardview.widget.CardView>
@@ -60,12 +63,13 @@
 
                 <TextView
                     android:id="@+id/name"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:fontFamily="@font/poppins_medium"
                     android:textColor="@color/black"
                     android:textSize="16sp"
+                    app:layout_constraintEnd_toStartOf="@+id/ivFav"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="Al-Faatiha" />
@@ -73,23 +77,24 @@
 
                 <TextView
                     android:id="@+id/meaning"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:fontFamily="@font/poppins"
                     android:textColor="#5A625A"
                     android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/ivFav"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/name"
                     tools:text="The opening(7) " />
 
                 <ImageView
-                    android:id="@+id/checkBox"
+                    android:id="@+id/ivFav"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="20dp"
-                    android:src="@drawable/heartt2"
+                    android:src="@drawable/fav_selector_checkbox"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/play_layout"
                     app:layout_constraintTop_toTopOf="parent" />

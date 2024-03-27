@@ -13,6 +13,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.network.base.BaseActivity
+import com.network.interfaces.OnItemClick
 import com.network.network.NetworkResult
 import com.network.utils.AppClass
 import com.network.utils.ProgressLoading.displayLoading
@@ -22,6 +23,7 @@ import com.taibahai.adapters.AdapterSettings
 import com.taibahai.databinding.ActivitySettingBinding
 import com.taibahai.databinding.DialogLogoutBinding
 import com.taibahai.models.ModelSettings
+import com.taibahai.quran.ReaderSettingsActivity
 import com.taibahai.utils.Constants
 
 class SettingActivity : BaseActivity() {
@@ -51,68 +53,45 @@ class SettingActivity : BaseActivity() {
     override fun initData() {
         super.initData()
         binding.appbar.tvTitle.setText("Setting")
-        
-        
+
+
     }
 
 
     override fun initAdapter() {
         super.initAdapter()
-        showList.add(ModelSettings(R.drawable.profileicon, "My Profile"))
-        showList.add(ModelSettings(R.drawable.notification, "Notifications"))
-        showList.add(ModelSettings(R.drawable.aivoice, "AI Voice Feedback"))
-        showList.add(ModelSettings(R.drawable.upcoming, "Upcoming Features"))
-        showList.add(ModelSettings(R.drawable.share_icon, "Share"))
-        showList.add(ModelSettings(R.drawable.rate, "Rate App"))
-        showList.add(ModelSettings(R.drawable.aboutus, "About Us"))
-        showList.add(ModelSettings(R.drawable.pp, "Privacy Policy"))
-        showList.add(ModelSettings(R.drawable.cs, "Contact Support"))
-        showList.add(ModelSettings(R.drawable.logout, "Logout"))
-        val adapter = AdapterSettings(showList) { position ->
-            when (position) {
-                0 -> {
-                    startActivity(Intent(this, MyProfileActivity::class.java))
-                }
-
-                1 -> {
-                    startActivity(Intent(this, NotificationActivity::class.java))
-                }
-
-                2 -> {
-                    startActivity(Intent(this, AIVoiceFeedbackActivity::class.java))
-                }
-
-                3 -> {
-                    startActivity(Intent(this, UpcomingFeaturesActivity::class.java))
-                }
-
-                4 -> {
-                    startActivity(Intent(this, ShareActivity::class.java))
-                }
-
-                5 -> {
-                    startActivity(Intent(this, RateAppActivity::class.java))
-                }
-
-                6 -> {
-                    startActivity(Intent(this, AboutUsActivity::class.java))
-                }
-
-                7 -> {
-                    startActivity(Intent(this, PrivacyPolicyActivity::class.java))
-                }
-
-                8 -> {
-                    startActivity(Intent(this, ContactSupportActivity::class.java))
-                }
-
-                9 -> {
-                    showLogoutDialog()
+        val showList = ArrayList<ModelSettings>().apply {
+            add(ModelSettings(1, R.drawable.profileicon, "My Profile"))
+            add(ModelSettings(2, R.drawable.notification, "Notifications"))
+            add(ModelSettings(11, R.drawable.baseline_text_fields_24, "Quran Reading Fonts"))
+            add(ModelSettings(3, R.drawable.aivoice, "AI Voice Feedback"))
+            add(ModelSettings(4, R.drawable.upcoming, "Upcoming Features"))
+            add(ModelSettings(5, R.drawable.share_icon, "Share"))
+            add(ModelSettings(6, R.drawable.rate, "Rate App"))
+            add(ModelSettings(7, R.drawable.aboutus, "About Us"))
+            add(ModelSettings(8, R.drawable.pp, "Privacy Policy"))
+            add(ModelSettings(9, R.drawable.cs, "Contact Support"))
+            add(ModelSettings(10, R.drawable.logout, "Logout"))
+        }
+        val adapter = AdapterSettings(showList, object : OnItemClick {
+            override fun onClick(position: Int, type: String?, data: Any?, view: View?) {
+                super.onClick(position, type, data, view)
+                when (data) {
+                    1 -> startActivity(Intent(this@SettingActivity, MyProfileActivity::class.java))
+                    2 -> startActivity(Intent(this@SettingActivity, NotificationActivity::class.java))
+                    3 -> startActivity(Intent(this@SettingActivity, AIVoiceFeedbackActivity::class.java))
+                    4 -> startActivity(Intent(this@SettingActivity, UpcomingFeaturesActivity::class.java))
+                    5 -> startActivity(Intent(this@SettingActivity, ShareActivity::class.java))
+                    6 -> startActivity(Intent(this@SettingActivity, RateAppActivity::class.java))
+                    7 -> startActivity(Intent(this@SettingActivity, AboutUsActivity::class.java))
+                    8 -> startActivity(Intent(this@SettingActivity, PrivacyPolicyActivity::class.java))
+                    9 -> startActivity(Intent(this@SettingActivity, ContactSupportActivity::class.java))
+                    10 -> showLogoutDialog()
+                    11 -> startActivity(Intent(this@SettingActivity, ReaderSettingsActivity::class.java))
                 }
             }
+        })
 
-
-        }
         adapter.setData(showList)
         binding.rvSettings.adapter = adapter
 

@@ -20,6 +20,7 @@ import android.media.MediaPlayer
 import android.media.MediaPlayer.OnPreparedListener
 import android.net.Uri
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import com.network.utils.AppClass
 import com.taibahai.audioPlayer.PlayerContract.PlayerCallback
@@ -336,10 +337,9 @@ class AudioPlayer private constructor() : PlayerContract.Player, OnPreparedListe
 
     interface OnViewClickListener {
         //        void onPlay();
-        //staff click
         fun onCompleted(mp1: MediaPlayer?)
         fun onPlayStarted(duration: Int)
-        fun updateDuration(duration: Int, currentPosition: Int)
+        fun updateDuration(duration: Int, currentPosition: Int, totalTrackTime:Int)
         fun onPause()
     }
 
@@ -347,7 +347,7 @@ class AudioPlayer private constructor() : PlayerContract.Player, OnPreparedListe
         val singleton = AudioPlayer()
     }
 
-    var mHandler = Handler()
+    var mHandler = Handler(Looper.getMainLooper())
     private val mUpdateTimeTask: Runnable = object : Runnable {
         override fun run() {
             if (mediaPlayer != null && mediaPlayer!!.isPlaying) {
@@ -355,7 +355,7 @@ class AudioPlayer private constructor() : PlayerContract.Player, OnPreparedListe
                     val progressPercentage = getProgressPercentage(
                         mediaPlayer!!.currentPosition.toLong(), mediaPlayer!!.duration.toLong()
                     )
-                    listener!!.updateDuration(progressPercentage, currentPosition)
+                    listener!!.updateDuration(progressPercentage, currentPosition,mediaPlayer!!.duration)
                 }
                 mHandler.postDelayed(this, VOICE_DELAY)
             }

@@ -26,7 +26,7 @@ class FirebaseMessagingService:FirebaseMessagingService() {
         val notificationId = 1
 
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.drawable.image_20)
+            .setSmallIcon(R.drawable.makkah)
             .setContentTitle(title)
             .setContentText(message)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)

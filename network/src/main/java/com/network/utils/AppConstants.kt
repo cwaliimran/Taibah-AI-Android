@@ -1,6 +1,7 @@
 package com.network.utils
 
 object AppConstants {
+    val FAV_SURAHS = "fav_surahs"
     val GUEST = "guest"
     val ACCESS_TOKEN = "access_token"
     val BUNDLE = "bundle"

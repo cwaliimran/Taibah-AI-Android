@@ -1,30 +1,42 @@
 package com.taibahai.quran
 
 import android.Manifest
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
-import android.widget.CompoundButton
+import android.view.Window
+import android.widget.LinearLayout
+import android.widget.SeekBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.gms.common.util.JsonUtils
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.normal.TedPermission
+import com.network.interfaces.OnItemClick
 import com.network.network.NetworkUtils.isInternetAvailable
 import com.network.utils.AppClass
+import com.network.utils.AppClass.Companion.BASE_URL_1
+import com.network.utils.AppClass.Companion.getAudioOutputDirectory
+import com.network.utils.AppClass.Companion.getTimeString
+import com.network.utils.AppClass.Companion.isFileExists
+import com.network.utils.AppConstants
 import com.network.utils.ProgressLoading.displayLoading
 import com.taibahai.R
 import com.taibahai.audioPlayer.AudioPlayer.Companion.instance
 import com.taibahai.audioPlayer.AudioPlayer.OnViewClickListener
 import com.taibahai.databinding.ActivityQuranChaptersBinding
+import com.taibahai.databinding.DialogHistoryBinding
 import com.taibahai.notifications.MediaNotificationManager
 import com.taibahai.quran.AllSurahListAdapter.OnPlayListener
 import com.taibahai.utils.AppJsonUtils
@@ -45,31 +57,28 @@ import org.json.JSONArray
 import org.json.JSONException
 import java.io.File
 import java.io.Serializable
-import java.util.Collections
 
 class QuranChaptersActivity : AppCompatActivity() {
-    var BASE_URL_1 = "https://taibahislamic.com/admin/"
-    var isFavourite = false
     var isDownload = true
     var isPlaySuffle = false
     var isPlaySimple = false
     var jsonArr: JSONArray? = null
-    private var mData: MutableList<SurahListModel>? = null
-    private var mFilteredData: MutableList<SurahListModel>? = null
+    private var mData: MutableList<SurahListModel> = mutableListOf()
     private var mPlayerList: MutableList<SurahListModel?>? = null
-    private var allSurahListAdapter: AllSurahListAdapter? = null
-    private var favModels: List<FavModel>? = null
+    private lateinit var allSurahListAdapter: AllSurahListAdapter
     var fetchConfiguration: FetchConfiguration? = null
     var fetch: Fetch? = null
     var request: Request? = null
-    var binding: ActivityQuranChaptersBinding? = null
+    lateinit var binding: ActivityQuranChaptersBinding
     var currentIndex = 0
     var currentFile = ""
     var surahName = ""
     var surahId = ""
-    var model: SurahListModel? = null
-
+    var model: SurahListModel = SurahListModel()
+    private val TAG = "QuranChaptersActivity"
     lateinit var context: Context
+    private var favSurahs = mutableListOf<String>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityQuranChaptersBinding.inflate(layoutInflater)
@@ -79,21 +88,47 @@ class QuranChaptersActivity : AppCompatActivity() {
         initAdapter()
         initClicks()
         initData()
-        setContentView(binding!!.root)
+        setContentView(binding.root)
     }
 
     private fun initViews() {
-        binding!!.recyclerView.isNestedScrollingEnabled = false
+        binding.recyclerView.isNestedScrollingEnabled = false
         mData = ArrayList()
-        mFilteredData = ArrayList()
-        favModels = ArrayList()
         mPlayerList = ArrayList()
+        favSurahs = mutableListOf()
+        binding.appbar.tvTitle.text = getString(R.string.chapters)
+        binding.playLayout.seekbar.setOnSeekBarChangeListener(object :
+            SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {}
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
+                instance.removeCallbacks()
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+                instance.seek(seekBar.progress.toLong())
+            }
+        })
+        binding.playLayout.ivFav.setOnClickListener {
+            if (mData[currentIndex].isFav) {
+                mData[currentIndex].isFav = false
+                favSurahs.remove(mData[currentIndex].number)
+                AppClass.sharedPref.storeList(AppConstants.FAV_SURAHS, favSurahs)
+            } else {
+                favSurahs.add(mData[currentIndex].number)
+                AppClass.sharedPref.storeList(AppConstants.FAV_SURAHS, favSurahs)
+                mData[currentIndex].isFav = true
+            }
+            binding.playLayout.ivFav.isSelected = mData[currentIndex].isFav
+
+            allSurahListAdapter.notifyItemChanged(currentIndex)
+
+        }
     }
 
     public override fun onResume() {
         super.onResume()
         initAudioPlay()
-        if (!mData!!.isEmpty()) {
+        if (!mData.isEmpty()) {
             downloads
         }
     }
@@ -112,9 +147,6 @@ class QuranChaptersActivity : AppCompatActivity() {
                         fetch!!.enqueue(
                             request!!,
                             { updatedRequest: Request? -> }) { error: Error? ->
-                            Log.d(
-                                TAG, "call: " + result.error
-                            )
                         }
                     }
                 }
@@ -122,23 +154,37 @@ class QuranChaptersActivity : AppCompatActivity() {
         }
     }
 
-    //                Collections.sort(list, (first, second) -> Long.compare(first.getCreated(), second.getCreated()));
     private val downloads: Unit
         private get() {
             fetch!!.getDownloadsInGroup(StringUtils.SURAH_GROUP_ID) { downloads: List<Download>? ->
                 val list = ArrayList(downloads)
-                Log.d(TAG, "call: " + Gson().toJson(list))
-                //                Collections.sort(list, (first, second) -> Long.compare(first.getCreated(), second.getCreated()));
                 for (download in list) {
-                    allSurahListAdapter!!.updateView(download)
+                    allSurahListAdapter.updateView(download)
                 }
             }.addListener(fetchListener)
         }
 
     private fun initAdapter() {
-        allSurahListAdapter = AllSurahListAdapter(context)
-        binding!!.recyclerView.adapter = allSurahListAdapter
-        allSurahListAdapter!!.setOnItemClickListener(object : OnPlayListener {
+        allSurahListAdapter = AllSurahListAdapter(context, object : OnItemClick {
+            override fun onClick(position: Int, type: String?, data: Any?, view: View?) {
+                super.onClick(position, type, data, view)
+                if (mData[position].isFav) {
+                    mData[position].isFav = false
+                    favSurahs.remove(mData[position].number)
+                    AppClass.sharedPref.storeList(AppConstants.FAV_SURAHS, favSurahs)
+                } else {
+                    favSurahs.add(mData[position].number)
+                    AppClass.sharedPref.storeList(AppConstants.FAV_SURAHS, favSurahs)
+                    mData[position].isFav = true
+                }
+                allSurahListAdapter.notifyItemChanged(position)
+                if (position == currentIndex) {
+                    binding.playLayout.ivFav.isSelected = model.isFav
+                }
+            }
+        })
+        binding.recyclerView.adapter = allSurahListAdapter
+        allSurahListAdapter.setOnItemClickListener(object : OnPlayListener {
             override fun onDownload(model: SurahListModel?) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     TedPermission.create().setPermissionListener(object : PermissionListener {
@@ -148,7 +194,7 @@ class QuranChaptersActivity : AppCompatActivity() {
                             } else {
                                 Toast.makeText(
                                     context,
-                                    context!!.getString(R.string.turn_on_internet),
+                                    context.getString(R.string.turn_on_internet),
                                     Toast.LENGTH_LONG
                                 ).show()
                             }
@@ -166,12 +212,12 @@ class QuranChaptersActivity : AppCompatActivity() {
                         override fun onPermissionGranted() {
                             if (isInternetAvailable()) {
                                 if (isDownload) if (model != null) {
-                                    model.audio?.let { downloadAudio(it) }
+                                    model.audio.let { downloadAudio(it) }
                                 }
                             } else {
                                 Toast.makeText(
                                     context,
-                                    context!!.getString(R.string.turn_on_internet),
+                                    context.getString(R.string.turn_on_internet),
                                     Toast.LENGTH_LONG
                                 ).show()
                             }
@@ -189,7 +235,29 @@ class QuranChaptersActivity : AppCompatActivity() {
 
             override fun onDelete(model: SurahListModel?) {
                 if (model != null) {
-                    fetch!!.remove(model.getDownloadId(context))
+                    val dialog = Dialog(context)
+                    val layoutInflater = LayoutInflater.from(context)
+                    val binding = DialogHistoryBinding.inflate(layoutInflater)
+                    binding.tvConfirmation.text = getString(R.string.sure_delete)
+                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                    dialog.setContentView(binding.root)
+                    dialog.setCancelable(false)
+                    binding.btnCancel.setOnClickListener {
+                        dialog.dismiss()
+                    }
+
+                    binding.btnYes.setOnClickListener {
+                        fetch!!.remove(model.getDownloadId())
+                        dialog.dismiss()
+                    }
+
+                    dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                    dialog.window!!.setLayout(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                    )
+
+                    dialog.show()
                 }
             }
 
@@ -197,48 +265,56 @@ class QuranChaptersActivity : AppCompatActivity() {
                 AppClass.sharedPref.removeKey(StringUtils.PREV_SURAH_FILEPATH)
                 AppClass.sharedPref.removeKey(StringUtils.PREV_SURAH_URL)
                 if (model != null) {
-                    fetch!!.pause(model.getDownloadId(context))
+                    fetch!!.pause(model.getDownloadId())
                 }
             }
 
             override fun onResume(model: SurahListModel?) {
                 if (model != null) {
-                    fetch!!.resume(model.getDownloadId(context))
+                    fetch!!.resume(model.getDownloadId())
                 }
             }
 
             override fun onRetryDownload(model: SurahListModel?) {
                 if (model != null) {
-                    fetch!!.retry(model.getDownloadId(context))
+                    fetch!!.retry(model.getDownloadId())
                 }
             }
 
             override fun onPlayClick(result: SurahListModel?) {
-                model = result
+                if (result != null) {
+                    model = result
+                }
                 isPlaySimple = false
                 isPlaySuffle = false
                 instance.release()
                 updateUi()
                 playerList
+                currentIndex = model.number.toInt() - 1
                 gotoDetails()
             }
         })
     }
 
     private fun updateUi() {
-        surahId = model!!.id.toString()
-        currentFile = model!!.download?.file.toString()
-        surahName = model!!.transliterationEn.toString()
-        binding!!.playLayout.surahName.text = surahName
-        allSurahListAdapter!!.updateView(surahId)
+        surahId = model.id
+        currentFile = model.download?.file.toString()
+        surahName = model.transliteration_en.toString()
+        binding.playLayout.surahName.text = surahName
+        binding.playLayout.tvSurahNo.text = model.number
+        binding.playLayout.ivFav.isSelected = model.isFav
+        binding.playLayout.tvMeaning.text =
+            "${model.translation_en}(${model.total_verses})"
+        allSurahListAdapter.notifyItemChanged(currentIndex)
     }
 
     private fun gotoDetails() {
-        val intent = Intent(context, Al_Quran_Details::class.java)
-        intent.putExtra("ayat_id", model!!.id)
-        intent.putExtra("ayat_name", model!!.transliterationEn)
-        intent.putExtra("ayat_verse", model!!.totalVerses)
-        intent.putExtra("ayat_type", model!!.revelationType)
+        binding.playLayout.root.visibility = View.VISIBLE
+        val intent = Intent(context, ChapterDetailActivity::class.java)
+        intent.putExtra("ayat_id", model.id)
+        intent.putExtra("ayat_name", model.transliteration_en)
+        intent.putExtra("ayat_verse", model.total_verses)
+        intent.putExtra("ayat_type", model.revelation_type)
         if (!mPlayerList!!.isEmpty()) {
             val args = Bundle()
             args.putSerializable(StringUtils.ARRAY, mPlayerList as Serializable?)
@@ -249,7 +325,7 @@ class QuranChaptersActivity : AppCompatActivity() {
 
     fun downloadAudio(s: String) {
         val child = StringUtils.SURAH_FOLDER + StringUtils.getNameFromUrl(s)
-        val file = File(getAudioOutputDirectory(context), child)
+        val file = File(getAudioOutputDirectory(), child)
         val audio_path = file.absolutePath
         request = Request(BASE_URL_1 + s, audio_path)
         request!!.priority = Priority.HIGH
@@ -262,41 +338,72 @@ class QuranChaptersActivity : AppCompatActivity() {
     }
 
     private fun initData() {
+        favSurahs = AppClass.sharedPref.getList(AppConstants.FAV_SURAHS)
         try {
-            mFilteredData!!.clear()
+            mData!!.clear()
             jsonArr = JSONArray(AppJsonUtils.readRawResource(context, R.raw.allsurahlist))
             val gson = Gson()
             val type = object : TypeToken<List<SurahListModel?>?>() {}.type
-            mFilteredData = gson.fromJson(jsonArr.toString(), type)
+            mData = gson.fromJson(jsonArr.toString(), type)
+            loadFav()
         } catch (e: JSONException) {
             e.printStackTrace()
         }
-        loadJson()
-        //        new getFavSurah().execute();
     }
 
     private fun initClicks() {
-
-        binding!!.playLayout.play.setOnClickListener { v: View? ->
-            if (!currentFile.isEmpty()) {
+        binding.appbar.ivLeft.setOnClickListener {
+            finish()
+        }
+        binding.playLayout.play.setOnClickListener { v: View? ->
+            if (currentFile.isNotEmpty()) {
                 startPlaying(currentFile)
-                allSurahListAdapter!!.updateView(surahId)
-            }
-        }
-//        binding!!.playLayout.fastForward.setOnClickListener { v: View? -> if (!mPlayerList!!.isEmpty()) playNext() }
-        binding!!.playLayout.play.setOnClickListener { v: View? ->
-            playerList
-            if (!mPlayerList!!.isEmpty()) {
-                instance.release()
-                isPlaySimple = true
-                isPlaySuffle = false
-                currentIndex = -1
-                playNext()
+                allSurahListAdapter.updateView(surahId)
             } else {
-                Toast.makeText(context, getString(R.string.no_surah_downloaded), Toast.LENGTH_SHORT)
-                    .show()
+                playerList
+                if (mPlayerList!!.isNotEmpty()) {
+                    instance.release()
+                    isPlaySimple = true
+                    isPlaySuffle = false
+                    currentIndex = -1
+                    playNext()
+                } else {
+                    Toast.makeText(
+                        context,
+                        getString(R.string.no_surah_downloaded),
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
+                }
             }
         }
+//        binding.playLayout.play.setOnClickListener { v: View? ->
+//            playerList
+//            if (mPlayerList!!.isNotEmpty()) {
+//                instance.release()
+//                isPlaySimple = true
+//                isPlaySuffle = false
+//                currentIndex = -1
+//                playNext()
+//            } else {
+//                Toast.makeText(context, getString(R.string.no_surah_downloaded), Toast.LENGTH_SHORT)
+//                    .show()
+//            }
+//        }
+//        binding!!.playLayout.fastForward.setOnClickListener { v: View? -> if (!mPlayerList!!.isEmpty()) playNext() }
+//        binding.playLayout.play.setOnClickListener { v: View? ->
+//            playerList
+//            if (!mPlayerList!!.isEmpty()) {
+//                instance.release()
+//                isPlaySimple = true
+//                isPlaySuffle = false
+//                currentIndex = -1
+//                playNext()
+//            } else {
+//                Toast.makeText(context, getString(R.string.no_surah_downloaded), Toast.LENGTH_SHORT)
+//                    .show()
+//            }
+//        }
 //        binding!!.shuffleBtn.setOnClickListener { v: View? ->
 //            playerList
 //            if (!mPlayerList!!.isEmpty()) {
@@ -315,31 +422,16 @@ class QuranChaptersActivity : AppCompatActivity() {
     private val playerList: Unit
         private get() {
             mPlayerList!!.clear()
-            for (model in mData!!) {
-                    if (model.download?.status == Status.COMPLETED) {
-                        val child =
-                            StringUtils.SURAH_FOLDER + StringUtils.getNameFromUrl(model.audio)
-                        if (isFileExists(child, context)) {
-                            mPlayerList!!.add(model)
-                        }
+            for (model in mData) {
+                if (model.download?.status == Status.COMPLETED) {
+                    val child = StringUtils.SURAH_FOLDER + StringUtils.getNameFromUrl(model.audio)
+                    if (isFileExists(child)) {
+                        mPlayerList!!.add(model)
+                    }
                 }
-            }
-            if (isPlaySuffle) {
-                Collections.shuffle(mPlayerList)
             }
         }
 
-    fun updateCurrentIndex() {
-        for (i in mPlayerList!!.indices) {
-            val model = mPlayerList!![i]
-            if (!surahId.isEmpty()) {
-                if (surahId == model!!.id) {
-                    currentIndex = i
-                    break
-                }
-            }
-        }
-    }
 
     private fun playNext() {
         currentIndex++
@@ -352,54 +444,32 @@ class QuranChaptersActivity : AppCompatActivity() {
                 val child = StringUtils.SURAH_FOLDER + StringUtils.getNameFromUrl(
                     model.audio
                 )
-                if (isFileExists(child, context)) {
+                if (isFileExists(child)) {
                     surahId = model.id.toString()
                     currentFile = model.download?.file.toString()
-                    surahName = model.transliterationEn.toString()
-                    binding!!.playLayout.surahName.text = surahName
+                    surahName = model.transliteration_en.toString()
+                    binding.playLayout.surahName.text = surahName
+                    binding.playLayout.tvSurahNo.text = model.number.toString()
                     startPlaying(currentFile)
-                    model.id?.let { allSurahListAdapter!!.updateView(it) }
+                    model.id.let { allSurahListAdapter.updateView(it) }
                 }
             }
         }
     }
 
-    private fun loadJson() {
-        mData!!.clear()
-        for (model in mFilteredData!!) {
-            val id = model.id?.toLong()
-            if (id?.let { isFavSaved(it) } == true && isFavourite && id != -1L) {
-                model.isFav = true
-                mData!!.add(model)
-            }
-            if (!isFavourite) {
-                model.isFav = id?.let { isFavSaved(it) } == true
-                mData!!.add(model)
-            }
+    private fun loadFav() {
+        mData.forEach { model ->
+            val isFav = isFavSaved(model.number)
+            model.isFav = isFav
         }
-        allSurahListAdapter!!.updateData(mData!!)
+
+        allSurahListAdapter.updateData(mData)
         displayLoading(false)
-//        binding!!.buttonsLayout.visibility = View.VISIBLE
-//        binding!!.playView.visibility = View.VISIBLE
         downloads
-//        if (mData!!.size == 0) {
-//            binding!!.textView.visibility = View.VISIBLE
-//        } else {
-//            binding!!.textView.visibility = View.GONE
-//        }
     }
 
-    private fun isFavSaved(id: Long): Boolean {
-        var check = false
-        for (favModels in favModels!!) {
-            val parkIdCurrent = favModels.position
-            //            Log.d("response", "isSaved: " + parkIdCurrent + "");
-            if (parkIdCurrent == id) {
-                check = true
-                break
-            }
-        }
-        return check
+    private fun isFavSaved(id: String): Boolean {
+        return favSurahs.contains(id)
     }
 
     //    @Override
@@ -429,7 +499,11 @@ class QuranChaptersActivity : AppCompatActivity() {
     private fun startPlaying(audio_url: String) {
         instance.setData(audio_url)
         instance.playOrPause()
-        Handler(Looper.myLooper()!!).postDelayed({ MediaNotificationManager.showMediaNotification(surahName) }, 200)
+        Handler(Looper.myLooper()!!).postDelayed({
+            MediaNotificationManager.showMediaNotification(
+                surahName
+            )
+        }, 200)
     }
 
     private fun stopPlaying() {
@@ -439,24 +513,33 @@ class QuranChaptersActivity : AppCompatActivity() {
     private fun initAudioPlay() {
         instance.OnItemClickListener(object : OnViewClickListener {
             override fun onPlayStarted(duration: Int) {
-                Log.d(TAG, "onPlayStarted: " + binding!!.playLayout.play.isSelected)
-                binding!!.playLayout.play.isSelected = true
+                binding.playLayout.play.isSelected = true
+                val total_duration = getTimeString(duration.toLong())
+                binding.playLayout.play.isSelected = true
             }
 
-            override fun updateDuration(duration: Int, currentPosition: Int) {
-                if (!binding!!.playLayout.play.isSelected) binding!!.playLayout.play.isSelected =
-                    true
+            override fun updateDuration(duration: Int, currentPosition: Int, totalTrackTime: Int) {
+                binding.playLayout.totalTime.text = getTimeString(totalTrackTime.toLong())
+
+                val current_duration = getTimeString(currentPosition.toLong())
+                binding.playLayout.currentTime.text = current_duration
+                binding.playLayout.seekbar.progress = duration
+
+                if (!binding.playLayout.play.isSelected) binding.playLayout.play.isSelected = true
             }
 
             override fun onPause() {
-                binding!!.playLayout.play.isSelected = false
-                allSurahListAdapter!!.updateView(StringUtils.NO_INDEX)
+                binding.playLayout.play.isSelected = false
+                allSurahListAdapter.updateView(StringUtils.NO_INDEX)
             }
 
             override fun onCompleted(mp1: MediaPlayer?) {
-                binding!!.playLayout.play.isSelected = false
-                allSurahListAdapter!!.updateView(StringUtils.NO_INDEX)
+                binding.playLayout.play.isSelected = false
+                allSurahListAdapter.updateView(StringUtils.NO_INDEX)
                 if (isPlaySimple || isPlaySuffle) playNext()
+
+                binding.playLayout.seekbar.progress = 0
+                binding.playLayout.currentTime.text = "0:00"
             }
         })
     }
@@ -471,44 +554,42 @@ class QuranChaptersActivity : AppCompatActivity() {
             )
             assert(throwable != null)
             Toast.makeText(context, throwable!!.message + "", Toast.LENGTH_SHORT).show()
-            allSurahListAdapter!!.updateView(download)
+            allSurahListAdapter.updateView(download)
             isDownload = true
         }
 
         override fun onAdded(download: Download) {
-            allSurahListAdapter!!.updateView(download)
+            allSurahListAdapter.updateView(download)
         }
 
         override fun onQueued(download: Download, waitingOnNetwork: Boolean) {
-            allSurahListAdapter!!.updateView(download)
+            allSurahListAdapter.updateView(download)
         }
 
         override fun onCompleted(download: Download) {
-            allSurahListAdapter!!.updateView(download)
+            allSurahListAdapter.updateView(download)
             isDownload = true
         }
 
         override fun onProgress(
-            download: Download,
-            etaInMilliSeconds: Long,
-            downloadedBytesPerSecond: Long
+            download: Download, etaInMilliSeconds: Long, downloadedBytesPerSecond: Long
         ) {
-            if (isDownload) allSurahListAdapter!!.updateView(download)
+            if (isDownload) allSurahListAdapter.updateView(download)
             isDownload = false
             Log.d(TAG, "onProgress: " + downloadedBytesPerSecond / 1024)
         }
 
         override fun onPaused(download: Download) {
-            allSurahListAdapter!!.updateView(download)
+            allSurahListAdapter.updateView(download)
             isDownload = true
         }
 
         override fun onResumed(download: Download) {
-            allSurahListAdapter!!.updateView(download)
+            allSurahListAdapter.updateView(download)
         }
 
         override fun onCancelled(download: Download) {
-            allSurahListAdapter!!.updateView(download)
+            allSurahListAdapter.updateView(download)
         }
 
         override fun onRemoved(download: Download) {
@@ -516,10 +597,9 @@ class QuranChaptersActivity : AppCompatActivity() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 TedPermission.create().setPermissionListener(object : PermissionListener {
                     override fun onPermissionGranted() {
-                        allSurahListAdapter!!.updateView(download)
-                        if (download.file != null && !download.file.isEmpty()) deleteFile(
-                            download.file,
-                            context
+                        allSurahListAdapter.updateView(download)
+                        if (download.file.isNotEmpty()) AppClass.deleteFile(
+                            download.file, context
                         )
                     }
 
@@ -527,16 +607,14 @@ class QuranChaptersActivity : AppCompatActivity() {
                 })
                     .setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
                     .setPermissions(
-                        Manifest.permission.READ_MEDIA_AUDIO,
-                        Manifest.permission.POST_NOTIFICATIONS
+                        Manifest.permission.READ_MEDIA_AUDIO, Manifest.permission.POST_NOTIFICATIONS
                     ).check()
             } else {
                 TedPermission.create().setPermissionListener(object : PermissionListener {
                     override fun onPermissionGranted() {
-                        allSurahListAdapter!!.updateView(download)
-                        if (download.file != null && !download.file.isEmpty()) deleteFile(
-                            download.file,
-                            context
+                        allSurahListAdapter.updateView(download)
+                        if (download.file.isNotEmpty()) AppClass.deleteFile(
+                            download.file, context
                         )
                     }
 
@@ -551,7 +629,7 @@ class QuranChaptersActivity : AppCompatActivity() {
         }
 
         override fun onDeleted(download: Download) {
-            allSurahListAdapter!!.updateView(download)
+            allSurahListAdapter.updateView(download)
         }
     }
 
@@ -566,42 +644,19 @@ class QuranChaptersActivity : AppCompatActivity() {
     public override fun onDestroy() {
         super.onDestroy()
         fetch!!.close()
-        //        AudioPlayer.Companion.getInstance().release();
+        instance.release()
     }
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == Constants.ACTIVITY_RESULT_CODE && resultCode == RESULT_OK) {
             if (data!!.hasExtra(StringUtils.OBJECT)) {
-                model = data.getSerializableExtra(StringUtils.OBJECT) as SurahListModel?
+                model = data.getSerializableExtra(StringUtils.OBJECT) as SurahListModel
+                favSurahs.clear()
+                favSurahs = AppClass.sharedPref.getList(AppConstants.FAV_SURAHS)
+                mData[currentIndex] = model
                 updateUi()
-                updateCurrentIndex()
             }
-        }
-    }
-
-    companion object {
-        private const val TAG = "AlQuranFragment"
-        fun getAudioOutputDirectory(context: Context?): File {
-            val mediaStorageDir = File(
-                context!!.filesDir.toString() + "/" +
-                        context.getString(R.string.app_name) + "/Audios"
-            )
-            if (!mediaStorageDir.exists()) {
-                mediaStorageDir.mkdirs()
-            }
-            return mediaStorageDir
-        }
-
-        fun isFileExists(childPath: String?, context: Context?): Boolean {
-            val yourFile = File(getAudioOutputDirectory(context), childPath)
-            return yourFile.exists()
-        }
-
-        fun deleteFile(filePath: String?, context: Context?): Boolean {
-            val dir = context!!.filesDir
-            val file = File(dir, filePath)
-            return file.delete()
         }
     }
 }

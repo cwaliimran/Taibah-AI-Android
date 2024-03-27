@@ -3,7 +3,7 @@
     <string name="message_no_internet_connection">No internet connection.</string>
     <string name="app_name">Taibah AI</string>
 
-<!--    test ids-->
+    <!--    test ids-->
     <string name="admob_app_id">ca-app-pub-3940256099942544~3347511713</string>
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
 

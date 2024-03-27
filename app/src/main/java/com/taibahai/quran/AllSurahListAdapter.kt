@@ -1,34 +1,30 @@
 package com.taibahai.quran
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import com.network.interfaces.OnItemClick
+import com.network.utils.AppClass.Companion.isFileExists
 import com.taibahai.R
 import com.taibahai.databinding.ItemQuranChapterBinding
 import com.taibahai.quran.StringUtils.getNameFromUrl
 import com.tonyodev.fetch2.Download
 import com.tonyodev.fetch2.Status
-import java.io.File
 
-class AllSurahListAdapter(private val context: Context) :
-    RecyclerView.Adapter<AllSurahListAdapter.HomeListHolder>() {
+class AllSurahListAdapter(private val context: Context, val clickListener: OnItemClick) :
+    RecyclerView.Adapter<AllSurahListAdapter.ViewHolder>() {
     private var mData: List<SurahListModel>
     var layoutInflater: LayoutInflater
     var listener: OnPlayListener? = null
     private var selected = "-1"
 
-    //    RoomDatabaseRepository dbRepository;
     init {
         mData = ArrayList()
         layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        //        dbRepository = new RoomDatabaseRepository(context);
     }
 
     fun updateData(mData: List<SurahListModel>) {
@@ -36,13 +32,13 @@ class AllSurahListAdapter(private val context: Context) :
         notifyDataSetChanged()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeListHolder {
-        return HomeListHolder(ItemQuranChapterBinding.inflate(layoutInflater, parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        return ViewHolder(ItemQuranChapterBinding.inflate(layoutInflater, parent, false))
     }
 
     override fun onBindViewHolder(
-        holder: HomeListHolder,
-        @SuppressLint("RecyclerView") position: Int
+        holder: ViewHolder,
+        position: Int
     ) {
         // showing data
         val model = mData[position]
@@ -53,12 +49,15 @@ class AllSurahListAdapter(private val context: Context) :
             holder.binding.name.setTextColor(Color.BLACK)
             holder.binding.meaning.setTextColor(Color.BLACK)
         }
-        holder.binding.name.text = model.transliterationEn
+        holder.binding.name.text = model.transliteration_en
         holder.binding.meaning.text =
-            java.lang.String.format("%s (%s)", model.transliterationEn, model.totalVerses)
+            java.lang.String.format("%s (%s)", model.translation_en, model.total_verses)
         holder.binding.number.text = model.number
-        holder.binding.checkBox.isSelected = model.isFav
-//        loadImageFromDrawable(context, R.drawable.surah, holder.binding.image, R.drawable.surah)
+        holder.binding.ivFav.isSelected = model.isFav
+
+        holder.binding.ivFav.setOnClickListener {
+            clickListener.onClick(holder.absoluteAdapterPosition)
+        }
 
 
         // handling download statuses
@@ -68,7 +67,7 @@ class AllSurahListAdapter(private val context: Context) :
                 Status.COMPLETED -> {
                     val child = StringUtils.SURAH_FOLDER + getNameFromUrl(model.audio)
                     holder.binding.progress.visibility = View.GONE
-                    if (isFileExists(child, context)) {
+                    if (isFileExists(child)) {
                         holder.binding.play.setImageResource(R.drawable.ic_delete)
                         holder.binding.play.setOnClickListener { v: View? ->
                             listener!!.onDelete(
@@ -159,25 +158,7 @@ class AllSurahListAdapter(private val context: Context) :
             holder.itemView.setOnClickListener { v: View? -> listener!!.onDownload(model) }
         }
 
-        //clicks
-        holder.binding.checkBox.setOnClickListener(object : View.OnClickListener {
-            var favModel: FavModel? = null
-            override fun onClick(v: View) {
-                if (!model.isFav) {
-                    favModel = model.id?.let { FavModel(it.toLong()) }
-                    // dbRepository.addToFavSurah(favModel);
-                    holder.binding.checkBox.isSelected = true
-                    model.isFav = true
-                    Log.d("response", "park id inserted: " + model.id)
-                } else {
-                    //  dbRepository.deleteFromFavSurah(Integer.parseInt(model.getId()));
-                    holder.binding.checkBox.isSelected = false
-                    model.isFav = false
-                    Log.d("response", "park id deleted: " + model.id)
-                }
-                //                notifyItemChanged(position);
-            }
-        })
+
     }
 
     fun setOnItemClickListener(listener: OnPlayListener?) {
@@ -197,14 +178,14 @@ class AllSurahListAdapter(private val context: Context) :
         return mData.size
     }
 
-    class HomeListHolder(var binding: ItemQuranChapterBinding) : RecyclerView.ViewHolder(
+    class ViewHolder(var binding: ItemQuranChapterBinding) : RecyclerView.ViewHolder(
         binding.root
     )
 
     fun updateView(download: Download) {
         for (position in mData.indices) {
             val downloadData = mData[position]
-            if (downloadData.getDownloadId(context) == download.id) {
+            if (downloadData.getDownloadId() == download.id) {
                 downloadData.download = download
                 notifyItemChanged(position)
                 return
@@ -217,31 +198,4 @@ class AllSurahListAdapter(private val context: Context) :
         notifyDataSetChanged()
     }
 
-    companion object {
-        fun loadImageFromDrawable(context: Context?, url: Int, imageView: ImageView?, error: Int) {
-            try {
-                Glide.with(context!!).load(url)
-                    .error(error)
-                    .into(imageView!!)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-
-        fun isFileExists(childPath: String?, context: Context): Boolean {
-            val yourFile = File(getAudioOutputDirectory(context), childPath)
-            return yourFile.exists()
-        }
-
-        fun getAudioOutputDirectory(context: Context): File {
-            val mediaStorageDir = File(
-                context.filesDir.toString() + "/" +
-                        context.getString(R.string.app_name) + "/Audios"
-            )
-            if (!mediaStorageDir.exists()) {
-                mediaStorageDir.mkdirs()
-            }
-            return mediaStorageDir
-        }
-    }
 }

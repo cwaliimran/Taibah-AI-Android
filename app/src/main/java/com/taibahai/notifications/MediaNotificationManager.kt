@@ -98,7 +98,7 @@ class MediaNotificationManager : BroadcastReceiver() {
                 .setContentIntent(contentIntent)
                 .build()
 
-            notificationManager.notify(Constants.NOTIFICATION_ID, notification)
+          //  notificationManager.notify(Constants.NOTIFICATION_ID, notification)
         }
     }
 }

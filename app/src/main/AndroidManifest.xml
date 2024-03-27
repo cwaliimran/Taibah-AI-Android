@@ -128,11 +128,9 @@
             android:name=".quran.QuranChaptersActivity"
             android:exported="true" />
         <activity
-            android:name=".quran.Al_Quran_Details"
+            android:name=".quran.ChapterDetailActivity"
             android:exported="true" />
-        <activity
-            android:name=".activities.ChapterDetailActivity"
-            android:exported="false" />
+
         <activity
             android:name=".activities.HistoryActivity"
             android:exported="false" />
@@ -145,6 +143,9 @@
         <activity
             android:name=".activities.LoginActivity"
             android:exported="true" />
+        <activity
+            android:name=".quran.ReaderSettingsActivity"
+            android:exported="false" />
         <activity
             android:name=".bottom_navigation.BottomNavigation"
             android:exported="true" />

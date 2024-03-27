@@ -18,4 +18,6 @@
     <color name="grey43">#6E6E6E</color>
     <color name="gray">#B1B3B4</color>
     <color name="grey_300">#E0E0E0</color>
+    <color name="seek_bar_progress_color">#FF4081</color>
+    <color name="seek_bar_thumb_color">#FF4081</color>
 </resources>

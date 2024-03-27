@@ -7,9 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.facebook.appevents.codeless.internal.ViewHierarchy.setOnClickListener
 import com.network.utils.AppClass
 import com.taibahai.R
 import com.taibahai.databinding.ItemQuranChapterDetailBinding
+import com.taibahai.utils.ShareImage.getBitmapFromView
 
 class SurahAdapter(private val context: Context) :
     RecyclerView.Adapter<SurahAdapter.HomeListHolder>() {
@@ -42,20 +44,15 @@ class SurahAdapter(private val context: Context) :
         }
         holder.binding.ayatArabicText.text = model.arabicText
         holder.binding.ayatEnglishTranslation.text = model.englishText
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            holder.binding.ayatEnglishTranslitration.text =
-                Html.fromHtml(model.english_translation, Html.FROM_HTML_MODE_LEGACY)
-        } else {
-            holder.binding.ayatEnglishTranslitration.text = Html.fromHtml(model.english_translation)
-        }
+        holder.binding.ayatEnglishTranslitration.text =
+            Html.fromHtml(model.english_translation, Html.FROM_HTML_MODE_LEGACY)
         holder.binding.ayatNumber.text = model.position.toString()
 
 
-//        holder.binding.shareImage.setOnClickListener(v -> {
-//            if (listener != null && position != RecyclerView.NO_POSITION) {
-//                listener.onItemClick(holder.itemView, model);
-//            }
-//        });
+        holder.binding.ivShare.setOnClickListener {
+            context.getBitmapFromView(holder.binding.root)
+
+        }
         val textSize = AppClass.sharedPref.getInt(StringUtils.FONT_SIZE)
         if (textSize != 0) {
             holder.binding.ayatArabicText.textSize = textSize.toFloat()

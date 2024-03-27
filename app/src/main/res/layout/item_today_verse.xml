@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -83,7 +84,7 @@
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginTop="20dp"
                 android:fontFamily="@font/poppins"
-                android:text="قُلْ هُوَ ٱللَّهُ أَحَدٌ ١"
+                tools:text="قُلْ هُوَ ٱللَّهُ أَحَدٌ ١"
                 android:textAlignment="textStart"
                 android:textColor="@color/black"
                 android:textSize="18sp"
@@ -98,7 +99,7 @@
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginTop="20dp"
                 android:fontFamily="@font/poppins"
-                android:text=" Qul huwa Allahu Ahad"
+                tools:text=" Qul huwa Allahu Ahad"
                 android:textColor="@color/primary_green"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -112,7 +113,7 @@
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/poppins"
-                android:text=" Soy, “O Prophet,”He is Allah_One"
+                tools:text=" Soy, “O Prophet,”He is Allah_One"
                 android:textColor="#4F4D4D"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -129,7 +130,7 @@
                 android:background="@drawable/item_more_upgradebtn"
                 android:backgroundTint="#DFF4DE"
                 android:fontFamily="@font/poppins"
-                android:text="Al-Faatiha (12:1)"
+                tools:text="Al-Faatiha (12:1)"
                 android:textColor="@color/primary_green"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"

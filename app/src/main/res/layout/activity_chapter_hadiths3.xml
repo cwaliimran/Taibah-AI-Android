@@ -66,7 +66,7 @@
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="20dp"
             android:fontFamily="@font/poppins_medium"
-            android:text="From 1 to 7"
+            tools:text="From 1 to 7"
             android:textColor="@color/black"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"

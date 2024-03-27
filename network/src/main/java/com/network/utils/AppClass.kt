@@ -13,7 +13,7 @@ import java.io.File
 import java.util.Locale
 
 
-public class AppClass : Application() {
+class AppClass : Application() {
     var singleton: AppClass? = null
 
 
@@ -96,28 +96,10 @@ public class AppClass : Application() {
             res.updateConfiguration(conf, res.displayMetrics)
         }
 
-        fun progressToTimer(i: Int, i2: Int): Int {
-            return (i.toDouble() / 100.0 * (i2 / 1000).toDouble()).toInt() * 1000
-        }
-
-        fun getProgressPercentage(j: Long, j2: Long): Int {
-            java.lang.Double.valueOf(0.0)
-            return java.lang.Double.valueOf(
-                (j / 1000).toInt().toLong().toDouble() / (j2 / 1000).toInt().toLong()
-                    .toDouble() * 100.0
-            ).toInt()
-        }
-
-        fun getTimeString(duration: Int): String? {
-            val minutes = Math.floor((duration / 1000 / 60).toDouble()).toInt()
-            val seconds = (duration / 1000 - minutes * 60).toInt()
-            return minutes.toString() + ":" + String.format("%02d", seconds)
-        }
-
-        fun getAudioOutputDirectory(): File? {
+        fun getAudioOutputDirectory(): File {
             val mediaStorageDir: File = File(
-                AppClass.instance.getFilesDir()
-                    .toString() + "/" + AppClass.instance.getString(R.string.app_name) + "/Audios"
+                instance.filesDir
+                    .toString() + "/" + "TaibahAI" + "/Audios"
             )
             if (!mediaStorageDir.exists()) {
                 mediaStorageDir.mkdirs()
@@ -128,6 +110,17 @@ public class AppClass : Application() {
         fun isFileExists(childPath: String?): Boolean {
             val yourFile = File(getAudioOutputDirectory(), childPath)
             return yourFile.exists()
+        }
+        fun deleteFile(filePath: String?, context: Context?): Boolean {
+            val dir = context!!.filesDir
+            val file = File(dir, filePath)
+            return file.delete()
+        }
+
+        fun getTimeString(duration: Long): String {
+            val minutes = Math.floor((duration / 1000 / 60).toDouble()).toInt()
+            val seconds = (duration / 1000 - minutes * 60).toInt()
+            return minutes.toString() + ":" + String.format("%02d", seconds)
         }
 
     }

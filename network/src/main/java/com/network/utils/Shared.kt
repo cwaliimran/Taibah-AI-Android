@@ -3,6 +3,7 @@ package com.network.utils
 import android.content.Context
 import android.content.SharedPreferences
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import java.util.Date
 
 class SharedPref(myApp: AppClass) {
@@ -11,6 +12,7 @@ class SharedPref(myApp: AppClass) {
     private var sharedPref: SharedPreferences? = null
     private var editor: SharedPreferences.Editor? = null
     private var value: String? = null
+    private val gson = Gson()
 
     fun clearAllPreferences() {
         editor = sharedPref!!.edit().clear()
@@ -121,6 +123,30 @@ class SharedPref(myApp: AppClass) {
         if (obj.equals("", ignoreCase = true)) return null
         val gson = Gson()
         return gson.fromJson(obj, classOfT)
+    }
+
+    // Saving list of type T in Shared Preferences
+    fun <T> storeList(key: String, list: MutableList<T>) {
+        val json = gson.toJson(list) // Converting list to JSON
+        try {
+            editor = sharedPref!!.edit()
+            editor?.putString(key, json)
+            editor?.apply()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    // Getting the list of type T from Shared Preferences
+    fun <T> getList(key: String): MutableList<T> {
+        val json = sharedPref!!.getString(key, null)
+        val type = object : TypeToken<MutableList<T>>() {}.type // Creating a TypeToken to preserve the generic type information
+
+        return if (json != null) {
+            gson.fromJson(json, type) // Returning the deserialized list of type T
+        } else {
+            mutableListOf() // Return an empty list if the JSON string is null
+        }
     }
 
     init {

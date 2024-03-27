@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".quran.ReaderSettingsActivity"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/appbar"
+        layout="@layout/appbar" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/white_upper_rounded_layout"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+
+        <TextView
+            android:text="Font Size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="20sp">
+
+        </TextView>
+
+        <androidx.appcompat.widget.AppCompatSeekBar
+            android:id="@+id/seekBarFontSize"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="20dp"
+            android:max="40"
+            android:min="16"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            app:thumbTint="#FF4081" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="example"
+            android:textColor="@color/black"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/ayat_arabic_text"
+            style="@style/text_arabic_regular"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/white_rounded_layout"
+            android:gravity="center_vertical"
+            android:minHeight="50dp"
+            android:padding="16dp"
+            android:text="@string/bismilla_text"
+            android:textColor="@color/black"
+            android:textSize="20sp"/>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="24dp"
+            android:background="@color/grey_300" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/scroll_speed"
+            android:textColor="@color/black"
+            android:textSize="20sp">
+
+        </TextView>
+
+
+        <androidx.appcompat.widget.AppCompatSeekBar
+            android:id="@+id/seekBarScrollSpeed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="20dp"
+            android:max="7"
+            android:min="1"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            app:thumbTint="#FF4081" />
+
+
+    </LinearLayout>
+
+</LinearLayout>

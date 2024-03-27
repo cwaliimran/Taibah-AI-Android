@@ -18,11 +18,14 @@ import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.appcompat.app.AppCompatActivity
 import com.network.utils.AppClass
+import com.network.utils.AppClass.Companion.getTimeString
+import com.network.utils.AppClass.Companion.isFileExists
+import com.network.utils.AppConstants
 import com.taibahai.R
 import com.taibahai.activities.ShareActivity
 import com.taibahai.audioPlayer.AudioPlayer.Companion.instance
 import com.taibahai.audioPlayer.AudioPlayer.OnViewClickListener
-import com.taibahai.databinding.ActivityAlQuranDetailsBinding
+import com.taibahai.databinding.ActivityChapterDetailsBinding
 import com.taibahai.notifications.MediaNotificationManager
 import com.taibahai.quran.StringUtils.getNameFromUrl
 import com.taibahai.utils.Constants
@@ -31,15 +34,14 @@ import com.tonyodev.fetch2.Status
 import kotlinx.coroutines.*
 import org.json.JSONArray
 import org.json.JSONException
-import java.io.File
 import java.io.IOException
 import java.io.Serializable
 import java.nio.charset.StandardCharsets
 
-class Al_Quran_Details : AppCompatActivity() {
+class ChapterDetailActivity : AppCompatActivity() {
     private var mData: ArrayList<SurahModel>? = null
     private var surahAdapter: SurahAdapter? = null
-    var binding: ActivityAlQuranDetailsBinding? = null
+    lateinit var binding: ActivityChapterDetailsBinding
     var name: String? = null
     var objectAnimator: ObjectAnimator? = null
     private var totalVerse = 0
@@ -47,26 +49,25 @@ class Al_Quran_Details : AppCompatActivity() {
     private var scroll = 0
     private var speed = 3
     private var isFling = false
-    private val isPlaySuffle = false
-    private val isRepeat = false
-    private val isUpdate = false
     var currentIndex = 0
     var currentFile = ""
     var surahName = ""
     var surahId: String? = ""
-    var model: SurahListModel? = null
+    var model: SurahListModel = SurahListModel()
     var mPlayerList: List<SurahListModel>? = null
 
     //    RoomDatabaseRepository dbRepository;
     var context: Context? = null
     var activity: Activity? = null
+    private var favSurahs = mutableListOf<String>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityAlQuranDetailsBinding.inflate(layoutInflater)
-        setContentView(binding!!.root)
+        binding = ActivityChapterDetailsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         context = this
         activity = this
-        //        initDB();
+        favSurahs = AppClass.sharedPref.getList(AppConstants.FAV_SURAHS)
         initClick()
         initAdapter()
         loadJson()
@@ -74,27 +75,24 @@ class Al_Quran_Details : AppCompatActivity() {
         initAudioPlay()
     }
 
-    //    private void initDB() {
-    //        dbRepository = new RoomDatabaseRepository(context);
-    //    }
     @SuppressLint("ClickableViewAccessibility")
     private fun initScroll() {
 //        binding.scrollView.isFocusableInTouchMode();
-        binding!!.recyclerView.setOnTouchListener { view: View?, event: MotionEvent ->
+        binding.recyclerView.setOnTouchListener { view: View?, event: MotionEvent ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN ->                     // The user just touched the screen
-                    if (binding!!.playLayout.play.isSelected) startScroll()
+                    if (binding.playLayout.play.isSelected) startScroll()
 
                 MotionEvent.ACTION_UP ->                     // The touch just ended
                     if (!isFling) {
-                        if (binding!!.playLayout.play.isSelected) startScroll()
+                        if (binding.playLayout.play.isSelected) startScroll()
                     } else {
                         isFling = false
                     }
             }
             false
         }
-        binding!!.scrollView.setOnFlingListener(object : CustomScrollView.OnFlingListener {
+        binding.scrollView.setOnFlingListener(object : CustomScrollView.OnFlingListener {
             override fun onFlingStarted() {
                 isFling = true
                 if (objectAnimator != null) {
@@ -104,10 +102,10 @@ class Al_Quran_Details : AppCompatActivity() {
 
             override fun onFlingStopped() {
                 isFling = false
-                if (binding!!.playLayout.play.isSelected) startScroll()
+                if (binding.playLayout.play.isSelected) startScroll()
             }
         })
-        binding!!.playLayout.seekbar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+        binding.playLayout.seekbar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {}
             override fun onStartTrackingTouch(seekBar: SeekBar) {
                 instance.removeCallbacks()
@@ -117,48 +115,49 @@ class Al_Quran_Details : AppCompatActivity() {
                 instance.seek(seekBar.progress.toLong())
             }
         })
-        binding!!.scrollView.viewTreeObserver.addOnScrollChangedListener {
-            scroll = binding!!.scrollView.scrollY
-            val view = binding!!.scrollView.getChildAt(0)
-            val diff = view.bottom - (binding!!.scrollView.height + binding!!.scrollView.scrollY)
+        binding.scrollView.viewTreeObserver.addOnScrollChangedListener {
+            scroll = binding.scrollView.scrollY
+            val view = binding.scrollView.getChildAt(0)
+            val diff = view.bottom - (binding.scrollView.height + binding.scrollView.scrollY)
         }
     }
 
     private fun initClick() {
-        binding!!.back.setOnClickListener { v: View? -> onBackPressed() }
+        binding.appbar.ivLeft.setOnClickListener { v: View? -> onBackPressed() }
+//        binding.appbar.ivRight.visibility = View.VISIBLE
+//        binding.appbar.ivRight.setImageResource(R.drawable.baseline_text_fields_24)
+//        binding.appbar.ivRight.setOnClickListener {
+//            startActivity(Intent(this, ReaderSettingsActivity::class.java))
+//        }
 
 //        binding.settings.setOnClickListener(v -> startActivityForResult(new Intent(context, ReaderSettingsActivity.class)
 //                , Constants.ACTIVITY_RESULT_CODE));
-        binding!!.playLayout.play.setOnClickListener { v: View? ->
+        binding.playLayout.play.setOnClickListener { v: View? ->
             if (!currentFile.isEmpty()) {
                 startPlaying(currentFile)
             }
         }
 
-
-//        binding.playLayout.star.setOnClickListener(v -> {
-//            isUpdate = true;
-//            if (!model.isFav()) {
-//                dbRepository.addToFavSurah(new FavModel(Long.parseLong(model.getId())));
-//                v.setSelected(true);
-//                model.setFav(true);
-//                Log.d("response", "park id inserted: " + model.getId());
-//            } else {
-//                dbRepository.deleteFromFavSurah(Integer.parseInt(model.getId()));
-//                v.setSelected(false);
-//                model.setFav(false);
-//                Log.d("response", "park id deleted: " + model.getId());
-//            }
-//
-//        });
+        binding.playLayout.ivFav.setOnClickListener {
+            if (model.isFav) {
+                model.isFav = false
+                favSurahs.remove(model.number)
+                AppClass.sharedPref.storeList(AppConstants.FAV_SURAHS, favSurahs)
+            } else {
+                favSurahs.add(model.number)
+                AppClass.sharedPref.storeList(AppConstants.FAV_SURAHS, favSurahs)
+                model.isFav = true
+            }
+            binding.playLayout.ivFav.isSelected = model.isFav
+        }
     }
 
     private fun initAdapter() {
         mPlayerList = ArrayList()
         mData = ArrayList()
         surahAdapter = SurahAdapter(context!!)
-        binding!!.recyclerView.adapter = surahAdapter
-        binding!!.recyclerView.isNestedScrollingEnabled = false
+        binding.recyclerView.adapter = surahAdapter
+        binding.recyclerView.isNestedScrollingEnabled = false
         surahAdapter!!.setOnItemClickListner(object : SurahAdapter.OnItemClickListener {
             override fun onItemClick(view: View?, homeModel: SurahModel?) {
                 val intent1 = Intent(context, ShareActivity::class.java)
@@ -193,14 +192,16 @@ class Al_Quran_Details : AppCompatActivity() {
 //            binding.playLayout.backward.setEnabled(false);
 //            binding.playLayout.shuffle.setEnabled(false);
         }
-        binding!!.detailsAyatName.text = name
-        binding!!.detailsVerseNumber.text = verse
+        binding.appbar.tvTitle.text = name
+        binding.makkiMadni.detailsVerseNumber.text = "$verse Ayaat"
         try {
             if (type == StringUtils.MAKKI) {
-                binding!!.surahType.text = getString(R.string.makki)
+                binding.makkiMadni.surahType.text = getString(R.string.makki)
+                binding.makkiMadni.imageView2.setImageResource(R.drawable.makkah)
             }
             if (type == StringUtils.MADNI) {
-                binding!!.surahType.text = getString(R.string.madni)
+                binding.makkiMadni.surahType.text = getString(R.string.madni)
+                binding.makkiMadni.imageView2.setImageResource(R.drawable.madina)
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -232,8 +233,8 @@ class Al_Quran_Details : AppCompatActivity() {
                     }
                 }
                 surahAdapter!!.updateList(mData)
-                binding!!.progressBar.visibility = View.GONE
-                binding!!.playView.visibility = View.VISIBLE
+                binding.progressBar.visibility = View.GONE
+                binding.playView.visibility = View.VISIBLE
                 playSurah()
                 delay(1000)
                 startScroll()
@@ -263,8 +264,8 @@ class Al_Quran_Details : AppCompatActivity() {
             override fun onPlayStarted(duration: Int) {
                 Log.d(TAG, "onPlayStarted: ")
                 val total_duration = getTimeString(duration.toLong())
-                binding!!.playLayout.totalTime.text = total_duration
-                binding!!.playLayout.play.isSelected = true
+                binding.playLayout.totalTime.text = total_duration
+                binding.playLayout.play.isSelected = true
                 if (objectAnimator != null) {
                     if (!objectAnimator!!.isRunning) {
                         startScroll()
@@ -272,31 +273,22 @@ class Al_Quran_Details : AppCompatActivity() {
                 }
             }
 
-            override fun updateDuration(duration: Int, currentPosition: Int) {
+            override fun updateDuration(duration: Int, currentPosition: Int, totalTrackTime: Int) {
                 val current_duration = getTimeString(currentPosition.toLong())
-                binding!!.playLayout.currentTime.text = current_duration
-                binding!!.playLayout.seekbar.progress = duration
+                binding.playLayout.currentTime.text = current_duration
+                binding.playLayout.seekbar.progress = duration
             }
 
             override fun onPause() {
-                binding!!.playLayout.play.isSelected = false
+                binding.playLayout.play.isSelected = false
                 stopScroll()
             }
 
             override fun onCompleted(mp1: MediaPlayer?) {
-                Log.d(TAG, "onCompleted: isRepeat $isRepeat isShuffle $isPlaySuffle")
-                binding!!.playLayout.play.isSelected = false
-                binding!!.playLayout.seekbar.progress = 0
-                binding!!.playLayout.currentTime.text = "0:00"
+                binding.playLayout.play.isSelected = false
+                binding.playLayout.seekbar.progress = 0
+                binding.playLayout.currentTime.text = "0:00"
                 stopScroll()
-                if (isRepeat) {
-                    binding!!.scrollView.fullScroll(ScrollView.FOCUS_UP)
-                    Handler().postDelayed({ binding!!.playLayout.play.callOnClick() }, 1000)
-                } else {
-                    if (isPlaySuffle) {
-//                        binding.playLayout.forward.callOnClick();
-                    }
-                }
             }
         })
     }
@@ -325,42 +317,41 @@ class Al_Quran_Details : AppCompatActivity() {
 
     private fun updateUi() {
         stopScroll()
-        binding!!.scrollView.fullScroll(ScrollView.FOCUS_UP)
+        binding.scrollView.fullScroll(ScrollView.FOCUS_UP)
         model = mPlayerList!![currentIndex]
-        if (isPlaySuffle) {
-            if (model!!.id == surahId) {
-                playNext()
-                return
-            }
-        }
         if (model!!.download != null) {
             if (model!!.download!!.status == Status.COMPLETED) {
                 val child = StringUtils.SURAH_FOLDER + getNameFromUrl(
                     model!!.audio
                 )
-                if (isFileExists(child, context)) {
+                if (isFileExists(child)) {
                     surahId = model!!.id
-                    totalVerse = model!!.totalVerses?.toInt()!!
+                    totalVerse = model!!.total_verses?.toInt()!!
                     showAyatList()
                 }
             }
         }
     }
 
-    @SuppressLint("SetTextI18n")
     private fun playSurah() {
         currentFile = model!!.download!!.file
-        surahName = model!!.transliterationEn.toString()
-        binding!!.playLayout.surahName.text = surahName
-        binding!!.detailsAyatName.text = surahName
-        binding!!.detailsVerseNumber.text = totalVerse.toString() + ""
-        binding!!.playLayout.star.isSelected = model!!.isFav
+        surahName = model!!.transliteration_en.toString()
+        binding.playLayout.surahName.text = surahName
+        binding.playLayout.ivFav.isSelected = model.isFav
+        binding.playLayout.tvMeaning.text =
+            "${model!!.translation_en.toString()}(${model!!.total_verses.toString()})"
+
+        binding.appbar.tvTitle.text = surahName
+        binding.makkiMadni.detailsVerseNumber.text = "$totalVerse Ayaat"
+        binding.playLayout.tvSurahNo.text = model!!.number
+        binding.playLayout.ivFav.isSelected = model!!.isFav
+
         try {
-            if (model!!.revelationType == StringUtils.MAKKI) {
-                binding!!.surahType.text = getString(R.string.makki)
+            if (model!!.revelation_type == StringUtils.MAKKI) {
+                binding.makkiMadni.surahType.text = getString(R.string.makki)
             }
-            if (model!!.revelationType == StringUtils.MADNI) {
-                binding!!.surahType.text = getString(R.string.madni)
+            if (model!!.revelation_type == StringUtils.MADNI) {
+                binding.makkiMadni.surahType.text = getString(R.string.madni)
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -386,11 +377,11 @@ class Al_Quran_Details : AppCompatActivity() {
             speed = scrollSpeed
         }
         objectAnimator = ObjectAnimator.ofInt(
-            binding!!.scrollView,
+            binding.scrollView,
             "scrollY",
-            binding!!.scrollView.getChildAt(0).height + scroll - binding!!.scrollView.height
+            binding.scrollView.getChildAt(0).height + scroll - binding.scrollView.height
         )
-        val duration = binding!!.scrollView.getChildAt(0).height / speed
+        val duration = binding.scrollView.getChildAt(0).height / speed
         // int total_duration=duration * Constants.getHeight(ScriptActivity.this);
         val total_duration = duration * STANDARD_SPEED
         //        Log.d("response", "helf height: "+Constants.getHeight(ScriptActivity.this));
@@ -404,12 +395,12 @@ class Al_Quran_Details : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == Constants.ACTIVITY_RESULT_CODE && resultCode == RESULT_OK) {
             surahAdapter!!.notifyDataSetChanged()
-            if (binding!!.playLayout.play.isSelected) startScroll()
+            if (binding.playLayout.play.isSelected) startScroll()
         }
     }
 
     override fun onBackPressed() {
-        if (isUpdate) finishWithUpdate(activity, model) else super.onBackPressed()
+         finishWithUpdate(activity, model)
     }
 
     protected fun finishWithUpdate(activity: Activity?, `val`: Any?) {
@@ -443,26 +434,6 @@ class Al_Quran_Details : AppCompatActivity() {
             return if (surah_id >= 1 && surah_id <= 2) R.raw.quran_part_0 else if (surah_id >= 3 && surah_id <= 4) R.raw.quran_part_1 else if (surah_id >= 5 && surah_id <= 8) R.raw.quran_part_2 else if (surah_id >= 9 && surah_id <= 16) R.raw.quran_part_3 else if (surah_id >= 17 && surah_id <= 24) R.raw.quran_part_4 else if (surah_id >= 25 && surah_id <= 32) R.raw.quran_part_5 else if (surah_id >= 33 && surah_id <= 40) R.raw.quran_part_6 else if (surah_id >= 41 && surah_id <= 52) R.raw.quran_part_7 else if (surah_id >= 53 && surah_id <= 64) R.raw.quran_part_8 else if (surah_id >= 65 && surah_id <= 80) R.raw.quran_part_9 else if (surah_id >= 81 && surah_id <= 114) R.raw.quran_part_10 else -1
         }
 
-        fun getTimeString(duration: Long): String {
-            val minutes = Math.floor((duration / 1000 / 60).toDouble()).toInt()
-            val seconds = (duration / 1000 - minutes * 60).toInt()
-            return minutes.toString() + ":" + String.format("%02d", seconds)
-        }
 
-        fun isFileExists(childPath: String?, context: Context?): Boolean {
-            val yourFile = File(getAudioOutputDirectory(context), childPath)
-            return yourFile.exists()
-        }
-
-        fun getAudioOutputDirectory(context: Context?): File {
-            val mediaStorageDir = File(
-                context!!.filesDir.toString() + "/" +
-                        context.getString(R.string.app_name) + "/Audios"
-            )
-            if (!mediaStorageDir.exists()) {
-                mediaStorageDir.mkdirs()
-            }
-            return mediaStorageDir
-        }
     }
 }

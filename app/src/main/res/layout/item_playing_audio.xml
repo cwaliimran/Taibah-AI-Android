@@ -32,11 +32,14 @@
                 android:layout_height="48dp"
                 android:backgroundTint="@color/primary_green"
                 app:cardCornerRadius="8dp"
+                app:cardUseCompatPadding="false"
+                android:elevation="2dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
+                    android:id="@+id/tvSurahNo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -63,7 +66,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:fontFamily="@font/inter_medium"
-                    android:text="Al-Falaq"
+                    android:text="Al-Faatiha"
                     android:textColor="@color/black"
                     android:textSize="16sp"
                     app:layout_constraintStart_toStartOf="parent"
@@ -71,6 +74,7 @@
 
 
                 <TextView
+                    android:id="@+id/tvMeaning"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -83,11 +87,11 @@
                     app:layout_constraintTop_toBottomOf="@+id/surahName" />
 
                 <ImageView
-                    android:id="@+id/star"
+                    android:id="@+id/ivFav"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="20dp"
-                    android:src="@drawable/heartt2"
+                    android:src="@drawable/fav_selector_checkbox"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/play"
                     app:layout_constraintTop_toTopOf="parent" />
