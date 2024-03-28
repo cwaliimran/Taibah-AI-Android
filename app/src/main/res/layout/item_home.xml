@@ -112,6 +112,7 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+            <!--            android:loadImage="@{data.feed_attachments != null &amp;&amp; data.feed_attachments.size() > 0 ? data.feed_attachments[0].file : null}"-->
 
             <ImageView
                 android:id="@+id/ivUploadImage"
@@ -120,11 +121,24 @@
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="10dp"
                 android:adjustViewBounds="true"
-                android:loadImage="@{data.feed_attachments != null &amp;&amp; data.feed_attachments.size() > 0 ? data.feed_attachments[0].file : null}"
+                android:minHeight="100dp"
+                android:src="@drawable/placeholder"
                 android:visibility="@{data.feed_attachments != null &amp;&amp; data.feed_attachments.size() > 0 ? View.VISIBLE : View.GONE}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/constraintLayout" />
+
+            <ProgressBar
+                android:id="@+id/progressBar1"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:indeterminate="true"
+                android:indeterminateTint="@color/primary_green"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="@+id/ivUploadImage"
+                app:layout_constraintEnd_toEndOf="@+id/ivUploadImage"
+                app:layout_constraintStart_toStartOf="@+id/ivUploadImage"
+                app:layout_constraintTop_toTopOf="@+id/ivUploadImage" />
 
             <TextView
                 android:id="@+id/tvDescription"
@@ -176,10 +190,10 @@
                         android:layout_alignParentEnd="true"
                         android:drawablePadding="10dp"
                         android:fontFamily="@font/poppins"
-                        tools:text="@string/dash"
                         android:text="@{data.comments+` Comments`, default=``}"
                         android:textColor="@color/silver"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        tools:text="@string/dash" />
                 </RelativeLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -220,12 +234,12 @@
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
                         android:drawablePadding="10dp"
-                        app:drawableStartFromBoolean="@{data._like}"
                         android:fontFamily="@font/poppins"
                         android:text="Like"
                         android:textColor="@color/silver"
                         android:textSize="16sp"
-                        app:drawableStartCompat="@drawable/like_2" />
+                        app:drawableStartCompat="@drawable/like_2"
+                        app:drawableStartFromBoolean="@{data._like}" />
 
                     <TextView
                         android:id="@+id/tvAddComment"

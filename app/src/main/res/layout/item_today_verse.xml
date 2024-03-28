@@ -14,10 +14,10 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/cardTodayVerse"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         app:cardCornerRadius="10dp"
         app:cardElevation="3dp"
-        app:cardUseCompatPadding="true"
-        android:layout_height="wrap_content">
+        app:cardUseCompatPadding="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/clTodayVerse"
@@ -67,12 +67,13 @@
                     android:background="@drawable/quran_counter_bg"
                     android:fontFamily="@font/poppins_medium"
                     android:gravity="center"
-                    android:text="1"
+                    android:text="@string/dash"
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@id/ivShare"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="3" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -84,13 +85,14 @@
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginTop="20dp"
                 android:fontFamily="@font/poppins"
-                tools:text="قُلْ هُوَ ٱللَّهُ أَحَدٌ ١"
+                android:text="@string/dash"
                 android:textAlignment="textStart"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/clTitle"
-                app:layout_constraintTop_toBottomOf="@id/tvTodaysVerse" />
+                app:layout_constraintTop_toBottomOf="@id/tvTodaysVerse"
+                tools:text="قُلْ هُوَ ٱللَّهُ أَحَدٌ ١" />
 
             <TextView
                 android:id="@+id/ayatEnglishTranslation"
@@ -99,12 +101,13 @@
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginTop="20dp"
                 android:fontFamily="@font/poppins"
-                tools:text=" Qul huwa Allahu Ahad"
                 android:textColor="@color/primary_green"
                 android:textSize="14sp"
+                android:text="@string/dash"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/ayatArabicText" />
+                app:layout_constraintTop_toBottomOf="@id/ayatArabicText"
+                tools:text=" Qul huwa Allahu Ahad" />
 
             <TextView
                 android:id="@+id/ayatEnglishTranslitration"
@@ -113,29 +116,31 @@
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/poppins"
-                tools:text=" Soy, “O Prophet,”He is Allah_One"
+                android:text="@string/dash"
                 android:textColor="#4F4D4D"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/ayatEnglishTranslation" />
+                app:layout_constraintTop_toBottomOf="@id/ayatEnglishTranslation"
+                tools:text=" Soy, “O Prophet,”He is Allah_One" />
 
 
             <TextView
                 android:id="@+id/tvSurah"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="@string/dash"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="10dp"
                 android:background="@drawable/item_more_upgradebtn"
                 android:backgroundTint="#DFF4DE"
                 android:fontFamily="@font/poppins"
-                tools:text="Al-Faatiha (12:1)"
                 android:textColor="@color/primary_green"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/ayatEnglishTranslitration" />
+                app:layout_constraintTop_toBottomOf="@id/ayatEnglishTranslitration"
+                tools:text="Al-Faatiha (12:1)" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

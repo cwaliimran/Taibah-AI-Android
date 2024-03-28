@@ -13,6 +13,7 @@ import com.network.models.ModelHome
 import com.network.utils.convertDateToLong
 import com.taibahai.R
 import com.taibahai.databinding.ItemHomeBinding
+import com.taibahai.utils.ImageLoading.loadImageWithProgress
 import com.taibahai.utils.showOptionsMenu
 
 
@@ -52,6 +53,14 @@ class AdapterHome(
 
         holder.binding.tvTimesAgo.text = TimeAgo.using(userData.timesince.convertDateToLong())
 
+        if (userData.feed_attachments.isNotEmpty()) {
+            context.loadImageWithProgress(
+                userData.feed_attachments[0].file,
+                holder.binding.ivUploadImage,
+                holder.binding.progressBar1
+            )
+
+        }
         if (isProfileFeed) {
             holder.binding.ivDots.visibility = View.GONE
             holder.binding.ivDelete.visibility = View.VISIBLE

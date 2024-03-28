@@ -14,10 +14,10 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/cardTodayVerse"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         app:cardCornerRadius="10dp"
         app:cardElevation="3dp"
-        app:cardUseCompatPadding="true"
-        android:layout_height="wrap_content">
+        app:cardUseCompatPadding="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/clTodayVerse"
@@ -44,12 +44,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:fontFamily="@font/poppins"
-                tools:text="إنما الأعمال بالنيات"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvTodaysVerse" />
+                app:layout_constraintTop_toBottomOf="@id/tvTodaysVerse"
+                tools:text="إنما الأعمال بالنيات" />
 
             <TextView
                 android:id="@+id/ayatEnglishTranslitration"
@@ -58,12 +58,13 @@
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/poppins"
-                android:text="The reward of deeds depends upon the intentions."
+                android:text="@string/dash"
                 android:textColor="#4F4D4D"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvArbiHadith" />
+                app:layout_constraintTop_toBottomOf="@id/tvArbiHadith"
+                tools:text="The reward of deeds depends upon the intentions." />
 
 
             <TextView
@@ -75,12 +76,13 @@
                 android:background="@drawable/item_more_upgradebtn"
                 android:backgroundTint="#DFF4DE"
                 android:fontFamily="@font/poppins"
-                android:text="Sahih al-Bukhari (1:1)"
+                android:text="@string/dash"
                 android:textColor="@color/primary_green"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/ayatEnglishTranslitration" />
+                app:layout_constraintTop_toBottomOf="@id/ayatEnglishTranslitration"
+                tools:text="Sahih al-Bukhari (1:1)" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

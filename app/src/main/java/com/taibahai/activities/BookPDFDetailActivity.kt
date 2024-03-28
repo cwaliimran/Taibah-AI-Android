@@ -1,6 +1,5 @@
 package com.taibahai.activities
 
-import android.app.AlertDialog
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
@@ -23,20 +22,13 @@ class BookPDFDetailActivity : BaseActivity() {
     var bookTitle = ""
 
     companion object {
-        const val FILE_URL = "pdf_file_url"
-        const val FILE_TITLE = "pdf_file_title"
         var engine = PdfEngine.INTERNAL
-
     }
 
 
     override fun onCreate() {
         binding = ActivityBookPdfdetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        /* intent.extras?.getString(
-             FILE_TITLE, "PDF"
-         )*/
-
         engine = PdfEngine.INTERNAL
 
 
@@ -44,34 +36,8 @@ class BookPDFDetailActivity : BaseActivity() {
 
     override fun initData() {
         super.initData()
-        binding.appbar.tvTitle.setText(bookTitle)
 
         binding.appbar.ivRight.setVisibility(GONE)
-//
-//        binding.pdfView.statusListener = object : PdfRendererView.StatusCallBack {
-//            override fun onPdfLoadStart() {
-//                Log.i("statusCallBack","onPdfLoadStart")
-//            }
-//            override fun onPdfLoadProgress(
-//                progress: Int,
-//                downloadedBytes: Long,
-//                totalBytes: Long?
-//            ) {
-//                //Download is in progress
-//            }
-//
-//            override fun onPdfLoadSuccess(absolutePath: String) {
-//                Log.i("statusCallBack","onPdfLoadSuccess")
-//            }
-//
-//            override fun onError(error: Throwable) {
-//                Log.i("statusCallBack","onError")
-//            }
-//
-//            override fun onPageChanged(currentPage: Int, totalPage: Int) {
-//                //Page change. Not require
-//            }
-//        }
     }
 
 
@@ -118,17 +84,9 @@ class BookPDFDetailActivity : BaseActivity() {
         return result != 0
     }
 
-
-    private fun loadFileFromNetwork(fileUrl: String?) {
-        initPdfViewer(
-            fileUrl, engine
-        )
-    }
-
     private fun initPdfViewer(fileUrl: String?, engine: PdfEngine) {
         if (TextUtils.isEmpty(fileUrl)) onPdfError()
 
-        //Initiating PDf Viewer with URL
         try {
             binding.pdfView.statusListener = object : PdfRendererView.StatusCallBack {
                 override fun onDownloadStart() {
@@ -187,10 +145,14 @@ class BookPDFDetailActivity : BaseActivity() {
             val model: ModelBooks.Data? = intent.getSerializableExtra("model") as? ModelBooks.Data
             if (model != null) {
                 bookTitle = model.title
+                binding.appbar.tvTitle.text = bookTitle
+
                 fileUrl = model.attachments.firstOrNull()?.file
 
                 if (checkInternetConnection(this)) {
-                    loadFileFromNetwork(this.fileUrl)
+                    initPdfViewer(
+                        fileUrl, engine
+                    )
                 } else {
                     Toast.makeText(
                         this,
