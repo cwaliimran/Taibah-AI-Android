@@ -1,5 +1,8 @@
 package com.taibahai.activities
 
+import android.os.Build
+import android.text.Html
+import android.text.Spanned
 import android.view.View
 import androidx.activity.viewModels
 import com.network.base.BaseActivity
@@ -42,9 +45,18 @@ class AboutUsActivity : BaseActivity() {
 
                 is NetworkResult.Success -> {
                     textAboutUs = it.data?.data.toString()
-                    if (!textAboutUs.isNullOrEmpty())
+                    if (textAboutUs.isNotEmpty())
                     {
-                        binding.tvAboutUs.text=textAboutUs
+                        if (!textAboutUs.isNullOrEmpty()) {
+                            val spannedText: Spanned = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                Html.fromHtml(textAboutUs, Html.FROM_HTML_MODE_COMPACT)
+                            } else {
+                                @Suppress("DEPRECATION")
+                                Html.fromHtml(textAboutUs)
+                            }
+
+                            binding.tvAboutUs.text = spannedText
+                        }
                     }
                 }
 

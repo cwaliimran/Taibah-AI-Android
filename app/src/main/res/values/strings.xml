@@ -87,6 +87,7 @@
     <string name="scroll_speed">Scroll Speed</string>
     <string name="fonts">Fonts</string>
     <string name="sure_delete">Are you sure you want to delete?</string>
+    <string name="share_text">Download Now</string>
 
 
 </resources>

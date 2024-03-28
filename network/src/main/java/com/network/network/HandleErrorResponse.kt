@@ -2,6 +2,7 @@ package com.network.network
 
 import android.content.Intent
 import com.network.utils.AppClass
+import com.network.utils.AppConstants
 import okhttp3.ResponseBody
 import org.json.JSONObject
 
@@ -17,7 +18,10 @@ fun handleErrorResponse(errorBody: ResponseBody?): String {
         e.message.toString()
     }
     if (serverErrorsList.contains(errorMsg?.lowercase())) {
+        val aiTokens = AppClass.sharedPref.getInt(AppConstants.AI_TOKENS)
         AppClass.sharedPref.clearAllPreferences()
+        AppClass.sharedPref.storeInt(AppConstants.AI_TOKENS, aiTokens)
+        AppClass.sharedPref.storeBoolean(AppConstants.IS_FREE_AI_TOKENS_PROVIDED, true)
         try {
             val intent = Intent(
                 AppClass.instance,

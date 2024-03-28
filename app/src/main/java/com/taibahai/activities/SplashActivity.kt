@@ -1,29 +1,26 @@
 package com.taibahai.activities
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import com.google.android.play.integrity.internal.l
 import com.network.base.BaseActivity
-import com.taibahai.R
+import com.network.utils.AppClass
+import com.network.utils.AppConstants
 import com.taibahai.bottom_navigation.BottomNavigation
 import com.taibahai.databinding.ActivitySplashBinding
-import com.taibahai.quran.QuranChaptersActivity
 
 class SplashActivity : BaseActivity() {
-    lateinit var binding:ActivitySplashBinding
+    lateinit var binding: ActivitySplashBinding
 
 
     override fun onCreate() {
-        binding=ActivitySplashBinding.inflate(layoutInflater)
+        binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        Handler(Looper.getMainLooper()).postDelayed({
-
-        }, 2000)
         if (currentUser == null) {
+            if (!AppClass.sharedPref.getBoolean(AppConstants.IS_FREE_AI_TOKENS_PROVIDED)) {
+                //provide free tokens to user
+                AppClass.sharedPref.storeInt(AppConstants.AI_TOKENS, 30)
+                AppClass.sharedPref.storeBoolean(AppConstants.IS_FREE_AI_TOKENS_PROVIDED, true)
+            }
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
             finishAffinity()

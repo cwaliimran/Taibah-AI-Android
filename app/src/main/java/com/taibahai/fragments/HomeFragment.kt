@@ -186,7 +186,10 @@ class HomeFragment : BaseFragment() {
                 }
 
                 is NetworkResult.Success -> {
+                     val aiTokens = AppClass.sharedPref.getInt(AppConstants.AI_TOKENS)
                     AppClass.sharedPref.clearAllPreferences()
+                    AppClass.sharedPref.storeInt(AppConstants.AI_TOKENS, aiTokens)
+                    AppClass.sharedPref.storeBoolean(AppConstants.IS_FREE_AI_TOKENS_PROVIDED, true)
                     startActivity(
                         Intent(
                             requireActivity(), LoginActivity::class.java
@@ -283,7 +286,10 @@ class HomeFragment : BaseFragment() {
         activity?.genericDialog(object : OnItemClick {
             override fun onClick(position: Int, type: String?, data: Any?, view: View?) {
                 super.onClick(position, type, data, view)
-                AppClass.sharedPref.clearAllPreferences()
+                 val aiTokens = AppClass.sharedPref.getInt(AppConstants.AI_TOKENS)
+                    AppClass.sharedPref.clearAllPreferences()
+                    AppClass.sharedPref.storeInt(AppConstants.AI_TOKENS, aiTokens)
+                    AppClass.sharedPref.storeBoolean(AppConstants.IS_FREE_AI_TOKENS_PROVIDED, true)
                 viewModel.logout(
                     AppClass.sharedPref.getString(Constants.DEVICE_ID, "").toString(),
                     "android"

@@ -21,6 +21,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.network.base.BaseFragment
 import com.network.interfaces.OnItemClick
 import com.network.utils.AppClass
+import com.network.utils.AppConstants
 import com.taibahai.R
 import com.taibahai.activities.HistoryActivity
 import com.taibahai.adapters.AdapterAISearch
@@ -31,6 +32,7 @@ import com.taibahai.models.ModelSearchAI
 import com.taibahai.room_database.ChatDatabase
 import com.taibahai.room_database.ChatMessageDao
 import com.taibahai.room_database.ModelChatMessage
+import com.taibahai.utils.showToast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -71,7 +73,7 @@ class SearchFragment : BaseFragment(), OnItemClick {
     private lateinit var messageAdapter: AdapterAISearch
     private lateinit var bottomNavigationView: BottomNavigationView
     private var isKeyboardOpen = false
-
+    var aiTokens = 0
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
@@ -79,7 +81,8 @@ class SearchFragment : BaseFragment(), OnItemClick {
         binding = DataBindingUtil.inflate<FragmentSearchBinding>(
             inflater, R.layout.fragment_search, container, false
         )
-        bottomNavigationView = activity?.findViewById(R.id.bottomNavigationView) ?: return binding.root
+        bottomNavigationView =
+            activity?.findViewById(R.id.bottomNavigationView) ?: return binding.root
 
         // Add a global layout listener to monitor layout changes, including keyboard visibility changes
         binding.root.viewTreeObserver.addOnGlobalLayoutListener {
@@ -117,6 +120,8 @@ class SearchFragment : BaseFragment(), OnItemClick {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        aiTokens = AppClass.sharedPref.getInt(AppConstants.AI_TOKENS)
+        binding.tvRemainingTokens.text = "Remaining Tokens : $aiTokens"
 
     }
 
@@ -165,6 +170,9 @@ class SearchFragment : BaseFragment(), OnItemClick {
 
     override fun clicks() {
         binding.sendBtn.setOnClickListener {
+            if (!checkTokens()) {
+                return@setOnClickListener
+            }
             userQuestion = binding.messageBox.text.toString().trim().toString()
             if (userQuestion != null) {
                 if (userQuestion.isNotEmpty()) {
@@ -196,12 +204,24 @@ class SearchFragment : BaseFragment(), OnItemClick {
         }
 
         binding.voiceBtn.setOnClickListener {
+            if (!checkTokens()) {
+                return@setOnClickListener
+            }
             startSpeechToText()
         }
 
         binding.ivDotsSelect.setOnClickListener { view ->
             showPopupMenu(view)
         }
+    }
+
+    private fun checkTokens(): Boolean {
+        aiTokens = AppClass.sharedPref.getInt(AppConstants.AI_TOKENS)
+        if (aiTokens <= 0) {
+            showToast("Not enough AI tokens")
+        }
+        return aiTokens > 0
+
     }
 
 
@@ -275,8 +295,12 @@ class SearchFragment : BaseFragment(), OnItemClick {
 
 
     private fun askChatbot(userQuestion: String) {
+
         getBotAnswer(userQuestion) { response ->
             activity?.runOnUiThread {
+                aiTokens -= 1
+                AppClass.sharedPref.storeInt(AppConstants.AI_TOKENS, aiTokens)
+                binding.tvRemainingTokens.text = "Remaining Tokens : $aiTokens"
                 botResponse = response
                 displayBotResponse()
 
@@ -444,7 +468,6 @@ class SearchFragment : BaseFragment(), OnItemClick {
         isAudioPlaying = false
 
     }
-
 
 
     private fun showPopupMenu(view: View) {

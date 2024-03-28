@@ -3,6 +3,7 @@ package com.network.network
 import android.content.Intent
 import android.util.Log
 import com.network.utils.AppClass
+import com.network.utils.AppConstants
 import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Response
@@ -112,7 +113,10 @@ abstract class BaseApiResponse {
                         // most probably.. unauthorised error
                         val error = obj.getString("error") ?: defaultErrorMessage
                         if (error.contains("unauthorized", true)) {
-                            AppClass.sharedPref.clearAllPreferences()
+                             val aiTokens = AppClass.sharedPref.getInt(AppConstants.AI_TOKENS)
+                    AppClass.sharedPref.clearAllPreferences()
+                    AppClass.sharedPref.storeInt(AppConstants.AI_TOKENS, aiTokens)
+                    AppClass.sharedPref.storeBoolean(AppConstants.IS_FREE_AI_TOKENS_PROVIDED, true)
                             try {
                                 // TODO: confirm package name 
                                 val intent = Intent(

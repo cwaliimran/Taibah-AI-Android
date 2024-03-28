@@ -53,7 +53,6 @@ object ImageLoading {
                     return false
                 }
 
-
             })
             .into(imageView)
 

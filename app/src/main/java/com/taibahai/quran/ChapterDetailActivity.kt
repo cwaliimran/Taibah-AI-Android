@@ -22,7 +22,6 @@ import com.network.utils.AppClass.Companion.getTimeString
 import com.network.utils.AppClass.Companion.isFileExists
 import com.network.utils.AppConstants
 import com.taibahai.R
-import com.taibahai.activities.ShareActivity
 import com.taibahai.audioPlayer.AudioPlayer.Companion.instance
 import com.taibahai.audioPlayer.AudioPlayer.OnViewClickListener
 import com.taibahai.databinding.ActivityChapterDetailsBinding
@@ -158,19 +157,6 @@ class ChapterDetailActivity : AppCompatActivity() {
         surahAdapter = SurahAdapter(context!!)
         binding.recyclerView.adapter = surahAdapter
         binding.recyclerView.isNestedScrollingEnabled = false
-        surahAdapter!!.setOnItemClickListner(object : SurahAdapter.OnItemClickListener {
-            override fun onItemClick(view: View?, homeModel: SurahModel?) {
-                val intent1 = Intent(context, ShareActivity::class.java)
-                intent1.putExtra("surah_name", name)
-                intent1.putExtra("share_type", "quran_ayat")
-                intent1.putExtra("arabic_text", homeModel!!.arabicText)
-                intent1.putExtra("english_text", homeModel.englishText)
-                intent1.putExtra("ayat_number", homeModel.position)
-                intent1.putExtra("surah_number", surahId)
-                startActivity(intent1)
-            }
-
-        })
     }
 
     private fun loadJson() {
