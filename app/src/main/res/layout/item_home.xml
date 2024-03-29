@@ -134,7 +134,7 @@
                 android:layout_height="15dp"
                 android:indeterminate="true"
                 android:indeterminateTint="@color/primary_green"
-                android:visibility="visible"
+                android:visibility="@{data.feed_attachments != null &amp;&amp; data.feed_attachments.size() > 0 ? View.VISIBLE : View.GONE}"
                 app:layout_constraintBottom_toBottomOf="@+id/ivUploadImage"
                 app:layout_constraintEnd_toEndOf="@+id/ivUploadImage"
                 app:layout_constraintStart_toStartOf="@+id/ivUploadImage"

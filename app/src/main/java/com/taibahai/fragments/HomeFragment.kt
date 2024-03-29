@@ -39,7 +39,7 @@ class HomeFragment : BaseFragment() {
     var currentItemAction = -1
 
     lateinit var adapter: AdapterHome
-    private var showList: MutableList<com.network.models.ModelHome.Data> = mutableListOf()
+    private var mData: MutableList<com.network.models.ModelHome.Data> = mutableListOf()
     val viewModel: MainViewModelAI by viewModels()
     private var currentPageNo = 1
     private var totalPages: Int = 0
@@ -86,7 +86,7 @@ class HomeFragment : BaseFragment() {
                 super.onScrolled(recyclerView, dx, dy)
                 val linearLayoutManager = (recyclerView.layoutManager as LinearLayoutManager?)!!
                 if (dy > 0) {
-                    if (linearLayoutManager.findLastCompletelyVisibleItemPosition() == showList.size - 1) {
+                    if (linearLayoutManager.findLastCompletelyVisibleItemPosition() == mData.size - 1) {
                         if (currentPageNo < totalPages) {
                             currentPageNo += 1
                             viewModel.home(pageno = currentPageNo)
@@ -112,13 +112,13 @@ class HomeFragment : BaseFragment() {
 
                 is NetworkResult.Success -> {
                     totalPages = it.data?.total_pages!!
-                    val oldSize = showList.size
+                    val oldSize = mData.size
                     feedId = it.data?.data?.firstOrNull()?.feed_id.toString()
-                    showList.addAll((it.data?.data ?: listOf()))
+                    mData.addAll((it.data?.data ?: listOf()))
                     if (oldSize == 0) {
                         initAdapter()
                     } else {
-                        adapter.notifyItemRangeInserted(oldSize, showList.size)
+                        adapter.notifyItemRangeInserted(oldSize, mData.size)
                     }
                 }
 
@@ -139,11 +139,11 @@ class HomeFragment : BaseFragment() {
                 }
 
                 is NetworkResult.Success -> {
-                    showList[currentItemAction].is_like = !showList[currentItemAction].is_like
-                    if (showList[currentItemAction].is_like) {
-                        showList[currentItemAction].likes += 1
+                    mData[currentItemAction].is_like = !mData[currentItemAction].is_like
+                    if (mData[currentItemAction].is_like) {
+                        mData[currentItemAction].likes += 1
                     } else {
-                        showList[currentItemAction].likes -= 1
+                        mData[currentItemAction].likes -= 1
                     }
                     adapter.notifyItemChanged(currentItemAction)
                 }
@@ -211,7 +211,7 @@ class HomeFragment : BaseFragment() {
     }
 
     override fun initAdapter() {
-        adapter = AdapterHome(showList, isProfileFeed = false, object : OnItemClick {
+        adapter = AdapterHome(mData, isProfileFeed = false, object : OnItemClick {
 
             override fun onClick(position: Int, type: String?, data: Any?, view: View?) {
                 if (isGuest()) {
@@ -228,7 +228,7 @@ class HomeFragment : BaseFragment() {
 
                     "comment" -> {
                         val intent = Intent(requireContext(), HomeDetailActivity::class.java)
-                        intent.putExtra(AppConstants.BUNDLE, showList[position])
+                        intent.putExtra(AppConstants.BUNDLE, mData[position])
                         detailActivityResultLauncher.launch(intent)
 
                     }
@@ -268,7 +268,7 @@ class HomeFragment : BaseFragment() {
                     }
 
                 if (model != null) {
-                    showList[currentItemAction] = model
+                    mData[currentItemAction] = model
                     adapter.notifyItemChanged(currentItemAction)
                 }
                 // Extract data from the intent if needed

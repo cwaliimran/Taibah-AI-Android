@@ -13,7 +13,6 @@ import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
-import com.google.android.play.integrity.internal.t
 import com.network.base.BaseActivity
 import com.network.interfaces.OnItemClick
 import com.network.models.ModelUser
@@ -34,7 +33,7 @@ import com.taibahai.utils.showToast
 class MyProfileActivity : BaseActivity() {
     lateinit var binding: ActivityMyProfileBinding
     lateinit var adapter: AdapterHome
-    private var profileFeedList: MutableList<com.network.models.ModelHome.Data> = mutableListOf()
+    private var mData: MutableList<com.network.models.ModelHome.Data> = mutableListOf()
     val viewModel: MainViewModelAI by viewModels()
     var currentItemAction = -1
 
@@ -44,7 +43,12 @@ class MyProfileActivity : BaseActivity() {
         binding.appbar.tvTitle.text = getString(R.string.my_profile)
 
         show(binding.appbar.ivRight)
-        binding.appbar.ivRight.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.pen_new_square))
+        binding.appbar.ivRight.setImageDrawable(
+            ContextCompat.getDrawable(
+                context,
+                R.drawable.pen_new_square
+            )
+        )
         loadAd()
         setContentView(binding.root)
 
@@ -88,8 +92,14 @@ class MyProfileActivity : BaseActivity() {
                     Glide.with(this).load(profileData.image).placeholder(R.drawable.splashlogo)
                         .into(binding.ivProfileImage)
 
-                    profileFeedList.addAll(profileData.feed)
-                    adapter.notifyDataSetChanged()
+                    mData.addAll(profileData.feed)
+                    if (mData.isEmpty()) {
+                        binding.noData.title.text = getString(R.string.no_posts_found)
+                        show(binding.noData.root)
+                    } else {
+                        hideGone(binding.noData.root)
+                        adapter.notifyDataSetChanged()
+                    }
 
                 }
 
@@ -110,13 +120,13 @@ class MyProfileActivity : BaseActivity() {
                 }
 
                 is NetworkResult.Success -> {
-                    it.data?.message?.let { it1 -> showToast(it1) }
-                    // TODO: handle likes 
-                    if (profileFeedList[currentItemAction].likes == 1) {
-                        profileFeedList[currentItemAction].likes == 0
+                    mData[currentItemAction].is_like = !mData[currentItemAction].is_like
+                    if (mData[currentItemAction].is_like) {
+                        mData[currentItemAction].likes += 1
                     } else {
-                        profileFeedList[currentItemAction].likes == 1
+                        mData[currentItemAction].likes -= 1
                     }
+                    adapter.notifyItemChanged(currentItemAction)
 
                 }
 
@@ -136,7 +146,12 @@ class MyProfileActivity : BaseActivity() {
                 }
 
                 is NetworkResult.Success -> {
-                   adapter.notifyItemRemoved(currentItemAction)
+                    mData.removeAt(currentItemAction)
+                    adapter.notifyItemRemoved(currentItemAction)
+                    if (mData.isEmpty()){
+                        show(binding.noData.root)
+                        binding.noData.title.text = getString(R.string.no_posts_found)
+                    }
 
                 }
 
@@ -148,7 +163,7 @@ class MyProfileActivity : BaseActivity() {
     }
 
     override fun initAdapter() {
-        adapter = AdapterHome(profileFeedList, isProfileFeed = true, object : OnItemClick {
+        adapter = AdapterHome(mData, isProfileFeed = true, object : OnItemClick {
             override fun onClick(position: Int, type: String?, data: Any?, view: View?) {
 
                 if (isGuest()) {
@@ -158,20 +173,18 @@ class MyProfileActivity : BaseActivity() {
                 currentItemAction = position
                 when (type) {
                     "like" -> {
-                        if (data is String) {
-                            viewModel.putLike(data)
-                        }
+                        viewModel.putLike(mData[position].feed_id)
                     }
 
                     "comment" -> {
                         val intent = Intent(this@MyProfileActivity, HomeDetailActivity::class.java)
-                        intent.putExtra(AppConstants.BUNDLE, profileFeedList[position])
+                        intent.putExtra(AppConstants.BUNDLE, mData[position])
                         startActivity(intent)
                     }
 
                     "delete" -> {
                         //delete post
-                        viewModel.deleteFeed(data.toString())
+                        confirmDelete(mData[position].feed_id)
                     }
 
                     else -> {}
@@ -214,10 +227,10 @@ class MyProfileActivity : BaseActivity() {
         genericDialog(object : OnItemClick {
             override fun onClick(position: Int, type: String?, data: Any?, view: View?) {
                 super.onClick(position, type, data, view)
-                 val aiTokens = AppClass.sharedPref.getInt(AppConstants.AI_TOKENS)
-                    AppClass.sharedPref.clearAllPreferences()
-                    AppClass.sharedPref.storeInt(AppConstants.AI_TOKENS, aiTokens)
-                    AppClass.sharedPref.storeBoolean(AppConstants.IS_FREE_AI_TOKENS_PROVIDED, true)
+                val aiTokens = AppClass.sharedPref.getInt(AppConstants.AI_TOKENS)
+                AppClass.sharedPref.clearAllPreferences()
+                AppClass.sharedPref.storeInt(AppConstants.AI_TOKENS, aiTokens)
+                AppClass.sharedPref.storeBoolean(AppConstants.IS_FREE_AI_TOKENS_PROVIDED, true)
                 viewModel.logout(
                     AppClass.sharedPref.getString(Constants.DEVICE_ID, "").toString(),
                     "android"
@@ -227,8 +240,31 @@ class MyProfileActivity : BaseActivity() {
     }
 
 
-            private fun confirmDelete() {
-          }
+    private fun confirmDelete(id: String) {
+        val dialog = Dialog(this)
+        val layoutInflater = LayoutInflater.from(this)
+        val binding = DialogHistoryBinding.inflate(layoutInflater)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(binding.root)
+        dialog.setCancelable(false)
+        binding.btnCancel.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        binding.btnYes.setOnClickListener {
+            viewModel.deleteFeed(id)
+            dialog.dismiss()
+        }
+
+        dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.window!!.setLayout(
+            LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+
+        dialog.show()
+
+
+    }
 
 
 }
