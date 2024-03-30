@@ -24,7 +24,7 @@ class InheritanceLawActivity : BaseActivity() {
 
     override fun onCreate() {
         binding=ActivityInheritanceLawBinding.inflate(layoutInflater)
-        loadAd()
+       if (!isAdsFree) loadAd() else binding.adView.visibility = View.GONE
         setContentView(binding.root)
     }
 

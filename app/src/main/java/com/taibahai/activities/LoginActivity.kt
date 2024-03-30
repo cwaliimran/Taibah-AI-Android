@@ -84,7 +84,7 @@ class LoginActivity : BaseActivity() {
         auth = FirebaseAuth.getInstance()
         FacebookSdk.sdkInitialize(applicationContext)
         AppEventsLogger.activateApp(application)
-
+        deviceId()
         isUserAuthenticated()
     }
 
@@ -113,7 +113,7 @@ class LoginActivity : BaseActivity() {
         }
 
         binding.clFacebookBtn.setOnClickListener {
-            // signInWithFacebook()
+             signInWithFacebook()
         }
         binding.clGuestBtn.setOnClickListener {
             viewModel.socialLogin(

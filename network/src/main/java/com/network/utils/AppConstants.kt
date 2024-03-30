@@ -3,6 +3,7 @@ package com.network.utils
 object AppConstants {
     val IS_FREE_AI_TOKENS_PROVIDED = "is_free_ai_tokens_provided"
     val AI_TOKENS = "ai_tokens"
+    val IS_ADS_FREE = "is_ads_free"
     val FAV_SURAHS = "fav_surahs"
     val GUEST = "guest"
     val ACCESS_TOKEN = "access_token"

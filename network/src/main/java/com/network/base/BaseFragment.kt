@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentActivity
 import com.google.gson.Gson
 import com.network.models.ModelUser
 import com.network.utils.AppClass
+import com.network.utils.AppConstants
 
 abstract class BaseFragment : Fragment() {
 
@@ -21,7 +22,7 @@ abstract class BaseFragment : Fragment() {
     val gson = Gson()
     var lastClickTime: Long = 0
     var currentUser: ModelUser.Data? = ModelUser.Data()
-
+    var isAdsFree = false
     protected val mContext: Context by lazy {
         requireActivity()
     }
@@ -33,6 +34,7 @@ abstract class BaseFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         currentUser = AppClass.getCurrentUser()
+        isAdsFree = AppClass.sharedPref.getBoolean(AppConstants.IS_ADS_FREE)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -66,5 +68,7 @@ abstract class BaseFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         currentUser = AppClass.getCurrentUser()
+        isAdsFree = AppClass.sharedPref.getBoolean(AppConstants.IS_ADS_FREE)
+
     }
 }

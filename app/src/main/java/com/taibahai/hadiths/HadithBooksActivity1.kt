@@ -26,10 +26,10 @@ class HadithBooksActivity1 : BaseActivity() {
 
     override fun onCreate() {
         binding = ActivityHadithBooks1Binding.inflate(layoutInflater)
-        binding.appbar.tvTitle.setText("Hadiths")
+        binding.appbar.tvTitle.text = getString(R.string.hadith)
         
         
-        loadAd()
+       if (!isAdsFree) loadAd() else binding.adView.visibility = View.GONE
         setContentView(binding.root)
     }
 

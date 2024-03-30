@@ -24,7 +24,7 @@ class ImamsOfSunnaActivity : BaseActivity() {
 
     override fun onCreate() {
         binding= ActivityImamsOfSunnaBinding.inflate(layoutInflater)
-        loadAd()
+       if (!isAdsFree) loadAd() else binding.adView.visibility = View.GONE
         setContentView(binding.root)
     }
 

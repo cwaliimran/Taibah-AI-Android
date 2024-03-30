@@ -61,7 +61,7 @@ class NotificationActivity : BaseActivity() {
         binding.appbar.tvTitle.setText("Notifications")
         
         
-        loadAd()
+       if (!isAdsFree) loadAd() else binding.adView.visibility = View.GONE
     }
 
     override fun apiAndArgs() {

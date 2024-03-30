@@ -49,7 +49,7 @@ class MyProfileActivity : BaseActivity() {
                 R.drawable.pen_new_square
             )
         )
-        loadAd()
+       if (!isAdsFree) loadAd() else binding.adView.visibility = View.GONE
         setContentView(binding.root)
 
 

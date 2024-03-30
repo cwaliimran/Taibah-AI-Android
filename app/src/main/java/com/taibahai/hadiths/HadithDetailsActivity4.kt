@@ -1,6 +1,7 @@
 package com.taibahai.hadiths
 
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import com.google.android.gms.ads.AdRequest
@@ -29,7 +30,7 @@ class HadithDetailsActivity4 : BaseActivity() {
 
     override fun onCreate() {
         binding = ActivityHadithDetails4Binding.inflate(layoutInflater)
-        loadAd()
+       if (!isAdsFree) loadAd() else binding.adView.visibility = View.GONE
         setContentView(binding.root)
     }
 

@@ -19,28 +19,27 @@ import com.taibahai.utils.getPicker
 import com.taibahai.utils.showToast
 
 class CreatePostActivity : BaseActivity() {
-    private var description=""
-    lateinit var binding:ActivityCreatePostBinding
-    val viewModel : MainViewModelAI by viewModels()
-    var upLoadedFile=""
-
-
-
+    private var description = ""
+    lateinit var binding: ActivityCreatePostBinding
+    val viewModel: MainViewModelAI by viewModels()
+    var upLoadedFile = ""
 
 
     override fun onCreate() {
-        binding=ActivityCreatePostBinding.inflate(layoutInflater)
+        binding = ActivityCreatePostBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
 
 
     override fun clicks() {
         binding.btnCreate.setOnClickListener {
-            if(isFieldChecked())
-            {
-                description=binding.etDescription.text.toString()
+            if (isFieldChecked()) {
+                description = binding.etDescription.text.toString()
                 viewModel.postFeed(description = description, type = upLoadedFile)
             }
+        }
+        binding.ivBackArrow.setOnClickListener {
+            finish()
         }
 
         binding.ivPostUpload.setOnClickListener {
@@ -60,11 +59,9 @@ class CreatePostActivity : BaseActivity() {
         }
     }
 
-    private fun isFieldChecked():Boolean
-    {
-        if(binding.etDescription.text.isEmpty())
-        {
-            binding.etDescription.error= "Description is required"
+    private fun isFieldChecked(): Boolean {
+        if (binding.etDescription.text.toString().isEmpty()) {
+            binding.etDescription.error = "Description is required"
             return false
         }
         return true
@@ -111,10 +108,10 @@ class CreatePostActivity : BaseActivity() {
                 is NetworkResult.Success -> {
                     it.data?.message?.let { it1 -> showToast(it1) }
                     Glide.with(this).load(it.data?.data?.url).into(binding.ivUserPost)
-                    binding.ivPostUpload.visibility=View.INVISIBLE
-                    binding.tvChooseImage.visibility=View.INVISIBLE
-                    binding.ivCross.visibility=View.VISIBLE
-                    upLoadedFile= it.data?.data?.file.toString()
+                    binding.ivPostUpload.visibility = View.INVISIBLE
+                    binding.tvChooseImage.visibility = View.INVISIBLE
+                    binding.ivCross.visibility = View.VISIBLE
+                    upLoadedFile = it.data?.data?.file.toString()
 
 
                 }
@@ -134,19 +131,20 @@ class CreatePostActivity : BaseActivity() {
                 Activity.RESULT_OK -> {
                     val uri = data?.data
                     val path = uri?.path
-                    // TODO: downloaded files folder path not working
                     // val path = uri?.let { getFilePathFormUri(it, this) }
                     Log.d("TAGRESULT", "onActivityResult: $path")
-                    if (path!=null){
+                    if (path != null) {
                         viewModel.uploadFile(path)
-                    }else{
+                    } else {
                         displayLoading(false)
                     }
                 }
+
                 ImagePicker.RESULT_ERROR -> {
                     showToast(ImagePicker.getError(data))
                     displayLoading(false)
                 }
+
                 else -> {
                     displayLoading(false)
                 }

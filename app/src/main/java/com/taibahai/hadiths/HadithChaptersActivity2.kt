@@ -13,7 +13,7 @@ import com.network.viewmodels.MainViewModelTaibahIslamic
 import com.taibahai.adapters.AdapterHadithChapter
 import com.taibahai.databinding.ActivityHadithChapters2Binding
 import com.taibahai.utils.showToast
-
+import android.view.View
 class HadithChaptersActivity2 : BaseActivity() {
     lateinit var binding: ActivityHadithChapters2Binding
     val showList = ArrayList<ModelHadithChapter2.Data>()
@@ -28,7 +28,7 @@ class HadithChaptersActivity2 : BaseActivity() {
 
     override fun onCreate() {
         binding = ActivityHadithChapters2Binding.inflate(layoutInflater)
-        loadAd()
+       if (!isAdsFree) loadAd() else binding.adView.visibility = View.GONE
         setContentView(binding.root)
     }
 

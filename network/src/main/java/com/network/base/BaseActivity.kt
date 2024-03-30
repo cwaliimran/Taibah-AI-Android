@@ -8,6 +8,7 @@ import com.google.gson.Gson
 import com.network.models.ModelUser
 
 import com.network.utils.AppClass
+import com.network.utils.AppConstants
 
 abstract class BaseActivity : AppCompatActivity() {
 
@@ -15,10 +16,12 @@ abstract class BaseActivity : AppCompatActivity() {
     val gson = Gson()
     lateinit var context: Context
     var currentUser: ModelUser.Data? = ModelUser.Data()
+    var isAdsFree = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // GlobalClass.updateStatusBar(window)
 
+        isAdsFree = AppClass.sharedPref.getBoolean(AppConstants.IS_ADS_FREE)
         currentUser = AppClass.getCurrentUser()
         context = this
         bundle = intent.extras
@@ -76,6 +79,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        isAdsFree = AppClass.sharedPref.getBoolean(AppConstants.IS_ADS_FREE)
         currentUser = AppClass.getCurrentUser()
     }
 }

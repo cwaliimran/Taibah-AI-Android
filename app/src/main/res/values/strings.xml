@@ -63,9 +63,10 @@
     <string name="hadith_english_translation">The Messenger of Allah (ﷺ) said, He who does not thank the people is not thankful to Allah. (Sahih al-Bukhari 5668 Please note that Sahih al-Bukhari is a compilation of Hadiths considered authentic by Sunni Muslims. The numbering of the Hadith may vary slightly between different editions. </string>
 
 
-    <string name="facebook_app_id">741513821181094</string>
     <string name="fb_login_protocol_scheme">fb741513821181094</string>
     <string name="facebook_client_token">ff05cc382b73837882d7f4a1933e4579</string>
+    <string name="facebook_app_id">741513821181094</string>
+
     <string name="turn_on_internet">No internet</string>
     <string name="dash">-</string>
     <string name="info">Info</string>
@@ -90,6 +91,7 @@
     <string name="share_text">Download Now</string>
     <string name="are_you_sure_you_want_to_delete">Are you sure you want to delete?</string>
     <string name="no_posts_found">No posts found</string>
+    <string name="hadith">Hadith</string>
 
 
 </resources>
