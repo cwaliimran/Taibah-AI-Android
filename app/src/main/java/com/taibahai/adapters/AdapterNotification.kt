@@ -3,7 +3,9 @@ package com.taibahai.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.github.marlonlom.utilities.timeago.TimeAgo
 import com.network.models.ModelNotifications
+import com.network.utils.convertDateToLong
 import com.taibahai.databinding.ItemNotificationBinding
 
 class AdapterNotification(var showData: MutableList<ModelNotifications.Data>) :
@@ -19,6 +21,7 @@ class AdapterNotification(var showData: MutableList<ModelNotifications.Data>) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val notiData = showData[position]
         holder.binding.data = notiData
+        holder.binding.tvTime.text=  TimeAgo.using(notiData.created_at.convertDateToLong())
 
     }
 

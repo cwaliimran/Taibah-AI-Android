@@ -82,7 +82,7 @@ class NotificationActivity : BaseActivity() {
                 }
 
                 is NetworkResult.Success -> {
-                    totalPages = it.data?.meta?.last_page!!
+                    totalPages = it.data?.total_pages!!
                     val oldSize = showList.size
                     showList.addAll((it.data?.data ?: listOf()))
                     if (oldSize == 0) {

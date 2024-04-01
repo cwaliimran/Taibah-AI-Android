@@ -10,7 +10,6 @@ data class ModelGetFeeds(
         var description: String = "",
         var user_name: String = "",
         var user_image: String = "",
-        var created_at: String = "",
         var timesince: String = "",
         var feed_attachments: List<Any> = listOf(),
         var comments: List<ModelComments> = listOf()

@@ -10,7 +10,7 @@ data class ModelScholars(
         var name: String = "",
         var era: String = "",
         var description: String = "",
-        var created_at: String = "",
+        
         var updated_at: Any = Any(),
         var attachments: List<Attachment> = listOf(),
         var books: List<Book> = listOf()

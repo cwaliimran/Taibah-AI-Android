@@ -10,6 +10,8 @@ import android.view.Window
 import android.widget.LinearLayout
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
@@ -37,6 +39,8 @@ class MyProfileActivity : BaseActivity() {
     val viewModel: MainViewModelAI by viewModels()
     var currentItemAction = -1
 
+    private var currentPageNo = 1
+    private var totalPages: Int = 0
 
     override fun onCreate() {
         binding = ActivityMyProfileBinding.inflate(layoutInflater)
@@ -69,6 +73,23 @@ class MyProfileActivity : BaseActivity() {
             val intent = Intent(this, EditProfileActivity::class.java)
             startActivity(intent)
         }
+
+
+        binding.rvProfile.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val linearLayoutManager = (recyclerView.layoutManager as LinearLayoutManager?)!!
+                if (dy > 0) {
+                    if (linearLayoutManager.findLastCompletelyVisibleItemPosition() == mData.size - 1) {
+                        if (currentPageNo < totalPages) {
+                            currentPageNo += 1
+                            viewModel.home(pageno = currentPageNo)
+                        }
+                    }
+
+                }
+            }
+        })
     }
 
     override fun initObservers() {
@@ -87,6 +108,8 @@ class MyProfileActivity : BaseActivity() {
                     showToast(it.data?.message.toString())
                     val profileData: ModelUser.Data = it.data!!.data
 
+                    // TODO: pagination  
+                  //  totalPages = it.data?.total_pages!!
                     binding.tvName.text = profileData.name
                     binding.tvEmail.text = profileData.email
                     Glide.with(this).load(profileData.image).placeholder(R.drawable.splashlogo)
@@ -208,6 +231,7 @@ class MyProfileActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         binding.adView.resume()
+        mData.clear()
         viewModel.profile()
 
     }

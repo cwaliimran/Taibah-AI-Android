@@ -34,7 +34,6 @@ class MainRepoAI : BaseApiResponse() {
     }
 
 
-
     val socialLoginMutableLiveData: SingleLiveEvent<NetworkResult<ModelUser>> by lazy {
         SingleLiveEvent()
     }
@@ -53,11 +52,10 @@ class MainRepoAI : BaseApiResponse() {
         socialLoginMutableLiveData.postValue(NetworkResult.Loading())
         socialLoginMutableLiveData.postValue(safeApiCall {
             apiService.socialLogin(
-                social_id, social_type,device_id,device_type,email,timezone,name,image
+                social_id, social_type, device_id, device_type, email, timezone, name, image
             )
         })
     }
-
 
 
     suspend fun profile() {
@@ -69,28 +67,26 @@ class MainRepoAI : BaseApiResponse() {
     }
 
 
-    suspend fun postProfile(name:String, image:String) {
+    suspend fun postProfile(name: String, image: String) {
         socialLoginMutableLiveData.value = null
         socialLoginMutableLiveData.postValue(NetworkResult.Loading())
         socialLoginMutableLiveData.postValue(safeApiCall {
-            apiService.postProfile(name,image)
+            apiService.postProfile(name, image)
         })
     }
-
 
 
     val postFeedMutableLiveData: SingleLiveEvent<NetworkResult<ModelPostFeed>> by lazy {
         SingleLiveEvent()
     }
 
-    suspend fun postFeed(description: String,file: String,)
-    {
+    suspend fun postFeed(description: String, file: String) {
         postFeedMutableLiveData.value = null
         postFeedMutableLiveData.postValue(NetworkResult.Loading())
         postFeedMutableLiveData.postValue(safeApiCall {
-            if (file.isEmpty()){
+            if (file.isEmpty()) {
                 apiService.postFeedNoImage(description)
-            }else{
+            } else {
                 apiService.postFeed(description, file)
             }
         })
@@ -110,18 +106,16 @@ class MainRepoAI : BaseApiResponse() {
         SingleLiveEvent()
     }
 
-    suspend fun feedComment(postId: String, comment: String)
-    {
+    suspend fun feedComment(postId: String, comment: String) {
         simpleResponseMutableLiveData.value = null
         simpleResponseMutableLiveData.postValue(NetworkResult.Loading())
         simpleResponseMutableLiveData.postValue(safeApiCall {
-            apiService.feedComment(postId,comment)
+            apiService.feedComment(postId, comment)
         })
     }
 
 
-    suspend fun putLike(feedId: String)
-    {
+    suspend fun putLike(feedId: String) {
         likeMutableLiveData.value = null
         likeMutableLiveData.postValue(NetworkResult.Loading())
         likeMutableLiveData.postValue(safeApiCall {
@@ -129,8 +123,7 @@ class MainRepoAI : BaseApiResponse() {
         })
     }
 
-        suspend fun deleteFeed(feedId: String)
-    {
+    suspend fun deleteFeed(feedId: String) {
         deleteFeedMutableLiveData.value = null
         deleteFeedMutableLiveData.postValue(NetworkResult.Loading())
         deleteFeedMutableLiveData.postValue(safeApiCall {
@@ -139,13 +132,11 @@ class MainRepoAI : BaseApiResponse() {
     }
 
 
-
     val getFeedMutableLiveData: SingleLiveEvent<NetworkResult<ModelGetFeeds>> by lazy {
         SingleLiveEvent()
     }
 
-    suspend fun getFeed(feedId: String)
-    {
+    suspend fun getFeed(feedId: String) {
         getFeedMutableLiveData.value = null
         getFeedMutableLiveData.postValue(NetworkResult.Loading())
         getFeedMutableLiveData.postValue(safeApiCall {
@@ -158,8 +149,7 @@ class MainRepoAI : BaseApiResponse() {
         SingleLiveEvent()
     }
 
-    suspend fun feedReport(feedId:String)
-    {
+    suspend fun feedReport(feedId: String) {
         reportFeedMutableLiveData.value = null
         reportFeedMutableLiveData.postValue(NetworkResult.Loading())
         reportFeedMutableLiveData.postValue(safeApiCall {
@@ -181,17 +171,13 @@ class MainRepoAI : BaseApiResponse() {
     }
 
 
-
-
-    suspend fun support(subject: String,message: String)
-    {
+    suspend fun support(subject: String, message: String) {
         simpleResponseMutableLiveData.value = null
         simpleResponseMutableLiveData.postValue(NetworkResult.Loading())
         simpleResponseMutableLiveData.postValue(safeApiCall {
             apiService.support(subject, message)
         })
     }
-
 
 
     val booksMutableLiveData: SingleLiveEvent<NetworkResult<ModelBooks>> by lazy {
@@ -261,21 +247,17 @@ class MainRepoAI : BaseApiResponse() {
     }
 
 
-
-
     val dbSearchMutableLiveData: SingleLiveEvent<NetworkResult<Any>> by lazy {
         SingleLiveEvent()
     }
 
-    suspend fun dbSearch(type: String,keyword:String)
-    {
+    suspend fun dbSearch(type: String, keyword: String) {
         dbSearchMutableLiveData.value = null
         dbSearchMutableLiveData.postValue(NetworkResult.Loading())
         dbSearchMutableLiveData.postValue(safeApiCall {
             apiService.dbSearch(type, keyword)
         })
     }
-
 
 
     val uploadFileMutableLiveData: SingleLiveEvent<NetworkResult<ModelUploadFile>> by lazy { SingleLiveEvent() }
@@ -303,13 +285,11 @@ class MainRepoAI : BaseApiResponse() {
     }
 
 
-
     val dailyAlertMutableLiveData: SingleLiveEvent<NetworkResult<ModelDailyAlert>> by lazy {
         SingleLiveEvent()
     }
 
-    suspend fun dailyAlert()
-    {
+    suspend fun dailyAlert() {
         dailyAlertMutableLiveData.value = null
         dailyAlertMutableLiveData.postValue(NetworkResult.Loading())
         dailyAlertMutableLiveData.postValue(safeApiCall {
@@ -321,8 +301,7 @@ class MainRepoAI : BaseApiResponse() {
         SingleLiveEvent()
     }
 
-    suspend fun today()
-    {
+    suspend fun today() {
         todayMutableLiveData.value = null
         todayMutableLiveData.postValue(NetworkResult.Loading())
         todayMutableLiveData.postValue(safeApiCall {
@@ -331,15 +310,12 @@ class MainRepoAI : BaseApiResponse() {
     }
 
 
-
-
     val upcomingMutableLiveData: SingleLiveEvent<NetworkResult<ModelUpcoming>> by lazy {
         SingleLiveEvent()
     }
 
 
-    suspend fun upcoming()
-    {
+    suspend fun upcoming() {
         upcomingMutableLiveData.value = null
         upcomingMutableLiveData.postValue(NetworkResult.Loading())
         upcomingMutableLiveData.postValue(safeApiCall {
@@ -351,8 +327,7 @@ class MainRepoAI : BaseApiResponse() {
         SingleLiveEvent()
     }
 
-    suspend fun notifications()
-    {
+    suspend fun notifications() {
         notificationsMutableLiveData.value = null
         notificationsMutableLiveData.postValue(NetworkResult.Loading())
         notificationsMutableLiveData.postValue(safeApiCall {
@@ -361,16 +336,13 @@ class MainRepoAI : BaseApiResponse() {
     }
 
 
-
-    suspend fun logout(device_id: String,device_type: String)
-    {
+    suspend fun logout(device_id: String, device_type: String) {
         logoutMutableLiveData.value = null
         logoutMutableLiveData.postValue(NetworkResult.Loading())
         logoutMutableLiveData.postValue(safeApiCall {
             apiService.logout(device_id, device_type)
         })
     }
-
 
 
 }

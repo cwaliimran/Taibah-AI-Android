@@ -11,7 +11,7 @@ data class ModelBooks(
         var id: String = "",
         var title: String = "",
         var date: String = "",
-        var created_at: String = "",
+        
         var attachments: List<Attachment> = listOf()
     ) : Serializable {
         data class Attachment(

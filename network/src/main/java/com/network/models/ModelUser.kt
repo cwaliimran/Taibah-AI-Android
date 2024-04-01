@@ -13,7 +13,7 @@ data class ModelUser(
         var accesstoken: String = "",
         var social_id: Any = Any(),
         var social_type: String = "",
-        var created_at: String = "",
+        
         var feed: MutableList<ModelHome.Data> = mutableListOf()
     )
 }

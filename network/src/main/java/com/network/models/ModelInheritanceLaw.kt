@@ -10,7 +10,7 @@ data class ModelInheritanceLaw(
         var title: String = "",
         var description: String = "",
         var type: String = "",
-        var created_at: String = "",
+        
         var updated_at: Any = Any(),
         var attachment: Attachment = Attachment()
     ) {
