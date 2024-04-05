@@ -2,6 +2,7 @@ package com.network.models
 
 data class ModelUser(
     var status: Int = 0,
+    var total_pages: Int = 0,
     var message: String = "",
     var data: Data = Data()
 ) {

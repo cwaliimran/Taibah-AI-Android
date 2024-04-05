@@ -30,10 +30,8 @@ class AdapterImamsOfSunnaDetail(var showData: MutableList<ModelScholars.Data.Boo
         holder.itemView.setOnClickListener {
             val context = holder.itemView.context
             val intent = Intent(context, BookPDFDetailActivity::class.java)
-
-            intent.putExtra("fileUrl", scholarList.book_file)
-
-
+            intent.putExtra("title", scholarList.book_title)
+            intent.putExtra("url", scholarList.book_file)
             context.startActivity(intent)
         }
     }

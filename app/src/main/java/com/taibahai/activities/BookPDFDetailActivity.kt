@@ -9,7 +9,6 @@ import android.util.Log
 import android.view.View.GONE
 import android.widget.Toast
 import com.network.base.BaseActivity
-import com.network.models.ModelBooks
 import com.network.utils.ProgressLoading.displayLoading
 import com.rajat.pdfviewer.PdfEngine
 import com.rajat.pdfviewer.PdfQuality
@@ -142,24 +141,19 @@ class BookPDFDetailActivity : BaseActivity() {
         super.apiAndArgs()
         if (bundle != null) {
 
-            val model: ModelBooks.Data? = intent.getSerializableExtra("model") as? ModelBooks.Data
-            if (model != null) {
-                bookTitle = model.title
-                binding.appbar.tvTitle.text = bookTitle
-
-                fileUrl = model.attachments.firstOrNull()?.file
-
-                if (checkInternetConnection(this)) {
-                    initPdfViewer(
-                        fileUrl, engine
-                    )
-                } else {
-                    Toast.makeText(
-                        this,
-                        "No Internet Connection. Please Check your internet connection.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
+            bookTitle = intent.getStringExtra("title").toString()
+            fileUrl = intent.getStringExtra("url")
+            binding.appbar.tvTitle.text = bookTitle
+            if (checkInternetConnection(this)) {
+                initPdfViewer(
+                    fileUrl, engine
+                )
+            } else {
+                Toast.makeText(
+                    this,
+                    "No Internet Connection. Please Check your internet connection.",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
 

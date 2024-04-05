@@ -50,8 +50,7 @@ class ContactSupportActivity : BaseActivity() {
 
                 is NetworkResult.Success -> {
                     it.data?.message?.let { it1 -> showToast(it1) }
-                    binding.etTitle.text.clear()
-                    binding.etMessage.text.clear()
+                    finish()
 
                 }
 

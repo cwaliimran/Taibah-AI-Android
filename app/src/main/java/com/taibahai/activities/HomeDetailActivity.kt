@@ -5,12 +5,14 @@ import android.app.Activity
 import android.content.Intent
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
+import com.bumptech.glide.Glide
 import com.network.base.BaseActivity
 import com.network.models.ModelComments
 import com.network.models.ModelHome
 import com.network.network.NetworkResult
 import com.network.utils.AppConstants
 import com.network.utils.ProgressLoading.displayLoading
+import com.network.utils.convertLongToDate
 import com.network.viewmodels.MainViewModelAI
 import com.taibahai.R
 import com.taibahai.adapters.AdapterComments
@@ -35,8 +37,8 @@ class HomeDetailActivity : BaseActivity() {
                 val intent = Intent().apply {
                     putExtra(AppConstants.BUNDLE, model)
                 }
-               setResult(Activity.RESULT_OK, intent)
-               finish()
+                setResult(Activity.RESULT_OK, intent)
+                finish()
             }
         }
         onBackPressedDispatcher.addCallback(this, callback)
@@ -138,14 +140,15 @@ class HomeDetailActivity : BaseActivity() {
 
                 is NetworkResult.Success -> {
                     showComments.add(
-                        0, ModelComments(
+                        ModelComments(
                             binding.messageBox.text.toString(),
                             currentUser?.name.toString(),
-                            currentUser?.image.toString()
+                            currentUser?.image.toString(),
+                            System.currentTimeMillis().convertLongToDate()
                         )
                     )
                     hideGone(binding.noData.root)
-                    adapter.notifyItemInserted(0)
+                    adapter.notifyItemInserted(showComments.size)
                     model.comments += 1
                     binding.ii.commentCounts.text = "${model.comments} Comments"
                     binding.messageBox.text.clear()
@@ -178,6 +181,7 @@ class HomeDetailActivity : BaseActivity() {
                     }
 
                     binding.ii.data = model
+                    hideGone(binding.ii.progressBar1)
                 }
 
                 is NetworkResult.Error -> {
@@ -199,6 +203,9 @@ class HomeDetailActivity : BaseActivity() {
         if (bundle != null) {
             model = intent.getSerializableExtra(AppConstants.BUNDLE) as ModelHome.Data
             binding.ii.data = model
+            Glide.with(this).load(model.feed_attachments.firstOrNull()?.file)
+                .into(binding.ii.ivUploadImage)
+            hideGone(binding.ii.progressBar1)
         }
         viewModel.getFeed(model.feed_id)
 

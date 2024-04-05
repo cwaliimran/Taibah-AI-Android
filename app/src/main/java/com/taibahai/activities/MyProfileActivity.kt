@@ -108,8 +108,7 @@ class MyProfileActivity : BaseActivity() {
                     showToast(it.data?.message.toString())
                     val profileData: ModelUser.Data = it.data!!.data
 
-                    // TODO: pagination  
-                  //  totalPages = it.data?.total_pages!!
+                    totalPages = it.data?.total_pages!!
                     binding.tvName.text = profileData.name
                     binding.tvEmail.text = profileData.email
                     Glide.with(this).load(profileData.image).placeholder(R.drawable.splashlogo)

@@ -1,5 +1,6 @@
 package com.taibahai.search_database_tablayout
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -12,21 +13,21 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import com.google.gson.Gson
 import com.network.base.BaseFragment
+import com.network.interfaces.OnItemClick
 import com.network.models.ModelDbSearchQuran
-import com.network.models.ModelSurah
 import com.network.network.NetworkResult
 import com.network.utils.ProgressLoading.displayLoading
 import com.network.viewmodels.MainViewModelAI
 import com.taibahai.R
 import com.taibahai.adapters.AdapterDbSearchQuran
 import com.taibahai.databinding.FragmentTopQuranBinding
+import com.taibahai.quran.ChapterDetailActivity
 import com.taibahai.utils.showToast
 
 class TopQuranFragment : BaseFragment() {
     lateinit var binding: FragmentTopQuranBinding
-    val showList=ArrayList<ModelSurah>()
     lateinit var adapter: AdapterDbSearchQuran
-    val quranData=ArrayList<ModelDbSearchQuran.Data>()
+    val model = ArrayList<ModelDbSearchQuran.Data>()
     val viewModel: MainViewModelAI by viewModels()
     val handler = Handler(Looper.getMainLooper())
     var searchRunnable: Runnable? = null
@@ -48,10 +49,20 @@ class TopQuranFragment : BaseFragment() {
 
     override fun clicks() {
         binding.etSearch.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(charSequence: CharSequence?, start: Int, before: Int, count: Int) {
+            override fun beforeTextChanged(
+                charSequence: CharSequence?,
+                start: Int,
+                before: Int,
+                count: Int
+            ) {
             }
 
-            override fun onTextChanged(charSequence: CharSequence?, start: Int, before: Int, count: Int) {
+            override fun onTextChanged(
+                charSequence: CharSequence?,
+                start: Int,
+                before: Int,
+                count: Int
+            ) {
             }
 
 
@@ -76,8 +87,13 @@ class TopQuranFragment : BaseFragment() {
     override fun initAdapter() {
         super.initAdapter()
 
-        adapter= AdapterDbSearchQuran(quranData)
-        binding.rvSearchQuran.adapter=adapter
+        adapter = AdapterDbSearchQuran(model, object : OnItemClick {
+            override fun onClick(position: Int, type: String?, data: Any?, view: View?) {
+                super.onClick(position, type, data, view)
+
+            }
+        })
+        binding.rvSearchQuran.adapter = adapter
 
     }
 
@@ -91,14 +107,15 @@ class TopQuranFragment : BaseFragment() {
             activity?.displayLoading(false)
             when (it) {
                 is NetworkResult.Loading -> {
-                    activity?. displayLoading(true)
+                    activity?.displayLoading(true)
                 }
 
                 is NetworkResult.Success -> {
-                    quranData.clear()
+                    model.clear()
                     val gson = Gson()
-                    val responseData = gson.fromJson(gson.toJson(it.data), ModelDbSearchQuran::class.java)
-                    quranData.addAll(responseData.data)
+                    val responseData =
+                        gson.fromJson(gson.toJson(it.data), ModelDbSearchQuran::class.java)
+                    model.addAll(responseData.data)
                     adapter.notifyDataSetChanged()
                 }
 

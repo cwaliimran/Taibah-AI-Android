@@ -4,7 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.github.marlonlom.utilities.timeago.TimeAgo
 import com.network.models.ModelComments
+import com.network.utils.convertDateToLong
 import com.taibahai.databinding.ItemCommentBinding
 
 class AdapterComments(var showData: MutableList<ModelComments>): RecyclerView.Adapter<AdapterComments.ViewHolder>() {
@@ -24,6 +26,8 @@ class AdapterComments(var showData: MutableList<ModelComments>): RecyclerView.Ad
         val userData = showData[position]
 
         holder.view.model = userData
+        holder.view.tvCommentTiming.text = TimeAgo.using(userData.timesince.convertDateToLong())
+
 
     }
 
