@@ -264,10 +264,10 @@ class MainViewModelAI constructor(application: Application) : AndroidViewModel(a
     val notificationsLiveData: MutableLiveData<NetworkResult<ModelNotifications>>
         get() = repository.notificationsMutableLiveData
 
-    fun notifications()
+    fun notifications(pageno: Int)
     {
         viewModelScope.launch {
-            repository.notifications()
+            repository.notifications(pageno)
         }
     }
 
@@ -275,6 +275,13 @@ class MainViewModelAI constructor(application: Application) : AndroidViewModel(a
     {
         viewModelScope.launch {
             repository.logout(device_id,device_type)
+        }
+    }
+
+    fun deleteAccount()
+    {
+        viewModelScope.launch {
+            repository.deleteAccount()
         }
     }
 

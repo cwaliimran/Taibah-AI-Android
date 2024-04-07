@@ -327,11 +327,11 @@ class MainRepoAI : BaseApiResponse() {
         SingleLiveEvent()
     }
 
-    suspend fun notifications() {
+    suspend fun notifications(pageno: Int) {
         notificationsMutableLiveData.value = null
         notificationsMutableLiveData.postValue(NetworkResult.Loading())
         notificationsMutableLiveData.postValue(safeApiCall {
-            apiService.notifications()
+            apiService.notifications(pageno)
         })
     }
 
@@ -341,6 +341,14 @@ class MainRepoAI : BaseApiResponse() {
         logoutMutableLiveData.postValue(NetworkResult.Loading())
         logoutMutableLiveData.postValue(safeApiCall {
             apiService.logout(device_id, device_type)
+        })
+    }
+
+    suspend fun deleteAccount() {
+        logoutMutableLiveData.value = null
+        logoutMutableLiveData.postValue(NetworkResult.Loading())
+        logoutMutableLiveData.postValue(safeApiCall {
+            apiService.deleteAccount()
         })
     }
 

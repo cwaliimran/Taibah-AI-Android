@@ -105,7 +105,6 @@ class MyProfileActivity : BaseActivity() {
                 }
 
                 is NetworkResult.Success -> {
-                    showToast(it.data?.message.toString())
                     val profileData: ModelUser.Data = it.data!!.data
 
                     totalPages = it.data?.total_pages!!

@@ -41,7 +41,7 @@ class NotificationActivity : BaseActivity() {
                     if (linearLayoutManager.findLastCompletelyVisibleItemPosition() == showList.size - 1) {
                         if (currentPageNo < totalPages) {
                             currentPageNo += 1
-                            viewModel.home(pageno = currentPageNo)
+                            viewModel.notifications(pageno = currentPageNo)
                         }
                     }
 
@@ -66,7 +66,7 @@ class NotificationActivity : BaseActivity() {
 
     override fun apiAndArgs() {
         super.apiAndArgs()
-        viewModel.notifications()
+        viewModel.notifications(currentPageNo)
     }
 
     override fun initObservers() {
@@ -111,7 +111,6 @@ class NotificationActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         binding.adView.resume()
-        viewModel.profile()
 
     }
 

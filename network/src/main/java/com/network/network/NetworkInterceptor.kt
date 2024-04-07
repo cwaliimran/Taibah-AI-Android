@@ -22,13 +22,13 @@ class NetworkInterceptor(private val context: Context) : Interceptor {
         val token = AppClass.getAccessToken().toString()
         var request: Request = chain.request()
         request = if (token == "null") {
-            Log.d(TAG, "intercept: nulltoken")
+            //Log.d(TAG, "intercept: nulltoken")
             request.newBuilder().addHeader(
                     "Accept", "application/json"
                 ) //                .addHeader("Request-Type", "Android")
                 .addHeader("Content-Type", "application/json").build()
         } else {
-            Log.d(TAG, "intercept: with token $token")
+            //Log.d(TAG, "intercept: with token $token")
             request.newBuilder().addHeader(
                     "Accept", "application/json"
                 ) //                .addHeader("Request-Type", "Android")
