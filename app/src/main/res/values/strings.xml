@@ -93,7 +93,7 @@
     <string name="no_posts_found">No posts found</string>
     <string name="hadith">Hadith</string>
     <string name="delete_account">Delete Account</string>
-    <string name="data_lost_warn">Are you sure you want to delete account? You all data will be lost and can\'t be recovered</string>
+    <string name="data_lost_warn">Are you sure you want to delete account? Your all data will be lost and can\'t be recovered</string>
 
 
 </resources>

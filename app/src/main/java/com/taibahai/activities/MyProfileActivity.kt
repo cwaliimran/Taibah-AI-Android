@@ -53,7 +53,7 @@ class MyProfileActivity : BaseActivity() {
                 R.drawable.pen_new_square
             )
         )
-       if (!isAdsFree) loadAd() else binding.adView.visibility = View.GONE
+        if (!isAdsFree) loadAd() else binding.adView.visibility = View.GONE
         setContentView(binding.root)
 
 
@@ -68,10 +68,10 @@ class MyProfileActivity : BaseActivity() {
 
             if (isGuest()) {
                 handleGuestLogic()
-                return@setOnClickListener
+            } else {
+                val intent = Intent(this, EditProfileActivity::class.java)
+                startActivity(intent)
             }
-            val intent = Intent(this, EditProfileActivity::class.java)
-            startActivity(intent)
         }
 
 
@@ -169,7 +169,7 @@ class MyProfileActivity : BaseActivity() {
                 is NetworkResult.Success -> {
                     mData.removeAt(currentItemAction)
                     adapter.notifyItemRemoved(currentItemAction)
-                    if (mData.isEmpty()){
+                    if (mData.isEmpty()) {
                         show(binding.noData.root)
                         binding.noData.title.text = getString(R.string.no_posts_found)
                     }
@@ -178,6 +178,40 @@ class MyProfileActivity : BaseActivity() {
 
                 is NetworkResult.Error -> {
                     showToast(it.message.toString())
+                }
+            }
+        }
+
+        viewModel.logoutLiveData.observe(this) {
+            if (it == null) {
+                return@observe
+            }
+            displayLoading(false)
+            when (it) {
+                is NetworkResult.Loading -> {
+                    displayLoading(true)
+                }
+
+                is NetworkResult.Success -> {
+                    val aiTokens = AppClass.sharedPref.getInt(AppConstants.AI_TOKENS)
+                    AppClass.sharedPref.clearAllPreferences()
+                    AppClass.sharedPref.storeInt(AppConstants.AI_TOKENS, aiTokens)
+                    AppClass.sharedPref.storeBoolean(AppConstants.IS_FREE_AI_TOKENS_PROVIDED, true)
+                    startActivity(
+                        Intent(
+                            this, LoginActivity::class.java
+                        )
+                    )
+                    this.finishAffinity()
+                }
+
+                is NetworkResult.Error -> {
+                    startActivity(
+                        Intent(
+                            this, LoginActivity::class.java
+                        )
+                    )
+                    this.finishAffinity()
                 }
             }
         }

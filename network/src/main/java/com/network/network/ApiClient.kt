@@ -1,6 +1,5 @@
 package com.network.network
 
-import com.network.network.UrlManager.BASE_URL_AI
 import com.network.utils.AppClass
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
@@ -23,7 +22,7 @@ object ApiClient {
 
         //http client
         val client: OkHttpClient = OkHttpClient.Builder().connectTimeout(1, TimeUnit.MINUTES)
-            .readTimeout(60, TimeUnit.SECONDS).writeTimeout(60, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS).writeTimeout(60, TimeUnit.SECONDS)
             .addInterceptor(networkConnectionInterceptor).addInterceptor(interceptor).build()
 
         //setting gson to lenient true

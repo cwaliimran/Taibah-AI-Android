@@ -189,14 +189,15 @@ class SettingActivity : BaseActivity() {
 
 
         binding.btnLogout.setOnClickListener {
-            val aiTokens = AppClass.sharedPref.getInt(AppConstants.AI_TOKENS)
-            AppClass.sharedPref.clearAllPreferences()
-            AppClass.sharedPref.storeInt(AppConstants.AI_TOKENS, aiTokens)
-            AppClass.sharedPref.storeBoolean(AppConstants.IS_FREE_AI_TOKENS_PROVIDED, true)
             viewModel.logout(
                 AppClass.sharedPref.getString(Constants.DEVICE_ID, "").toString(),
                 "android"
             )
+            val aiTokens = AppClass.sharedPref.getInt(AppConstants.AI_TOKENS)
+            AppClass.sharedPref.clearAllPreferences()
+            AppClass.sharedPref.storeInt(AppConstants.AI_TOKENS, aiTokens)
+            AppClass.sharedPref.storeBoolean(AppConstants.IS_FREE_AI_TOKENS_PROVIDED, true)
+
             googleSignInClient.signOut().addOnCompleteListener {
                 dialog.dismiss() // Dismiss dialog after initiating the logout action
             }

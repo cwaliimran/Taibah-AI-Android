@@ -195,9 +195,9 @@ class EditProfileActivity : BaseActivity() {
     override fun initData() {
         super.initData()
         currentUser.let {
-            binding.etName.setText(it!!.name)
-            binding.tvEmail.text = it.email
-            Glide.with(this).load(it.image).placeholder(R.drawable.splashlogo)
+            binding.etName.setText(it?.name)
+            binding.tvEmail.text = it?.email
+            Glide.with(this).load(it?.image).placeholder(R.drawable.splashlogo)
                 .into(binding.ivProfile)
         }
     }
@@ -224,13 +224,14 @@ class EditProfileActivity : BaseActivity() {
             dialog.dismiss()
         }
 
+        binding.btnLogout.setBackgroundResource(R.drawable.warn_btn_bg)
 
         binding.btnLogout.setOnClickListener {
+            viewModel.deleteAccount()
             val aiTokens = AppClass.sharedPref.getInt(AppConstants.AI_TOKENS)
             AppClass.sharedPref.clearAllPreferences()
             AppClass.sharedPref.storeInt(AppConstants.AI_TOKENS, aiTokens)
             AppClass.sharedPref.storeBoolean(AppConstants.IS_FREE_AI_TOKENS_PROVIDED, true)
-            viewModel.deleteAccount()
             googleSignInClient.signOut().addOnCompleteListener {
                 dialog.dismiss() // Dismiss dialog after initiating the logout action
             }

@@ -20,4 +20,5 @@
     <color name="grey_300">#E0E0E0</color>
     <color name="seek_bar_progress_color">#FF4081</color>
     <color name="seek_bar_thumb_color">#FF4081</color>
+    <color name="red">#E72618</color>
 </resources>
