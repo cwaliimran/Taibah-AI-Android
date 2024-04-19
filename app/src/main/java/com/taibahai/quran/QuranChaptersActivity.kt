@@ -21,7 +21,6 @@ import android.widget.SeekBar
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -139,7 +138,9 @@ class QuranChaptersActivity : AppCompatActivity() {
     }
 
     private fun initDownloader() {
-        fetchConfiguration = Builder(context).build()
+
+
+        fetchConfiguration = Builder(this@QuranChaptersActivity).build()
         fetch = getInstance(fetchConfiguration!!)
         val requestUrl = AppClass.sharedPref.getString(StringUtils.PREV_SURAH_URL, "")
         val requestPath = AppClass.sharedPref.getString(StringUtils.PREV_SURAH_FILEPATH, "")
@@ -320,7 +321,7 @@ class QuranChaptersActivity : AppCompatActivity() {
         intent.putExtra("ayat_name", model.transliteration_en)
         intent.putExtra("ayat_verse", model.total_verses)
         intent.putExtra("ayat_type", model.revelation_type)
-        if (!mPlayerList!!.isEmpty()) {
+        if (mPlayerList!!.isNotEmpty()) {
             val args = Bundle()
             args.putSerializable(StringUtils.ARRAY, mPlayerList as Serializable?)
             intent.putExtra(StringUtils.BUNDLE, args)

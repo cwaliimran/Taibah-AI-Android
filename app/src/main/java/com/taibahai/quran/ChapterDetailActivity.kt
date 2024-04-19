@@ -54,8 +54,7 @@ class ChapterDetailActivity : AppCompatActivity() {
     var surahId: String? = ""
     var model: SurahListModel = SurahListModel()
     var mPlayerList: List<SurahListModel>? = null
-
-    //    RoomDatabaseRepository dbRepository;
+    var isFromSearch = false
     var context: Context? = null
     var activity: Activity? = null
     private var favSurahs = mutableListOf<String>()
@@ -167,17 +166,24 @@ class ChapterDetailActivity : AppCompatActivity() {
         totalVerse = verse!!.toInt()
         name = intent.getStringExtra("ayat_name")
         val type = intent.getStringExtra("ayat_type")
-        val args = intent.getBundleExtra(StringUtils.BUNDLE)!!
-        mPlayerList = args.getSerializable(StringUtils.ARRAY) as List<SurahListModel>?
-        updateCurrentIndex()
-        if (mPlayerList!!.size == 1) {
+        val args = intent.getBundleExtra(StringUtils.BUNDLE)
+        mPlayerList = args?.getSerializable(StringUtils.ARRAY) as List<SurahListModel>?
+        if (args != null) {
+            updateCurrentIndex()
+            updateUi()
+        } else {
+            isFromSearch = true
+            showAyatList()
+
+        }
+//        if (mPlayerList!!.size == 1) {
 //            binding.playLayout.forward.setAlpha(.4f);
 //            binding.playLayout.backward.setAlpha(.4f);
 //            binding.playLayout.shuffle.setAlpha(.4f);
 //            binding.playLayout.forward.setEnabled(false);
 //            binding.playLayout.backward.setEnabled(false);
 //            binding.playLayout.shuffle.setEnabled(false);
-        }
+//        }
         binding.appbar.tvTitle.text = name
         binding.makkiMadni.detailsVerseNumber.text = "$verse Ayaat"
         try {
@@ -192,7 +198,7 @@ class ChapterDetailActivity : AppCompatActivity() {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        updateUi()
+
     }
 
 
@@ -220,10 +226,12 @@ class ChapterDetailActivity : AppCompatActivity() {
                 }
                 surahAdapter!!.updateList(mData)
                 binding.progressBar.visibility = View.GONE
-                binding.playView.visibility = View.VISIBLE
-                playSurah()
-                delay(1000)
-                startScroll()
+                if (!isFromSearch) {
+                    playSurah()
+                    binding.playView.visibility = View.VISIBLE
+                    delay(1000)
+                    startScroll()
+                }
             } catch (e: JSONException) {
                 e.printStackTrace()
             }
@@ -386,7 +394,7 @@ class ChapterDetailActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-         finishWithUpdate(activity, model)
+        finishWithUpdate(activity, model)
     }
 
     protected fun finishWithUpdate(activity: Activity?, `val`: Any?) {

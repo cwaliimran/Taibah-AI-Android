@@ -34,8 +34,7 @@ class Adapter100Scholars(var showData: MutableList<ModelScholars.Data>):Recycler
         holder.itemView.setOnClickListener {
             val context = holder.itemView.context
             val intent = Intent(context, ScholarDetailActivity::class.java)
-            intent.putExtra("ScholarName", scholarList.name)
-            intent.putExtra("ScholarEra", scholarList.era)
+            intent.putExtra(AppConstants.BUNDLE, scholarList)
             context.startActivity(intent)
         }
     }

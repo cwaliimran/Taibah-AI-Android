@@ -4,11 +4,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.network.interfaces.OnItemClick
-import com.network.models.ModelDbSearchQuran
 import com.taibahai.databinding.ItemDbQuranBinding
+import com.taibahai.quran.SurahListModel
 
 class AdapterDbSearchQuran(
-    var showData: ArrayList<ModelDbSearchQuran.Data>,
+    var showData: MutableList<SurahListModel>,
     var listener: OnItemClick
 ) :
     RecyclerView.Adapter<AdapterDbSearchQuran.ViewHolder>() {
@@ -19,7 +19,7 @@ class AdapterDbSearchQuran(
         return ViewHolder(binding, listener)
     }
 
-    fun setData(list: ArrayList<ModelDbSearchQuran.Data>) {
+    fun setData(list: ArrayList<SurahListModel>) {
         showData = list
         notifyDataSetChanged()
     }

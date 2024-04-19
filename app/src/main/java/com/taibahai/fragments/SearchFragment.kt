@@ -128,7 +128,7 @@ class SearchFragment : BaseFragment(), OnItemClick {
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
-        textToSpeech = TextToSpeech(context, TextToSpeech.OnInitListener { status ->
+        textToSpeech = TextToSpeech(context) { status ->
             if (status != TextToSpeech.ERROR) {
 
                 val availableVoices = textToSpeech!!.voices
@@ -136,7 +136,7 @@ class SearchFragment : BaseFragment(), OnItemClick {
                     Log.d("YourFragment", "Available Voice: ${voice.name}, Locale: ${voice.locale}")
                 }
 //                val locale = Locale("ar", "SA") // Arabic, Saudi Arabia
-                val locale = Locale("en", "US") // Arabic, Saudi Arabia
+                val locale = Locale("en", "UK") // English, US
                 textToSpeech!!.language = locale
 
                 textToSpeech!!.setPitch(1.0f) // Adjust pitch if needed
@@ -144,7 +144,7 @@ class SearchFragment : BaseFragment(), OnItemClick {
             } else {
                 Log.e("YourFragment", "Text-to-Speech initialization failed")
             }
-        })
+        }
     }
 
 
@@ -423,24 +423,20 @@ class SearchFragment : BaseFragment(), OnItemClick {
 
     private fun speakText(text: String, position: Int) {
         textToSpeech?.let { tts ->
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                val params = Bundle()
-                params.putString(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "UniqueUtteranceId")
+            val params = Bundle()
+            params.putString(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "UniqueUtteranceId")
 
-                tts.setOnUtteranceCompletedListener { utteranceId ->
-                    if (utteranceId == "UniqueUtteranceId") {
-                        isAudioPlaying = false
-                        // Delay the visibility update for 500 milliseconds
-                        handler.postDelayed({
-                            updateVisibility(position)
-                        }, 200)
-                    }
+            tts.setOnUtteranceCompletedListener { utteranceId ->
+                if (utteranceId == "UniqueUtteranceId") {
+                    isAudioPlaying = false
+                    // Delay the visibility update for 500 milliseconds
+                    handler.postDelayed({
+                        updateVisibility(position)
+                    }, 200)
                 }
-
-                tts.speak(text, TextToSpeech.QUEUE_FLUSH, params, "UniqueUtteranceId")
-            } else {
-                @Suppress("deprecation") tts.speak(text, TextToSpeech.QUEUE_FLUSH, null)
             }
+
+            tts.speak(text, TextToSpeech.QUEUE_FLUSH, params, "UniqueUtteranceId")
         }
     }
 

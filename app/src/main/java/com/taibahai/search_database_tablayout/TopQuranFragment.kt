@@ -12,26 +12,30 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.network.base.BaseFragment
 import com.network.interfaces.OnItemClick
-import com.network.models.ModelDbSearchQuran
-import com.network.network.NetworkResult
-import com.network.utils.ProgressLoading.displayLoading
 import com.network.viewmodels.MainViewModelAI
 import com.taibahai.R
 import com.taibahai.adapters.AdapterDbSearchQuran
 import com.taibahai.databinding.FragmentTopQuranBinding
 import com.taibahai.quran.ChapterDetailActivity
-import com.taibahai.utils.showToast
+import com.taibahai.quran.SurahListModel
+import com.taibahai.utils.AppJsonUtils
+import org.json.JSONArray
+import org.json.JSONException
 
 class TopQuranFragment : BaseFragment() {
     lateinit var binding: FragmentTopQuranBinding
     lateinit var adapter: AdapterDbSearchQuran
-    val model = ArrayList<ModelDbSearchQuran.Data>()
     val viewModel: MainViewModelAI by viewModels()
     val handler = Handler(Looper.getMainLooper())
     var searchRunnable: Runnable? = null
 
+    private var mData: MutableList<SurahListModel> = mutableListOf()
+    private var mDataFiltered: MutableList<SurahListModel> = mutableListOf()
+
+    var jsonArr: JSONArray? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -72,8 +76,24 @@ class TopQuranFragment : BaseFragment() {
 
                 // Define a new search runnable
                 searchRunnable = Runnable {
+                    mDataFiltered.clear()
+                    adapter.notifyDataSetChanged()
+
                     if (!editable.isNullOrEmpty()) {
-                        viewModel.dbSearch(type = "quran", keyword = editable.toString())
+                        mData.forEach {
+                            if (it.transliteration_en.lowercase()
+                                    .contains(editable.toString()) || it.translation_en.lowercase()
+                                    .contains(
+                                        editable.toString().lowercase()
+                                    )
+                            ) {
+                                mDataFiltered.add(it)
+                            }
+                        }
+                        adapter.notifyDataSetChanged()
+                    } else {
+                        mDataFiltered.addAll(mData)
+                        adapter.notifyDataSetChanged()
                     }
                 }
 
@@ -84,45 +104,34 @@ class TopQuranFragment : BaseFragment() {
         })
     }
 
-    override fun initAdapter() {
-        super.initAdapter()
-
-        adapter = AdapterDbSearchQuran(model, object : OnItemClick {
-            override fun onClick(position: Int, type: String?, data: Any?, view: View?) {
-                super.onClick(position, type, data, view)
-
-            }
-        })
-        binding.rvSearchQuran.adapter = adapter
-
-    }
-
 
     override fun initObservers() {
         super.initObservers()
-        viewModel.dbSearchLiveData.observe(this) {
-            if (it == null) {
-                return@observe
-            }
-            activity?.displayLoading(false)
-            when (it) {
-                is NetworkResult.Loading -> {
-                    activity?.displayLoading(true)
-                }
+        try {
+            mData.clear()
+            mDataFiltered.clear()
+            jsonArr = JSONArray(AppJsonUtils.readRawResource(requireContext(), R.raw.allsurahlist))
+            val gson = Gson()
+            val type = object : TypeToken<List<SurahListModel?>?>() {}.type
+            mData = gson.fromJson(jsonArr.toString(), type)
+            mDataFiltered = gson.fromJson(jsonArr.toString(), type)
 
-                is NetworkResult.Success -> {
-                    model.clear()
-                    val gson = Gson()
-                    val responseData =
-                        gson.fromJson(gson.toJson(it.data), ModelDbSearchQuran::class.java)
-                    model.addAll(responseData.data)
-                    adapter.notifyDataSetChanged()
+            adapter = AdapterDbSearchQuran(mDataFiltered, object : OnItemClick {
+                override fun onClick(position: Int, type: String?, data: Any?, view: View?) {
+                    super.onClick(position, type, data, view)
+                    val intent = Intent(context, ChapterDetailActivity::class.java)
+                    intent.putExtra("ayat_id", mDataFiltered[position].id)
+                    intent.putExtra("ayat_name", mDataFiltered[position].transliteration_en)
+                    intent.putExtra("ayat_verse", mDataFiltered[position].total_verses)
+                    intent.putExtra("ayat_type", mDataFiltered[position].revelation_type)
+                    startActivity(intent)
                 }
+            })
+            binding.rvSearchQuran.adapter = adapter
 
-                is NetworkResult.Error -> {
-                    showToast(it.message.toString())
-                }
-            }
+
+        } catch (e: JSONException) {
+            e.printStackTrace()
         }
     }
 

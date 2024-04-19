@@ -156,7 +156,8 @@ dependencies {
     implementation("com.github.marlonlom:timeago:4.0.3")
 
     //fetch
-    implementation "com.github.tonyofrancis.Fetch:xfetch2:3.1.6"
+//    implementation "com.github.tonyofrancis.Fetch:xfetch2:3.1.6"
+    implementation "com.github.abbas7777:fetch2-android14:3.2.0-beta02"
     implementation "androidx.media:media:1.7.0"
 
 

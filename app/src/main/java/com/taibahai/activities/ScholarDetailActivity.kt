@@ -3,24 +3,21 @@ package com.taibahai.activities
 import androidx.activity.viewModels
 import com.network.base.BaseActivity
 import com.network.models.ModelScholars
-import com.network.network.NetworkResult
-import com.network.utils.ProgressLoading.displayLoading
+import com.network.utils.AppConstants
 import com.network.viewmodels.MainViewModelAI
 import com.taibahai.adapters.AdapterImamsOfSunnaDetail
 import com.taibahai.databinding.ActivityScholarDetailBinding
-import com.taibahai.utils.showToast
 
 class ScholarDetailActivity : BaseActivity() {
-    lateinit var binding:ActivityScholarDetailBinding
-    val viewModel:MainViewModelAI by viewModels()
-    lateinit  var adapter: AdapterImamsOfSunnaDetail
-    val bookList:MutableList<ModelScholars.Data.Book> =mutableListOf()
-    private var scholarName = ""
-    private var scholarEra = ""
+    lateinit var binding: ActivityScholarDetailBinding
+    val viewModel: MainViewModelAI by viewModels()
+    lateinit var adapter: AdapterImamsOfSunnaDetail
+    val bookList: MutableList<ModelScholars.Data.Book> = mutableListOf()
+    private var data = ModelScholars.Data()
 
 
     override fun onCreate() {
-        binding=ActivityScholarDetailBinding.inflate(layoutInflater)
+        binding = ActivityScholarDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
 
@@ -33,51 +30,25 @@ class ScholarDetailActivity : BaseActivity() {
     override fun apiAndArgs() {
         super.apiAndArgs()
         if (bundle != null) {
-            scholarName = intent.getStringExtra("ScholarName").toString()
-            scholarEra = intent.getStringExtra("ScholarEra").toString()
-
-            viewModel.scholars()
+            data = intent.getSerializableExtra(AppConstants.BUNDLE) as ModelScholars.Data
+            binding.tvScholarName.text = data.name
+            binding.tvScholarEra.text = data.era
+            binding.tvScholarDetail.text = data.description
+            bookList.addAll((data.books))
+            adapter.notifyDataSetChanged()
 
         }
     }
 
     override fun initObservers() {
         super.initObservers()
-        viewModel.scholarsLiveData.observe(this) {
-            if (it == null) {
-                return@observe
-            }
-            displayLoading(false)
-            when (it) {
-                is NetworkResult.Loading -> {
-                    displayLoading(true)
-                }
-
-                is NetworkResult.Success -> {
-                    binding.tvScholarName.text=scholarName
-                    binding.tvScholarEra.text=scholarEra
-                    binding.tvScholarDetail.text=it.data?.data?.firstOrNull()?.description
-
-                    bookList.addAll((it.data?.data?.firstOrNull()?.books!!))
-                    adapter.notifyDataSetChanged()
-
-
-
-
-                }
-
-                is NetworkResult.Error -> {
-                    showToast(it.message.toString())
-                }
-            }
-        }
     }
 
     override fun initAdapter() {
         super.initAdapter()
         bookList.clear()
-        adapter= AdapterImamsOfSunnaDetail(bookList)
-        binding.rvBookList.adapter=adapter
+        adapter = AdapterImamsOfSunnaDetail(bookList)
+        binding.rvBookList.adapter = adapter
     }
 
 }

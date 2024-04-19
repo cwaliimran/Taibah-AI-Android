@@ -31,7 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_marginHorizontal="20dp">
 
             <TextView
@@ -40,7 +40,6 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_medium"
                 android:text="@string/dash"
-                android:layout_weight="1"
                 android:textColor="@color/black"
                 android:textSize="16sp"/>
 
@@ -52,6 +51,7 @@
                 android:drawableStart="@drawable/book_layer"
                 android:drawablePadding="10dp"
                 android:fontFamily="@font/poppins"
+                android:layout_marginTop="4dp"
                 android:text="Sahih al-Bukhari"
                 android:textColor="@color/black"
                 android:textSize="14sp"/>
