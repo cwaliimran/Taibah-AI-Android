@@ -74,7 +74,7 @@ class ImamsOfSunnaActivity : BaseActivity() {
 
     override fun initData() {
         super.initData()
-        binding.appbar.tvTitle.setText("4 major imams of Sunna")
+        binding.appbar.tvTitle.setText("4 Major Sunni Imams")
         
         
     }
