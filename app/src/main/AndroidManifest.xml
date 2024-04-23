@@ -37,6 +37,9 @@
             android:name=".activities.UpcomingFeaturesDetailActivity"
             android:exported="false" />
         <activity
+            android:name=".quran.SearchQuranChapterDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".search_database_tablayout.DbSearchHadithRMActivity"
             android:exported="false" />
         <activity

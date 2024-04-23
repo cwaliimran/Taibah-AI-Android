@@ -29,7 +29,7 @@ class AdapterDbSearchQuran(
         holder.binding.model = quranList
         holder.binding.surahName.text = quranList.transliteration_en
         holder.binding.tvDes.text = quranList.translation_en
-        holder.binding.tvCounter.text = (position + 1).toString()
+        holder.binding.tvCounter.text = quranList.number
 
     }
 

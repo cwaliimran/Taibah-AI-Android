@@ -66,6 +66,9 @@ class ExploreFragment : BaseFragment() {
         binding.inTodayVerse.ivShare.setOnClickListener {
             requireActivity().getBitmapFromView(binding.inTodayVerse.cardTodayVerse)
         }
+        binding.inTodayHadith.ivShare.setOnClickListener {
+            requireActivity().getBitmapFromView(binding.inTodayHadith.cardTodayVerse)
+        }
     }
 
     override fun initObservers() {

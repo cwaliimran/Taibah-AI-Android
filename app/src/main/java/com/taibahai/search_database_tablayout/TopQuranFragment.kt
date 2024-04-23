@@ -19,7 +19,7 @@ import com.network.viewmodels.MainViewModelAI
 import com.taibahai.R
 import com.taibahai.adapters.AdapterDbSearchQuran
 import com.taibahai.databinding.FragmentTopQuranBinding
-import com.taibahai.quran.ChapterDetailActivity
+import com.taibahai.quran.SearchQuranChapterDetailActivity
 import com.taibahai.quran.SurahListModel
 import com.taibahai.utils.AppJsonUtils
 import org.json.JSONArray
@@ -37,8 +37,7 @@ class TopQuranFragment : BaseFragment() {
 
     var jsonArr: JSONArray? = null
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate<FragmentTopQuranBinding>(
@@ -54,18 +53,12 @@ class TopQuranFragment : BaseFragment() {
     override fun clicks() {
         binding.etSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(
-                charSequence: CharSequence?,
-                start: Int,
-                before: Int,
-                count: Int
+                charSequence: CharSequence?, start: Int, before: Int, count: Int
             ) {
             }
 
             override fun onTextChanged(
-                charSequence: CharSequence?,
-                start: Int,
-                before: Int,
-                count: Int
+                charSequence: CharSequence?, start: Int, before: Int, count: Int
             ) {
             }
 
@@ -77,19 +70,18 @@ class TopQuranFragment : BaseFragment() {
                 // Define a new search runnable
                 searchRunnable = Runnable {
                     mDataFiltered.clear()
-                    adapter.notifyDataSetChanged()
+                    adapter.notifyItemRangeRemoved(0, 0)
 
                     if (!editable.isNullOrEmpty()) {
-                        mData.forEach {
-                            if (it.transliteration_en.lowercase()
-                                    .contains(editable.toString()) || it.translation_en.lowercase()
-                                    .contains(
-                                        editable.toString().lowercase()
-                                    )
-                            ) {
-                                mDataFiltered.add(it)
-                            }
+                        val searchQuery = editable.toString().lowercase()
+                        mData.filterTo(mDataFiltered) {
+                            it.transliteration_en.lowercase()
+                                .contains(searchQuery) || it.translation_en.lowercase()
+                                .contains(searchQuery) || it.number.lowercase()
+                                .contains(searchQuery) || it.revelation_type.lowercase()
+                                .contains(searchQuery)
                         }
+
                         adapter.notifyDataSetChanged()
                     } else {
                         mDataFiltered.addAll(mData)
@@ -97,8 +89,8 @@ class TopQuranFragment : BaseFragment() {
                     }
                 }
 
-                // Post the search runnable with a delay of 2 seconds
-                handler.postDelayed(searchRunnable!!, 2000)
+                // Post the search runnable with a delay of half second
+                handler.postDelayed(searchRunnable!!, 500)
             }
 
         })
@@ -119,7 +111,7 @@ class TopQuranFragment : BaseFragment() {
             adapter = AdapterDbSearchQuran(mDataFiltered, object : OnItemClick {
                 override fun onClick(position: Int, type: String?, data: Any?, view: View?) {
                     super.onClick(position, type, data, view)
-                    val intent = Intent(context, ChapterDetailActivity::class.java)
+                    val intent = Intent(context, SearchQuranChapterDetailActivity::class.java)
                     intent.putExtra("ayat_id", mDataFiltered[position].id)
                     intent.putExtra("ayat_name", mDataFiltered[position].transliteration_en)
                     intent.putExtra("ayat_verse", mDataFiltered[position].total_verses)

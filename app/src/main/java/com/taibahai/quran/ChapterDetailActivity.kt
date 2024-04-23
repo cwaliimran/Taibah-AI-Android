@@ -39,6 +39,7 @@ import java.nio.charset.StandardCharsets
 
 class ChapterDetailActivity : AppCompatActivity() {
     private var mData: ArrayList<SurahModel>? = null
+    private var verseNumbers = mutableListOf<String>()
     private var surahAdapter: SurahAdapter? = null
     lateinit var binding: ActivityChapterDetailsBinding
     var name: String? = null
@@ -168,14 +169,8 @@ class ChapterDetailActivity : AppCompatActivity() {
         val type = intent.getStringExtra("ayat_type")
         val args = intent.getBundleExtra(StringUtils.BUNDLE)
         mPlayerList = args?.getSerializable(StringUtils.ARRAY) as List<SurahListModel>?
-        if (args != null) {
-            updateCurrentIndex()
-            updateUi()
-        } else {
-            isFromSearch = true
-            showAyatList()
-
-        }
+        updateCurrentIndex()
+        updateUi()
 //        if (mPlayerList!!.size == 1) {
 //            binding.playLayout.forward.setAlpha(.4f);
 //            binding.playLayout.backward.setAlpha(.4f);
@@ -226,12 +221,11 @@ class ChapterDetailActivity : AppCompatActivity() {
                 }
                 surahAdapter!!.updateList(mData)
                 binding.progressBar.visibility = View.GONE
-                if (!isFromSearch) {
-                    playSurah()
-                    binding.playView.visibility = View.VISIBLE
-                    delay(1000)
-                    startScroll()
-                }
+                playSurah()
+                binding.playView.visibility = View.VISIBLE
+                delay(1000)
+                startScroll()
+
             } catch (e: JSONException) {
                 e.printStackTrace()
             }
@@ -424,8 +418,23 @@ class ChapterDetailActivity : AppCompatActivity() {
         }
 
         private fun getFileName(id: String?): Int {
-            val surah_id = id!!.toInt()
-            return if (surah_id >= 1 && surah_id <= 2) R.raw.quran_part_0 else if (surah_id >= 3 && surah_id <= 4) R.raw.quran_part_1 else if (surah_id >= 5 && surah_id <= 8) R.raw.quran_part_2 else if (surah_id >= 9 && surah_id <= 16) R.raw.quran_part_3 else if (surah_id >= 17 && surah_id <= 24) R.raw.quran_part_4 else if (surah_id >= 25 && surah_id <= 32) R.raw.quran_part_5 else if (surah_id >= 33 && surah_id <= 40) R.raw.quran_part_6 else if (surah_id >= 41 && surah_id <= 52) R.raw.quran_part_7 else if (surah_id >= 53 && surah_id <= 64) R.raw.quran_part_8 else if (surah_id >= 65 && surah_id <= 80) R.raw.quran_part_9 else if (surah_id >= 81 && surah_id <= 114) R.raw.quran_part_10 else -1
+            val surah_id = id?.toIntOrNull() ?: return -1
+
+            val rangeToRawMap = mapOf(
+                1..2 to R.raw.quran_part_0,
+                3..4 to R.raw.quran_part_1,
+                5..8 to R.raw.quran_part_2,
+                9..16 to R.raw.quran_part_3,
+                17..24 to R.raw.quran_part_4,
+                25..32 to R.raw.quran_part_5,
+                33..40 to R.raw.quran_part_6,
+                41..52 to R.raw.quran_part_7,
+                53..64 to R.raw.quran_part_8,
+                65..80 to R.raw.quran_part_9,
+                81..114 to R.raw.quran_part_10
+            )
+
+            return rangeToRawMap.entries.firstOrNull { surah_id in it.key }?.value ?: -1
         }
 
 

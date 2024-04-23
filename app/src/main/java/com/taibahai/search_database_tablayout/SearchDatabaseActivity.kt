@@ -22,8 +22,8 @@ class SearchDatabaseActivity : BaseActivity() {
         binding=ActivitySearchDatabaseBinding.inflate(layoutInflater)
         setContentView(binding.root)
         adapter = AdapterSDTabLayout(this)
-        binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Hadith"))
         binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Quran"))
+        binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Hadith"))
         binding.viewPager.adapter = adapter
 
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {

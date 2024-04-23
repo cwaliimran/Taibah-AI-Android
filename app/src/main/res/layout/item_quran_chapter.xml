@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="20dp"
+        android:layout_marginHorizontal="10dp"
         android:layout_marginBottom="20dp"
         android:background="@drawable/bg_quran_chapter"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -28,8 +28,8 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:backgroundTint="@color/primary_green"
                 app:cardCornerRadius="8dp"
                 app:cardUseCompatPadding="false"
@@ -41,13 +41,14 @@
                     android:id="@+id/number"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:autoSizeTextType="uniform"
-                    android:gravity="center"
+                    app:autoSizeMaxTextSize="20sp"
                     android:fontFamily="@font/poppins_medium"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="1"
                     android:textColor="@color/white"
-                    android:textSize="24sp"
-                    android:autoSizeMaxTextSize="30sp"
-                    android:text="114" />
+                    android:textSize="16sp"
+                    app:autoSizeTextType="uniform" />
 
 
             </androidx.cardview.widget.CardView>
@@ -66,11 +67,12 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:autoSizeMaxTextSize="40sp"
+                    android:ellipsize="end"
                     android:fontFamily="@font/poppins_medium"
+                    android:singleLine="true"
                     android:textColor="@color/black"
                     android:textSize="16sp"
-                    android:singleLine="true"
-                    android:ellipsize="end"
                     app:layout_constraintEnd_toStartOf="@+id/ivFav"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -95,20 +97,20 @@
                     android:id="@+id/ivFav"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="20dp"
+                    android:layout_marginEnd="12dp"
                     android:src="@drawable/fav_selector_checkbox"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/play_layout"
+                    app:layout_constraintBottom_toTopOf="@+id/meaning"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <FrameLayout
                     android:id="@+id/play_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="12dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toBottomOf="@+id/ivFav">
 
                     <com.mikhaellopez.circularprogressbar.CircularProgressBar
                         android:id="@+id/progress"

@@ -2,7 +2,6 @@ package com.taibahai.fragments
 
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -74,6 +73,7 @@ class SearchFragment : BaseFragment(), OnItemClick {
     private lateinit var bottomNavigationView: BottomNavigationView
     private var isKeyboardOpen = false
     var aiTokens = 0
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
@@ -152,7 +152,6 @@ class SearchFragment : BaseFragment(), OnItemClick {
         isArchived = AppClass.sharedPref.getIsArchived() ?: false
         chatDatabase = ChatDatabase.getDatabase(requireContext())
         chatMessageDao = chatDatabase.chatMessageDao()
-        messageAdapter = AdapterAISearch(requireContext(), showMessage, this)
 
         adapterMessagePopups = AdapterChatPopups(showMessagePopups) { message ->
             binding.messageBox.setText(message)
@@ -201,6 +200,14 @@ class SearchFragment : BaseFragment(), OnItemClick {
             }
 
 
+        }
+
+        binding.ivFlashMsg.setOnClickListener {
+            if (binding.rvTopMessagePopups.visibility == View.VISIBLE) {
+                binding.rvTopMessagePopups.visibility = View.GONE
+            } else {
+                binding.rvTopMessagePopups.visibility = View.VISIBLE
+            }
         }
 
         binding.voiceBtn.setOnClickListener {
@@ -256,27 +263,24 @@ class SearchFragment : BaseFragment(), OnItemClick {
 
 
     private fun updateUI(messages: List<ModelChatMessage>) {
-        (binding.rvSearchAI.adapter as AdapterAISearch).messageList.clear()
 
         if (isNewMessage) {
             for (i in messages.indexOfFirst { it.id == archiveMessageId } + 1 until messages.size) {
                 val message = messages[i]
                 val modelMessage = ModelSearchAI(message.message, message.isUser)
-                (binding.rvSearchAI.adapter as AdapterAISearch).messageList.add(modelMessage)
+                showMessage.add(modelMessage)
+                messageAdapter.notifyItemInserted(showMessage.size)
+                binding.rvSearchAI.scrollToPosition(showMessage.size - 1)
             }
         } else {
+            showMessage.clear()
             // Display the entire chat
             for (message in messages) {
                 val modelMessage = ModelSearchAI(message.message, message.isUser)
-                (binding.rvSearchAI.adapter as AdapterAISearch).messageList.add(modelMessage)
+                showMessage.add(modelMessage)
             }
-        }
-
-        binding.rvSearchAI.adapter?.notifyDataSetChanged()
-
-        val itemCount = (binding.rvSearchAI.adapter as AdapterAISearch).itemCount
-        if (itemCount > 0) {
-            binding.rvSearchAI.smoothScrollToPosition(itemCount - 1)
+            binding.rvSearchAI.adapter?.notifyDataSetChanged()
+            binding.rvSearchAI.scrollToPosition(showMessage.size - 1)
         }
     }
 
