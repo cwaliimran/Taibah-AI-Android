@@ -6,6 +6,7 @@ import com.network.utils.AppClass
 import com.network.utils.AppConstants
 import com.taibahai.bottom_navigation.BottomNavigation
 import com.taibahai.databinding.ActivitySplashBinding
+import com.taibahai.search_database_tablayout.SearchDatabaseActivity
 
 class SplashActivity : BaseActivity() {
     lateinit var binding: ActivitySplashBinding
@@ -21,13 +22,13 @@ class SplashActivity : BaseActivity() {
                 AppClass.sharedPref.storeInt(AppConstants.AI_TOKENS, 30)
                 AppClass.sharedPref.storeBoolean(AppConstants.IS_FREE_AI_TOKENS_PROVIDED, true)
             }
-            val intent = Intent(this, LoginActivity::class.java)
+            val intent = Intent(this, SearchWholeQuranActivity::class.java)
             startActivity(intent)
             finishAffinity()
         } else {
 
-            val intent = Intent(this, BottomNavigation::class.java)
-//            val intent = Intent(this, QuranChaptersActivity::class.java)
+//            val intent = Intent(this, BottomNavigation::class.java)
+            val intent = Intent(this, SearchWholeQuranActivity::class.java)
             startActivity(intent)
             finishAffinity()
 

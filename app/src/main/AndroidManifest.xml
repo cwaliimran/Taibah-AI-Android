@@ -34,6 +34,9 @@
             android:name=".activities.WebViewActivity"
             android:exported="false" />
         <activity
+            android:name=".activities.SearchWholeQuranActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.UpcomingFeaturesDetailActivity"
             android:exported="false" />
         <activity

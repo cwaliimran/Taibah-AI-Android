@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.network.utils.AppClass
 import com.network.utils.AppConstants
 import com.taibahai.R
@@ -87,9 +88,8 @@ class SearchQuranChapterDetailActivity : AppCompatActivity() {
 
 
     private fun showAyatList() {
-        GlobalScope.launch(Dispatchers.Main) {
             try {
-                withContext(Dispatchers.IO) {
+                lifecycleScope.launch {
                     val jsonArr = JSONArray(loadQuranJson(context, surahId))
                     for (i in 0 until jsonArr.length()) {
                         val surahModel = SurahModel()
@@ -135,7 +135,6 @@ class SearchQuranChapterDetailActivity : AppCompatActivity() {
             } catch (e: JSONException) {
                 e.printStackTrace()
             }
-        }
     }
 
 

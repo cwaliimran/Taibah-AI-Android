@@ -33,5 +33,9 @@ class SurahListModel(
     fun setDownloadId(downloadId: Int) {
         this.downloadId = downloadId
     }
+
+    override fun toString(): String {
+        return "$number. $transliteration_en"
+    }
 }
 

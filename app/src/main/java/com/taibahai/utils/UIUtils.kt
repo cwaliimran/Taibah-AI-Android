@@ -11,7 +11,9 @@ import android.net.Uri
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
+import android.view.View
 import android.view.Window
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Toast
@@ -29,7 +31,13 @@ fun Activity.showToast(text: String, time: Int = Toast.LENGTH_SHORT) {
 fun Fragment.showToast(text: String, time: Int = Toast.LENGTH_SHORT) {
     Toast.makeText(this.context, text, time).show()
 }
-
+fun Activity.hideKeyboard() {
+    val view = this.findViewById<View>(android.R.id.content)
+    if (view != null) {
+        val imm = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(view.windowToken, 0)
+    }
+}
 
 fun Context.genericDialog(listener: OnItemClick, cancelable: Boolean? = true) {
     val dialog = Dialog(this)
@@ -95,4 +103,6 @@ fun EditText.addTextWatcher(onTextChanged: (Double) -> Unit) {
 
         override fun afterTextChanged(s: Editable?) {}
     })
+
+
 }

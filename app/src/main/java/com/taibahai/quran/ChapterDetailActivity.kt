@@ -17,6 +17,7 @@ import android.widget.ScrollView
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.network.utils.AppClass
 import com.network.utils.AppClass.Companion.getTimeString
 import com.network.utils.AppClass.Companion.isFileExists
@@ -27,6 +28,7 @@ import com.taibahai.audioPlayer.AudioPlayer.OnViewClickListener
 import com.taibahai.databinding.ActivityChapterDetailsBinding
 import com.taibahai.notifications.MediaNotificationManager
 import com.taibahai.quran.StringUtils.getNameFromUrl
+import com.taibahai.utils.AppJsonUtils.loadQuranJson
 import com.taibahai.utils.Constants
 import com.taibahai.utils.CustomScrollView
 import com.tonyodev.fetch2.Status
@@ -198,10 +200,9 @@ class ChapterDetailActivity : AppCompatActivity() {
 
 
     private fun showAyatList() {
-        GlobalScope.launch(Dispatchers.Main) {
             try {
-                withContext(Dispatchers.IO) {
-                    val jsonArr = JSONArray(loadQuranJson(context, surahId))
+                lifecycleScope.launch {
+                    val jsonArr = JSONArray(loadQuranJson(context!!, surahId.toString()))
                     for (i in 0 until jsonArr.length()) {
                         val surahModel = SurahModel()
                         if (surahId == jsonArr.getJSONObject(i).getString("surah_number")) {
@@ -223,12 +224,12 @@ class ChapterDetailActivity : AppCompatActivity() {
                 binding.progressBar.visibility = View.GONE
                 playSurah()
                 binding.playView.visibility = View.VISIBLE
-                delay(1000)
-                startScroll()
+                Handler(Looper.getMainLooper()).postDelayed({
+                    startScroll()
+                },1000)
 
             } catch (e: JSONException) {
                 e.printStackTrace()
-            }
         }
     }
 
@@ -401,42 +402,6 @@ class ChapterDetailActivity : AppCompatActivity() {
     companion object {
         private const val STANDARD_SPEED = 50
         private const val TAG = "Al_Quran_Details"
-        fun loadQuranJson(context: Context?, id: String?): String? {
-            var json = ""
-            json = try {
-                val `is` = context!!.resources.openRawResource(getFileName(id))
-                val size = `is`.available()
-                val buffer = ByteArray(size)
-                `is`.read(buffer)
-                `is`.close()
-                String(buffer, StandardCharsets.UTF_8)
-            } catch (ex: IOException) {
-                ex.printStackTrace()
-                return null
-            }
-            return json
-        }
-
-        private fun getFileName(id: String?): Int {
-            val surah_id = id?.toIntOrNull() ?: return -1
-
-            val rangeToRawMap = mapOf(
-                1..2 to R.raw.quran_part_0,
-                3..4 to R.raw.quran_part_1,
-                5..8 to R.raw.quran_part_2,
-                9..16 to R.raw.quran_part_3,
-                17..24 to R.raw.quran_part_4,
-                25..32 to R.raw.quran_part_5,
-                33..40 to R.raw.quran_part_6,
-                41..52 to R.raw.quran_part_7,
-                53..64 to R.raw.quran_part_8,
-                65..80 to R.raw.quran_part_9,
-                81..114 to R.raw.quran_part_10
-            )
-
-            return rangeToRawMap.entries.firstOrNull { surah_id in it.key }?.value ?: -1
-        }
-
 
     }
 }

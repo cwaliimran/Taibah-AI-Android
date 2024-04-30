@@ -1,20 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
-
-    <data>
-
-        <variable
-            name="model"
-            type="com.network.models.ModelSurahDetail" />
-    </data>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -65,10 +56,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:background="@drawable/quran_counter_bg"
-                    android:padding="4dp"
-                    android:includeFontPadding="false"
                     android:fontFamily="@font/poppins_medium"
                     android:gravity="center"
+                    android:includeFontPadding="false"
+                    android:padding="4dp"
                     android:text="1"
                     android:textColor="@color/black"
                     android:textSize="14sp"
@@ -100,12 +91,12 @@
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/poppins"
-                tools:text=" Soy, “O Prophet,”He is Allah_One"
                 android:textColor="#4F4D4D"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/ayatEnglishTranslation" />
+                app:layout_constraintTop_toBottomOf="@id/ayatEnglishTranslation"
+                tools:text=" Soy, “O Prophet,”He is Allah_One" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -114,5 +105,4 @@
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:visibility="gone" />
-    </LinearLayout>
-</layout>
+</LinearLayout>

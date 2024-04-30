@@ -1,45 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".search_database_tablayout.TopQuranFragment">
+    tools:context=".search_database_tablayout.TopQuranFragment"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <EditText
-        android:id="@+id/etSearch"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="20dp"
-        android:background="@drawable/search_bg"
-        android:drawableStart="@drawable/searchh_icon"
-        android:drawablePadding="10dp"
-        android:imeOptions="actionDone"
-        android:fontFamily="@font/poppins"
-        android:hint="search Quran"
-        android:textCursorDrawable="@drawable/custom_cursor"
-        android:textColor="#8C8994"
-        android:textSize="14sp"
-        android:inputType="text"
-        android:singleLine="true"
-        android:layout_marginTop="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="match_parent">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvSearchQuran"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="20dp"
-        android:orientation="vertical"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etSearch"
-        tools:itemCount="4"
-        android:layout_marginBottom="20dp"
-        tools:listitem="@layout/item_db_quran" />
+        <EditText
+            android:id="@+id/etSearch"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/search_bg"
+            android:drawableStart="@drawable/searchh_icon"
+            android:drawablePadding="10dp"
+            android:fontFamily="@font/poppins"
+            android:hint="Search Quran Chapter"
+            android:imeOptions="actionDone"
+            android:inputType="text"
+            android:singleLine="true"
+            android:textColor="#8C8994"
+            android:textCursorDrawable="@drawable/custom_cursor"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toStartOf="@+id/searchWholeQuran"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageView
+            android:id="@+id/searchWholeQuran"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="20dp"
+            android:src="@drawable/baseline_menu_book_24"
+            app:layout_constraintBottom_toBottomOf="@+id/etSearch"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/etSearch" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvSearchQuran"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etSearch"
+            tools:itemCount="4"
+            tools:listitem="@layout/item_db_quran" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

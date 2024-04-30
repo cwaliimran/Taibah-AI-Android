@@ -17,6 +17,7 @@ import com.network.base.BaseFragment
 import com.network.interfaces.OnItemClick
 import com.network.viewmodels.MainViewModelAI
 import com.taibahai.R
+import com.taibahai.activities.SearchWholeQuranActivity
 import com.taibahai.adapters.AdapterDbSearchQuran
 import com.taibahai.databinding.FragmentTopQuranBinding
 import com.taibahai.quran.SearchQuranChapterDetailActivity
@@ -51,6 +52,9 @@ class TopQuranFragment : BaseFragment() {
     }
 
     override fun clicks() {
+        binding.searchWholeQuran.setOnClickListener {
+            startActivity(Intent(requireContext(), SearchWholeQuranActivity::class.java))
+        }
         binding.etSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(
                 charSequence: CharSequence?, start: Int, before: Int, count: Int
@@ -75,7 +79,7 @@ class TopQuranFragment : BaseFragment() {
                     if (!editable.isNullOrEmpty()) {
                         val searchQuery = editable.toString().lowercase()
                         mData.filterTo(mDataFiltered) {
-                            it.transliteration_en.lowercase()
+                                    it.transliteration_en.lowercase()
                                 .contains(searchQuery) || it.translation_en.lowercase()
                                 .contains(searchQuery) || it.number.lowercase()
                                 .contains(searchQuery) || it.revelation_type.lowercase()
