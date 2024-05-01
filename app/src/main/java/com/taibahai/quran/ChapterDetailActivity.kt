@@ -18,6 +18,7 @@ import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.network.models.ModelChapter
 import com.network.utils.AppClass
 import com.network.utils.AppClass.Companion.getTimeString
 import com.network.utils.AppClass.Companion.isFileExists
@@ -35,14 +36,12 @@ import com.tonyodev.fetch2.Status
 import kotlinx.coroutines.*
 import org.json.JSONArray
 import org.json.JSONException
-import java.io.IOException
 import java.io.Serializable
-import java.nio.charset.StandardCharsets
 
 class ChapterDetailActivity : AppCompatActivity() {
-    private var mData: ArrayList<SurahModel>? = null
+    private var mData: MutableList<ModelChapter> = mutableListOf()
     private var verseNumbers = mutableListOf<String>()
-    private var surahAdapter: SurahAdapter? = null
+    private var chaptersAdapter: ChaptersAdapter? = null
     lateinit var binding: ActivityChapterDetailsBinding
     var name: String? = null
     var objectAnimator: ObjectAnimator? = null
@@ -156,8 +155,8 @@ class ChapterDetailActivity : AppCompatActivity() {
     private fun initAdapter() {
         mPlayerList = ArrayList()
         mData = ArrayList()
-        surahAdapter = SurahAdapter(context!!)
-        binding.recyclerView.adapter = surahAdapter
+        chaptersAdapter = ChaptersAdapter(mData, context!!, true)
+        binding.recyclerView.adapter = chaptersAdapter
         binding.recyclerView.isNestedScrollingEnabled = false
     }
 
@@ -204,13 +203,13 @@ class ChapterDetailActivity : AppCompatActivity() {
                 lifecycleScope.launch {
                     val jsonArr = JSONArray(loadQuranJson(context!!, surahId.toString()))
                     for (i in 0 until jsonArr.length()) {
-                        val surahModel = SurahModel()
+                        val surahModel = ModelChapter()
                         if (surahId == jsonArr.getJSONObject(i).getString("surah_number")) {
-                            surahModel.position = jsonArr.getJSONObject(i).getString("verse_number")
-                            surahModel.arabicText = jsonArr.getJSONObject(i).getString("text")
-                            surahModel.englishText =
+                            surahModel.verse_number = jsonArr.getJSONObject(i).getString("verse_number")
+                            surahModel.text = jsonArr.getJSONObject(i).getString("text")
+                            surahModel.translation_en =
                                 jsonArr.getJSONObject(i).getString("translation_en")
-                            surahModel.english_translation =
+                            surahModel.transliteration_en =
                                 jsonArr.getJSONObject(i).getString("transliteration_en")
                             mData!!.add(surahModel)
                             counter++
@@ -220,7 +219,7 @@ class ChapterDetailActivity : AppCompatActivity() {
                         }
                     }
                 }
-                surahAdapter!!.updateList(mData)
+                chaptersAdapter!!.updateList(mData)
                 binding.progressBar.visibility = View.GONE
                 playSurah()
                 binding.playView.visibility = View.VISIBLE
@@ -383,7 +382,7 @@ class ChapterDetailActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == Constants.ACTIVITY_RESULT_CODE && resultCode == RESULT_OK) {
-            surahAdapter!!.notifyDataSetChanged()
+            chaptersAdapter!!.notifyDataSetChanged()
             if (binding.playLayout.play.isSelected) startScroll()
         }
     }

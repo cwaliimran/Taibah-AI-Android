@@ -8,6 +8,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.network.models.ModelChapter
 import com.network.utils.AppClass
 import com.network.utils.AppConstants
 import com.taibahai.R
@@ -19,9 +20,9 @@ import java.io.IOException
 import java.nio.charset.StandardCharsets
 
 class SearchQuranChapterDetailActivity : AppCompatActivity() {
-    private var mData: ArrayList<SurahModel>? = null
+    private var mData: MutableList<ModelChapter> = mutableListOf()
     private var verseNumbers = mutableListOf<String>()
-    private var surahAdapter: SurahAdapter? = null
+    private var chaptersAdapter: ChaptersAdapter? = null
     lateinit var binding: ActivitySearchQuranChapterDetailsBinding
     var name: String? = null
     private var totalVerse = 0
@@ -55,8 +56,8 @@ class SearchQuranChapterDetailActivity : AppCompatActivity() {
 
     private fun initAdapter() {
         mData = ArrayList()
-        surahAdapter = SurahAdapter(context!!)
-        binding.recyclerView.adapter = surahAdapter
+        chaptersAdapter = ChaptersAdapter(mData, context!!, true)
+        binding.recyclerView.adapter = chaptersAdapter
         binding.recyclerView.isNestedScrollingEnabled = false
     }
 
@@ -88,53 +89,53 @@ class SearchQuranChapterDetailActivity : AppCompatActivity() {
 
 
     private fun showAyatList() {
-            try {
-                lifecycleScope.launch {
-                    val jsonArr = JSONArray(loadQuranJson(context, surahId))
-                    for (i in 0 until jsonArr.length()) {
-                        val surahModel = SurahModel()
-                        if (surahId == jsonArr.getJSONObject(i).getString("surah_number")) {
-                            surahModel.position = jsonArr.getJSONObject(i).getString("verse_number")
-                            surahModel.arabicText = jsonArr.getJSONObject(i).getString("text")
-                            surahModel.englishText =
-                                jsonArr.getJSONObject(i).getString("translation_en")
-                            surahModel.english_translation =
-                                jsonArr.getJSONObject(i).getString("transliteration_en")
-                            mData!!.add(surahModel)
-                            counter++
-                            if (counter == totalVerse) {
-                                break
-                            }
+        try {
+            lifecycleScope.launch {
+                val jsonArr = JSONArray(loadQuranJson(context, surahId))
+                for (i in 0 until jsonArr.length()) {
+                    val surahModel = ModelChapter()
+                    if (surahId == jsonArr.getJSONObject(i).getString("surah_number")) {
+                        surahModel.verse_number = jsonArr.getJSONObject(i).getString("verse_number")
+                        surahModel.text = jsonArr.getJSONObject(i).getString("text")
+                        surahModel.translation_en =
+                            jsonArr.getJSONObject(i).getString("translation_en")
+                        surahModel.transliteration_en =
+                            jsonArr.getJSONObject(i).getString("transliteration_en")
+                        mData!!.add(surahModel)
+                        counter++
+                        if (counter == totalVerse) {
+                            break
                         }
                     }
                 }
-                surahAdapter!!.updateList(mData)
-                binding.progressBar.visibility = View.GONE
-                //from search
-                mData?.forEach {
-                    verseNumbers.add(it.position.toString())
-                }
-                var verseNumbersAdapter: ArrayAdapter<String>? = null
-                verseNumbersAdapter = ArrayAdapter(
-                    this@SearchQuranChapterDetailActivity,
-                    android.R.layout.simple_list_item_1,
-                    verseNumbers
-                )
-                binding.spVerseNumbers.adapter = verseNumbersAdapter
-                binding.spVerseNumbers.onItemSelectedListener =
-                    object : AdapterView.OnItemSelectedListener {
-                        override fun onItemSelected(
-                            adapterView: AdapterView<*>, view: View, i: Int, l: Long
-                        ) {
-                            //go to verse
-                            binding.recyclerView.scrollToPosition(i)
-                        }
-
-                        override fun onNothingSelected(adapterView: AdapterView<*>?) {}
-                    }
-            } catch (e: JSONException) {
-                e.printStackTrace()
             }
+            chaptersAdapter!!.updateList(mData)
+            binding.progressBar.visibility = View.GONE
+            //from search
+            mData?.forEach {
+                verseNumbers.add(it.verse_number)
+            }
+            var verseNumbersAdapter: ArrayAdapter<String>? = null
+            verseNumbersAdapter = ArrayAdapter(
+                this@SearchQuranChapterDetailActivity,
+                android.R.layout.simple_list_item_1,
+                verseNumbers
+            )
+            binding.spVerseNumbers.adapter = verseNumbersAdapter
+            binding.spVerseNumbers.onItemSelectedListener =
+                object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(
+                        adapterView: AdapterView<*>, view: View, i: Int, l: Long
+                    ) {
+                        //go to verse
+                        binding.recyclerView.scrollToPosition(i)
+                    }
+
+                    override fun onNothingSelected(adapterView: AdapterView<*>?) {}
+                }
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
     }
 
 
@@ -175,7 +176,6 @@ class SearchQuranChapterDetailActivity : AppCompatActivity() {
 
             return rangeToRawMap.entries.firstOrNull { surah_id in it.key }?.value ?: -1
         }
-
 
 
     }

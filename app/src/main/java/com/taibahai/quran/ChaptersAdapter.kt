@@ -1,32 +1,35 @@
 package com.taibahai.quran
 
 import android.content.Context
-import android.os.Build
 import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import androidx.recyclerview.widget.RecyclerView
-import com.facebook.appevents.codeless.internal.ViewHierarchy.setOnClickListener
+import com.network.models.ModelChapter
 import com.network.utils.AppClass
 import com.taibahai.R
 import com.taibahai.databinding.ItemQuranChapterDetailBinding
 import com.taibahai.utils.ShareImage.getBitmapFromView
 
-class SurahAdapter(private val context: Context) :
-    RecyclerView.Adapter<SurahAdapter.HomeListHolder>() {
-    private var listener: OnItemClickListener? = null
-    private var mData: List<SurahModel>?
+class ChaptersAdapter(
+    var mData: MutableList<ModelChapter>,
+    private val context: Context,
+    var showFooter: Boolean ? = true
+) :
+    RecyclerView.Adapter<ChaptersAdapter.HomeListHolder>() {
+    private var listener: AdapterView.OnItemClickListener? = null
     var layoutInflater: LayoutInflater
 
     init {
-        mData = ArrayList()
         layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
     }
 
-    fun updateList(tasks: List<SurahModel>?) {
+    fun updateList(tasks: MutableList<ModelChapter>) {
+        mData.clear()
         mData = tasks
-        notifyDataSetChanged()
+        notifyItemRangeInserted(0, mData.size)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeListHolder {
@@ -37,16 +40,18 @@ class SurahAdapter(private val context: Context) :
 
     override fun onBindViewHolder(holder: HomeListHolder, position: Int) {
         val model = mData!![position]
-        if (position == mData!!.size - 1) {
+        if (showFooter == true){
+        if (position == mData.size - 1) {
             holder.binding.footer.visibility = View.VISIBLE
         } else {
             holder.binding.footer.visibility = View.GONE
         }
-        holder.binding.ayatArabicText.text = model.arabicText
-        holder.binding.ayatEnglishTranslation.text = model.englishText
+        }
+        holder.binding.ayatArabicText.text = model.text
+        holder.binding.ayatEnglishTranslation.text = model.translation_en
         holder.binding.ayatEnglishTranslitration.text =
-            Html.fromHtml(model.english_translation, Html.FROM_HTML_MODE_LEGACY)
-        holder.binding.ayatNumber.text = model.position.toString()
+            Html.fromHtml(model.transliteration_en, Html.FROM_HTML_MODE_LEGACY)
+        holder.binding.ayatNumber.text = model.verse_number.toString()
 
 
         holder.binding.ivShare.setOnClickListener {
@@ -60,15 +65,7 @@ class SurahAdapter(private val context: Context) :
     }
 
     override fun getItemCount(): Int {
-        return if (mData != null) mData!!.size else 0
-    }
-
-    interface OnItemClickListener {
-        fun onItemClick(view: View?, homeModel: SurahModel?)
-    }
-
-    fun setOnItemClickListner(listener: OnItemClickListener?) {
-        this.listener = listener
+        return mData.size
     }
 
     class HomeListHolder(var binding: ItemQuranChapterDetailBinding) : RecyclerView.ViewHolder(
