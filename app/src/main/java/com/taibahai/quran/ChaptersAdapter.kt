@@ -16,7 +16,7 @@ import com.taibahai.utils.ShareImage.getBitmapFromView
 class ChaptersAdapter(
     var mData: MutableList<ModelChapter>,
     private val context: Context,
-    var showFooter: Boolean ? = true
+    var showFooter: Boolean? = true
 ) :
     RecyclerView.Adapter<ChaptersAdapter.HomeListHolder>() {
     private var listener: AdapterView.OnItemClickListener? = null
@@ -27,9 +27,14 @@ class ChaptersAdapter(
     }
 
     fun updateList(tasks: MutableList<ModelChapter>) {
-        mData.clear()
+        var oldSize = mData.size
         mData = tasks
-        notifyItemRangeInserted(0, mData.size)
+        notifyItemRangeInserted(oldSize, mData.size)
+    }
+
+    fun clearList() {
+        mData.clear()
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeListHolder {
@@ -40,12 +45,12 @@ class ChaptersAdapter(
 
     override fun onBindViewHolder(holder: HomeListHolder, position: Int) {
         val model = mData!![position]
-        if (showFooter == true){
-        if (position == mData.size - 1) {
-            holder.binding.footer.visibility = View.VISIBLE
-        } else {
-            holder.binding.footer.visibility = View.GONE
-        }
+        if (showFooter == true) {
+            if (position == mData.size - 1) {
+                holder.binding.footer.visibility = View.VISIBLE
+            } else {
+                holder.binding.footer.visibility = View.GONE
+            }
         }
         holder.binding.ayatArabicText.text = model.text
         holder.binding.ayatEnglishTranslation.text = model.translation_en

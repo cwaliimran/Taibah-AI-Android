@@ -44,10 +44,6 @@ class SearchWholeQuranActivity : BaseActivity() {
     private var surahListSelected = SurahListModel()
     private var searchText = ""
 
-    // Define a handler and a delay duration
-    private val handlerWholeQuran = Handler(Looper.getMainLooper())
-    var wholeQuranRunnable: Runnable? = null
-    private val DELAY_MILLIS = 500L // Adjust the delay duration as needed
     override fun onCreate() {
         binding = ActivitySearchWholeQuranBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -75,67 +71,67 @@ class SearchWholeQuranActivity : BaseActivity() {
         binding.etSearch.setOnEditorActionListener { _, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_DONE || (event != null && event.action == KeyEvent.ACTION_DOWN && event.keyCode == KeyEvent.KEYCODE_ENTER)) {
                 searchText = binding.etSearch.text.toString().trim()
+                binding.progressLoading.setProgress(0, true)
                 if (searchText.isNotEmpty()) {
                     hideKeyboard()
                     if (surahNumber == "0") {
-                        displayLoading()
+                        displayLoading(cancelable = true)
                         //search whole quran
                         mData.clear()
-                        adapter.notifyItemRangeRemoved(0, mData.size)
-                        var oldSize = 0
+                        adapter.clearList()
                         moreRecordsUpdate = 0
                         hideGone(binding.tvMoreRecords)
 
-                        // Cancel the previous search runnable if it exists
-                        wholeQuranRunnable?.let { handler.removeCallbacks(it) }
-
-
-
-                        searchWholeQuran(searchText, this, object : SearchResultListener {
-                            override fun onSearchResultFound(result: ModelChapter) {
-                                // Update the UI on the main thread with a delay
-                                runOnUiThread {
-                                    // Define a new wholeQuranRunnable runnable
-                                    wholeQuranRunnable = Runnable {
+                        searchWholeQuran(
+                            searchText,
+                            this@SearchWholeQuranActivity,
+                            object : SearchResultListener {
+                                override fun onSearchResultFound(result: ModelChapter) {
+                                    // Update the UI on the main thread with a delay
+                                    runOnUiThread {
                                         mData.add(result)
+                                        hideGone(binding.noData.root)
+                                        adapter.updateList(mData)
+                                        displayLoading(false)
+                                        if (moreRecordsUpdate == 1) {
+                                            show(binding.tvMoreRecords)
+                                            binding.tvMoreRecords.text =
+                                                "More Records Loaded - Total: ${mData.size}"
+                                        }
+                                        moreRecordsUpdate = 1
+                                    }
+                                }
+
+                                override fun onProgressUpdate(surahId: Int) {
+                                    super.onProgressUpdate(surahId)
+                                    binding.progressLoading.setProgress(surahId, true)
+                                }
+
+                                override fun onSearchComplete() {
+                                    runOnUiThread {
+                                        Log.d(TAG, "onSearchComplete:   ")
+                                        displayLoading(false)
                                         if (mData.isEmpty()) {
                                             show(binding.noData.root)
+                                            hideGone(binding.tvMoreRecords)
                                         } else {
                                             hideGone(binding.noData.root)
-                                            adapter.notifyItemRangeInserted(oldSize, mData.size)
-                                            oldSize = mData.size
-                                            Log.d(TAG, "onSearchResultFound: $oldSize")
-                                            displayLoading(false)
-                                            if (moreRecordsUpdate == 1) {
-                                                show(binding.tvMoreRecords)
-                                                binding.tvMoreRecords.text =
-                                                    "More Records Loaded - Total: ${mData.size}"
-                                            }
-                                            moreRecordsUpdate = 1
+                                            show(binding.tvMoreRecords)
+                                            binding.tvMoreRecords.text =
+                                                "All records Loaded - Total:${mData.size}"
+
                                         }
                                     }
-
-                                    handlerWholeQuran.postDelayed(
-                                        wholeQuranRunnable!!, DELAY_MILLIS
-                                    )
-
                                 }
-                            }
-
-                            override fun onSearchComplete() {
-                                runOnUiThread {
-                                    Log.d(TAG, "onSearchComplete:   ")
-                                    displayLoading(false)
-                                    show(binding.tvMoreRecords)
-                                    binding.tvMoreRecords.text =
-                                        "All records Loaded - Total:${mData.size}"
-                                }
-                            }
-                        }, isCancelJob = false)
+                            },
+                            isCancelJob = false
+                        )
 
                     } else {
-                        adapter.notifyItemRangeRemoved(0, mData.size)
-                        showFilteredData()
+                        //load ayah and search
+                        mData.clear()
+                        adapter.clearList()
+                        getAyahList()
                     }
                 } else {
                     //
@@ -159,35 +155,35 @@ class SearchWholeQuranActivity : BaseActivity() {
             0, SurahListModel("0", "0", total_verses = "0", transliteration_en = "Whole Quran")
         )
 
-        verseNumbersAdapter = SpinnerAdapterHelper.createAdapter(surahList, binding.spSurahList) {
-            //cancel whole quran search job
-            searchWholeQuran("",this,null,true)
-            wholeQuranRunnable?.let { handlerWholeQuran.removeCallbacks(it) }
+        verseNumbersAdapter =
+            SpinnerAdapterHelper.createAdapter(surahList, binding.spSurahList) { it ->
+                //cancel whole quran search job
+                searchWholeQuran("", this, null, true)
+                surahListSelected = surahList[it]
+                surahNumber = surahList[it].number
+                binding.etSearch.hint = "Search in " + surahList[it].transliteration_en
+                Log.d(TAG, "initData: $surahNumber")
+                hideGone(binding.tvMoreRecords)
+                mData.clear()
+                mDataFiltered.clear()
+                adapter.clearList()
 
-            surahListSelected = surahList[it]
-            surahNumber = surahList[it].number
-            Log.d(TAG, "initData: $surahNumber")
-            mData.clear()
-            mDataFiltered.clear()
-            hideGone(binding.tvMoreRecords)
-            adapter.notifyDataSetChanged()
-            if (surahNumber.toInt() > 0) {
-                getAyahList()
+                Handler(Looper.getMainLooper()).postDelayed({
+                    binding.progressLoading.setProgress(0, true)
+                }, 300)
+
             }
-
-        }
 
     }
 
     override fun onDestroy() {
         super.onDestroy()
         searchRunnable?.let { handler.removeCallbacks(it) }
-        wholeQuranRunnable?.let { handlerWholeQuran.removeCallbacks(it) }
     }
 
 
     private fun getAyahList() {
-        displayLoading()
+        displayLoading(cancelable = true)
         try {
             lifecycleScope.launch {
                 val jsonArr = JSONArray(
@@ -234,6 +230,9 @@ class SearchWholeQuranActivity : BaseActivity() {
                 ) || containsIgnoreCase(
                     surah.text,
                     searchText
+                ) || containsIgnoreCase(
+                    surah.translation_en,
+                    searchText
                 ) || containsIgnoreCase(surah.transliteration_en, searchText) || containsIgnoreCase(
                     transliterationEnWithoutHtmlTags,
                     searchText
@@ -250,6 +249,8 @@ class SearchWholeQuranActivity : BaseActivity() {
 
         show(binding.tvMoreRecords)
         binding.tvMoreRecords.text = "All records Loaded - Total:${mDataFiltered.size}"
+
+        binding.progressLoading.setProgress(113, true)
     }
 
 }

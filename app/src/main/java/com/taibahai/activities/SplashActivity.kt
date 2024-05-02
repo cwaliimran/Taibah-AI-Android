@@ -22,13 +22,13 @@ class SplashActivity : BaseActivity() {
                 AppClass.sharedPref.storeInt(AppConstants.AI_TOKENS, 30)
                 AppClass.sharedPref.storeBoolean(AppConstants.IS_FREE_AI_TOKENS_PROVIDED, true)
             }
-            val intent = Intent(this, SearchWholeQuranActivity::class.java)
+            val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
             finishAffinity()
         } else {
 
-//            val intent = Intent(this, BottomNavigation::class.java)
-            val intent = Intent(this, SearchWholeQuranActivity::class.java)
+            val intent = Intent(this, BottomNavigation::class.java)
+//            val intent = Intent(this, SearchWholeQuranActivity::class.java)
             startActivity(intent)
             finishAffinity()
 

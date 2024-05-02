@@ -14,16 +14,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!--    <androidx.constraintlayout.widget.ConstraintLayout-->
-    <!--        android:id="@+id/versesLayout"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_marginHorizontal="20dp"-->
-    <!--        android:layout_marginTop="8dp"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/makkiMadni">-->
-
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
@@ -59,9 +49,6 @@
         app:tint="@color/primary_green" />
 
 
-    <!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
-
-
     <EditText
         android:id="@+id/etSearch"
         android:layout_width="match_parent"
@@ -82,6 +69,24 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spSurahList" />
 
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/progressLoading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="4dp"
+        android:max="113"
+        android:progress="0"
+        android:textAlignment="center"
+        android:tooltipText="Loading"
+        app:indicatorColor="@color/primary_green"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etSearch"
+        app:trackColor="#DFDFDF"
+        app:trackCornerRadius="6dp"
+        app:trackThickness="10dp" />
+
     <include
         android:id="@+id/noData"
         layout="@layout/no_data_found"
@@ -89,7 +94,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etSearch" />
+        app:layout_constraintTop_toBottomOf="@+id/progressLoading" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvSearchQuran"
@@ -101,7 +106,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etSearch"
+        app:layout_constraintTop_toBottomOf="@+id/progressLoading"
         tools:itemCount="4"
         tools:listitem="@layout/item_quran_chapter_detail" />
 

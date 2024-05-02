@@ -9,7 +9,8 @@ import com.taibahai.quran.SearchResultListener
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONException
@@ -101,18 +102,21 @@ object AppJsonUtils {
         listener: SearchResultListener? = null,
         isCancelJob: Boolean? = false
     ) {
-        searchJob?.cancel(null)
-// TODO: job cancellation
+        searchJob?.cancel("Job cancelled")
         searchJob = searchScope.launch {
             val startSurahId = 1 // ID of the first Surah
             val endSurahId = 114 // ID of the last Surah
             val jsonList = loadQuranJson(context, startSurahId, endSurahId)
             val processedIds = HashSet<String>() // Set to store processed record IDs
 
-            for ((index, json) in jsonList.withIndex()) {               
+            for ((index, json) in jsonList.withIndex()) {
+                listener?.onProgressUpdate(index)
+                // Check for cancellation
+                if (!isActive) {
+                    return@launch
+                }
                 json?.let { quranJson ->
                     if (isCancelJob == true) {
-                        Log.d("TAG", "searchWholeQuran: LET CANCELLED")
                         return@let
                     }
                     try {
@@ -145,7 +149,10 @@ object AppJsonUtils {
                                     searchText
                                 ) || containsIgnoreCase(
                                     surahModel.transliteration_en, searchText
-                                ) || containsIgnoreCase(
+                                )|| containsIgnoreCase(
+                                    surahModel.translation_en,
+                                    searchText
+                                )  || containsIgnoreCase(
                                     transliterationEnWithoutHtmlTags, searchText
                                 ) || containsIgnoreCase(surahModel.id, searchText))
                             ) {
