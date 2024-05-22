@@ -39,7 +39,7 @@ class UpgradeActivity : BaseActivity() {
         upgradeBasic.add(ModelUpgradeList("Hadith"))
         upgradeBasic.add(ModelUpgradeList("Zakat Calculator"))
 
-        showList.add(ModelUpgrade("1","Basic","Silver Subscription Package",upgradeBasic,"\$2.99/month"))
+        showList.add(ModelUpgrade("1","Basic","Silver Package",upgradeBasic,"\$2.99/month"))
 
 
         val upgradeAdvance=ArrayList<ModelUpgradeList>()
@@ -48,9 +48,9 @@ class UpgradeActivity : BaseActivity() {
         upgradeAdvance.add(ModelUpgradeList("Quran"))
         upgradeAdvance.add(ModelUpgradeList("Hadith"))
         upgradeAdvance.add(ModelUpgradeList("Zakat Calculator"))
-        upgradeAdvance.add(ModelUpgradeList("4 Sunni Imams Books"))
+        upgradeAdvance.add(ModelUpgradeList("4 Influential"))
 
-        showList.add(ModelUpgrade("2","Advance","Gold Subscription Package",upgradeAdvance,"\$4.99/month"))
+        showList.add(ModelUpgrade("2","Advance","Gold Package",upgradeAdvance,"\$4.99/month"))
 
 
         val upgradeExclusive=ArrayList<ModelUpgradeList>()
@@ -58,22 +58,22 @@ class UpgradeActivity : BaseActivity() {
         upgradeExclusive.add(ModelUpgradeList("No Ads"))
         upgradeExclusive.add(ModelUpgradeList("Quran"))
         upgradeExclusive.add(ModelUpgradeList("Hadith"))
-        upgradeExclusive.add(ModelUpgradeList("4 Sunni Imams Books"))
-        upgradeExclusive.add(ModelUpgradeList("Books & PDF"))
+        upgradeExclusive.add(ModelUpgradeList("4 Influential"))
+        upgradeExclusive.add(ModelUpgradeList("Islamic Literature"))
         upgradeExclusive.add(ModelUpgradeList("Zakat Calculator"))
         upgradeExclusive.add(ModelUpgradeList("Inheritance Law"))
         upgradeExclusive.add(ModelUpgradeList("Search Database"))
 
 
-        showList.add(ModelUpgrade("3","Exclusive","Diamond Subscription Package",upgradeExclusive,"\$9.99/month"))
+        showList.add(ModelUpgrade("3","Exclusive","Diamond Package",upgradeExclusive,"\$9.99/month"))
     }
 
 
     private fun addViewPager()
     {
-        binding?.viewPager?.adapter = AdapterUpgrade(showList)
-        binding?.viewPager?.let { binding?.dotsIndicator?.attachTo(it) }
-        binding?.viewPager?.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+        binding.viewPager.adapter = AdapterUpgrade(showList)
+        binding.viewPager.let { binding.dotsIndicator.attachTo(it) }
+        binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
 

@@ -41,30 +41,30 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_medium"
-                    tools:text="Hadith No: 1"
                     android:text="@{`Hadith No: `+data.hadith_no, default=``}"
                     android:textColor="@color/black"
                     android:textSize="16sp"
-                    app:layout_constraintEnd_toStartOf="@+id/tvBookName"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Hadith No: 1" />
 
 
                 <TextView
                     android:id="@+id/tvBookName"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/book_layer"
                     android:drawablePadding="10dp"
                     android:fontFamily="@font/poppins"
-                    tools:text="Sahih al-Bukhari"
+                    android:gravity="start"
                     android:text="@{data.book_name, default=``}"
-                    android:gravity="end"
                     android:textColor="@color/black"
                     android:textSize="14sp"
-
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvHadithNo"
+                    tools:text="Sahih al-Bukhari" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -102,7 +102,7 @@
 
             <TextView
                 android:id="@+id/ayatArabicText"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:text="إنما الأعمال بالنيات"
                 android:text="@{data.arabic, default=``}"
@@ -112,6 +112,7 @@
                 android:textColor="@color/black"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp"
+                android:layout_marginStart="20dp"
                 android:layout_gravity="end"/>
 
 

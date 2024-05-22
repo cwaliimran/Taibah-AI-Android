@@ -16,14 +16,15 @@
         android:id="@+id/ayatArabicText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="16dp"
         android:fontFamily="@font/poppins"
-        android:text="قُلْ هُوَ ٱللَّهُ أَحَدٌ ١"
+        tools:text="قُلْ هُوَ ٱللَّهُ أَحَدٌ ١"
         android:textColor="@color/black"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/clTitle"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/clTitle" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clTitle"
@@ -69,9 +70,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="16dp"
         android:fontFamily="@font/poppins"
-        android:text=" Qul huwa Allahu Ahad"
+        tools:text=" Qul huwa Allahu Ahad"
         android:textColor="@color/primary_green"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -102,4 +103,3 @@
         app:layout_constraintTop_toBottomOf="@+id/ayatEnglishTranslitration" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-

@@ -278,7 +278,7 @@ class HomeFragment : BaseFragment() {
 
     override fun apiAndArgs() {
         super.apiAndArgs()
-        viewModel.home(pageno = 1)
+       viewModel.home(pageno = 1)
 
     }
 

@@ -72,7 +72,7 @@ class MoreFragment : BaseFragment() {
             )
         )
         moreLevel1.add(ModelMoreLevels("", R.drawable.ads_icon, "Ads"))
-        showList.add(ModelMore("Level 1", "Silver Subscription Package", moreLevel1))
+        showList.add(ModelMore("Level 1", "Silver Package", moreLevel1))
 
 
         val moreLevel2 = ArrayList<ModelMoreLevels>()
@@ -87,8 +87,8 @@ class MoreFragment : BaseFragment() {
                 "zakat_calculator", R.drawable.zakat_icon, "Zakat Calculator"
             )
         )
-        moreLevel2.add(ModelMoreLevels("imams", R.drawable.imams_logo, "4 Sunni Madhabs"))
-        showList.add(ModelMore("Level 2", "Gold Subscription Package", moreLevel2))
+        moreLevel2.add(ModelMoreLevels("imams", R.drawable.imams_logo, "4 Influential"))
+        showList.add(ModelMore("Level 2", "Gold Package", moreLevel2))
 
         val moreLevel3 = ArrayList<ModelMoreLevels>()
 
@@ -107,8 +107,8 @@ class MoreFragment : BaseFragment() {
                 "searchLevel3", R.drawable.search_icon, "Unlimited AI Tokens"
             )
         )
-        moreLevel3.add(ModelMoreLevels("books_pdfs", R.drawable.bookspdf_icon, "Books & PDF"))
-        showList.add(ModelMore("Level 3", "Diamond Subscription Package", moreLevel3))
+        moreLevel3.add(ModelMoreLevels("books_pdfs", R.drawable.bookspdf_icon, "Islamic Literature"))
+        showList.add(ModelMore("Level 3", "Diamond Package", moreLevel3))
 
 
 

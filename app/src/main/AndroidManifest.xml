@@ -129,10 +129,12 @@
             android:exported="false" />
         <activity
             android:name=".quran.QuranChaptersActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:configChanges="orientation|screenSize"/>
         <activity
             android:name=".quran.ChapterDetailActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:configChanges="orientation|screenSize"/>
         <activity
             android:name=".activities.HistoryActivity"
             android:exported="false" />
