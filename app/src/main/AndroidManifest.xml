@@ -101,12 +101,6 @@
             android:name=".activities.AboutUsActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.RateAppActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activities.ShareActivity"
-            android:exported="false" />
-        <activity
             android:name=".activities.UpcomingFeaturesActivity"
             android:exported="false" />
         <activity
@@ -157,7 +151,6 @@
         <activity
             android:name=".bottom_navigation.BottomNavigation"
             android:exported="true" />
-
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

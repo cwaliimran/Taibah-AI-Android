@@ -478,30 +478,6 @@ class QuranChaptersActivity : AppCompatActivity() {
         return favSurahs.contains(id)
     }
 
-    //    @Override
-    //    public void onChanged(Download download, @NotNull Reason reason) {
-    //        if (request.getId() == download.getId()) {
-    //            allSurahListAdapter.updateView(download);
-    //        }
-    //    }
-    //    class getFavSurah extends AsyncTask<Void, Void, List<FavModel>> {
-    //
-    //        @Override
-    //        protected List<FavModel> doInBackground(Void... voids) {
-    //            return DatabaseClient
-    //                    .getInstance(getActivity())
-    //                    .getAppDatabase().surahDao()
-    //                    .getAllfav();
-    //        }
-    //
-    //        @Override
-    //        protected void onPostExecute(List<FavModel> tasks) {
-    //            super.onPostExecute(tasks);
-    //            favModels.clear();
-    //            favModels.addAll(tasks);
-    //            new Handler().postDelayed(AlQuranFragment.this::loadJson, 200);
-    //        }
-    //    }
     private fun startPlaying(audio_url: String) {
         instance.setData(audio_url)
         instance.playOrPause()
