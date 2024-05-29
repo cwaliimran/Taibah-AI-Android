@@ -48,7 +48,7 @@ class UpgradeActivity : BaseActivity() {
         upgradeAdvance.add(ModelUpgradeList("Quran"))
         upgradeAdvance.add(ModelUpgradeList("Hadith"))
         upgradeAdvance.add(ModelUpgradeList("Zakat Calculator"))
-        upgradeAdvance.add(ModelUpgradeList("4 Influential"))
+        upgradeAdvance.add(ModelUpgradeList("4 Influential Scholars"))
 
         showList.add(ModelUpgrade("2","Advance","Gold Package",upgradeAdvance,"\$4.99/month"))
 
@@ -58,7 +58,7 @@ class UpgradeActivity : BaseActivity() {
         upgradeExclusive.add(ModelUpgradeList("No Ads"))
         upgradeExclusive.add(ModelUpgradeList("Quran"))
         upgradeExclusive.add(ModelUpgradeList("Hadith"))
-        upgradeExclusive.add(ModelUpgradeList("4 Influential"))
+        upgradeExclusive.add(ModelUpgradeList("4 Influential Scholars"))
         upgradeExclusive.add(ModelUpgradeList("Islamic Literature"))
         upgradeExclusive.add(ModelUpgradeList("Zakat Calculator"))
         upgradeExclusive.add(ModelUpgradeList("Inheritance Law"))
