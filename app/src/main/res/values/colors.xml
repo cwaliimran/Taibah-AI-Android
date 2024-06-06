@@ -21,4 +21,8 @@
     <color name="seek_bar_progress_color">#FF4081</color>
     <color name="seek_bar_thumb_color">#FF4081</color>
     <color name="red">#E72618</color>
+
+    <color name="buttonsColor">#4CAF50</color>
+    <color name="green">#4CAF50</color>
+    <color name="custom_disabled_text_color">#888888</color>
 </resources>

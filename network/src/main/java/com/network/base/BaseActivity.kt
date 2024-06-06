@@ -17,11 +17,18 @@ abstract class BaseActivity : AppCompatActivity() {
     lateinit var context: Context
     var currentUser: ModelUser.Data? = ModelUser.Data()
     var isAdsFree = false
+    var isSilverPurchased = false
+    var isGoldPurchased = false
+    var isDiamondPurchased = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // GlobalClass.updateStatusBar(window)
 
         isAdsFree = AppClass.sharedPref.getBoolean(AppConstants.IS_ADS_FREE)
+        isSilverPurchased = AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_SILVER_PURCHASED)
+        isGoldPurchased = AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_GOLD_PURCHASED)
+        isDiamondPurchased = AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_DIAMOND_PURCHASED)
         currentUser = AppClass.getCurrentUser()
         context = this
         bundle = intent.extras
@@ -81,5 +88,8 @@ abstract class BaseActivity : AppCompatActivity() {
         super.onResume()
         isAdsFree = AppClass.sharedPref.getBoolean(AppConstants.IS_ADS_FREE)
         currentUser = AppClass.getCurrentUser()
+        isSilverPurchased = AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_SILVER_PURCHASED)
+        isGoldPurchased = AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_GOLD_PURCHASED)
+        isDiamondPurchased = AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_DIAMOND_PURCHASED)
     }
 }

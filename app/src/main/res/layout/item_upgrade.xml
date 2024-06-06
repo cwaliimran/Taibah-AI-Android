@@ -46,13 +46,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_medium"
-                        tools:text="1"
                         android:textColor="@color/white"
                         android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="1" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -126,14 +126,26 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
                     android:background="@drawable/item_more_upgradebtn"
                     android:backgroundTint="#009045"
                     android:fontFamily="@font/poppins_medium"
                     android:text="Subscribe"
-                    android:layout_marginTop="10dp"
                     android:textColor="@color/white"
                     android:textSize="10sp" />
 
+                <TextView
+                    android:id="@+id/tvRestore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="#009045"
+                    android:fontFamily="@font/poppins"
+                    android:gravity="center"
+                    android:text="Restore"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
 
             </LinearLayout>
 

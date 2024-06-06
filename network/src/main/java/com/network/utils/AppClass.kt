@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Build
+import com.android.billingclient.api.ProductDetails
 import com.network.R
 import com.network.models.ModelUser
 import java.io.File
@@ -122,6 +123,8 @@ class AppClass : Application() {
             val seconds = (duration / 1000 - minutes * 60).toInt()
             return minutes.toString() + ":" + String.format("%02d", seconds)
         }
+
+        var productsList: MutableList<ProductDetails> = mutableListOf()
 
     }
 }

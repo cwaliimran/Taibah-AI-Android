@@ -59,5 +59,16 @@
     <string name="data_lost_warn">Are you sure you want to delete account? Your all data will be lost and can\'t be recovered</string>
     <string name="search_whole_quran">Search Whole Quran</string>
 
+    <string name="product_not_found">Product not found!</string>
+    <string name="failed_to_update">Failed to update.</string>
+    <string name="product_not_found_msg">We are sorry, this product is not available anymore, please try later.</string>
+    <string name="done">Done</string>
+    <string name="purchase_success">Purchase Success</string>
+    <string name="restore_success">Restore Success</string>
+    <string name="purchase_success_msg">Thanks for purchasing.</string>
+    <string name="restore_success_msg">Your subscription is restored successfully.</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+
 
 </resources>

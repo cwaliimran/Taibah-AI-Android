@@ -30,7 +30,7 @@ class MoreFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        binding = DataBindingUtil.inflate<FragmentMoreBinding>(
+        binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_more, container, false
         )
 

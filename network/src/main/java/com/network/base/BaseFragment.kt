@@ -12,6 +12,7 @@ import com.google.gson.Gson
 import com.network.models.ModelUser
 import com.network.utils.AppClass
 import com.network.utils.AppConstants
+import org.checkerframework.checker.units.qual.A
 
 abstract class BaseFragment : Fragment() {
 
@@ -27,6 +28,10 @@ abstract class BaseFragment : Fragment() {
         requireActivity()
     }
 
+    var isSilverPurchased = false
+    var isGoldPurchased = false
+    var isDiamondPurchased = false
+
     protected val fragmentActivity: FragmentActivity by lazy {
         requireActivity()
     }
@@ -35,6 +40,9 @@ abstract class BaseFragment : Fragment() {
         super.onCreate(savedInstanceState)
         currentUser = AppClass.getCurrentUser()
         isAdsFree = AppClass.sharedPref.getBoolean(AppConstants.IS_ADS_FREE)
+        isSilverPurchased = AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_SILVER_PURCHASED)
+        isGoldPurchased = AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_GOLD_PURCHASED)
+        isDiamondPurchased = AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_DIAMOND_PURCHASED)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -69,6 +77,8 @@ abstract class BaseFragment : Fragment() {
         super.onResume()
         currentUser = AppClass.getCurrentUser()
         isAdsFree = AppClass.sharedPref.getBoolean(AppConstants.IS_ADS_FREE)
-
+        isSilverPurchased = AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_SILVER_PURCHASED)
+        isGoldPurchased = AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_GOLD_PURCHASED)
+        isDiamondPurchased = AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_DIAMOND_PURCHASED)
     }
 }
