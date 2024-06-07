@@ -7,14 +7,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
-import com.google.gson.Gson
 import com.network.base.BaseActivity
 import com.network.interfaces.OnItemClick
 import com.network.models.ModelChapterHadith3
-import com.network.models.ModelDbSearchHadith
 import com.network.network.NetworkResult
 import com.network.utils.ProgressLoading.displayLoading
-import com.network.viewmodels.MainViewModelAI
 import com.network.viewmodels.MainViewModelTaibahIslamic
 import com.taibahai.adapters.AdapterChapterHadiths
 import com.taibahai.databinding.ActivityChapterHadiths3Binding
@@ -28,6 +25,7 @@ class ChapterHadithsActivity3 : BaseActivity() {
     var chapter_id = ""
     var chapterName = ""
     var sequenceNo = ""
+    var bookTitle = ""
     private var currentPageNo = 1
     private var totalPages: Int = 1
 
@@ -114,7 +112,7 @@ class ChapterHadithsActivity3 : BaseActivity() {
                 startActivity(intent)
             }
 
-        })
+        }, "Hadith", bookTitle)
         binding.rvChapterHadiths.adapter = adapter
 
     }
@@ -125,6 +123,7 @@ class ChapterHadithsActivity3 : BaseActivity() {
             chapter_id = intent.getStringExtra("ayat_id").toString()
             chapterName = intent.getStringExtra("chapter_name").toString()
             sequenceNo = intent.getStringExtra("sequence").toString()
+            bookTitle = intent.getStringExtra("title").toString()
         }
         viewModel.getChapterHadiths(currentPageNo, chapter_id)
     }

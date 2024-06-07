@@ -11,5 +11,9 @@ data class ModelHadithBooks(
         var imam: String = "",
         var is_active: String = "",
         var total_chapters: String = ""
-    )
+    ) {
+        override fun toString(): String {
+            return "$id. $title"
+        }
+    }
 }

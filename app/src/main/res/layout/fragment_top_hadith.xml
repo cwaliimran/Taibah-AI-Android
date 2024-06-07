@@ -1,11 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".search_database_tablayout.TopHadithFragment">
+
+    <Spinner
+        android:id="@+id/spHadithBooks"
+        android:layout_width="0dp"
+        android:layout_height="55dp"
+        android:layout_marginHorizontal="20dp"
+        android:background="@drawable/background_editext"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <ImageView
+        android:id="@+id/ivVerseNumbers"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="10dp"
+        android:src="@drawable/ccp_ic_arrow_drop_down"
+        app:layout_constraintBottom_toBottomOf="@+id/spHadithBooks"
+        app:layout_constraintEnd_toEndOf="@+id/spHadithBooks"
+        app:layout_constraintTop_toTopOf="@+id/spHadithBooks"
+        app:tint="@color/primary_green" />
 
     <EditText
         android:id="@+id/etSearch"
@@ -15,18 +36,19 @@
         android:background="@drawable/search_bg"
         android:drawableStart="@drawable/searchh_icon"
         android:drawablePadding="10dp"
-        android:imeOptions="actionDone"
         android:fontFamily="@font/poppins"
         android:hint="search Hadith"
-        android:textCursorDrawable="@drawable/custom_cursor"
-        android:textColor="#8C8994"
-        android:textSize="14sp"
+        android:imeOptions="actionDone"
         android:inputType="text"
         android:singleLine="true"
-        android:layout_marginTop="20dp"
+        android:textColor="#8C8994"
+        android:textCursorDrawable="@drawable/custom_cursor"
+        android:textSize="14sp"
+        android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/spHadithBooks" />
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvSearchHadith"

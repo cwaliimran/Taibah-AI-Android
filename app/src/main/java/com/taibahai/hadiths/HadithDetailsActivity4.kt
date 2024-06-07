@@ -24,13 +24,22 @@ class HadithDetailsActivity4 : BaseActivity() {
     var hadithNo = ""
     var chapterName = ""
     var chapterId = ""
-    var bookName=""
-    var type=""
+    var bookName = ""
+    var type = ""
+    var titleName = ""
 
 
     override fun onCreate() {
         binding = ActivityHadithDetails4Binding.inflate(layoutInflater)
-       if (!isAdsFree) loadAd() else binding.adView.visibility = View.GONE
+        if (!isAdsFree) loadAd() else binding.adView.visibility = View.GONE
+        titleName = intent.getStringExtra("searchBookName").toString()
+        val searchHadith = intent.getBooleanExtra("searchHadith", false)
+        if (searchHadith) {
+            binding.tvNoOfHadiths.visibility = View.GONE
+        } else {
+            binding.tvNoOfHadiths.visibility = View.VISIBLE
+        }
+
         setContentView(binding.root)
     }
 
@@ -65,13 +74,16 @@ class HadithDetailsActivity4 : BaseActivity() {
 
                 is NetworkResult.Success -> {
 
-                    binding.tvHadithChapter.text = chapterName
+                    if (chapterName=="null"){
+                        binding.tvHadithChapter.text = bookName
+                    }else{
+                        binding.tvHadithChapter.text = chapterName
+                    }
                     binding.tvNoOfHadiths.text = totalHadithNo
                     binding.tvHadithNo.text = "Hadith No: ${it.data!!.data.hadith_no}"
                     binding.ayatArabicText.text = it.data?.data?.arabic
                     binding.tvEnglishTranslation.text = it.data?.data?.english_translation
-                    binding.tvBookName.text=bookName
-                    binding.tvHadithType.text=type
+                    binding.tvHadithType.text = type
                     the_id = it.data?.data?.id.toString()
 
                 }
@@ -99,8 +111,8 @@ class HadithDetailsActivity4 : BaseActivity() {
                     binding.tvHadithNo.text = "Hadith No: ${result.data!!.data.hadith_no}"
                     binding.ayatArabicText.text = result.data?.data?.arabic
                     binding.tvEnglishTranslation.text = result.data?.data?.english_translation
-                    binding.tvBookName.text=bookName
-                    binding.tvHadithType.text=type
+                    binding.tvBookName.text = bookName
+                    binding.tvHadithType.text = type
                     the_id = result.data?.data?.id.toString()
                 }
 
@@ -123,6 +135,8 @@ class HadithDetailsActivity4 : BaseActivity() {
             chapterId = intent.getStringExtra("chapter_id").toString()
             bookName = intent.getStringExtra("book_name").toString()
             type = intent.getStringExtra("type").toString()
+
+            binding.tvBookName.text = bookName
 
 
             viewModel.getHadithDetail(id)

@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.network.models.ModelBooks
+import com.network.models.ModelChapterHadith3
 import com.network.models.ModelDailyAlert
 import com.network.models.ModelGetFeeds
 import com.network.models.ModelHome
@@ -201,13 +202,23 @@ class MainViewModelAI constructor(application: Application) : AndroidViewModel(a
     }
 
 
-    val dbSearchLiveData: MutableLiveData<NetworkResult<Any>>
-        get() = repository.dbSearchMutableLiveData
+    val dbSearchHadithWithBookIdLiveData: MutableLiveData<NetworkResult<ModelChapterHadith3>>
+        get() = repository.dbSearchHadithWithBookId
 
-    fun dbSearch(type:String, keyword: String )
+    fun hadithSearchWithBookId(search:String, book_number: String )
     {
         viewModelScope.launch {
-            repository.dbSearch(type,keyword)
+            repository.hadithSearchWithBookId(search,book_number)
+        }
+    }
+
+    val dbSearchHadithAllBooksLiveData: MutableLiveData<NetworkResult<ModelChapterHadith3>>
+        get() = repository.dbSearchHadithAllBooks
+
+    fun hadithSearchAllBooks(search:String )
+    {
+        viewModelScope.launch {
+            repository.hadithSearchAllBooks(search)
         }
     }
 

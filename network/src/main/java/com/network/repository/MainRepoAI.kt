@@ -2,6 +2,7 @@ package com.network.repository
 
 import android.util.Log
 import com.network.models.ModelBooks
+import com.network.models.ModelChapterHadith3
 import com.network.models.ModelDailyAlert
 import com.network.models.ModelGetFeeds
 import com.network.models.ModelHome
@@ -247,17 +248,30 @@ class MainRepoAI : BaseApiResponse() {
     }
 
 
-    val dbSearchMutableLiveData: SingleLiveEvent<NetworkResult<Any>> by lazy {
+    val dbSearchHadithWithBookId: SingleLiveEvent<NetworkResult<ModelChapterHadith3>> by lazy {
         SingleLiveEvent()
     }
 
-    suspend fun dbSearch(type: String, keyword: String) {
-        dbSearchMutableLiveData.value = null
-        dbSearchMutableLiveData.postValue(NetworkResult.Loading())
-        dbSearchMutableLiveData.postValue(safeApiCall {
-            apiService.dbSearch(type, keyword)
+    suspend fun hadithSearchWithBookId(search: String, book_number: String) {
+        dbSearchHadithWithBookId.value = null
+        dbSearchHadithWithBookId.postValue(NetworkResult.Loading())
+        dbSearchHadithWithBookId.postValue(safeApiCall {
+            apiService.hadithSearchWithBookId(search, book_number)
         })
     }
+
+    val dbSearchHadithAllBooks: SingleLiveEvent<NetworkResult<ModelChapterHadith3>> by lazy {
+        SingleLiveEvent()
+    }
+
+    suspend fun hadithSearchAllBooks(search: String) {
+        dbSearchHadithAllBooks.value = null
+        dbSearchHadithAllBooks.postValue(NetworkResult.Loading())
+        dbSearchHadithAllBooks.postValue(safeApiCall {
+            apiService.hadithSearchAllBooks(search)
+        })
+    }
+
 
 
     val uploadFileMutableLiveData: SingleLiveEvent<NetworkResult<ModelUploadFile>> by lazy { SingleLiveEvent() }
