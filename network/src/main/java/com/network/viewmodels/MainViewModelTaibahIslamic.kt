@@ -13,7 +13,7 @@ import com.network.network.NetworkResult
 import com.network.repository.MainRepoTaibahIslamic
 import kotlinx.coroutines.launch
 
-class MainViewModelTaibahIslamic constructor(application: Application) :
+class MainViewModelTaibahIslamic(application: Application) :
     AndroidViewModel(application) {
     private val repository: MainRepoTaibahIslamic by lazy {
         MainRepoTaibahIslamic()

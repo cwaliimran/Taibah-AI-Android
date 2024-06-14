@@ -13,12 +13,12 @@ class AdapterUpgradeList( var showData: ArrayList<ModelUpgradeList>):
     lateinit var binding: ItemUpgradeListBinding
 
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int ): AdapterUpgradeList.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int ): ViewHolder {
         binding = ItemUpgradeListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return AdapterUpgradeList.ViewHolder(binding)
+        return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: AdapterUpgradeList.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val moreData = showData[position]
         holder.binding.model = moreData
         holder.binding.tvOffers.text=showData[position].offer
@@ -30,6 +30,5 @@ class AdapterUpgradeList( var showData: ArrayList<ModelUpgradeList>):
     override fun getItemCount(): Int {
         return showData.size
     }
-    class ViewHolder(val binding: ItemUpgradeListBinding) : RecyclerView.ViewHolder(binding.root) {
-    }
+    class ViewHolder(val binding: ItemUpgradeListBinding) : RecyclerView.ViewHolder(binding.root)
 }

@@ -16,9 +16,9 @@ import com.taibahai.models.ModelUpgrade
 class AdapterUpgrade(var showData: List<ModelUpgrade>, var listener: OnItemClick) :
     RecyclerView.Adapter<AdapterUpgrade.ViewHolder>() {
     lateinit var binding: ItemUpgradeBinding
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AdapterUpgrade.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         binding = ItemUpgradeBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return AdapterUpgrade.ViewHolder(binding)
+        return ViewHolder(binding)
     }
 
     fun setData(list: List<ModelUpgrade>) {
@@ -26,7 +26,7 @@ class AdapterUpgrade(var showData: List<ModelUpgrade>, var listener: OnItemClick
         notifyDataSetChanged()
     }
 
-    override fun onBindViewHolder(holder: AdapterUpgrade.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val upgradeData = showData[position]
         holder.binding.model = upgradeData
         holder.binding.ayatNumber.text = showData[position].tvCount

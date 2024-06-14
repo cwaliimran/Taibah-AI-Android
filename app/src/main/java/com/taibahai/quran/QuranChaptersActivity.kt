@@ -346,7 +346,7 @@ class QuranChaptersActivity : AppCompatActivity() {
     private fun initData() {
         favSurahs = AppClass.sharedPref.getList(AppConstants.FAV_SURAHS)
         try {
-            mData!!.clear()
+            mData.clear()
             jsonArr = JSONArray(AppJsonUtils.readRawResource(context, R.raw.allsurahlist))
             val gson = Gson()
             val type = object : TypeToken<List<SurahListModel?>?>() {}.type

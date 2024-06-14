@@ -43,13 +43,13 @@ class TopHadithFragment : BaseFragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate<FragmentTopHadithBinding>(
             inflater, R.layout.fragment_top_hadith, container, false
         )
 
-        return binding.getRoot()
+        return binding.root
     }
 
     override fun viewCreated() {

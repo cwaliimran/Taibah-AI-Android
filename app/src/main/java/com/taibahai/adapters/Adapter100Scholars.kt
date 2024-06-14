@@ -13,9 +13,9 @@ import com.taibahai.models.Model100Scholars
 
 class Adapter100Scholars(var showData: MutableList<ModelScholars.Data>):RecyclerView.Adapter<Adapter100Scholars.ViewHolder>() {
     lateinit var binding: Item100scholarsBinding
-    override fun onCreateViewHolder(parent: ViewGroup,viewType: Int): Adapter100Scholars.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup,viewType: Int): ViewHolder {
         binding = Item100scholarsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return Adapter100Scholars.ViewHolder(binding)
+        return ViewHolder(binding)
     }
 
     fun setData(list: MutableList<ModelScholars.Data>) {
@@ -23,7 +23,7 @@ class Adapter100Scholars(var showData: MutableList<ModelScholars.Data>):Recycler
         list.addAll(showData)
         notifyDataSetChanged()
     }
-    override fun onBindViewHolder(holder: Adapter100Scholars.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val scholarList = showData[position]
         holder.binding.model = scholarList
         holder.binding.tvScholarName.text=scholarList.name
@@ -43,5 +43,5 @@ class Adapter100Scholars(var showData: MutableList<ModelScholars.Data>):Recycler
         return showData.size
     }
 
-    class ViewHolder(val binding: Item100scholarsBinding) : RecyclerView.ViewHolder(binding.root) {}
+    class ViewHolder(val binding: Item100scholarsBinding) : RecyclerView.ViewHolder(binding.root)
 }

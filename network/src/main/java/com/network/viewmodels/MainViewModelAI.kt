@@ -24,7 +24,7 @@ import com.network.network.SimpleResponse
 import com.network.repository.MainRepoAI
 import kotlinx.coroutines.launch
 
-class MainViewModelAI constructor(application: Application) : AndroidViewModel(application) {
+class MainViewModelAI(application: Application) : AndroidViewModel(application) {
     private val repository: MainRepoAI by lazy {
         MainRepoAI()
     }

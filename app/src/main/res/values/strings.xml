@@ -69,6 +69,7 @@
     <string name="restore_success_msg">Your subscription is restored successfully.</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="already_purchased">Already purchased</string>
 
 
 </resources>

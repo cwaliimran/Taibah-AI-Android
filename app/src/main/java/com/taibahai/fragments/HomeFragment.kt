@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -21,6 +22,7 @@ import com.network.utils.AppClass.Companion.isGuest
 import com.network.utils.AppConstants
 import com.network.utils.ProgressLoading.displayLoading
 import com.network.viewmodels.MainViewModelAI
+import com.network.viewmodels.SharedViewModel
 import com.taibahai.R
 import com.taibahai.activities.CreatePostActivity
 import com.taibahai.activities.HomeDetailActivity
@@ -35,51 +37,64 @@ import com.taibahai.utils.showToast
 
 class HomeFragment : BaseFragment() {
     lateinit var binding: FragmentHomeBinding
-    var feedId = ""
+
+    private val sharedViewModel: SharedViewModel by activityViewModels()
     var currentItemAction = -1
 
     lateinit var adapter: AdapterHome
-    private var mData: MutableList<com.network.models.ModelHome.Data> = mutableListOf()
+    private var mData: MutableList<ModelHome.Data> = mutableListOf()
     val viewModel: MainViewModelAI by viewModels()
     private var currentPageNo = 1
     private var totalPages: Int = 0
     private var reportedPos: Int = 0
-
+    private var isCalled = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate<FragmentHomeBinding>(
             inflater, R.layout.fragment_home, container, false
         )
 
-        return binding.getRoot()
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-
+        return binding.root
     }
 
     override fun viewCreated() {
     }
-
+    private val addPostActivityResultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data = result.data
+                val booleanResult = data?.getBooleanExtra("result_key", false) ?: false
+                if (booleanResult) {
+                    mData.clear()
+                    adapter.notifyDataSetChanged()
+                    viewModel.home(pageno = 1)
+                }
+            }
+        }
     override fun clicks() {
         binding.ivCreatePostIcon.setOnClickListener {
             if (isGuest()) {
                 handleGuestLogic()
                 return@setOnClickListener
             }
-            val intent = Intent(requireContext(), CreatePostActivity::class.java)
-            startActivity(intent)
+            addPostActivityResultLauncher.launch(Intent(requireContext(), CreatePostActivity::class.java))
         }
 
         binding.ivNotification.setOnClickListener {
             val intent = Intent(requireContext(), NotificationActivity::class.java)
             startActivity(intent)
         }
+
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            mData.clear()
+            adapter.notifyDataSetChanged()
+            viewModel.home(pageno = 1)
+            binding.swipeRefreshLayout.isRefreshing = false
+        }
+
 
         binding.rvHome.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -111,20 +126,30 @@ class HomeFragment : BaseFragment() {
                 }
 
                 is NetworkResult.Success -> {
+                    isCalled = true
                     totalPages = it.data?.total_pages!!
-                    val oldSize = mData.size
-                    feedId = it.data?.data?.firstOrNull()?.feed_id.toString()
+
                     mData.addAll((it.data?.data ?: listOf()))
-                    if (oldSize == 0) {
-                        initAdapter()
-                    } else {
-                        adapter.notifyItemRangeInserted(oldSize, mData.size)
-                    }
+                    sharedViewModel.setData(mData)
+
                 }
 
                 is NetworkResult.Error -> {
                     showToast(it.message.toString())
                 }
+            }
+        }
+
+        sharedViewModel.data.observe(this) {
+            if (it == null) {
+                return@observe
+            }
+            val oldSize = mData.size
+            mData = it
+            if (oldSize == 0) {
+                initAdapter()
+            } else {
+                adapter.notifyItemRangeInserted(oldSize, mData.size)
             }
         }
 
@@ -186,7 +211,7 @@ class HomeFragment : BaseFragment() {
                 }
 
                 is NetworkResult.Success -> {
-                     val aiTokens = AppClass.sharedPref.getInt(AppConstants.AI_TOKENS)
+                    val aiTokens = AppClass.sharedPref.getInt(AppConstants.AI_TOKENS)
                     AppClass.sharedPref.clearAllPreferences()
                     AppClass.sharedPref.storeInt(AppConstants.AI_TOKENS, aiTokens)
                     AppClass.sharedPref.storeBoolean(AppConstants.IS_FREE_AI_TOKENS_PROVIDED, true)
@@ -278,7 +303,19 @@ class HomeFragment : BaseFragment() {
 
     override fun apiAndArgs() {
         super.apiAndArgs()
-       viewModel.home(pageno = 1)
+        if (isGuest()) {
+            binding.ivNotification.visibility = View.GONE
+        }
+
+        if (!isCalled && sharedViewModel.data.value.isNullOrEmpty()) {
+            viewModel.home(pageno = 1)
+        } else {
+            // If data is already available in SharedViewModel, use it to initialize the adapter
+            sharedViewModel.data.value?.let {
+                mData = it.toMutableList()
+                initAdapter()
+            }
+        }
 
     }
 
@@ -286,10 +323,10 @@ class HomeFragment : BaseFragment() {
         activity?.genericDialog(object : OnItemClick {
             override fun onClick(position: Int, type: String?, data: Any?, view: View?) {
                 super.onClick(position, type, data, view)
-                 val aiTokens = AppClass.sharedPref.getInt(AppConstants.AI_TOKENS)
-                    AppClass.sharedPref.clearAllPreferences()
-                    AppClass.sharedPref.storeInt(AppConstants.AI_TOKENS, aiTokens)
-                    AppClass.sharedPref.storeBoolean(AppConstants.IS_FREE_AI_TOKENS_PROVIDED, true)
+                val aiTokens = AppClass.sharedPref.getInt(AppConstants.AI_TOKENS)
+                AppClass.sharedPref.clearAllPreferences()
+                AppClass.sharedPref.storeInt(AppConstants.AI_TOKENS, aiTokens)
+                AppClass.sharedPref.storeBoolean(AppConstants.IS_FREE_AI_TOKENS_PROVIDED, true)
                 viewModel.logout(
                     AppClass.sharedPref.getString(Constants.DEVICE_ID, "").toString(),
                     "android"

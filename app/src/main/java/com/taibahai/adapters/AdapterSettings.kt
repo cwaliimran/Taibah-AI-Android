@@ -10,9 +10,9 @@ import com.taibahai.models.ModelSettings
 class AdapterSettings(var showData: MutableList<ModelSettings>, var listener: OnItemClick) :
     RecyclerView.Adapter<AdapterSettings.ViewHolder>() {
     lateinit var binding: ItemSettingsBinding
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AdapterSettings.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         binding = ItemSettingsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return AdapterSettings.ViewHolder(binding)
+        return ViewHolder(binding)
     }
 
     fun setData(list: ArrayList<ModelSettings>) {
@@ -20,7 +20,7 @@ class AdapterSettings(var showData: MutableList<ModelSettings>, var listener: On
         notifyDataSetChanged()
     }
 
-    override fun onBindViewHolder(holder: AdapterSettings.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val settingData = showData[position]
         holder.binding.model = settingData
         holder.binding.ivicon.setImageResource(showData[position].icon)
@@ -36,5 +36,5 @@ class AdapterSettings(var showData: MutableList<ModelSettings>, var listener: On
         return showData.size
     }
 
-    class ViewHolder(val binding: ItemSettingsBinding) : RecyclerView.ViewHolder(binding.root) {}
+    class ViewHolder(val binding: ItemSettingsBinding) : RecyclerView.ViewHolder(binding.root)
 }

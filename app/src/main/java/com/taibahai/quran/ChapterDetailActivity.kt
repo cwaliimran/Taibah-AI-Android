@@ -163,7 +163,7 @@ class ChapterDetailActivity : AppCompatActivity() {
     }
 
     private fun loadJson() {
-        mData!!.clear()
+        mData.clear()
         val intent = intent
         surahId = intent.getStringExtra("ayat_id")
         val verse = intent.getStringExtra("ayat_verse")
@@ -213,7 +213,7 @@ class ChapterDetailActivity : AppCompatActivity() {
                                 jsonArr.getJSONObject(i).getString("translation_en")
                             surahModel.transliteration_en =
                                 jsonArr.getJSONObject(i).getString("transliteration_en")
-                            mData!!.add(surahModel)
+                            mData.add(surahModel)
                             counter++
                             if (counter == totalVerse) {
                                 break
@@ -309,14 +309,14 @@ class ChapterDetailActivity : AppCompatActivity() {
         stopScroll()
         binding.scrollView.fullScroll(ScrollView.FOCUS_UP)
         model = mPlayerList!![currentIndex]
-        if (model!!.download != null) {
-            if (model!!.download!!.status == Status.COMPLETED) {
+        if (model.download != null) {
+            if (model.download!!.status == Status.COMPLETED) {
                 val child = StringUtils.SURAH_FOLDER + getNameFromUrl(
-                    model!!.audio
+                    model.audio
                 )
                 if (isFileExists(child)) {
-                    surahId = model!!.id
-                    totalVerse = model!!.total_verses?.toInt()!!
+                    surahId = model.id
+                    totalVerse = model.total_verses.toInt()
                     showAyatList()
                 }
             }
@@ -324,23 +324,23 @@ class ChapterDetailActivity : AppCompatActivity() {
     }
 
     private fun playSurah() {
-        currentFile = model!!.download!!.file
-        surahName = model!!.transliteration_en.toString()
+        currentFile = model.download!!.file
+        surahName = model.transliteration_en.toString()
         binding.playLayout.surahName.text = surahName
         binding.playLayout.ivFav.isSelected = model.isFav
         binding.playLayout.tvMeaning.text =
-            "${model!!.translation_en.toString()}(${model!!.total_verses.toString()})"
+            "${model.translation_en}(${model.total_verses})"
 
         binding.appbar.tvTitle.text = surahName
         binding.makkiMadni.detailsVerseNumber.text = "$totalVerse Ayaat"
-        binding.playLayout.tvSurahNo.text = model!!.number
-        binding.playLayout.ivFav.isSelected = model!!.isFav
+        binding.playLayout.tvSurahNo.text = model.number
+        binding.playLayout.ivFav.isSelected = model.isFav
 
         try {
-            if (model!!.revelation_type == StringUtils.MAKKI) {
+            if (model.revelation_type == StringUtils.MAKKI) {
                 binding.makkiMadni.surahType.text = getString(R.string.makki)
             }
-            if (model!!.revelation_type == StringUtils.MADNI) {
+            if (model.revelation_type == StringUtils.MADNI) {
                 binding.makkiMadni.surahType.text = getString(R.string.madni)
             }
         } catch (e: Exception) {
@@ -377,7 +377,7 @@ class ChapterDetailActivity : AppCompatActivity() {
         //        Log.d("response", "helf height: "+Constants.getHeight(ScriptActivity.this));
         objectAnimator?.setDuration(total_duration.toLong())
         objectAnimator?.setAutoCancel(true)
-        objectAnimator?.setInterpolator(LinearInterpolator())
+        objectAnimator?.interpolator = LinearInterpolator()
         objectAnimator?.start()
     }
 

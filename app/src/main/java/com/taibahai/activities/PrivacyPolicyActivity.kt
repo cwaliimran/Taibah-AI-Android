@@ -71,7 +71,7 @@ class PrivacyPolicyActivity : BaseActivity() {
 
     override fun initData() {
         super.initData()
-        binding.appbar.tvTitle.setText("Privacy Policy")
+        binding.appbar.tvTitle.text = "Privacy Policy"
         
         
     }

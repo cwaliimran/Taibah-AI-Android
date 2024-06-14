@@ -18,6 +18,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.ProductDetails
 import com.android.billingclient.api.PurchasesUpdatedListener
+import com.facebook.internal.Utility.logd
 import com.network.base.BaseActivity
 import com.network.interfaces.AlertDialogListener
 import com.network.interfaces.OnItemClick
@@ -71,7 +72,16 @@ class UpgradeActivity : BaseActivity(), PurchaseInterface {
         upgradeBasic.add(ModelUpgradeList("Hadith"))
         upgradeBasic.add(ModelUpgradeList("Zakat Calculator"))
 
-        showList.add(ModelUpgrade("1", "Basic", "Silver Package", upgradeBasic, "\$2.99/month", isSilverPurchased))
+        showList.add(
+            ModelUpgrade(
+                "1",
+                "Basic",
+                "Silver Package",
+                upgradeBasic,
+                "\$2.99/month",
+                isSilverPurchased
+            )
+        )
 
 
         val upgradeAdvance = ArrayList<ModelUpgradeList>()
@@ -82,7 +92,16 @@ class UpgradeActivity : BaseActivity(), PurchaseInterface {
         upgradeAdvance.add(ModelUpgradeList("Zakat Calculator"))
         upgradeAdvance.add(ModelUpgradeList("4 Influential Scholars"))
 
-        showList.add(ModelUpgrade("2", "Advance", "Gold Package", upgradeAdvance, "\$4.99/month", isGoldPurchased))
+        showList.add(
+            ModelUpgrade(
+                "2",
+                "Advance",
+                "Gold Package",
+                upgradeAdvance,
+                "\$4.99/month",
+                isGoldPurchased
+            )
+        )
 
 
         val upgradeExclusive = ArrayList<ModelUpgradeList>()
@@ -99,7 +118,12 @@ class UpgradeActivity : BaseActivity(), PurchaseInterface {
 
         showList.add(
             ModelUpgrade(
-                "3", "Exclusive", "Diamond Package", upgradeExclusive, "\$9.99/month", isDiamondPurchased
+                "3",
+                "Exclusive",
+                "Diamond Package",
+                upgradeExclusive,
+                "\$9.99/month",
+                isDiamondPurchased
             )
         )
     }
@@ -113,14 +137,25 @@ class UpgradeActivity : BaseActivity(), PurchaseInterface {
                     "subscribe" -> {
                         when (position) {
                             0 -> {
-                                billingClientManager.makePurchase(EnumSubscriptions.TAIBAH_AI_SILVER.productId)
+                                if (isSilverPurchased){
+                                    showToast(getString(R.string.already_purchased))
+                                }else{
+                                    billingClientManager.makePurchase(EnumSubscriptions.TAIBAH_AI_SILVER.productId)
+                                }
                             }
 
                             1 -> {
+                                if (isGoldPurchased){
+                                    showToast(getString(R.string.already_purchased))
+                                }else{
                                 billingClientManager.makePurchase(EnumSubscriptions.TAIBAH_AI_GOLD.productId)
+                            }
                             }
 
                             2 -> {
+                                if (isDiamondPurchased){
+                                    showToast(getString(R.string.already_purchased))
+                                }else
                                 billingClientManager.makePurchase(EnumSubscriptions.TAIBAH_AI_DIAMOND.productId)
                             }
 
@@ -138,18 +173,13 @@ class UpgradeActivity : BaseActivity(), PurchaseInterface {
         })
         binding.viewPager.let { binding.dotsIndicator.attachTo(it) }
         binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-
-
-            }
         })
 
     }
 
     override fun initData() {
         super.initData()
-        binding.appbar.tvTitle.setText("Upgrade")
+        binding.appbar.tvTitle.text = "Upgrade"
 
 
     }
@@ -170,16 +200,22 @@ class UpgradeActivity : BaseActivity(), PurchaseInterface {
             )
         } else if (type == "purchase") {
             //data = purchasedProductId
+            var aiTokens = AppClass.sharedPref.getInt(AppConstants.AI_TOKENS)
+
             when (data.toString()) {
                 EnumSubscriptions.TAIBAH_AI_SILVER.productId -> {
                     AppClass.sharedPref.storeBoolean(
                         AppConstants.IS_TAIBAH_AI_SILVER_PURCHASED, true
                     )
+                    aiTokens += 300
+                    AppClass.sharedPref.storeInt(AppConstants.AI_TOKENS, aiTokens)
                 }
 
                 EnumSubscriptions.TAIBAH_AI_GOLD.productId -> {
                     AppClass.sharedPref.storeBoolean(AppConstants.IS_TAIBAH_AI_GOLD_PURCHASED, true)
                     AppClass.sharedPref.storeBoolean(AppConstants.IS_ADS_FREE, true)
+                    aiTokens += 700
+                    AppClass.sharedPref.storeInt(AppConstants.AI_TOKENS, aiTokens)
 
                 }
 
@@ -188,6 +224,8 @@ class UpgradeActivity : BaseActivity(), PurchaseInterface {
                         AppConstants.IS_TAIBAH_AI_DIAMOND_PURCHASED, true
                     )
                     AppClass.sharedPref.storeBoolean(AppConstants.IS_ADS_FREE, true)
+                    aiTokens += 100000
+                    AppClass.sharedPref.storeInt(AppConstants.AI_TOKENS, aiTokens)
 
                 }
 
@@ -220,13 +258,14 @@ class UpgradeActivity : BaseActivity(), PurchaseInterface {
                         }
                     }
                 }
-            }else{
+            } else {
                 runOnMainThread {
                     showToast("No subscription found!")
                 }
             }
         }
     }
+
     private fun runOnMainThread(action: () -> Unit) {
         if (Looper.myLooper() == Looper.getMainLooper()) {
             // Already on the main thread, run directly
@@ -238,52 +277,42 @@ class UpgradeActivity : BaseActivity(), PurchaseInterface {
             }
         }
     }
+
     override fun apiAndArgs() {
         billingClientManager =
             BillingClientManager(this, purchasesUpdatedListener, object : BillingManagerActions {
                 override fun addInAppPurchase(inAppPurchase: InAppPurchase) {
                     // add purchase in db
-                 //   updateSubscriptionStatus("restore")
+                    //   updateSubscriptionStatus("restore")
                     Log.d(TAG, "addInAppPurchase restore: $inAppPurchase")
                 }
             }, this, object : ProductsInterface {
                 override fun productsFetched(products: MutableList<ProductDetails>) {
-                    products.forEach {
-                        if (it.productId == EnumSubscriptions.TAIBAH_AI_SILVER.productId) {
-                            var price =
-                                it.subscriptionOfferDetails?.get(0)?.pricingPhases?.pricingPhaseList?.get(
-                                    0
-                                )?.formattedPrice
+                  //  Log.d(TAG, "productsFetched: $products")
 
-                            if (price.isNullOrBlank()) {
-                                price = "\$2.99/month"
+                    products.forEach { product ->
+                        when (product.productId) {
+                            EnumSubscriptions.TAIBAH_AI_SILVER.productId -> {
+                                val price = product.subscriptionOfferDetails?.get(0)?.pricingPhases?.pricingPhaseList?.getOrNull(0)?.formattedPrice
+                                showList[0].subscriptionPrice = price?.let { "$it/month" } ?: "\$2.99/month"
+                                Log.d(TAG, "Silver subscription price: ${showList[0].subscriptionPrice}")
                             }
-                            showList[0].subscriptionPrice = price
-                        }
-                        if (it.productId == EnumSubscriptions.TAIBAH_AI_GOLD.productId) {
-                            var price =
-                                it.subscriptionOfferDetails?.get(0)?.pricingPhases?.pricingPhaseList?.get(
-                                    1
-                                )?.formattedPrice
-
-                            if (price.isNullOrBlank()) {
-                                price = "\$4.99/month"
+                            EnumSubscriptions.TAIBAH_AI_GOLD.productId -> {
+                                val price = product.subscriptionOfferDetails?.get(0)?.pricingPhases?.pricingPhaseList?.getOrNull(0)?.formattedPrice
+                                showList[1].subscriptionPrice = price?.let { "$it/month" } ?: "\$4.99/month"
+                                Log.d(TAG, "Gold subscription price: ${showList[1].subscriptionPrice}")
                             }
-                            showList[0].subscriptionPrice = price
-                        }
-                        if (it.productId == EnumSubscriptions.TAIBAH_AI_DIAMOND.productId) {
-                            var price =
-                                it.subscriptionOfferDetails?.get(0)?.pricingPhases?.pricingPhaseList?.get(
-                                    2
-                                )?.formattedPrice
-
-                            if (price.isNullOrBlank()) {
-                                price = "\$9.99/month"
+                            EnumSubscriptions.TAIBAH_AI_DIAMOND.productId -> {
+                                val price = product.subscriptionOfferDetails?.get(0)?.pricingPhases?.pricingPhaseList?.getOrNull(0)?.formattedPrice
+                                showList[2].subscriptionPrice = price?.let { "$it/month" } ?: "\$9.99/month"
+                                Log.d(TAG, "Diamond subscription price: ${showList[2].subscriptionPrice}")
                             }
-                            showList[0].subscriptionPrice = price
                         }
                     }
+
+                    binding.viewPager.adapter?.notifyDataSetChanged()
                 }
+
             })
 
 
@@ -315,32 +344,32 @@ class UpgradeActivity : BaseActivity(), PurchaseInterface {
 
     private fun updateSubscriptionStatus(type: String) {
         lifecycleScope.launch {
-                    withContext(Dispatchers.Main) {
-                        this@UpgradeActivity.purchaseDialog(
-                            object : AlertDialogListener {
-                                override fun onYesClick(data: Any?) {
-                                    startActivity(
-                                        Intent(
-                                            this@UpgradeActivity, SplashActivity::class.java
-                                        )
-                                    )
-                                    finishAffinity()
-                                }
+            withContext(Dispatchers.Main) {
+                this@UpgradeActivity.purchaseDialog(
+                    object : AlertDialogListener {
+                        override fun onYesClick(data: Any?) {
+                            startActivity(
+                                Intent(
+                                    this@UpgradeActivity, SplashActivity::class.java
+                                )
+                            )
+                            finishAffinity()
+                        }
 
-                            }, if (type == "purchase") {
-                                getString(R.string.purchase_success)
-                            } else {
-                                getString(R.string.restore_success)
-                            }, if (type == "purchase") {
-                                getString(R.string.purchase_success_msg)
-                            } else {
-                                getString(R.string.restore_success_msg)
-                            }, hideNoBtn = true
-                        )
-                    }
-                }
-
+                    }, if (type == "purchase") {
+                        getString(R.string.purchase_success)
+                    } else {
+                        getString(R.string.restore_success)
+                    }, if (type == "purchase") {
+                        getString(R.string.purchase_success_msg)
+                    } else {
+                        getString(R.string.restore_success_msg)
+                    }, hideNoBtn = true
+                )
+            }
         }
+
+    }
 
     private fun Context.purchaseDialog(
         listener: AlertDialogListener,

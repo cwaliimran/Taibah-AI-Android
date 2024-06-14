@@ -44,7 +44,7 @@ class ChaptersAdapter(
     }
 
     override fun onBindViewHolder(holder: HomeListHolder, position: Int) {
-        val model = mData!![position]
+        val model = mData[position]
         if (showFooter == true) {
             if (position == mData.size - 1) {
                 holder.binding.footer.visibility = View.VISIBLE

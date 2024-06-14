@@ -59,20 +59,20 @@ class HistoryActivity : BaseActivity() {
         val messageAdapter = AdapterAISearch(this, ArrayList(),object :OnItemClick{
 
         })
-        binding?.rvHistory?.adapter = messageAdapter
+        binding.rvHistory?.adapter = messageAdapter
     }
 
 
     private fun updateUI(messages: List<ModelChatMessage>) {
-        (binding?.rvHistory?.adapter as AdapterAISearch).messageList.clear()
+        (binding.rvHistory?.adapter as AdapterAISearch).messageList.clear()
 
         for (message in messages) {
             val modelMessage = ModelSearchAI(message.message, message.isUser)
             //val chatMessage = ChatMessage(modelMessage, message.conversationId)
-            (binding?.rvHistory?.adapter as AdapterAISearch).messageList.add(modelMessage)
+            (binding.rvHistory?.adapter as AdapterAISearch).messageList.add(modelMessage)
         }
 
-        binding?.rvHistory?.adapter?.notifyDataSetChanged()
+        binding.rvHistory?.adapter?.notifyDataSetChanged()
     }
 
     private fun showDeleteDialog() {

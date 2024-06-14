@@ -39,13 +39,13 @@ class TopQuranFragment : BaseFragment() {
     var jsonArr: JSONArray? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate<FragmentTopQuranBinding>(
             inflater, R.layout.fragment_top_quran, container, false
         )
 
-        return binding.getRoot()
+        return binding.root
     }
 
     override fun viewCreated() {

@@ -83,8 +83,9 @@ class CreatePostActivity : BaseActivity() {
                 is NetworkResult.Success -> {
                     it.data?.let { it1 -> showToast(it1.message) }
 
-                    val intent = Intent(this, BottomNavigation::class.java)
-                    startActivity(intent)
+                    val resultIntent = Intent()
+                    resultIntent.putExtra("result_key", true)
+                    setResult(Activity.RESULT_OK, resultIntent)
                     finish()
                 }
 

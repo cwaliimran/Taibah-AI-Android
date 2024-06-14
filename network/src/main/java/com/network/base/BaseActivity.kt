@@ -79,11 +79,6 @@ abstract class BaseActivity : AppCompatActivity() {
         return true
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-
-    }
-
     override fun onResume() {
         super.onResume()
         isAdsFree = AppClass.sharedPref.getBoolean(AppConstants.IS_ADS_FREE)

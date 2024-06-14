@@ -73,7 +73,7 @@ class InheritanceLawActivity : BaseActivity() {
 
     override fun initData() {
         super.initData()
-        binding.appbar.tvTitle.setText("Islamic Law of Inheritance")
+        binding.appbar.tvTitle.text = "Islamic Law of Inheritance"
         
         
     }

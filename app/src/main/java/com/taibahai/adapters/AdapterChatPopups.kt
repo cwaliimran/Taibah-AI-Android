@@ -16,9 +16,9 @@ class AdapterChatPopups(
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): AdapterChatPopups.ViewHolder {
+    ): ViewHolder {
         binding = ItemChatPopupsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return AdapterChatPopups.ViewHolder(binding)
+        return ViewHolder(binding)
     }
 
     fun setData(list: ArrayList<ModelChatPopups>) {
@@ -26,7 +26,7 @@ class AdapterChatPopups(
         notifyDataSetChanged()
     }
 
-    override fun onBindViewHolder(holder: AdapterChatPopups.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val messagePopups = showMessagePopups[position]
         holder.binding.model = messagePopups
         holder.binding.tvMessageItem.text = showMessagePopups[position].message
@@ -41,6 +41,6 @@ class AdapterChatPopups(
         return showMessagePopups.size
     }
 
-    class ViewHolder(val binding: ItemChatPopupsBinding) : RecyclerView.ViewHolder(binding.root) {}
+    class ViewHolder(val binding: ItemChatPopupsBinding) : RecyclerView.ViewHolder(binding.root)
 
 }

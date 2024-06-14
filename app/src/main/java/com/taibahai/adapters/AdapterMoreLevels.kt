@@ -17,12 +17,12 @@ class AdapterMoreLevels(
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): AdapterMoreLevels.ViewHolder {
+    ): ViewHolder {
         binding = ItemMoreLevelsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return AdapterMoreLevels.ViewHolder(binding)
+        return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: AdapterMoreLevels.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val moreData = showData[position]
         holder.binding.model = moreData
         holder.binding.ivIcon.setImageResource(showData[position].icon)
@@ -38,6 +38,5 @@ class AdapterMoreLevels(
         return showData.size
     }
 
-    class ViewHolder(val binding: ItemMoreLevelsBinding) : RecyclerView.ViewHolder(binding.root) {
-    }
+    class ViewHolder(val binding: ItemMoreLevelsBinding) : RecyclerView.ViewHolder(binding.root)
 }

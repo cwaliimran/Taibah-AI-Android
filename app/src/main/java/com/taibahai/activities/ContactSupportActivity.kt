@@ -83,7 +83,7 @@ class ContactSupportActivity : BaseActivity() {
 
     override fun initData() {
         super.initData()
-        binding.appbar.tvTitle.setText("Setting")
+        binding.appbar.tvTitle.text = "Setting"
         
         
     }

@@ -76,7 +76,7 @@ class SearchFragment : BaseFragment(), OnItemClick {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate<FragmentSearchBinding>(
             inflater, R.layout.fragment_search, container, false
@@ -87,8 +87,8 @@ class SearchFragment : BaseFragment(), OnItemClick {
         // Add a global layout listener to monitor layout changes, including keyboard visibility changes
         binding.root.viewTreeObserver.addOnGlobalLayoutListener {
             // Check if the keyboard is open or closed
-            val screenHeight = binding.getRoot().rootView.height
-            val heightDiff = screenHeight - binding.getRoot().height
+            val screenHeight = binding.root.rootView.height
+            val heightDiff = screenHeight - binding.root.height
             val keyboardOpenThreshold = screenHeight / 3
 
             if (heightDiff > keyboardOpenThreshold) {
@@ -121,7 +121,11 @@ class SearchFragment : BaseFragment(), OnItemClick {
         super.onViewCreated(view, savedInstanceState)
 
         aiTokens = AppClass.sharedPref.getInt(AppConstants.AI_TOKENS)
-        binding.tvRemainingTokens.text = "Remaining Tokens : $aiTokens"
+        if (isDiamondPurchased) {
+            binding.tvRemainingTokens.text = "Unlimited Tokens"
+        } else {
+            binding.tvRemainingTokens.text = "Remaining Tokens : $aiTokens"
+        }
 
     }
 
@@ -149,7 +153,7 @@ class SearchFragment : BaseFragment(), OnItemClick {
 
 
     override fun viewCreated() {
-        isArchived = AppClass.sharedPref.getIsArchived() ?: false
+        isArchived = AppClass.sharedPref.getIsArchived()
         chatDatabase = ChatDatabase.getDatabase(requireContext())
         chatMessageDao = chatDatabase.chatMessageDao()
 
@@ -223,6 +227,8 @@ class SearchFragment : BaseFragment(), OnItemClick {
     }
 
     private fun checkTokens(): Boolean {
+        if (isDiamondPurchased) return true
+
         aiTokens = AppClass.sharedPref.getInt(AppConstants.AI_TOKENS)
         if (aiTokens <= 0) {
             showToast("Not enough AI tokens")
@@ -256,7 +262,7 @@ class SearchFragment : BaseFragment(), OnItemClick {
             val results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
             if (results != null && results.isNotEmpty()) {
                 spokenText = results[0]
-                binding?.messageBox?.setText(spokenText)  // Set spoken text in the message box
+                binding.messageBox?.setText(spokenText)  // Set spoken text in the message box
             }
         }
     }
@@ -528,16 +534,17 @@ class SearchFragment : BaseFragment(), OnItemClick {
 
     private fun showTopMessagePopups() {
         showMessagePopups.clear()
-        showMessagePopups.add(ModelChatPopups("Merry Christmas"))
-        showMessagePopups.add(ModelChatPopups("Happy Birthday"))
-        showMessagePopups.add(ModelChatPopups("English Teacher"))
-        showMessagePopups.add(ModelChatPopups("Cat-Friend"))
-        showMessagePopups.add(ModelChatPopups("Happy Valentine's day"))
-        showMessagePopups.add(ModelChatPopups("Horoscope"))
-        showMessagePopups.add(ModelChatPopups("Quick Meal"))
-        showMessagePopups.add(ModelChatPopups("Plan my Vacation"))
-        showMessagePopups.add(ModelChatPopups("Business Idea"))
-        showMessagePopups.add(ModelChatPopups("Tell Me a Joke"))
+        showMessagePopups.add(ModelChatPopups("Prayers in Islam"))
+        showMessagePopups.add(ModelChatPopups("Prophet of Islam"))
+        showMessagePopups.add(ModelChatPopups("Islamic Teachings"))
+        showMessagePopups.add(ModelChatPopups("Halal Food"))
+        showMessagePopups.add(ModelChatPopups("Islamic Festivals"))
+        showMessagePopups.add(ModelChatPopups("Quran Recitation"))
+        showMessagePopups.add(ModelChatPopups("Islamic History"))
+        showMessagePopups.add(ModelChatPopups("Islamic Etiquette"))
+        showMessagePopups.add(ModelChatPopups("Hajj and Umrah"))
+        showMessagePopups.add(ModelChatPopups("Islamic Quotes"))
+
 
         adapterMessagePopups.setData(showMessagePopups)
         binding.rvTopMessagePopups.adapter = adapterMessagePopups

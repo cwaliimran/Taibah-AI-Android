@@ -63,7 +63,7 @@ class SearchDatabaseActivity : BaseActivity() {
 
     override fun initData() {
         super.initData()
-        binding.appbar.tvTitle.setText("Search Database")
+        binding.appbar.tvTitle.text = "Search Database"
         
         
     }

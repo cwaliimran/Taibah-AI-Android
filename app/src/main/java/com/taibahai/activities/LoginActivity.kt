@@ -242,13 +242,13 @@ class LoginActivity : BaseActivity() {
 
     private fun signUp() {
         viewModel.socialLogin(
-            user.uid ?: "",
+            user.uid,
             socialType,
             deviceID,
             "android",
             user.email ?: "",
             NetworkUtils.timeZone(),
-            name ?: "",
+            name,
             image
         )
 
@@ -339,8 +339,8 @@ class LoginActivity : BaseActivity() {
     }
 
     private fun uploadFile(fos: OutputStream) {
-        fos?.use {
-//            bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, it)
+        fos.use {
+    //            bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, it)
             // Toast.makeText(this, "Saved to Gallery", Toast.LENGTH_SHORT).show()
 
             viewModel.uploadFile(savedImagePath)
@@ -471,7 +471,7 @@ class LoginActivity : BaseActivity() {
                 return@OnCompleteListener
             }
             deviceID = task.result
-            AppClass.sharedPref?.storeString(Constants.DEVICE_ID, deviceID)
+            AppClass.sharedPref.storeString(Constants.DEVICE_ID, deviceID)
         })
     }
 

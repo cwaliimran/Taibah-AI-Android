@@ -70,22 +70,35 @@ class BillingClientManager(
 
 
     private fun queryProduct() {
-        val queryProductDetailsParams = QueryProductDetailsParams.newBuilder().setProductList(
-            ImmutableList.of(
+        val productList = ImmutableList.builder<QueryProductDetailsParams.Product>()
+            .add(
                 QueryProductDetailsParams.Product.newBuilder()
                     .setProductId(EnumSubscriptions.TAIBAH_AI_GOLD.productId)
+                    .setProductType(BillingClient.ProductType.SUBS)
+                    .build()
+            )
+            .add(
+                QueryProductDetailsParams.Product.newBuilder()
                     .setProductId(EnumSubscriptions.TAIBAH_AI_SILVER.productId)
+                    .setProductType(BillingClient.ProductType.SUBS)
+                    .build()
+            )
+            .add(
+                QueryProductDetailsParams.Product.newBuilder()
                     .setProductId(EnumSubscriptions.TAIBAH_AI_DIAMOND.productId)
                     .setProductType(BillingClient.ProductType.SUBS)
-                    .build(),
+                    .build()
             )
+            .build()
+        val queryProductDetailsParams = QueryProductDetailsParams.newBuilder().setProductList(
+           productList
         ).build()
 
         billingClient.queryProductDetailsAsync(
             queryProductDetailsParams
         ) { _, productDetailsList ->
             if (productDetailsList.isNotEmpty()) {
-                Log.d(TAG, "onProductDetailsResponse: $productDetailsList")
+             //   Log.d(TAG, "onProductDetailsResponse: $productDetailsList")
                 productsList = productDetailsList
                 productsInterface.productsFetched(productsList)
             } else {
@@ -261,17 +274,31 @@ class BillingClientManager(
                     // Implement the logic to check the subscription status and expiration date here.
 
                     // For example, you can check the expiration date of the first active subscription:
-                    val firstActiveSubscription = activeSubscriptions[0]
+                    activeSubscriptions.forEach { subscription ->
+                        Log.d(TAG, "checkSubscriptionStatus: $subscription")
+                        Log.d(TAG, "checkSubscriptionStatus: ${subscription.products}")
+                        subscription.products.forEach {
+                            Log.d(TAG, "checkSubscriptionStatus: $it")
+                            if (it == EnumSubscriptions.TAIBAH_AI_SILVER.productId) {
+                                purchaseListener.onPurchaseUpdate(
+                                    0, "subscription_status", EnumSubscriptionStatus.SUBSCRIPTION_ACTIVE
+                                )
 
-                    val expirationDate =
-                        firstActiveSubscription.skus[0] // Assuming a single SKU per subscription
+                            }
+                            if (it == EnumSubscriptions.TAIBAH_AI_GOLD.productId) {
+                                purchaseListener.onPurchaseUpdate(
+                                    0, "subscription_status", EnumSubscriptionStatus.SUBSCRIPTION_ACTIVE
+                                )
+                            }
+                            if (it == EnumSubscriptions.TAIBAH_AI_DIAMOND.productId) {
+                                purchaseListener.onPurchaseUpdate(
+                                    0, "subscription_status", EnumSubscriptionStatus.SUBSCRIPTION_ACTIVE
+                                )
+                            }
 
-                    // Check the expiration date and handle it as needed.
+                        }
 
-                    // Notify your UI or application logic about the subscription status.
-                    purchaseListener.onPurchaseUpdate(
-                        0, "subscription_status", EnumSubscriptionStatus.SUBSCRIPTION_ACTIVE
-                    )
+                    }
                 } else {
                     // No active subscriptions found.
                     // Handle this scenario accordingly, e.g., prompt the user to subscribe.

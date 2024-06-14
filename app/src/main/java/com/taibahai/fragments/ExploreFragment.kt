@@ -36,7 +36,7 @@ class ExploreFragment : BaseFragment() {
     val viewModel: MainViewModelAI by viewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate<FragmentExploreBinding>(
             inflater, R.layout.fragment_explore, container, false
@@ -46,7 +46,7 @@ class ExploreFragment : BaseFragment() {
     }
 
     override fun viewCreated() {
-        binding.appbar.tvTitle.setText("Explore")
+        binding.appbar.tvTitle.text = "Explore"
         binding.appbar.ivLeft.setVisibility(View.GONE)
         
 

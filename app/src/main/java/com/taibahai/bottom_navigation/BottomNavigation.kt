@@ -1,8 +1,10 @@
 package com.taibahai.bottom_navigation
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.network.viewmodels.SharedViewModel
 import com.taibahai.R
 import com.taibahai.databinding.ActivityBottomNavigationBinding
 import com.taibahai.fragments.HomeFragment
@@ -17,7 +19,8 @@ class BottomNavigation : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityBottomNavigationBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding?.bottomNavigationView?.itemIconTintList = null
+
+        binding.bottomNavigationView?.itemIconTintList = null
         replaceFragment(HomeFragment())
         binding.bottomNavigationView.setOnItemSelectedListener {
 

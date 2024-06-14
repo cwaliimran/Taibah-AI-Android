@@ -12,9 +12,9 @@ import com.taibahai.hadiths.HadithChaptersActivity2
 class AdapterHadithBooks(var showData: MutableList<ModelHadithBooks.Data>, var listener: OnItemClick):RecyclerView.Adapter<AdapterHadithBooks.ViewHolder>() {
     lateinit var binding: ItemHadithBooksBinding
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int ): AdapterHadithBooks.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int ): ViewHolder {
         binding = ItemHadithBooksBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return AdapterHadithBooks.ViewHolder(binding)
+        return ViewHolder(binding)
     }
 
     fun setData(list: ArrayList<ModelHadithBooks.Data>) {
@@ -22,7 +22,7 @@ class AdapterHadithBooks(var showData: MutableList<ModelHadithBooks.Data>, var l
         notifyDataSetChanged()
     }
 
-    override fun onBindViewHolder(holder: AdapterHadithBooks.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val hadithData = showData[position]
         holder.binding.model = hadithData
         holder.binding.tvCounter.text = (position + 1).toString()
@@ -38,5 +38,5 @@ class AdapterHadithBooks(var showData: MutableList<ModelHadithBooks.Data>, var l
     override fun getItemCount(): Int {
         return showData.size
     }
-    class ViewHolder(val binding: ItemHadithBooksBinding) : RecyclerView.ViewHolder(binding.root) {}
+    class ViewHolder(val binding: ItemHadithBooksBinding) : RecyclerView.ViewHolder(binding.root)
 }

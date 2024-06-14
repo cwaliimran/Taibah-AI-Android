@@ -95,7 +95,7 @@ abstract class BaseApiResponse {
                     }
                     if (obj.has("errors")) {
                         val errors = obj.getJSONArray("errors")
-                        Log.d(TAG, "getError: ${errors.toString()}")
+                        Log.d(TAG, "getError: $errors")
                         if (errors.length() > 0) {
                             val message = errors.getJSONObject(0).getString("message")
                             val actualCode = errors.getJSONObject(0).getString("code")

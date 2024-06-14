@@ -26,7 +26,7 @@ class ZakatInfoActivity : BaseActivity() {
 
     override fun initData() {
         super.initData()
-        binding.appbar.tvTitle.setText("Zakat Info")
+        binding.appbar.tvTitle.text = "Zakat Info"
         
         
     }

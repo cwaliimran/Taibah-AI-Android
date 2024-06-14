@@ -72,7 +72,7 @@ class BooksAndPDFActivity : BaseActivity() {
 
     override fun initData() {
         super.initData()
-        binding.appbar.tvTitle.setText("Books & PDF")
+        binding.appbar.tvTitle.text = "Books & PDF"
         
         
     }

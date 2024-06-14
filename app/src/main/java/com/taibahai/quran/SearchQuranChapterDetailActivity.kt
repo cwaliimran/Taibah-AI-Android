@@ -62,7 +62,7 @@ class SearchQuranChapterDetailActivity : AppCompatActivity() {
     }
 
     private fun loadJson() {
-        mData!!.clear()
+        mData.clear()
         val intent = intent
         surahId = intent.getStringExtra("ayat_id")
         val verse = intent.getStringExtra("ayat_verse")
@@ -101,7 +101,7 @@ class SearchQuranChapterDetailActivity : AppCompatActivity() {
                             jsonArr.getJSONObject(i).getString("translation_en")
                         surahModel.transliteration_en =
                             jsonArr.getJSONObject(i).getString("transliteration_en")
-                        mData!!.add(surahModel)
+                        mData.add(surahModel)
                         counter++
                         if (counter == totalVerse) {
                             break
@@ -112,7 +112,7 @@ class SearchQuranChapterDetailActivity : AppCompatActivity() {
             chaptersAdapter!!.updateList(mData)
             binding.progressBar.visibility = View.GONE
             //from search
-            mData?.forEach {
+            mData.forEach {
                 verseNumbers.add(it.verse_number)
             }
             var verseNumbersAdapter: ArrayAdapter<String>? = null

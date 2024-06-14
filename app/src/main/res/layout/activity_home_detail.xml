@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".activities.HomeDetailActivity"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".activities.HomeDetailActivity">
 
     <data>
 
@@ -49,6 +49,7 @@
         </RelativeLayout>
 
         <androidx.core.widget.NestedScrollView
+            android:id="@+id/nestedScrollView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@+id/relativeLayout"
@@ -119,14 +120,11 @@
                     android:id="@+id/progressBar"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:progressTint="#5DC759"
+                    android:indeterminateTint="@color/green"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView7"/>
-
-
-
+                    app:layout_constraintTop_toBottomOf="@+id/textView7" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -140,9 +138,9 @@
             android:layout_marginHorizontal="20dp"
             android:layout_marginBottom="20dp"
             android:background="@drawable/bg_rounded_button"
-            android:paddingVertical="8dp"
-            android:paddingHorizontal="4dp"
             android:backgroundTint="@color/grey"
+            android:paddingHorizontal="4dp"
+            android:paddingVertical="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">

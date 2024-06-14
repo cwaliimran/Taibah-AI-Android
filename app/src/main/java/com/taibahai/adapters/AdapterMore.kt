@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.network.interfaces.OnItemClick
+import com.network.utils.AppClass
+import com.network.utils.AppConstants
 import com.taibahai.R
 import com.taibahai.activities.ImamsOfSunnaActivity
 import com.taibahai.activities.BooksAndPDFActivity
@@ -25,9 +27,12 @@ class AdapterMore(private val context: Context, var showData: MutableList<ModelM
     RecyclerView.Adapter<AdapterMore.ViewHolder>() {
     lateinit var binding: ItemMoreBinding
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AdapterMore.ViewHolder {
+  var  isSilverPurchased = AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_SILVER_PURCHASED)
+    var isGoldPurchased = AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_GOLD_PURCHASED)
+    var isDiamondPurchased = AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_DIAMOND_PURCHASED)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         binding = ItemMoreBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return AdapterMore.ViewHolder(binding)
+        return ViewHolder(binding)
     }
 
     fun setData(list: ArrayList<ModelMore>) {
@@ -35,7 +40,7 @@ class AdapterMore(private val context: Context, var showData: MutableList<ModelM
         notifyDataSetChanged()
     }
 
-    override fun onBindViewHolder(holder: AdapterMore.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val moreData = showData[position]
         holder.binding.model = moreData
         holder.binding.tvLevel.text = showData[position].level
@@ -62,6 +67,16 @@ class AdapterMore(private val context: Context, var showData: MutableList<ModelM
 
         }
 
+        if (position==1 && isSilverPurchased){
+            holder.binding.btnUpgrade.visibility = View.INVISIBLE
+        }
+        if (position==2 && isGoldPurchased){
+            holder.binding.btnUpgrade.visibility = View.INVISIBLE
+        }
+
+        if (isDiamondPurchased) {
+            holder.binding.btnUpgrade.visibility = View.INVISIBLE
+        }
         binding.btnUpgrade.setOnClickListener {
             context.startActivity(Intent(context, UpgradeActivity::class.java))
         }

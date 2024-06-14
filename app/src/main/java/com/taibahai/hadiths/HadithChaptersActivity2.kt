@@ -43,10 +43,10 @@ class HadithChaptersActivity2 : BaseActivity() {
         super.initAdapter()
         adapter = AdapterHadithChapter(showList, object : OnItemClick {
             override fun onClick(
-                position: kotlin.Int,
-                type: kotlin.String?,
-                data: kotlin.Any?,
-                view: android.view.View?
+                position: Int,
+                type: String?,
+                data: Any?,
+                view: View?
             ) {
                 super.onClick(position, type, data, view)
                 val intent = Intent(context, ChapterHadithsActivity3::class.java)

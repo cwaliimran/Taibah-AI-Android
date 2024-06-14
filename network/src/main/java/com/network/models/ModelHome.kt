@@ -6,7 +6,7 @@ data class ModelHome(
     var status: Int = 0,
     var message: String = "",
     var total_pages: Int = 0,
-    var data: List<Data> = listOf()
+    var data: MutableList<Data> = mutableListOf()
 ) : Serializable {
     data class Data(
         var feed_id: String = "",

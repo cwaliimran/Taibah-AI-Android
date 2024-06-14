@@ -37,7 +37,7 @@ class AdapterHome(
         return ViewHolder(binding, listener)
     }
 
-    fun setData(list: MutableList<com.network.models.ModelHome.Data>) {
+    fun setData(list: MutableList<ModelHome.Data>) {
         list.clear()
         list.addAll(showData)
         notifyDataSetChanged()
@@ -59,7 +59,8 @@ class AdapterHome(
                 holder.binding.ivUploadImage,
                 holder.binding.progressBar1
             )
-
+        } else {
+            holder.binding.progressBar1.visibility = View.GONE
         }
         if (isProfileFeed) {
             holder.binding.ivDots.visibility = View.GONE

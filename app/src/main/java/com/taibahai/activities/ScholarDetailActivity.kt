@@ -40,10 +40,6 @@ class ScholarDetailActivity : BaseActivity() {
         }
     }
 
-    override fun initObservers() {
-        super.initObservers()
-    }
-
     override fun initAdapter() {
         super.initAdapter()
         bookList.clear()

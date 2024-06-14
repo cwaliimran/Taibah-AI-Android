@@ -22,7 +22,7 @@ class AdapterComments(var showData: MutableList<ModelComments>): RecyclerView.Ad
         notifyDataSetChanged()
     }
 
-    override fun onBindViewHolder(holder: AdapterComments.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val userData = showData[position]
 
         holder.view.model = userData
@@ -35,6 +35,5 @@ class AdapterComments(var showData: MutableList<ModelComments>): RecyclerView.Ad
         return showData.size
     }
 
-    class ViewHolder(val view: ItemCommentBinding) : RecyclerView.ViewHolder(view.root) {
-    }
+    class ViewHolder(val view: ItemCommentBinding) : RecyclerView.ViewHolder(view.root)
 }

@@ -39,7 +39,7 @@ class EditProfileActivity : BaseActivity() {
 
     override fun onCreate() {
         binding = ActivityEditProfileBinding.inflate(layoutInflater)
-        binding.appbar.tvTitle.setText("Edit Profile")
+        binding.appbar.tvTitle.text = "Edit Profile"
 
         val gso = GoogleSignInOptions.Builder(
             GoogleSignInOptions.DEFAULT_SIGN_IN
@@ -200,10 +200,6 @@ class EditProfileActivity : BaseActivity() {
             Glide.with(this).load(it?.image).placeholder(R.drawable.splashlogo)
                 .into(binding.ivProfile)
         }
-    }
-
-    override fun apiAndArgs() {
-        super.apiAndArgs()
     }
 
 

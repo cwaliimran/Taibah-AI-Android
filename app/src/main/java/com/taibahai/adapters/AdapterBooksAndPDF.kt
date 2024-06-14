@@ -16,9 +16,9 @@ class AdapterBooksAndPDF(var showData: MutableList<ModelBooks.Data>) :
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): AdapterBooksAndPDF.ViewHolder {
+    ): ViewHolder {
         binding = ItemBooksPdfBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return AdapterBooksAndPDF.ViewHolder(binding)
+        return ViewHolder(binding)
     }
 
     fun setData(list: ArrayList<ModelBooks.Data>) {
@@ -26,7 +26,7 @@ class AdapterBooksAndPDF(var showData: MutableList<ModelBooks.Data>) :
         notifyDataSetChanged()
     }
 
-    override fun onBindViewHolder(holder: AdapterBooksAndPDF.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val booksPDFData = showData[position]
         holder.binding.model = booksPDFData
         holder.binding.tvBookName.text = booksPDFData.title
@@ -47,5 +47,5 @@ class AdapterBooksAndPDF(var showData: MutableList<ModelBooks.Data>) :
         return showData.size
     }
 
-    class ViewHolder(val binding: ItemBooksPdfBinding) : RecyclerView.ViewHolder(binding.root) {}
+    class ViewHolder(val binding: ItemBooksPdfBinding) : RecyclerView.ViewHolder(binding.root)
 }

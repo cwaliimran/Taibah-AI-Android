@@ -161,5 +161,7 @@ dependencies {
     implementation "com.github.abbas7777:fetch2-android14:3.2.0-beta02"
     implementation "androidx.media:media:1.7.0"
 
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+
 
 }

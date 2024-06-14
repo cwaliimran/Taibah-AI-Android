@@ -10,9 +10,9 @@ import com.taibahai.databinding.ItemBooklistTitlesBinding
 
 class AdapterImamsOfSunnaDetail(var showData: MutableList<ModelScholars.Data.Book>): RecyclerView.Adapter<AdapterImamsOfSunnaDetail.ViewHolder>() {
     lateinit var binding: ItemBooklistTitlesBinding
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AdapterImamsOfSunnaDetail.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         binding = ItemBooklistTitlesBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return AdapterImamsOfSunnaDetail.ViewHolder(binding)
+        return ViewHolder(binding)
     }
 
     fun setData(list: MutableList<ModelScholars.Data.Book>) {
@@ -20,7 +20,7 @@ class AdapterImamsOfSunnaDetail(var showData: MutableList<ModelScholars.Data.Boo
         list.addAll(showData)
         notifyDataSetChanged()
     }
-    override fun onBindViewHolder(holder: AdapterImamsOfSunnaDetail.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val scholarList = showData[position]
         holder.binding.model = scholarList
         holder.binding.tvBookName.text=scholarList.book_title
@@ -40,5 +40,5 @@ class AdapterImamsOfSunnaDetail(var showData: MutableList<ModelScholars.Data.Boo
         return showData.size
     }
 
-    class ViewHolder(val binding: ItemBooklistTitlesBinding) : RecyclerView.ViewHolder(binding.root) {}
+    class ViewHolder(val binding: ItemBooklistTitlesBinding) : RecyclerView.ViewHolder(binding.root)
 }

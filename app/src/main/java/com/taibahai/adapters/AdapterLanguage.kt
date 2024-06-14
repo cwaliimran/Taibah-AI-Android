@@ -11,10 +11,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.taibahai.R
 import com.taibahai.models.ModelLanguages
 
-class AdapterLanguage():RecyclerView.Adapter<AdapterLanguage.ViewHolder>() {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AdapterLanguage.ViewHolder {
+class AdapterLanguage :RecyclerView.Adapter<AdapterLanguage.ViewHolder>() {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view= LayoutInflater.from(parent.context).inflate(R.layout.item_language,parent,false)
-        return AdapterLanguage.ViewHolder(view)
+        return ViewHolder(view)
     }
     var selectedPosition = RecyclerView.NO_POSITION
         set(value) {
@@ -30,7 +30,7 @@ class AdapterLanguage():RecyclerView.Adapter<AdapterLanguage.ViewHolder>() {
         showLanguage=list
     }
 
-    override fun onBindViewHolder(holder: AdapterLanguage.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.tvLanguage.text = showLanguage[position].countryLanguage
         holder.ivCountryFlag.setImageResource(showLanguage[position].image)
 

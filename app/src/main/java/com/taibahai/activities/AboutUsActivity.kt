@@ -74,7 +74,7 @@ class AboutUsActivity : BaseActivity() {
 
     override fun initData() {
         super.initData()
-        binding.appbar.tvTitle.setText("About Us")
+        binding.appbar.tvTitle.text = "About Us"
         
         
     }
