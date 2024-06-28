@@ -24,15 +24,14 @@ class SplashActivity : BaseActivity() {
             }
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
-            finishAffinity()
         } else {
 
-//            val intent = Intent(this, BottomNavigation::class.java)
-            val intent = Intent(this, SearchDatabaseActivity::class.java)
+            val intent = Intent(this, BottomNavigation::class.java)
+//            val intent = Intent(this, SearchDatabaseActivity::class.java)
             startActivity(intent)
-            finishAffinity()
 
         }
+        finishAffinity()
     }
 
     override fun clicks() {
