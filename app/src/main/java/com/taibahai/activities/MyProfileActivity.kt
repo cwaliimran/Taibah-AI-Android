@@ -110,7 +110,7 @@ class MyProfileActivity : BaseActivity() {
                     totalPages = it.data?.total_pages!!
                     binding.tvName.text = profileData.name
                     binding.tvEmail.text = profileData.email
-                    Glide.with(this).load(profileData.image).placeholder(R.drawable.splashlogo)
+                    Glide.with(this).load(profileData.image).placeholder(R.mipmap.ic_launcher)
                         .into(binding.ivProfileImage)
 
                     mData.addAll(profileData.feed)

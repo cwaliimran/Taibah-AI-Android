@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".quran.ReaderSettingsActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".quran.ReaderSettingsActivity">
 
     <include
         android:id="@+id/appbar"
         layout="@layout/appbar" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -20,9 +21,9 @@
 
 
         <TextView
-            android:text="Font Size"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="Font Size"
             android:textColor="@color/black"
             android:textSize="20sp">
 
@@ -38,6 +39,8 @@
             android:min="16"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
+            android:progressTint="@color/green"
+            android:thumbTint="@color/green"
             app:thumbTint="#FF4081" />
 
 
@@ -47,7 +50,7 @@
             android:layout_marginTop="16dp"
             android:text="example"
             android:textColor="@color/black"
-            android:textSize="16sp"/>
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/ayat_arabic_text"
@@ -61,7 +64,7 @@
             android:padding="16dp"
             android:text="@string/bismilla_text"
             android:textColor="@color/black"
-            android:textSize="20sp"/>
+            android:textSize="20sp" />
 
 
         <View
@@ -91,6 +94,8 @@
             android:min="1"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
+            android:progressTint="@color/green"
+            android:thumbTint="@color/green"
             app:thumbTint="#FF4081" />
 
 

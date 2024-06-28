@@ -27,8 +27,8 @@ class SplashActivity : BaseActivity() {
             finishAffinity()
         } else {
 
-            val intent = Intent(this, BottomNavigation::class.java)
-//            val intent = Intent(this, SearchWholeQuranActivity::class.java)
+//            val intent = Intent(this, BottomNavigation::class.java)
+            val intent = Intent(this, SearchDatabaseActivity::class.java)
             startActivity(intent)
             finishAffinity()
 

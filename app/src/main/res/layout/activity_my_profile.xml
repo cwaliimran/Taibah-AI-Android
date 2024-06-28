@@ -32,7 +32,7 @@
                 android:id="@+id/ivProfileImage"
                 android:layout_width="56dp"
                 android:layout_height="56dp"
-                android:src="@drawable/splashlogo"
+                android:src="@mipmap/ic_launcher"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

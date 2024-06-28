@@ -1,9 +1,17 @@
 package com.taibahai.bottom_navigation
 
+import android.app.Activity
+import android.content.IntentSender
 import android.os.Bundle
+import android.util.Log
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.appupdate.AppUpdateOptions
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.UpdateAvailability
 import com.network.viewmodels.SharedViewModel
 import com.taibahai.R
 import com.taibahai.databinding.ActivityBottomNavigationBinding
@@ -42,6 +50,7 @@ class BottomNavigation : AppCompatActivity() {
         }
 
 
+        checkForAppUpdate()
     }
 
     private fun replaceFragment(fragment: Fragment) {
@@ -52,5 +61,69 @@ class BottomNavigation : AppCompatActivity() {
         fragmentTransaction.commit()
 
 
+    }
+
+
+    //User has to update app on new releases
+
+    private fun checkForAppUpdate() {
+        // Creates instance of the manager.
+        val appUpdateManager = AppUpdateManagerFactory.create(this)
+
+        // Returns an intent object that you use to check for an update.
+        val appUpdateInfoTask = appUpdateManager.appUpdateInfo
+
+        // Checks that the platform will allow the specified type of update.
+        appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+                // For a flexible update, use AppUpdateType.FLEXIBLE
+                && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)
+            ) {
+                // Request the update.
+                try {
+                    appUpdateManager.startUpdateFlowForResult(
+                        appUpdateInfo, activityResultLauncher,
+                        AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build()
+                    )
+                } catch (e: IntentSender.SendIntentException) {
+                    e.printStackTrace()
+                }
+            }
+        }
+    }
+
+    private val activityResultLauncher = registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
+        when (val resultCode = result.resultCode) {
+            Activity.RESULT_OK -> {
+                Log.v("MyActivity", "Update flow completed!")
+            }
+            Activity.RESULT_CANCELED -> {
+                Log.v("MyActivity", "User cancelled Update flow!")
+            }
+            else -> {
+                Log.v("MyActivity", "Update flow failed with resultCode:$resultCode")
+            }
+        }
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+
+        val appUpdateManager = AppUpdateManagerFactory.create(this)
+        val appUpdateInfoTask = appUpdateManager.appUpdateInfo
+        appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
+                // If an in-app update is already running, resume the update.
+                try {
+                    appUpdateManager.startUpdateFlowForResult(
+                        appUpdateInfo, activityResultLauncher,
+                        AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build()
+                    )
+                } catch (e: IntentSender.SendIntentException) {
+                    e.printStackTrace()
+                }
+            }
+        }
     }
 }

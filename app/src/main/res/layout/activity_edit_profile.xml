@@ -17,7 +17,7 @@
         android:layout_width="114dp"
         android:layout_height="114dp"
         android:layout_marginTop="20dp"
-        android:src="@drawable/splashlogo"
+        android:src="@mipmap/ic_launcher"
         app:civ_border_color="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

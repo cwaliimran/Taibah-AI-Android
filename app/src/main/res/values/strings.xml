@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">Taibah AI</string>
+    <string name="admob_app_id" translatable="false">ca-app-pub-9511947431014806~5761398806</string>
+    <string name="banner_ad_unit_id" translatable="false">ca-app-pub-9511947431014806/5472705297</string>
+
+
     <string name="title_activity_onboarding">OnboardingActivity</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>

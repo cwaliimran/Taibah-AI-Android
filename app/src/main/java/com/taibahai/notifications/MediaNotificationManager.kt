@@ -78,7 +78,7 @@ class MediaNotificationManager : BroadcastReceiver() {
                 StringUtils.NOTIFICATION_CHANNEL_ID
             )
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                .setSmallIcon(R.drawable.splashlogo)
+                .setSmallIcon(R.mipmap.ic_launcher)
                 .setCategory(NotificationCompat.CATEGORY_TRANSPORT)
 //                .setStyle(
 //                    NotificationCompat.MediaStyle()

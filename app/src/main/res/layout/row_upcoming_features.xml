@@ -27,7 +27,7 @@
             android:layout_width="62dp"
             android:layout_height="62dp"
             android:loadImage="@{data.icon}"
-            android:src="@drawable/splashlogo"
+            android:src="@mipmap/ic_launcher"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

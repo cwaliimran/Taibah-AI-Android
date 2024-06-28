@@ -21,6 +21,7 @@ import com.network.base.BaseFragment
 import com.network.interfaces.OnItemClick
 import com.network.utils.AppClass
 import com.network.utils.AppConstants
+import com.network.utils.ProgressLoading.displayLoading
 import com.taibahai.R
 import com.taibahai.activities.HistoryActivity
 import com.taibahai.adapters.AdapterAISearch
@@ -159,6 +160,7 @@ class SearchFragment : BaseFragment(), OnItemClick {
 
         adapterMessagePopups = AdapterChatPopups(showMessagePopups) { message ->
             binding.messageBox.setText(message)
+            binding.rvTopMessagePopups.visibility = View.GONE
         }
 
         showTopMessagePopups()
@@ -179,6 +181,7 @@ class SearchFragment : BaseFragment(), OnItemClick {
             userQuestion = binding.messageBox.text.toString().trim().toString()
             if (userQuestion != null) {
                 if (userQuestion.isNotEmpty()) {
+                    activity?.displayLoading()
                     binding.messageBox.text.clear()
 
                     // Generate or use the existing conversationId for this conversation
@@ -206,7 +209,7 @@ class SearchFragment : BaseFragment(), OnItemClick {
 
         }
 
-        binding.ivFlashMsg.setOnClickListener {
+        binding.clFlashMsg.setOnClickListener {
             if (binding.rvTopMessagePopups.visibility == View.VISIBLE) {
                 binding.rvTopMessagePopups.visibility = View.GONE
             } else {
@@ -313,6 +316,7 @@ class SearchFragment : BaseFragment(), OnItemClick {
                 binding.tvRemainingTokens.text = "Remaining Tokens : $aiTokens"
                 botResponse = response
                 displayBotResponse()
+                activity?.displayLoading(false)
 
             }
         }
@@ -436,6 +440,13 @@ class SearchFragment : BaseFragment(), OnItemClick {
             val params = Bundle()
             params.putString(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "UniqueUtteranceId")
 
+            // Select a male voice if available
+            val availableVoices = tts.voices
+            val maleVoice = availableVoices.find { it.name.contains("male", true) }
+            if (maleVoice != null) {
+                tts.voice = maleVoice
+            }
+
             tts.setOnUtteranceCompletedListener { utteranceId ->
                 if (utteranceId == "UniqueUtteranceId") {
                     isAudioPlaying = false
@@ -449,6 +460,7 @@ class SearchFragment : BaseFragment(), OnItemClick {
             tts.speak(text, TextToSpeech.QUEUE_FLUSH, params, "UniqueUtteranceId")
         }
     }
+
 
     private fun updateVisibility(position: Int) {
         val itemView = binding.rvSearchAI.findViewHolderForAdapterPosition(position)?.itemView

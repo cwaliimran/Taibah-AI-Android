@@ -5,6 +5,7 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.network.interfaces.OnItemClick
@@ -27,9 +28,12 @@ class AdapterMore(private val context: Context, var showData: MutableList<ModelM
     RecyclerView.Adapter<AdapterMore.ViewHolder>() {
     lateinit var binding: ItemMoreBinding
 
-  var  isSilverPurchased = AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_SILVER_PURCHASED)
+    var isSilverPurchased =
+        AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_SILVER_PURCHASED)
     var isGoldPurchased = AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_GOLD_PURCHASED)
-    var isDiamondPurchased = AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_DIAMOND_PURCHASED)
+    var isDiamondPurchased =
+        AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_DIAMOND_PURCHASED)
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         binding = ItemMoreBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
@@ -67,10 +71,10 @@ class AdapterMore(private val context: Context, var showData: MutableList<ModelM
 
         }
 
-        if (position==1 && isSilverPurchased){
+        if (position == 1 && isSilverPurchased) {
             holder.binding.btnUpgrade.visibility = View.INVISIBLE
         }
-        if (position==2 && isGoldPurchased){
+        if (position == 2 && isGoldPurchased) {
             holder.binding.btnUpgrade.visibility = View.INVISIBLE
         }
 
@@ -99,28 +103,51 @@ class AdapterMore(private val context: Context, var showData: MutableList<ModelM
 
 
             "zakat_calculator" -> {
-                val intent = Intent(context, ZakatCalculatorActivity::class.java)
-                context.startActivity(intent)
+                if (isGoldPurchased || isDiamondPurchased) {
+                    val intent = Intent(context, ZakatCalculatorActivity::class.java)
+                    context.startActivity(intent)
+                } else {
+                    Toast.makeText(context, "Please upgrade to Gold Package", Toast.LENGTH_SHORT)
+                        .show()
+                }
             }
 
             "imams" -> {
-                val intent = Intent(context, ImamsOfSunnaActivity::class.java)
-                context.startActivity(intent)
+                if (isGoldPurchased || isDiamondPurchased) {
+                    val intent = Intent(context, ImamsOfSunnaActivity::class.java)
+                    context.startActivity(intent)
+                } else {
+                    Toast.makeText(context, "Please upgrade to Gold Package", Toast.LENGTH_SHORT)
+                        .show()
+                }
             }
 
             "books_pdfs" -> {
-                val intent = Intent(context, BooksAndPDFActivity::class.java)
-                context.startActivity(intent)
+
+                if (isDiamondPurchased) {
+                    val intent = Intent(context, BooksAndPDFActivity::class.java)
+                    context.startActivity(intent)
+                }else
+                    Toast.makeText(context, "Please upgrade to Diamond Package", Toast.LENGTH_SHORT)
+                        .show()
             }
 
             "inheritance_law" -> {
-                val intent = Intent(context, InheritanceLawActivity::class.java)
-                context.startActivity(intent)
+                if (isDiamondPurchased) {
+                    val intent = Intent(context, InheritanceLawActivity::class.java)
+                    context.startActivity(intent)
+                }else
+                    Toast.makeText(context, "Please upgrade to Diamond Package", Toast.LENGTH_SHORT)
+                        .show()
             }
 
             "searchdb" -> {
-                val intent = Intent(context, SearchDatabaseActivity::class.java)
-                context.startActivity(intent)
+                if (isDiamondPurchased) {
+                    val intent = Intent(context, SearchDatabaseActivity::class.java)
+                    context.startActivity(intent)
+                }else
+                    Toast.makeText(context, "Please upgrade to Diamond Package", Toast.LENGTH_SHORT)
+                        .show()
             }
 
 

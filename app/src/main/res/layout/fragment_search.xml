@@ -79,7 +79,7 @@
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/poppins"
-                android:text="AweGPT"
+                android:text="Quick Actions"
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 android:textStyle="bold"
@@ -126,21 +126,20 @@
         <RelativeLayout
             android:id="@+id/clAskAnything"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_alignParentBottom="true"
             android:layout_marginHorizontal="20dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="10dp"
             android:background="@drawable/edittext_bg">
 
 
             <EditText
                 android:id="@+id/messageBox"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_centerVertical="true"
-                android:layout_marginVertical="5dp"
                 android:layout_toStartOf="@id/voiceBtn"
                 android:background="@color/transparent"
                 android:fontFamily="@font/poppins"
@@ -148,7 +147,7 @@
                 android:includeFontPadding="false"
                 android:textColor="#7D848D"
                 android:textColorHint="#7D848D"
-                android:textSize="14dp" />
+                android:textSize="14sp" />
 
             <ImageView
                 android:id="@+id/voiceBtn"

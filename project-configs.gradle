@@ -1,9 +1,9 @@
 ext {
   applicationId = "com.taibahai"
-  compileSdkVersion = 33
+  compileSdkVersion = 34
   minSdkVersion = 26
   targetSdkVersion = compileSdkVersion
-  versionCode = 5
-  versionName = "1.4"
+  versionCode = 7
+  versionName = "1.6"
   testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 }

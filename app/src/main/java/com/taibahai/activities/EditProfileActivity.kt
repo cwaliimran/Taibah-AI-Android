@@ -197,7 +197,7 @@ class EditProfileActivity : BaseActivity() {
         currentUser.let {
             binding.etName.setText(it?.name)
             binding.tvEmail.text = it?.email
-            Glide.with(this).load(it?.image).placeholder(R.drawable.splashlogo)
+            Glide.with(this).load(it?.image).placeholder(R.mipmap.ic_launcher)
                 .into(binding.ivProfile)
         }
     }
