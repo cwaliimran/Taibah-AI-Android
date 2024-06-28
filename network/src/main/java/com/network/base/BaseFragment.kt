@@ -49,6 +49,7 @@ abstract class BaseFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewCreated()
         initAdapter()
+        initData()
         initObservers()
         clicks()
         apiAndArgs()
@@ -56,6 +57,7 @@ abstract class BaseFragment : Fragment() {
     }
 
     abstract fun viewCreated()
+    open fun initData() {}
     abstract fun clicks()
     open fun initAdapter() {}
     open fun initObservers() {}

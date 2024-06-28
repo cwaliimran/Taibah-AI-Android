@@ -6,9 +6,11 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
@@ -32,7 +34,7 @@ class TopHadithFragment : BaseFragment() {
     lateinit var binding: FragmentTopHadithBinding
     lateinit var adapter: AdapterChapterHadiths
     val showList = ArrayList<ModelHadithBooks.Data>()
-    val showHadithData =ArrayList<ModelChapterHadith3.Data>()
+    val showHadithData = ArrayList<ModelChapterHadith3.Data>()
     private val viewModel: MainViewModelTaibahIslamic by viewModels()
     val viewModelHadith: MainViewModelAI by viewModels()
     val handler = Handler(Looper.getMainLooper())
@@ -57,50 +59,75 @@ class TopHadithFragment : BaseFragment() {
     }
 
     override fun clicks() {
-        binding.etSearch.addTextChangedListener(object : TextWatcher {
 
-            override fun beforeTextChanged(
-                charSequence: CharSequence?,
-                start: Int,
-                before: Int,
-                count: Int
-            ) {
-            }
 
-            override fun onTextChanged(
-                charSequence: CharSequence?,
-                start: Int,
-                before: Int,
-                count: Int
-            ) {
-            }
-
-            override fun afterTextChanged(editable: Editable?) {
-                // Cancel the previous search runnable if it exists
-                searchRunnable?.let { handler.removeCallbacks(it) }
-
-                // Define a new search runnable
-                searchRunnable = Runnable {
-                    if (!editable.isNullOrEmpty()) {
-                        val searchQuery = editable.toString().lowercase()
-                        when (selectedBook.id) {
-                            "0" -> {
-                                //search whole db
-                                viewModelHadith.hadithSearchAllBooks(searchQuery)
-                            }
-                            else -> {
-                                //search against book
-                                viewModelHadith.hadithSearchWithBookId(searchQuery, selectedBook.id)
-                            }
+        binding.etSearch.setOnEditorActionListener { _, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE || (event != null && event.action == KeyEvent.ACTION_DOWN && event.keyCode == KeyEvent.KEYCODE_ENTER)) {
+                if (binding.etSearch.text.toString().trim().isNotEmpty()) {
+                    val searchQuery = binding.etSearch.text.toString().trim().lowercase()
+                    when (selectedBook.id) {
+                        "0" -> {
+                            //search whole db
+                            viewModelHadith.hadithSearchAllBooks(searchQuery)
                         }
 
+                        else -> {
+                            //search against book
+                            viewModelHadith.hadithSearchWithBookId(searchQuery, selectedBook.id)
+                        }
                     }
-                }
 
-                // Post the search runnable with a delay of 1 seconds
-                handler.postDelayed(searchRunnable!!, 500)
+                }
+                return@setOnEditorActionListener true
             }
-        })
+            false
+        }
+
+//        binding.etSearch.addTextChangedListener(object : TextWatcher {
+//
+//            override fun beforeTextChanged(
+//                charSequence: CharSequence?,
+//                start: Int,
+//                before: Int,
+//                count: Int
+//            ) {
+//            }
+//
+//            override fun onTextChanged(
+//                charSequence: CharSequence?,
+//                start: Int,
+//                before: Int,
+//                count: Int
+//            ) {
+//            }
+//
+//            override fun afterTextChanged(editable: Editable?) {
+//                // Cancel the previous search runnable if it exists
+//                searchRunnable?.let { handler.removeCallbacks(it) }
+//
+//                // Define a new search runnable
+//                searchRunnable = Runnable {
+//                    if (!editable.isNullOrEmpty()) {
+//                        val searchQuery = editable.toString().lowercase()
+//                        when (selectedBook.id) {
+//                            "0" -> {
+//                                //search whole db
+//                                viewModelHadith.hadithSearchAllBooks(searchQuery)
+//                            }
+//
+//                            else -> {
+//                                //search against book
+//                                viewModelHadith.hadithSearchWithBookId(searchQuery, selectedBook.id)
+//                            }
+//                        }
+//
+//                    }
+//                }
+//
+//                // Post the search runnable with a delay of 1 seconds
+//                handler.postDelayed(searchRunnable!!, 1500)
+//            }
+//        })
     }
 
     override fun initAdapter() {
@@ -109,9 +136,9 @@ class TopHadithFragment : BaseFragment() {
             override fun onClick(position: Int, type: String?, data: Any?, view: View?) {
 
                 val intent = Intent(context, HadithDetailsActivity4::class.java)
-                val currentPosition=showHadithData[position].id
-                intent.putExtra("ayat_id",currentPosition)
-                intent.putExtra("chapter_id",showHadithData[position].chapter_id )
+                val currentPosition = showHadithData[position].id
+                intent.putExtra("ayat_id", currentPosition)
+                intent.putExtra("chapter_id", showHadithData[position].chapter_id)
                 intent.putExtra("hadith_number", showHadithData[position].hadith_no)
                 intent.putExtra("book_name", selectedBook.title)
                 intent.putExtra("type", showHadithData[position].type)
@@ -199,7 +226,8 @@ class TopHadithFragment : BaseFragment() {
 
     }
 
-    private fun initData() {
+    override fun initData() {
+        super.initData()
         hadithBooks.clear()
         hadithBooks.add(ModelHadithBooks.Data("0", "All books"))
         hadithBooks.addAll(showList)
