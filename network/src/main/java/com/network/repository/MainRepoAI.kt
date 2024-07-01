@@ -252,11 +252,11 @@ class MainRepoAI : BaseApiResponse() {
         SingleLiveEvent()
     }
 
-    suspend fun hadithSearchWithBookId(search: String, book_number: String) {
+    suspend fun hadithSearchWithBookId(pageno: Int,search: String, book_number: String) {
         dbSearchHadithWithBookId.value = null
         dbSearchHadithWithBookId.postValue(NetworkResult.Loading())
         dbSearchHadithWithBookId.postValue(safeApiCall {
-            apiService.hadithSearchWithBookId(search, book_number)
+            apiService.hadithSearchWithBookId(pageno,search, book_number)
         })
     }
 
@@ -264,11 +264,11 @@ class MainRepoAI : BaseApiResponse() {
         SingleLiveEvent()
     }
 
-    suspend fun hadithSearchAllBooks(search: String) {
+    suspend fun hadithSearchAllBooks(pageno: Int,search: String) {
         dbSearchHadithAllBooks.value = null
         dbSearchHadithAllBooks.postValue(NetworkResult.Loading())
         dbSearchHadithAllBooks.postValue(safeApiCall {
-            apiService.hadithSearchAllBooks(search)
+            apiService.hadithSearchAllBooks(pageno,search)
         })
     }
 

@@ -233,17 +233,27 @@ class UpgradeActivity : BaseActivity(), PurchaseInterface {
             }
             updateSubscriptionStatus("purchase")
         } else if (type == "restore") {
+
+            var aiTokens = AppClass.sharedPref.getInt(AppConstants.AI_TOKENS)
             val products = data as MutableList<String>
             if (products.isNotEmpty()) {
                 products.forEach {
                     when (it) {
                         EnumSubscriptions.TAIBAH_AI_SILVER.productId -> {
+
+                            aiTokens += 300
+                            AppClass.sharedPref.storeInt(AppConstants.AI_TOKENS, aiTokens)
+
                             AppClass.sharedPref.storeBoolean(
                                 AppConstants.IS_TAIBAH_AI_SILVER_PURCHASED, true
                             )
                         }
 
                         EnumSubscriptions.TAIBAH_AI_GOLD.productId -> {
+                            AppClass.sharedPref.storeBoolean(AppConstants.IS_ADS_FREE, true)
+                            aiTokens += 700
+                            AppClass.sharedPref.storeInt(AppConstants.AI_TOKENS, aiTokens)
+
                             AppClass.sharedPref.storeBoolean(
                                 AppConstants.IS_TAIBAH_AI_GOLD_PURCHASED,
                                 true
@@ -252,6 +262,9 @@ class UpgradeActivity : BaseActivity(), PurchaseInterface {
                         }
 
                         EnumSubscriptions.TAIBAH_AI_DIAMOND.productId -> {
+                            AppClass.sharedPref.storeBoolean(AppConstants.IS_ADS_FREE, true)
+                            aiTokens += 100000
+                            AppClass.sharedPref.storeInt(AppConstants.AI_TOKENS, aiTokens)
                             AppClass.sharedPref.storeBoolean(
                                 AppConstants.IS_TAIBAH_AI_DIAMOND_PURCHASED, true
                             )

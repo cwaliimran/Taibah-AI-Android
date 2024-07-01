@@ -21,19 +21,11 @@ class AdapterChapterHadiths(
         return ViewHolder(binding, listener)
     }
 
-    fun setData(list: ArrayList<ModelChapterHadith3.Data>) {
-        showData = list
-        notifyDataSetChanged()
-    }
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val hadithChapter = showData[position]
         holder.binding.model = hadithChapter
-        holder.binding.tvHadithNo.text = hadithChapter.hadith_no
         holder.binding.tvBookName.text = title
         holder.binding.tvHadithType.text = type
-        holder.binding.ayatArabicText.text = hadithChapter.arabic
-        holder.binding.ayatEnglishTranslitration.text = hadithChapter.english_translation
 
     }
 
@@ -41,10 +33,8 @@ class AdapterChapterHadiths(
         return showData.size
     }
 
-    fun updateData(showHadithData: ArrayList<ModelChapterHadith3.Data>, bookTitle: String) {
-        showData = showHadithData
+    fun updateData(bookTitle: String) {
         title = bookTitle
-        notifyDataSetChanged()
     }
 
     class ViewHolder(val binding: ItemChatpersHadithBinding, listener: OnItemClick) :

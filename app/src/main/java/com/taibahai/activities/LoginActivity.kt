@@ -23,6 +23,7 @@ import com.facebook.FacebookCallback
 import com.facebook.FacebookException
 import com.facebook.FacebookSdk
 import com.facebook.appevents.AppEventsLogger
+import com.facebook.internal.Utility.logd
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -76,6 +77,7 @@ class LoginActivity : BaseActivity() {
     var socialType = ""
     private val callbackManager = CallbackManager.Factory.create()
     var deviceID = "123"
+    private val TAG = "LoginActivity"
 
 
     override fun onCreate() {
@@ -122,6 +124,7 @@ class LoginActivity : BaseActivity() {
                 deviceID,
                 "android",
                 "guest@taibahai.com",
+//                "Ooumard@gmail.com",
                 NetworkUtils.timeZone(),
                 "Guest",
                 "noimg.png"
@@ -175,6 +178,7 @@ class LoginActivity : BaseActivity() {
                 }
 
                 is NetworkResult.Error -> {
+                    Log.d(TAG, "initObservers: " + it.toString())
                     showToast(it.message.toString())
                 }
             }

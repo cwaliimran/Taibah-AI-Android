@@ -205,20 +205,20 @@ class MainViewModelAI(application: Application) : AndroidViewModel(application) 
     val dbSearchHadithWithBookIdLiveData: MutableLiveData<NetworkResult<ModelChapterHadith3>>
         get() = repository.dbSearchHadithWithBookId
 
-    fun hadithSearchWithBookId(search:String, book_number: String )
+    fun hadithSearchWithBookId(pageno: Int,search:String, book_number: String )
     {
         viewModelScope.launch {
-            repository.hadithSearchWithBookId(search,book_number)
+            repository.hadithSearchWithBookId(pageno,search,book_number)
         }
     }
 
     val dbSearchHadithAllBooksLiveData: MutableLiveData<NetworkResult<ModelChapterHadith3>>
         get() = repository.dbSearchHadithAllBooks
 
-    fun hadithSearchAllBooks(search:String )
+    fun hadithSearchAllBooks(pageno: Int,search:String )
     {
         viewModelScope.launch {
-            repository.hadithSearchAllBooks(search)
+            repository.hadithSearchAllBooks(pageno,search)
         }
     }
 

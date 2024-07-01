@@ -1,38 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
-<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".search_database_tablayout.TopHadithFragment">
 
-    <Spinner
-        android:id="@+id/spHadithBooks"
-        android:layout_width="0dp"
-        android:layout_height="55dp"
-        android:layout_marginHorizontal="20dp"
-        android:background="@drawable/background_editext"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-    <ImageView
-        android:id="@+id/ivVerseNumbers"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginEnd="10dp"
-        android:src="@drawable/ccp_ic_arrow_drop_down"
-        app:layout_constraintBottom_toBottomOf="@+id/spHadithBooks"
-        app:layout_constraintEnd_toEndOf="@+id/spHadithBooks"
-        app:layout_constraintTop_toTopOf="@+id/spHadithBooks"
-        app:tint="@color/primary_green" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Spinner
+            android:id="@+id/spHadithBooks"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/background_editext"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/ivVerseNumbers"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/ccp_ic_arrow_drop_down"
+            app:layout_constraintBottom_toBottomOf="@+id/spHadithBooks"
+            app:layout_constraintEnd_toEndOf="@+id/spHadithBooks"
+            app:layout_constraintTop_toTopOf="@+id/spHadithBooks"
+            app:tint="@color/primary_green" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <EditText
         android:id="@+id/etSearch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/search_bg"
         android:drawableStart="@drawable/searchh_icon"
         android:drawablePadding="10dp"
@@ -43,25 +53,16 @@
         android:singleLine="true"
         android:textColor="#8C8994"
         android:textCursorDrawable="@drawable/custom_cursor"
-        android:textSize="14sp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spHadithBooks" />
+        android:textSize="14sp" />
 
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvSearchHadith"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etSearch"
         tools:itemCount="1"
         tools:listitem="@layout/item_chatpers_hadith" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
-</layout>
+</LinearLayout>

@@ -140,6 +140,8 @@ class MoreFragment : BaseFragment() {
     override fun onResume() {
         super.onResume()
         binding.adView.resume()
+        adapter.notifyDataSetChanged()
+
     }
 
 

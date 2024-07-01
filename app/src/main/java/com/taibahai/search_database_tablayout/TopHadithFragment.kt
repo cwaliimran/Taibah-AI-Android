@@ -4,16 +4,15 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.network.base.BaseFragment
 import com.network.interfaces.OnItemClick
 import com.network.models.ModelChapterHadith3
@@ -22,7 +21,6 @@ import com.network.network.NetworkResult
 import com.network.utils.ProgressLoading.displayLoading
 import com.network.viewmodels.MainViewModelAI
 import com.network.viewmodels.MainViewModelTaibahIslamic
-import com.taibahai.R
 import com.taibahai.adapters.AdapterChapterHadiths
 import com.taibahai.databinding.FragmentTopHadithBinding
 import com.taibahai.hadiths.HadithDetailsActivity4
@@ -31,9 +29,10 @@ import com.taibahai.utils.showToast
 
 
 class TopHadithFragment : BaseFragment() {
-    lateinit var binding: FragmentTopHadithBinding
+    private lateinit var binding: FragmentTopHadithBinding
+
     lateinit var adapter: AdapterChapterHadiths
-    val showList = ArrayList<ModelHadithBooks.Data>()
+    val booksList = ArrayList<ModelHadithBooks.Data>()
     val showHadithData = ArrayList<ModelChapterHadith3.Data>()
     private val viewModel: MainViewModelTaibahIslamic by viewModels()
     val viewModelHadith: MainViewModelAI by viewModels()
@@ -41,16 +40,16 @@ class TopHadithFragment : BaseFragment() {
     var searchRunnable: Runnable? = null
     val hadithBooks = mutableListOf<ModelHadithBooks.Data>()
     var selectedBook = ModelHadithBooks.Data("0", "All books")
+    var searchQuery = ""
+    private var currentPageNo = 1
+    private var totalPages: Int = 1
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        // Inflate the layout for this fragment
-        binding = DataBindingUtil.inflate<FragmentTopHadithBinding>(
-            inflater, R.layout.fragment_top_hadith, container, false
-        )
-
+    ): View
+    {
+        binding = FragmentTopHadithBinding.inflate(layoutInflater)
         return binding.root
     }
 
@@ -59,23 +58,27 @@ class TopHadithFragment : BaseFragment() {
     }
 
     override fun clicks() {
-
-
+        binding.rvSearchHadith.addOnScrollListener(object :
+            RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val linearLayoutManager = (recyclerView.layoutManager as LinearLayoutManager?)!!
+                if (dy > 0) {
+                    if (linearLayoutManager.findLastCompletelyVisibleItemPosition() == showHadithData.size - 1) {
+                        if (currentPageNo < totalPages) {
+                            currentPageNo += 1
+                            searchFromDb()
+                        }
+                    }
+                }
+            }
+        })
         binding.etSearch.setOnEditorActionListener { _, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_DONE || (event != null && event.action == KeyEvent.ACTION_DOWN && event.keyCode == KeyEvent.KEYCODE_ENTER)) {
                 if (binding.etSearch.text.toString().trim().isNotEmpty()) {
-                    val searchQuery = binding.etSearch.text.toString().trim().lowercase()
-                    when (selectedBook.id) {
-                        "0" -> {
-                            //search whole db
-                            viewModelHadith.hadithSearchAllBooks(searchQuery)
-                        }
-
-                        else -> {
-                            //search against book
-                            viewModelHadith.hadithSearchWithBookId(searchQuery, selectedBook.id)
-                        }
-                    }
+                    showHadithData.clear()
+                    currentPageNo = 1
+                    searchFromDb()
 
                 }
                 return@setOnEditorActionListener true
@@ -130,6 +133,21 @@ class TopHadithFragment : BaseFragment() {
 //        })
     }
 
+    private fun searchFromDb() {
+        searchQuery = binding.etSearch.text.toString().trim().lowercase()
+        when (selectedBook.id) {
+            "0" -> {
+                //search whole db
+                viewModelHadith.hadithSearchAllBooks(currentPageNo, searchQuery)
+            }
+
+            else -> {
+                //search against book
+                viewModelHadith.hadithSearchWithBookId(currentPageNo, searchQuery, selectedBook.id)
+            }
+        }
+    }
+
     override fun initAdapter() {
         super.initAdapter()
         adapter = AdapterChapterHadiths(showHadithData, object : OnItemClick {
@@ -165,7 +183,7 @@ class TopHadithFragment : BaseFragment() {
                 }
 
                 is NetworkResult.Success -> {
-                    it.data?.data?.let { it1 -> showList.addAll(it1) }
+                    it.data?.data?.let { it1 -> booksList.addAll(it1) }
                     initData()
                     adapter.notifyDataSetChanged()
 
@@ -187,9 +205,17 @@ class TopHadithFragment : BaseFragment() {
                 }
 
                 is NetworkResult.Success -> {
-                    showHadithData.clear()
+
+                    totalPages = it.data?.total_pages!!
+                    val oldSize = showHadithData.size
                     it.data?.let { it1 -> showHadithData.addAll(it1.data) }
-                    adapter.updateData(showHadithData, selectedBook.title)
+                    if (oldSize == 0) {
+                        initAdapter()
+                    } else {
+                        adapter.notifyItemRangeInserted(oldSize, booksList.size)
+                    }
+
+
                 }
 
                 is NetworkResult.Error -> {
@@ -209,13 +235,18 @@ class TopHadithFragment : BaseFragment() {
                 }
 
                 is NetworkResult.Success -> {
-                    showHadithData.clear()
-//                    val gson = Gson()
-//                    val responseData =
-//                        gson.fromJson(gson.toJson(it.data), ModelChapterHadith3.Data::class.java)
 
+                    adapter.updateData(selectedBook.title)
+                    totalPages = it.data?.total_pages!!
+                    val oldSize = showHadithData.size
                     it.data?.let { it1 -> showHadithData.addAll(it1.data) }
-                    adapter.updateData(showHadithData, selectedBook.title)
+                    if (oldSize == 0) {
+                        initAdapter()
+                    } else {
+                        adapter.notifyItemRangeInserted(oldSize, booksList.size)
+                    }
+
+
                 }
 
                 is NetworkResult.Error -> {
@@ -230,7 +261,7 @@ class TopHadithFragment : BaseFragment() {
         super.initData()
         hadithBooks.clear()
         hadithBooks.add(ModelHadithBooks.Data("0", "All books"))
-        hadithBooks.addAll(showList)
+        hadithBooks.addAll(booksList)
         val adapter: ArrayAdapter<ModelHadithBooks.Data> =
             ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, hadithBooks)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
