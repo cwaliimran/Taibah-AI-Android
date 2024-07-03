@@ -241,7 +241,7 @@ class UpgradeActivity : BaseActivity(), PurchaseInterface {
                     when (it) {
                         EnumSubscriptions.TAIBAH_AI_SILVER.productId -> {
 
-                            aiTokens += 300
+                            aiTokens = 300
                             AppClass.sharedPref.storeInt(AppConstants.AI_TOKENS, aiTokens)
 
                             AppClass.sharedPref.storeBoolean(
@@ -251,7 +251,7 @@ class UpgradeActivity : BaseActivity(), PurchaseInterface {
 
                         EnumSubscriptions.TAIBAH_AI_GOLD.productId -> {
                             AppClass.sharedPref.storeBoolean(AppConstants.IS_ADS_FREE, true)
-                            aiTokens += 700
+                            aiTokens = 700
                             AppClass.sharedPref.storeInt(AppConstants.AI_TOKENS, aiTokens)
 
                             AppClass.sharedPref.storeBoolean(
@@ -263,7 +263,7 @@ class UpgradeActivity : BaseActivity(), PurchaseInterface {
 
                         EnumSubscriptions.TAIBAH_AI_DIAMOND.productId -> {
                             AppClass.sharedPref.storeBoolean(AppConstants.IS_ADS_FREE, true)
-                            aiTokens += 100000
+                            aiTokens = 100000
                             AppClass.sharedPref.storeInt(AppConstants.AI_TOKENS, aiTokens)
                             AppClass.sharedPref.storeBoolean(
                                 AppConstants.IS_TAIBAH_AI_DIAMOND_PURCHASED, true

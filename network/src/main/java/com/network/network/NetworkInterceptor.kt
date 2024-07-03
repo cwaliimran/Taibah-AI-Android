@@ -19,7 +19,8 @@ class NetworkInterceptor(private val context: Context) : Interceptor {
         if (!isInternetAvailable()) {
             throw NetworkException(context.getString(R.string.message_no_internet_connection))
         }
-        val token = AppClass.getAccessToken().toString()
+//        val token = AppClass.getAccessToken().toString()
+        val token = "1Dd72Y6bojvVjaHEldeEH7bPtOnjLRLsqPyURASRyh6QvvgQi5nt3bzeA8YQ8SenqmEbbQNQaQIAPWFBBdU5jFzjICC7TL8hVJS23y8ovjVzzT2I76TbWyiXEnY2iKlC0mLvT3Y7bKb6DhPHexoFz1HkDA5Z5OGdTtTIu2JxV858aEvv3dKlIwLXHkKWU4RYOqdgw0XB"
         var request: Request = chain.request()
         request = if (token == "null") {
             //Log.d(TAG, "intercept: nulltoken")

@@ -5,7 +5,7 @@ import java.io.Serializable
 data class ModelBooks(
     var status: Int = 0,
     var message: String = "",
-    var `data`: List<Data> = listOf()
+    var data: MainData
 ) : Serializable {
     data class Data(
         var id: String = "",
@@ -19,4 +19,8 @@ data class ModelBooks(
             var file_type: String = ""
         ) : Serializable
     }
+
+   data class MainData (
+        var books: List<Data> = mutableListOf()
+   )
 }

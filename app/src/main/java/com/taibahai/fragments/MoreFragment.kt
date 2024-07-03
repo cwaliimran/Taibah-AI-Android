@@ -54,41 +54,26 @@ class MoreFragment : BaseFragment() {
         adapter = AdapterMore(requireContext(), showList)
         val moreFree = ArrayList<ModelMoreLevels>()
 
-        moreFree.add(
-            ModelMoreLevels(
-                "searchFree", R.drawable.search_icon, "30 AI Tokens (monthly)"
-            )
-        )
         moreFree.add(ModelMoreLevels("quran", R.drawable.quran_icon, "Quran"))
         moreFree.add(ModelMoreLevels("hadith", R.drawable.hadih_icon, "Hadith"))
         moreFree.add(ModelMoreLevels("", R.drawable.ads_icon, "Ads"))
-        showList.add(ModelMore("Free", "", moreFree))
+        showList.add(ModelMore("Free", "30 AI Tokens (monthly)", moreFree))
 
         val moreLevel1 = ArrayList<ModelMoreLevels>()
 
-        moreLevel1.add(
-            ModelMoreLevels(
-                "searchLevel1", R.drawable.search_icon, "300 AI Tokens (monthly)"
-            )
-        )
         moreLevel1.add(ModelMoreLevels("", R.drawable.ads_icon, "Ads"))
-        showList.add(ModelMore("Level 1", "Silver Package", moreLevel1))
+        showList.add(ModelMore("Level 1", "Silver Package\n300 AI Tokens (monthly)", moreLevel1))
 
 
         val moreLevel2 = ArrayList<ModelMoreLevels>()
 
         moreLevel2.add(
             ModelMoreLevels(
-                "searchLevel2", R.drawable.search_icon, "700 AI Tokens (monthly) "
-            )
-        )
-        moreLevel2.add(
-            ModelMoreLevels(
                 "zakat_calculator", R.drawable.zakat_icon, "Zakat Calculator"
             )
         )
         moreLevel2.add(ModelMoreLevels("imams", R.drawable.imams_logo, "Four Imams"))
-        showList.add(ModelMore("Level 2", "Gold Package", moreLevel2))
+        showList.add(ModelMore("Level 2", "Gold Package\n700 AI Tokens (monthly)", moreLevel2))
 
         val moreLevel3 = ArrayList<ModelMoreLevels>()
 
@@ -102,13 +87,9 @@ class MoreFragment : BaseFragment() {
                 "searchdb", R.drawable.sd_icon, "Search Database Hadith, Surah"
             )
         )
-        moreLevel3.add(
-            ModelMoreLevels(
-                "searchLevel3", R.drawable.search_icon, "Unlimited AI Tokens"
-            )
-        )
+
         moreLevel3.add(ModelMoreLevels("books_pdfs", R.drawable.bookspdf_icon, "Islamic Literature"))
-        showList.add(ModelMore("Level 3", "Diamond Package", moreLevel3))
+        showList.add(ModelMore("Level 3", "Diamond Package\nUnlimited AI Tokens (monthly)", moreLevel3))
 
 
 

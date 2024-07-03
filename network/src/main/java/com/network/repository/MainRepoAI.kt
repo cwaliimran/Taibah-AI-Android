@@ -2,6 +2,7 @@ package com.network.repository
 
 import android.util.Log
 import com.network.models.ModelBooks
+import com.network.models.ModelBooksCategories
 import com.network.models.ModelChapterHadith3
 import com.network.models.ModelDailyAlert
 import com.network.models.ModelGetFeeds
@@ -185,11 +186,23 @@ class MainRepoAI : BaseApiResponse() {
         SingleLiveEvent()
     }
 
-    suspend fun books() {
+    suspend fun books(categoryId: String) {
         booksMutableLiveData.value = null
         booksMutableLiveData.postValue(NetworkResult.Loading())
         booksMutableLiveData.postValue(safeApiCall {
-            apiService.books()
+            apiService.books(categoryId)
+        })
+    }
+
+    val booksCategoriesMutableLiveData: SingleLiveEvent<NetworkResult<ModelBooksCategories>> by lazy {
+        SingleLiveEvent()
+    }
+
+    suspend fun booksCategories() {
+        booksCategoriesMutableLiveData.value = null
+        booksCategoriesMutableLiveData.postValue(NetworkResult.Loading())
+        booksCategoriesMutableLiveData.postValue(safeApiCall {
+            apiService.booksCategories()
         })
     }
 

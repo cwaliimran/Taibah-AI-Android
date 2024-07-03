@@ -1,21 +1,22 @@
 package com.taibahai.activities
 
+import android.content.Intent
 import android.view.View
 import androidx.activity.viewModels
 import com.network.base.BaseActivity
-import com.network.models.ModelBooks
+import com.network.interfaces.OnItemClick
+import com.network.models.ModelBooksCategories
 import com.network.network.NetworkResult
 import com.network.utils.ProgressLoading.displayLoading
 import com.network.viewmodels.MainViewModelAI
-import com.taibahai.R
-import com.taibahai.adapters.AdapterBooksAndPDF
+import com.taibahai.adapters.AdapterBooksCategories
 import com.taibahai.databinding.ActivityBooksAndPdfactivityBinding
 import com.taibahai.utils.showToast
 
-class BooksAndPDFActivity : BaseActivity() {
+class BooksCategoriesActivity : BaseActivity() {
     lateinit var binding: ActivityBooksAndPdfactivityBinding
-    val showList = ArrayList<ModelBooks.Data>()
-    lateinit var adapter: AdapterBooksAndPDF
+    val showList = ArrayList<ModelBooksCategories.Data>()
+    lateinit var adapter: AdapterBooksCategories
     val viewModel: MainViewModelAI by viewModels()
 
 
@@ -32,7 +33,7 @@ class BooksAndPDFActivity : BaseActivity() {
 
     override fun initObservers() {
         super.initObservers()
-        viewModel.booksLiveData.observe(this) {
+        viewModel.booksCategoriesLiveData.observe(this) {
             if (it == null) {
                 return@observe
             }
@@ -43,7 +44,9 @@ class BooksAndPDFActivity : BaseActivity() {
                 }
 
                 is NetworkResult.Success -> {
-                    showList.addAll((it.data?.data?.books ?: listOf()))
+                    showList.clear()
+                    showList.add(ModelBooksCategories.Data("1", "All Books", "1", "", "", ""))
+                    showList.addAll((it.data?.data ?: listOf()))
                     adapter.notifyDataSetChanged()
                 }
 
@@ -56,7 +59,16 @@ class BooksAndPDFActivity : BaseActivity() {
 
     override fun initAdapter() {
         super.initAdapter()
-        adapter = AdapterBooksAndPDF(showList)
+        adapter = AdapterBooksCategories(showList, object : OnItemClick {
+            override fun onClick(position: Int, type: String?, data: Any?, view: View?) {
+                super.onClick(position, type, data, view)
+
+                val intent = Intent(context, BooksAndPDFActivity::class.java)
+                intent.putExtra("categoryId", showList[position].id)
+                intent.putExtra("title", showList[position].title)
+                context.startActivity(intent)
+            }
+        })
 
         binding.rvBooksPDF.adapter = adapter
 
@@ -64,15 +76,14 @@ class BooksAndPDFActivity : BaseActivity() {
 
     override fun apiAndArgs() {
         super.apiAndArgs()
-        val categoryId = intent.getStringExtra("categoryId").toString()
-        val title = intent.getStringExtra("title").toString()
-        binding.appbar.tvTitle.text = title
-        viewModel.books(categoryId)
+
+        viewModel.booksCategories()
     }
 
 
     override fun initData() {
         super.initData()
+        binding.appbar.tvTitle.text = "Categories"
 
 
     }

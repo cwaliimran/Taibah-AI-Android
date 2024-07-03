@@ -72,6 +72,10 @@ android {
             dimension 'taibahai'
             applicationIdSuffix '.dev'
         }
+        adsFree {
+            dimension 'taibahai'
+            applicationIdSuffix '.adsFree'
+        }
     }
 
     applicationVariants.all { variant ->

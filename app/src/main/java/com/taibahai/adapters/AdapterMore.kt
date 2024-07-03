@@ -12,8 +12,8 @@ import com.network.interfaces.OnItemClick
 import com.network.utils.AppClass
 import com.network.utils.AppConstants
 import com.taibahai.R
+import com.taibahai.activities.BooksCategoriesActivity
 import com.taibahai.activities.ImamsOfSunnaActivity
-import com.taibahai.activities.BooksAndPDFActivity
 import com.taibahai.activities.InheritanceLawActivity
 import com.taibahai.activities.UpgradeActivity
 import com.taibahai.activities.ZakatCalculatorActivity
@@ -58,7 +58,6 @@ class AdapterMore(private val context: Context, var showData: MutableList<ModelM
         if (position == 0) {
             holder.binding.tvFree.visibility = View.VISIBLE
             holder.binding.tvLevel.visibility = View.INVISIBLE
-            holder.binding.tvPackege.visibility = View.INVISIBLE
             holder.binding.btnUpgrade.visibility = View.INVISIBLE
             val layoutParams = holder.rvMoreLevelsList.layoutParams as ConstraintLayout.LayoutParams
             layoutParams.topMargin = -40
@@ -66,7 +65,6 @@ class AdapterMore(private val context: Context, var showData: MutableList<ModelM
         } else {
             holder.binding.tvFree.visibility = View.INVISIBLE
             holder.binding.tvLevel.visibility = View.VISIBLE
-            holder.binding.tvPackege.visibility = View.VISIBLE
             holder.binding.btnUpgrade.visibility = View.VISIBLE
 
         }
@@ -125,9 +123,9 @@ class AdapterMore(private val context: Context, var showData: MutableList<ModelM
             "books_pdfs" -> {
 
                 if (isDiamondPurchased) {
-                    val intent = Intent(context, BooksAndPDFActivity::class.java)
+                    val intent = Intent(context, BooksCategoriesActivity::class.java)
                     context.startActivity(intent)
-                }else
+                } else
                     Toast.makeText(context, "Please upgrade to Diamond Package", Toast.LENGTH_SHORT)
                         .show()
             }
@@ -136,7 +134,7 @@ class AdapterMore(private val context: Context, var showData: MutableList<ModelM
                 if (isDiamondPurchased) {
                     val intent = Intent(context, InheritanceLawActivity::class.java)
                     context.startActivity(intent)
-                }else
+                } else
                     Toast.makeText(context, "Please upgrade to Diamond Package", Toast.LENGTH_SHORT)
                         .show()
             }
@@ -145,7 +143,7 @@ class AdapterMore(private val context: Context, var showData: MutableList<ModelM
                 if (isDiamondPurchased) {
                     val intent = Intent(context, SearchDatabaseActivity::class.java)
                     context.startActivity(intent)
-                }else
+                } else
                     Toast.makeText(context, "Please upgrade to Diamond Package", Toast.LENGTH_SHORT)
                         .show()
             }

@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.network.models.ModelBooks
+import com.network.models.ModelBooksCategories
 import com.network.models.ModelChapterHadith3
 import com.network.models.ModelDailyAlert
 import com.network.models.ModelGetFeeds
@@ -151,9 +152,18 @@ class MainViewModelAI(application: Application) : AndroidViewModel(application) 
     val booksLiveData: MutableLiveData<NetworkResult<ModelBooks>>
         get() = repository.booksMutableLiveData
 
-    fun books() {
+    fun books(categoryId: String) {
         viewModelScope.launch {
-            repository.books()
+            repository.books(categoryId)
+        }
+    }
+
+    val booksCategoriesLiveData: MutableLiveData<NetworkResult<ModelBooksCategories>>
+        get() = repository.booksCategoriesMutableLiveData
+
+    fun booksCategories() {
+        viewModelScope.launch {
+            repository.booksCategories()
         }
     }
 

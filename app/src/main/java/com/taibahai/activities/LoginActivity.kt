@@ -43,6 +43,7 @@ import com.network.utils.AppClass
 import com.network.utils.AppConstants
 import com.network.utils.ProgressLoading.displayLoading
 import com.network.viewmodels.MainViewModelAI
+import com.taibahai.BuildConfig
 import com.taibahai.R
 import com.taibahai.bottom_navigation.BottomNavigation
 import com.taibahai.databinding.ActivityLoginBinding
@@ -124,7 +125,6 @@ class LoginActivity : BaseActivity() {
                 deviceID,
                 "android",
                 "guest@taibahai.com",
-//                "Ooumard@gmail.com",
                 NetworkUtils.timeZone(),
                 "Guest",
                 "noimg.png"
@@ -167,6 +167,14 @@ class LoginActivity : BaseActivity() {
                 }
 
                 is NetworkResult.Success -> {
+                    if (BuildConfig.FLAVOR == "adsFree") {
+                        AppClass.sharedPref.storeBoolean(AppConstants.IS_ADS_FREE, true)
+                       val aiTokens = 100000
+                        AppClass.sharedPref.storeInt(AppConstants.AI_TOKENS, aiTokens)
+                        AppClass.sharedPref.storeBoolean(
+                            AppConstants.IS_TAIBAH_AI_DIAMOND_PURCHASED, true
+                        )
+                    }
                     showToast(it.data?.message.toString())
                     AppClass.sharedPref.storeObject(AppConstants.CURRENT_USER, it.data?.data)
                     AppClass.sharedPref.storeString(
