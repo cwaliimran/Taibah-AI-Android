@@ -531,11 +531,9 @@ class SearchFragment : BaseFragment(), OnItemClick {
         // Save the Id of the last message before archiving
         GlobalScope.launch {
             archiveMessageId = getLastMessageId()
+            isNewMessage = true  // Indicate new message after archiving
+            updateUI(newMessages)  // Update UI immediately
         }
-        //  indicate new message
-        isNewMessage = true
-        // display new list after archiving
-        updateUI(newMessages)
     }
 
     private fun unarchiveChat() {

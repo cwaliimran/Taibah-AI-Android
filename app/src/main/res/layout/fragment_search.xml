@@ -144,6 +144,7 @@
                 android:background="@color/transparent"
                 android:fontFamily="@font/poppins"
                 android:hint="type here.."
+                android:textCursorDrawable="@drawable/et_cursor"
                 android:includeFontPadding="false"
                 android:textColor="#7D848D"
                 android:textColorHint="#7D848D"

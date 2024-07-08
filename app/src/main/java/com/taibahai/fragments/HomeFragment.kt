@@ -97,7 +97,7 @@ class HomeFragment : BaseFragment() {
 
         binding.swipeRefreshLayout.setOnRefreshListener {
             mData.clear()
-            adapter.notifyDataSetChanged()
+            sharedViewModel.setData(mData)
             viewModel.home(pageno = 1)
             binding.swipeRefreshLayout.isRefreshing = false
         }

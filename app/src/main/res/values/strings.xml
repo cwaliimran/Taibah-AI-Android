@@ -74,6 +74,22 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="already_purchased">Already purchased</string>
+    <string name="predefined_response">
+    <![CDATA[
+    In a 4 rakaat salaah, if a person missed 3 rakaats then when the imaam completes the second salaam at the end of the salaah, this person should stand up and offer the three rakaats which he missed in the following manner: in the first rakaat he should recite Surah Faatihah, another Surah, make his ruku and sajdahs and then sit down for his first qa’dah. Thereafter, he should offer his second rakaat and recite Surah Faatihah and another Surah in it as well. After this second rakaat he should get up for the third rakaat without sitting and only recite Surah Faatihah. After this rakaat, he should sit in qa’dah and complete the salaah.
+
+    If he missed 1 or 2 rakaats of a four rakaat salaah then when the imaam completes the second salaam at the end of the salaah, this person should stand up and perform two rakaats with Surah Faatihah and a surah in each rakaat and without sitting in between the two rakaats. After the second rakaat he should sit in qa`dah and complete the salaah.
+
+    In a 3 rakaat salaah like maghrib, if a person missed 3 rakaats then when the imaam completes the second salaam at the end of the salaah he should stand up and perform the 3 rakaats in the same sequence of the maghrib salaah.
+
+    If he missed 2 rakaats then when the imaam completes the second salaam at the end of the salaah this person should stand up and perform the 2 rakaats in the following manner: in the first rakaat he should recite Surah Faatihah, another Surah, make his ruku and sajdahs and then sit down for his first qa’dah. Thereafter, he should offer his second rakaat and recite Surah Faatihah and another Surah in it as well. After completing the second rakaat he should sit in qa`dah and complete the salaah as normal.
+
+    If he missed 1 rakaat then when the imaam completes the second salaam at the end of the salaah he should stand up and perform the 1 rakaat and complete the salaah as normal.
+
+    And Allah Ta’ala (الله تعالى) knows best.
+    ]]>
+</string>
+
 
 
 </resources>
