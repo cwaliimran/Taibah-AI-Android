@@ -62,6 +62,7 @@ class HomeFragment : BaseFragment() {
 
     override fun viewCreated() {
     }
+
     private val addPostActivityResultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -74,13 +75,19 @@ class HomeFragment : BaseFragment() {
                 }
             }
         }
+
     override fun clicks() {
         binding.ivCreatePostIcon.setOnClickListener {
             if (isGuest()) {
                 handleGuestLogic()
                 return@setOnClickListener
             }
-            addPostActivityResultLauncher.launch(Intent(requireContext(), CreatePostActivity::class.java))
+            addPostActivityResultLauncher.launch(
+                Intent(
+                    requireContext(),
+                    CreatePostActivity::class.java
+                )
+            )
         }
 
         binding.ivNotification.setOnClickListener {
@@ -128,6 +135,10 @@ class HomeFragment : BaseFragment() {
                 is NetworkResult.Success -> {
                     isCalled = true
                     totalPages = it.data?.total_pages!!
+                    if (currentPageNo == 1) {
+                        mData.clear()
+                        adapter.notifyDataSetChanged()
+                    }
 
                     mData.addAll((it.data?.data ?: listOf()))
                     sharedViewModel.setData(mData)
