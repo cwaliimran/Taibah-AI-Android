@@ -97,9 +97,6 @@
             android:name=".activities.PrivacyPolicyActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.AboutUsActivity"
-            android:exported="false" />
-        <activity
             android:name=".activities.UpcomingFeaturesActivity"
             android:exported="false" />
         <activity

@@ -234,7 +234,7 @@ class UpgradeActivity : BaseActivity(), PurchaseInterface {
             updateSubscriptionStatus("purchase")
         } else if (type == "restore") {
 
-            var aiTokens = AppClass.sharedPref.getInt(AppConstants.AI_TOKENS)
+            var aiTokens: Int
             val products = data as MutableList<String>
             if (products.isNotEmpty()) {
                 products.forEach {

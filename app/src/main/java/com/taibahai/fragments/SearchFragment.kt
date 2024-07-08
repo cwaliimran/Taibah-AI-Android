@@ -159,6 +159,9 @@ class SearchFragment : BaseFragment(), OnItemClick {
         chatMessageDao = chatDatabase.chatMessageDao()
 
         adapterMessagePopups = AdapterChatPopups(showMessagePopups) { message ->
+            if (message == "Completing Missed Rakaats"){
+
+            }
             binding.messageBox.setText(message)
             binding.rvTopMessagePopups.visibility = View.GONE
         }
@@ -178,7 +181,7 @@ class SearchFragment : BaseFragment(), OnItemClick {
             if (!checkTokens()) {
                 return@setOnClickListener
             }
-            userQuestion = binding.messageBox.text.toString().trim().toString()
+            userQuestion = binding.messageBox.text.toString().trim()
             if (userQuestion != null) {
                 if (userQuestion.isNotEmpty()) {
                     activity?.displayLoading()
@@ -308,7 +311,6 @@ class SearchFragment : BaseFragment(), OnItemClick {
 
 
     private fun askChatbot(userQuestion: String) {
-
         getBotAnswer(userQuestion) { response ->
             activity?.runOnUiThread {
                 aiTokens -= 1
@@ -549,6 +551,7 @@ class SearchFragment : BaseFragment(), OnItemClick {
         showMessagePopups.add(ModelChatPopups("Prayers in Islam"))
         showMessagePopups.add(ModelChatPopups("Prophet of Islam"))
         showMessagePopups.add(ModelChatPopups("Islamic Teachings"))
+        showMessagePopups.add(ModelChatPopups("Completing Missed Rakaats"))
         showMessagePopups.add(ModelChatPopups("Halal Food"))
         showMessagePopups.add(ModelChatPopups("Islamic Festivals"))
         showMessagePopups.add(ModelChatPopups("Quran Recitation"))

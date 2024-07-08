@@ -8,10 +8,10 @@ import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Build
 import com.android.billingclient.api.ProductDetails
-import com.network.R
 import com.network.models.ModelUser
 import java.io.File
 import java.util.Locale
+import com.network.BuildConfig
 
 
 class AppClass : Application() {
@@ -45,27 +45,6 @@ class AppClass : Application() {
     }
 
 
-    //    public static void deleteFile(String path){
-    //        File fdelete = new File(uri.getPath());
-    //        if (fdelete.exists()) {
-    //            if (fdelete.delete()) {
-    //                System.out.println("file Deleted :" + uri.getPath());
-    //            } else {
-    //                System.out.println("file not Deleted :" + uri.getPath());
-    //            }
-    //        }
-    //
-    //
-    //        File file = new File(path);
-    //        file.delete();
-    //        if(file.exists()){
-    //            file.getCanonicalFile().delete();
-    //            if(file.exists()){
-    //                getApplicationContext().deleteFile(file.getName());
-    //            }
-    //        }
-    //    }
-
 
     companion object {
         val BASE_URL_1 = "https://taibahislamic.com/admin/"
@@ -82,7 +61,11 @@ class AppClass : Application() {
         }
 
         fun isGuest(): Boolean {
-            return getCurrentUser()?.social_type == "guest"
+            return if (BuildConfig.FLAVOR == "adsFree") {
+                getCurrentUser()?.social_type == "admin"
+            } else {
+                getCurrentUser()?.social_type == "guest"
+            }
         }
 
 
@@ -112,6 +95,7 @@ class AppClass : Application() {
             val yourFile = File(getAudioOutputDirectory(), childPath)
             return yourFile.exists()
         }
+
         fun deleteFile(filePath: String?, context: Context?): Boolean {
             val dir = context!!.filesDir
             val file = File(dir, filePath)

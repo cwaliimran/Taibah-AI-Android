@@ -38,6 +38,19 @@ android {
         buildConfig true
 
     }
+
+    flavorDimensions 'taibahai'
+    productFlavors {
+        prod {
+            dimension 'taibahai'
+        }
+        dev {
+            dimension 'taibahai'
+        }
+        adsFree {
+            dimension 'taibahai'
+        }
+    }
 }
 
 dependencies {

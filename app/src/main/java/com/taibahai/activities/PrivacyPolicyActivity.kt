@@ -3,25 +3,22 @@ package com.taibahai.activities
 import android.os.Build
 import android.text.Html
 import android.text.Spanned
-import android.view.View
 import androidx.activity.viewModels
 import com.network.base.BaseActivity
 import com.network.network.NetworkResult
 import com.network.utils.ProgressLoading.displayLoading
 import com.network.viewmodels.MainViewModelAI
-import com.taibahai.R
 import com.taibahai.databinding.ActivityPrivacyPolicyBinding
 import com.taibahai.utils.showToast
 
 class PrivacyPolicyActivity : BaseActivity() {
-    lateinit var binding:ActivityPrivacyPolicyBinding
-    val viewModel : MainViewModelAI by viewModels()
-    var textPrivacy=""
-
+    lateinit var binding: ActivityPrivacyPolicyBinding
+    val viewModel: MainViewModelAI by viewModels()
+    var data = ""
 
 
     override fun onCreate() {
-        binding=ActivityPrivacyPolicyBinding.inflate(layoutInflater)
+        binding = ActivityPrivacyPolicyBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
 
@@ -44,14 +41,15 @@ class PrivacyPolicyActivity : BaseActivity() {
                 }
 
                 is NetworkResult.Success -> {
-                    textPrivacy= it.data?.data.toString()
-                    if (!textPrivacy.isNullOrEmpty()) {
-                        val spannedText: Spanned = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                            Html.fromHtml(textPrivacy, Html.FROM_HTML_MODE_COMPACT)
-                        } else {
-                            @Suppress("DEPRECATION")
-                            Html.fromHtml(textPrivacy)
-                        }
+                    data = it.data?.data.toString()
+                    if (!data.isNullOrEmpty()) {
+                        val spannedText: Spanned =
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                Html.fromHtml(data, Html.FROM_HTML_MODE_COMPACT)
+                            } else {
+                                @Suppress("DEPRECATION")
+                                Html.fromHtml(data)
+                            }
 
                         binding.tvPrivacyPolicy.text = spannedText
                     }
@@ -66,14 +64,35 @@ class PrivacyPolicyActivity : BaseActivity() {
 
     override fun apiAndArgs() {
         super.apiAndArgs()
-        viewModel.privacy()
+        bundle = intent.extras
+        if (bundle != null) {
+            val type = bundle?.getString("type")
+            when (type) {
+                "privacy" -> {
+                    binding.appbar.tvTitle.text = "Privacy Policy"
+                    viewModel.privacy()
+
+                }
+
+                "terms" -> {
+                    binding.appbar.tvTitle.text = "Terms and Conditions"
+                    viewModel.terms()
+                }
+
+                "about" -> {
+                    binding.appbar.tvTitle.text = "About Us"
+                    viewModel.about()
+                }
+
+                else -> {}
+            }
+        }
     }
 
     override fun initData() {
         super.initData()
-        binding.appbar.tvTitle.text = "Privacy Policy"
-        
-        
+
+
     }
 
 }

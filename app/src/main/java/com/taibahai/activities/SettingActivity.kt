@@ -67,12 +67,12 @@ class SettingActivity : BaseActivity() {
             add(ModelSettings(1, R.drawable.profileicon, "My Profile"))
             add(ModelSettings(2, R.drawable.notification, "Notifications"))
             add(ModelSettings(11, R.drawable.baseline_text_fields_24, "Quran Reading Fonts"))
-//            add(ModelSettings(3, R.drawable.aivoice, "AI Voice Feedback"))
             add(ModelSettings(4, R.drawable.upcoming, "Upcoming Features"))
             add(ModelSettings(5, R.drawable.share_icon, "Share"))
             add(ModelSettings(6, R.drawable.rate, "Rate App"))
             add(ModelSettings(7, R.drawable.aboutus, "About Us"))
             add(ModelSettings(8, R.drawable.pp, "Privacy Policy"))
+            add(ModelSettings(12, R.drawable.pp, "Terms and Conditions"))
             add(ModelSettings(9, R.drawable.cs, "Contact Support"))
             add(ModelSettings(10, R.drawable.logout, "Logout"))
         }
@@ -104,12 +104,25 @@ class SettingActivity : BaseActivity() {
 
                     5 -> context.shareApp()
                     6 -> context.openPlayStoreForRating()
-                    7 -> startActivity(Intent(this@SettingActivity, AboutUsActivity::class.java))
+                    7 -> startActivity(
+                        Intent(
+                            this@SettingActivity,
+                            PrivacyPolicyActivity::class.java
+                        ).putExtra("type", "about")
+                    )
+
                     8 -> startActivity(
                         Intent(
                             this@SettingActivity,
                             PrivacyPolicyActivity::class.java
-                        )
+                        ).putExtra("type", "privacy")
+                    )
+
+                    12 -> startActivity(
+                        Intent(
+                            this@SettingActivity,
+                            PrivacyPolicyActivity::class.java
+                        ).putExtra("type", "terms")
                     )
 
                     9 -> startActivity(
