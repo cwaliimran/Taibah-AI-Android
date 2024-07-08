@@ -325,23 +325,29 @@ class SearchFragment : BaseFragment(), OnItemClick {
     }
 
     private fun getBotAnswer(question: String, callback: (String?) -> Unit) {
-
+        if (question.trim().equals("Completing Missed Rakaats", ignoreCase = true)) {
+            val predefinedResponse = getString(R.string.predefined_response)
+            callback(predefinedResponse)
+            return
+        }
 
         val apiKey = "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"
         val url = "https://api.openai.com/v1/completions"
         val requestBody = """
-    {
-       "model": "gpt-3.5-turbo-instruct",
-        "prompt": "In the context of Islam, $question",
-        "max_tokens": 4000,
-        "temperature": 0
-    }
+        {
+           "model": "gpt-3.5-turbo-instruct",
+            "prompt": "In the context of Islam, $question",
+            "max_tokens": 4000,
+            "temperature": 0
+        }
     """.trimIndent()
 
-
-        val request = Request.Builder().url(url).header("Content-Type", "application/json")
+        val request = Request.Builder()
+            .url(url)
+            .header("Content-Type", "application/json")
             .addHeader("Authorization", "Bearer $apiKey")
-            .post(requestBody.toRequestBody("application/json".toMediaTypeOrNull())).build()
+            .post(requestBody.toRequestBody("application/json".toMediaTypeOrNull()))
+            .build()
 
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: okhttp3.Call, e: IOException) {
@@ -366,7 +372,8 @@ class SearchFragment : BaseFragment(), OnItemClick {
                         val jsonArray: JSONArray = jsonObject.getJSONArray("choices")
 
                         if (jsonArray.length() > 0) {
-                            val textResult = jsonArray.getJSONObject(0).optString("text", "")
+                            val textResult =
+                                jsonArray.getJSONObject(0).optString("text", "")
 
                             if (textResult.isNotEmpty()) {
                                 callback(textResult)
@@ -384,6 +391,7 @@ class SearchFragment : BaseFragment(), OnItemClick {
             }
         })
     }
+
 
 
     private fun displayBotResponse() {
