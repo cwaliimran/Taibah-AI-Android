@@ -148,7 +148,8 @@
             android:exported="false" />
         <activity
             android:name=".bottom_navigation.BottomNavigation"
-            android:exported="true" />
+            android:exported="true"
+            android:configChanges="orientation|screenSize"/>
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

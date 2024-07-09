@@ -105,7 +105,7 @@ class ExploreFragment : BaseFragment() {
 
 
                     binding.inTodayHadith.tvArbiHadith.text = it.data?.data?.hadith?.arabic
-                    binding.inTodayHadith.ayatEnglishTranslitration.text =
+                    binding.inTodayHadith.hadithEnglishTranslitration.text =
                         it.data?.data?.hadith?.english_translation
                     val reference = it.data?.data?.hadith?.reference
                     if (reference != null) {
@@ -148,6 +148,7 @@ class ExploreFragment : BaseFragment() {
                 binding.inTodayVerse.ayatEnglishTranslation.text = savedData.quran.quran_translation_en
                 binding.inTodayVerse.tvSurah.text = savedData.quran.transliteration_en
                 val transliteration = savedData.quran.quran_transliteration_en
+               
                 if (transliteration != null)
 
                 {
@@ -158,12 +159,12 @@ class ExploreFragment : BaseFragment() {
                         @Suppress("DEPRECATION") HtmlCompat.fromHtml(transliteration,HtmlCompat.FROM_HTML_MODE_LEGACY)
                     }
 
-                    binding.inTodayVerse.ayatEnglishTranslation.text = spannedText
+                    binding.inTodayVerse.ayatEnglishTranslitration.text = spannedText
                 }
 
 
                 binding.inTodayHadith.tvArbiHadith.text = savedData.hadith.arabic
-                binding.inTodayHadith.ayatEnglishTranslitration.text = savedData.hadith.english_translation
+                binding.inTodayHadith.hadithEnglishTranslitration.text = savedData.hadith.english_translation
                 val reference = savedData.hadith.reference
                 if (reference != null) {
                     val parts = reference.split("\t : ")

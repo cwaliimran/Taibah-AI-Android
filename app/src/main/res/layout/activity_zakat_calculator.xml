@@ -80,6 +80,7 @@
                         android:layout_toLeftOf="@+id/btnGoldRate"
                         android:background="@drawable/edittext_bg"
                         android:hint="0"
+                        android:textCursorDrawable="@drawable/et_cursor"
                         android:inputType="numberDecimal"
                         android:textColor="@color/primary_green"
                         android:textColorHint="@color/grey43" />
@@ -112,6 +113,7 @@
                         android:layout_toLeftOf="@+id/btnSilverRate"
                         android:background="@drawable/edittext_bg"
                         android:hint="0"
+                        android:textCursorDrawable="@drawable/et_cursor"
                         android:inputType="numberDecimal"
                         android:textColor="@color/primary_green"
                         android:textColorHint="@color/grey43" />

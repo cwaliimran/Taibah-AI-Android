@@ -203,6 +203,7 @@ class HomeFragment : BaseFragment() {
                 is NetworkResult.Success -> {
                     showToast(it.data?.message.toString())
                     adapter.notifyItemRemoved(reportedPos)
+                    mData.removeAt(reportedPos)
                 }
 
                 is NetworkResult.Error -> {
@@ -277,6 +278,7 @@ class HomeFragment : BaseFragment() {
 
             when (menuItem.itemId) {
                 R.id.menu_report -> {
+                    reportedPos = mData.indexOf(data)
                     if (isGuest()) {
                         handleGuestLogic()
                     } else {
