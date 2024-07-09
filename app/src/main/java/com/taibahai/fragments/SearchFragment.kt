@@ -1,5 +1,6 @@
 package com.taibahai.fragments
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -274,27 +275,34 @@ class SearchFragment : BaseFragment(), OnItemClick {
     }
 
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun updateUI(messages: List<ModelChatMessage>) {
+        showMessage.clear()
 
-        if (isNewMessage) {
-            for (i in messages.indexOfFirst { it.id == archiveMessageId } + 1 until messages.size) {
-                val message = messages[i]
-                val modelMessage = ModelSearchAI(message.message, message.isUser)
-                showMessage.add(modelMessage)
-                messageAdapter.notifyItemInserted(showMessage.size)
+        if (isArchived) {
+            binding.rvSearchAI.adapter?.notifyDataSetChanged()
+
+        } else {
+            if (isNewMessage) {
+                for (i in messages.indexOfFirst { it.id == archiveMessageId } + 1 until messages.size) {
+                    val message = messages[i]
+                    val modelMessage = ModelSearchAI(message.message, message.isUser)
+                    showMessage.add(modelMessage)
+                    messageAdapter.notifyItemInserted(showMessage.size)
+                    binding.rvSearchAI.scrollToPosition(showMessage.size - 1)
+                }
+            } else {
+                // Display the entire chat
+                for (message in messages) {
+                    val modelMessage = ModelSearchAI(message.message, message.isUser)
+                    showMessage.add(modelMessage)
+                }
+                binding.rvSearchAI.adapter?.notifyDataSetChanged()
                 binding.rvSearchAI.scrollToPosition(showMessage.size - 1)
             }
-        } else {
-            showMessage.clear()
-            // Display the entire chat
-            for (message in messages) {
-                val modelMessage = ModelSearchAI(message.message, message.isUser)
-                showMessage.add(modelMessage)
-            }
-            binding.rvSearchAI.adapter?.notifyDataSetChanged()
-            binding.rvSearchAI.scrollToPosition(showMessage.size - 1)
         }
     }
+
 
 
     private suspend fun getLastMessageId(): Long? = withContext(Dispatchers.IO) {
@@ -537,12 +545,13 @@ class SearchFragment : BaseFragment(), OnItemClick {
         AppClass.sharedPref.setIsArchived(isArchived)
 
         // Save the Id of the last message before archiving
-        GlobalScope.launch {
-            archiveMessageId = getLastMessageId()
-            isNewMessage = true  // Indicate new message after archiving
-            updateUI(newMessages)  // Update UI immediately
+        GlobalScope.launch(Dispatchers.Main) {
+            archiveMessageId = withContext(Dispatchers.IO) { getLastMessageId() }
+            isNewMessage = false // Not loading new messages, displaying the archived state
+            updateUI(emptyList())  // Clear the UI to reflect the archived state
         }
     }
+
 
     private fun unarchiveChat() {
         isArchived = false
