@@ -26,3 +26,4 @@ output.json
 # Android Profiling
 *.hprof
 app/prod/release/app-prod-release.aab
+app/prod/release/app-prod-release.aab
