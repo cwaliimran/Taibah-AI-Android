@@ -45,6 +45,7 @@
         android:textSize="16sp"
         android:inputType="textPersonName"
         android:padding="13dp"
+        android:textCursorDrawable="@drawable/et_cursor"
         android:textColor="@color/silver"
         android:textColorHint="@color/silver"
         app:layout_constraintEnd_toEndOf="parent"
@@ -65,6 +66,7 @@
         android:textColor="@color/silver"
         android:textColorHint="@color/lightgrey"
         android:textSize="16sp"
+        android:textCursorDrawable="@drawable/et_cursor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etName" />

@@ -156,6 +156,7 @@
                 android:layout_toStartOf="@id/sendBtn"
                 android:background="@color/transparent"
                 android:fontFamily="@font/poppins"
+                android:textCursorDrawable="@drawable/et_cursor"
                 android:hint="type here.."
                 android:includeFontPadding="false"
                 android:textColor="#7D848D"
