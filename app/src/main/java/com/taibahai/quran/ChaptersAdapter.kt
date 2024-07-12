@@ -59,7 +59,6 @@ class ChaptersAdapter(
         }
         holder.binding.ayatArabicText.text = model.text
        holder.binding.surahName.text= name
-        holder.binding.verseNumber.text = model.verse_number
         holder.binding.ayatEnglishTranslation.text = model.translation_en
         holder.binding.ayatEnglishTranslitration.text =
             Html.fromHtml(model.transliteration_en, Html.FROM_HTML_MODE_LEGACY)
