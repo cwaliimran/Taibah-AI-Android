@@ -49,6 +49,19 @@
                     android:text="Sahih al-Bukhari"
                     android:textColor="@color/black"
                     android:textSize="14sp" />
+
+
+                <TextView
+                    android:id="@+id/tvChapterName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:drawablePadding="10dp"
+                    android:fontFamily="@font/poppins"
+                    tools:text="Revelation"
+                    android:text="@{model.chapter_name}"
+                    android:textColor="@color/black"
+                    android:textSize="14sp" />
             </LinearLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout

@@ -16,6 +16,7 @@ data class ModelChapterHadith3(
         var book_name: String = "",
         var type: String = "",
         var is_active: String = "",
-        var chapter_id: String = ""
+        var chapter_id: String = "",
+        var chapter_name:String=""
     )
 }

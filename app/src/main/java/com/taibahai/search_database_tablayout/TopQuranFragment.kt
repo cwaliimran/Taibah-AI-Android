@@ -61,7 +61,7 @@ class TopQuranFragment : BaseFragment() {
 
     override fun initAdapter() {
         super.initAdapter()
-        adapter = ChaptersAdapter(mData, requireActivity(), false)
+        adapter = ChaptersAdapter(mData, requireActivity(), false,surahListSelected.transliteration_en)
         binding.rvSearchQuran.adapter = adapter
     }
 
@@ -173,6 +173,8 @@ class TopQuranFragment : BaseFragment() {
                 mData.clear()
                 mDataFiltered.clear()
                 adapter.clearList()
+
+                adapter.updateSurahName(surahListSelected.transliteration_en)
 
                 Handler(Looper.getMainLooper()).postDelayed({
                     binding.progressLoading.setProgress(0, true)

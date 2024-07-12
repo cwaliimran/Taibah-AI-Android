@@ -83,7 +83,7 @@ class HadithDetailsActivity4 : BaseActivity() {
                     binding.tvHadithNo.text = "Hadith No: ${it.data!!.data.hadith_no}"
                     binding.ayatArabicText.text = it.data?.data?.arabic
                     binding.tvEnglishTranslation.text = it.data?.data?.english_translation
-                    binding.tvHadithType.text = type
+                    binding.tvHadithType.text = "hadith"
                     the_id = it.data?.data?.id.toString()
 
                 }
@@ -112,7 +112,8 @@ class HadithDetailsActivity4 : BaseActivity() {
                     binding.ayatArabicText.text = result.data?.data?.arabic
                     binding.tvEnglishTranslation.text = result.data?.data?.english_translation
                     binding.tvBookName.text = bookName
-                    binding.tvHadithType.text = type
+                    binding.tvHadithType.text = "hadith"
+
                     the_id = result.data?.data?.id.toString()
                 }
 

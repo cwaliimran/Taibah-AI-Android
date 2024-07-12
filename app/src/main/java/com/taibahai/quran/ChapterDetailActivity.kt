@@ -69,6 +69,8 @@ class ChapterDetailActivity : AppCompatActivity() {
         context = this
         activity = this
         favSurahs = AppClass.sharedPref.getList(AppConstants.FAV_SURAHS)
+        name = intent.getStringExtra("ayat_name")
+
         initClick()
         initAdapter()
         loadJson()
@@ -157,7 +159,7 @@ class ChapterDetailActivity : AppCompatActivity() {
     private fun initAdapter() {
         mPlayerList = ArrayList()
         mData = ArrayList()
-        chaptersAdapter = ChaptersAdapter(mData, context!!, true)
+        chaptersAdapter = name?.let { ChaptersAdapter(mData, context!!, true, it) }
         binding.recyclerView.adapter = chaptersAdapter
         binding.recyclerView.isNestedScrollingEnabled = false
     }
@@ -168,7 +170,6 @@ class ChapterDetailActivity : AppCompatActivity() {
         surahId = intent.getStringExtra("ayat_id")
         val verse = intent.getStringExtra("ayat_verse")
         totalVerse = verse!!.toInt()
-        name = intent.getStringExtra("ayat_name")
         val type = intent.getStringExtra("ayat_type")
         val args = intent.getBundleExtra(StringUtils.BUNDLE)
         mPlayerList = args?.getSerializable(StringUtils.ARRAY) as List<SurahListModel>?

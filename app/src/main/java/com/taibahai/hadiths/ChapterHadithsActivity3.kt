@@ -112,7 +112,7 @@ class ChapterHadithsActivity3 : BaseActivity() {
                 startActivity(intent)
             }
 
-        }, "Hadith", bookTitle)
+        }, "hadith", bookTitle)
         binding.rvChapterHadiths.adapter = adapter
 
     }

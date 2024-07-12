@@ -16,7 +16,8 @@ import com.taibahai.utils.ShareImage.getBitmapFromView
 class ChaptersAdapter(
     var mData: MutableList<ModelChapter>,
     private val context: Context,
-    var showFooter: Boolean? = true
+    var showFooter: Boolean? = true,
+    var name:String
 ) :
     RecyclerView.Adapter<ChaptersAdapter.HomeListHolder>() {
     private var listener: AdapterView.OnItemClickListener? = null
@@ -36,6 +37,10 @@ class ChaptersAdapter(
         mData.clear()
         notifyDataSetChanged()
     }
+    fun updateSurahName(newSurahName: String) {
+        this.name = newSurahName
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeListHolder {
         val view = LayoutInflater.from(parent.context)
@@ -53,6 +58,8 @@ class ChaptersAdapter(
             }
         }
         holder.binding.ayatArabicText.text = model.text
+       holder.binding.surahName.text= name
+        holder.binding.verseNumber.text = model.verse_number
         holder.binding.ayatEnglishTranslation.text = model.translation_en
         holder.binding.ayatEnglishTranslitration.text =
             Html.fromHtml(model.transliteration_en, Html.FROM_HTML_MODE_LEGACY)

@@ -159,12 +159,13 @@ class TopHadithFragment : BaseFragment() {
                 intent.putExtra("chapter_id", showHadithData[position].chapter_id)
                 intent.putExtra("hadith_number", showHadithData[position].hadith_no)
                 intent.putExtra("book_name", selectedBook.title)
+                intent.putExtra("chapter_name", showHadithData[position].chapter_name)
                 intent.putExtra("type", showHadithData[position].type)
                 intent.putExtra("searchHadith", true)
                 startActivity(intent)
             }
 
-        }, "Hadith", selectedBook.title)
+        }, "hadith", selectedBook.title)
         binding.rvSearchHadith.adapter = adapter
 
     }
