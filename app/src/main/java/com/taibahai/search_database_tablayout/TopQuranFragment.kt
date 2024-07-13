@@ -60,7 +60,7 @@ class TopQuranFragment : BaseFragment() {
 
     override fun initAdapter() {
         super.initAdapter()
-        adapter = ChaptersAdapter(mData, requireActivity(), false)
+        adapter = ChaptersAdapter(mData, requireActivity(), false, surahName=false)
         binding.rvSearchQuran.adapter = adapter
     }
 

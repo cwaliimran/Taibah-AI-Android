@@ -17,6 +17,7 @@ class ChaptersAdapter(
     var mData: MutableList<ModelChapter>,
     private val context: Context,
     var showFooter: Boolean? = true,
+    var hideSurahName: Boolean
 ) :
     RecyclerView.Adapter<ChaptersAdapter.HomeListHolder>() {
     private var listener: AdapterView.OnItemClickListener? = null
@@ -52,8 +53,16 @@ class ChaptersAdapter(
                 holder.binding.footer.visibility = View.GONE
             }
         }
+        if (hideSurahName) {
+            holder.binding.tvSurahName.visibility = View.GONE
+            holder.binding.surahName.visibility = View.GONE
+
+        } else {
+            holder.binding.tvSurahName.visibility = View.VISIBLE
+            holder.binding.surahName.visibility = View.VISIBLE
+        }
         holder.binding.ayatArabicText.text = model.text
-       holder.binding.surahName.text= model.surah_name
+        holder.binding.surahName.text = model.surah_name
         holder.binding.ayatEnglishTranslation.text = model.translation_en
         holder.binding.ayatEnglishTranslitration.text =
             Html.fromHtml(model.transliteration_en, Html.FROM_HTML_MODE_LEGACY)
