@@ -56,7 +56,7 @@ class SearchQuranChapterDetailActivity : AppCompatActivity() {
 
     private fun initAdapter() {
         mData = ArrayList()
-        chaptersAdapter = ChaptersAdapter(mData, context!!, true, hideSurahName = true)
+        chaptersAdapter = ChaptersAdapter(mData, context!!, true)
         binding.recyclerView.adapter = chaptersAdapter
         binding.recyclerView.isNestedScrollingEnabled = false
     }
