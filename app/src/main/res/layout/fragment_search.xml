@@ -142,6 +142,8 @@
                 android:layout_centerVertical="true"
                 android:layout_toStartOf="@id/voiceBtn"
                 android:background="@color/transparent"
+                android:singleLine="true"
+                android:inputType="text"
                 android:fontFamily="@font/poppins"
                 android:hint="type here.."
                 android:textCursorDrawable="@drawable/et_cursor"

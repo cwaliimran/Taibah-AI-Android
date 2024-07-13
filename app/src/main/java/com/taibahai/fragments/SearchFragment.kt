@@ -63,7 +63,6 @@ class SearchFragment : BaseFragment(), OnItemClick {
     private var userQuestion: String = ""
     private var botResponse: String? = null
     private var currentChatId: String? = null
-    private val newMessages = mutableListOf<ModelChatMessage>()
     private var isNewMessage = false
     private val SPEECH_REQUEST_CODE = 123
     private var textToSpeech: TextToSpeech? = null

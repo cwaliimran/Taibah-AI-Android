@@ -11,7 +11,6 @@ class AdapterChapterHadiths(
     var showData: ArrayList<ModelChapterHadith3.Data>,
     var listener: OnItemClick,
     var type: String,
-    var title: String
 ) : RecyclerView.Adapter<AdapterChapterHadiths.ViewHolder>() {
     lateinit var binding: ItemChatpersHadithBinding
 
@@ -24,7 +23,7 @@ class AdapterChapterHadiths(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val hadithChapter = showData[position]
         holder.binding.model = hadithChapter
-        holder.binding.tvBookName.text = title
+        holder.binding.tvBookName.text = hadithChapter.book_name
         holder.binding.tvHadithType.text = type
 
     }
@@ -33,9 +32,6 @@ class AdapterChapterHadiths(
         return showData.size
     }
 
-    fun updateData(bookTitle: String) {
-        title = bookTitle
-    }
 
     class ViewHolder(val binding: ItemChatpersHadithBinding, listener: OnItemClick) :
         RecyclerView.ViewHolder(binding.root) {

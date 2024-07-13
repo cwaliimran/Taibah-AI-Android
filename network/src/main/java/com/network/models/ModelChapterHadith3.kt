@@ -13,6 +13,7 @@ data class ModelChapterHadith3(
         var urdu: String = "",
         var reference: String = "",
         var hadith_no: String = "",
+        var book_id: String = "",
         var book_name: String = "",
         var type: String = "",
         var is_active: String = "",

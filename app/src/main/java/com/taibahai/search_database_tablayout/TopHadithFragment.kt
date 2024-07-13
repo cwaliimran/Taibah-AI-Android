@@ -47,8 +47,7 @@ class TopHadithFragment : BaseFragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View
-    {
+    ): View {
         binding = FragmentTopHadithBinding.inflate(layoutInflater)
         return binding.root
     }
@@ -158,14 +157,14 @@ class TopHadithFragment : BaseFragment() {
                 intent.putExtra("ayat_id", currentPosition)
                 intent.putExtra("chapter_id", showHadithData[position].chapter_id)
                 intent.putExtra("hadith_number", showHadithData[position].hadith_no)
-                intent.putExtra("book_name", selectedBook.title)
+                intent.putExtra("book_name", showHadithData[position].book_name)
                 intent.putExtra("chapter_name", showHadithData[position].chapter_name)
                 intent.putExtra("type", showHadithData[position].type)
                 intent.putExtra("searchHadith", true)
                 startActivity(intent)
             }
 
-        }, "hadith", selectedBook.title)
+        }, "hadith")
         binding.rvSearchHadith.adapter = adapter
 
     }
@@ -209,7 +208,19 @@ class TopHadithFragment : BaseFragment() {
 
                     totalPages = it.data?.total_pages!!
                     val oldSize = showHadithData.size
-                    it.data?.let { it1 -> showHadithData.addAll(it1.data) }
+                    it.data?.let { it1 ->
+                        it1.data.forEach { resp ->
+                            for (data in booksList) {
+                                if (data.id == resp.book_id) {
+                                    resp.book_name = data.title
+                                    showHadithData.add(resp)
+                                    break
+                                }
+                            }
+
+                        }
+                    }
+
                     if (oldSize == 0) {
                         initAdapter()
                     } else {
@@ -237,16 +248,25 @@ class TopHadithFragment : BaseFragment() {
 
                 is NetworkResult.Success -> {
 
-                    adapter.updateData(selectedBook.title)
                     totalPages = it.data?.total_pages!!
                     val oldSize = showHadithData.size
-                    it.data?.let { it1 -> showHadithData.addAll(it1.data) }
+
+                    it.data?.let { it1 ->
+                        it1.data.forEach { resp ->
+                            for (data in booksList) {
+                                if (data.id == resp.book_id) {
+                                    resp.book_name = data.title
+                                    showHadithData.add(resp)
+                                    break
+                                }
+                            }
+                        }
+                    }
                     if (oldSize == 0) {
                         initAdapter()
                     } else {
                         adapter.notifyItemRangeInserted(oldSize, booksList.size)
                     }
-
 
                 }
 

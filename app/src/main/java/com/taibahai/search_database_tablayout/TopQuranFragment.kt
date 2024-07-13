@@ -44,7 +44,6 @@ class TopQuranFragment : BaseFragment() {
     private var surahList: MutableList<SurahListModel> = mutableListOf()
     private var mDataFiltered: MutableList<ModelChapter> = mutableListOf()
     private var mData: MutableList<ModelChapter> = mutableListOf()
-    private var surahListSelected = SurahListModel()
     private var searchText = ""
 
     override fun onCreateView(
@@ -61,7 +60,7 @@ class TopQuranFragment : BaseFragment() {
 
     override fun initAdapter() {
         super.initAdapter()
-        adapter = ChaptersAdapter(mData, requireActivity(), false,surahListSelected.transliteration_en)
+        adapter = ChaptersAdapter(mData, requireActivity(), false)
         binding.rvSearchQuran.adapter = adapter
     }
 
@@ -95,6 +94,9 @@ class TopQuranFragment : BaseFragment() {
                                 override fun onSearchResultFound(result: ModelChapter) {
                                     // Update the UI on the main thread with a delay
                                     activity?.runOnUiThread {
+                                        result.surah_name =
+                                            surahList.find { it.number == result.surah_number }?.name
+                                                ?: ""
                                         mData.add(result)
                                         hideGone(binding.noData.root)
                                         adapter.updateList(mData)
@@ -165,7 +167,6 @@ class TopQuranFragment : BaseFragment() {
             SpinnerAdapterHelper.createAdapter(surahList, binding.spSurahList) { it ->
                 //cancel whole quran search job
                 searchWholeQuran("", requireActivity(), null, true)
-                surahListSelected = surahList[it]
                 surahNumber = surahList[it].number
                 binding.etSearch.hint = "Search in " + surahList[it].transliteration_en
                 Log.d(TAG, "initData: $surahNumber")
@@ -173,8 +174,6 @@ class TopQuranFragment : BaseFragment() {
                 mData.clear()
                 mDataFiltered.clear()
                 adapter.clearList()
-
-                adapter.updateSurahName(surahListSelected.transliteration_en)
 
                 Handler(Looper.getMainLooper()).postDelayed({
                     binding.progressLoading.setProgress(0, true)
@@ -210,6 +209,9 @@ class TopQuranFragment : BaseFragment() {
                             jsonArr.getJSONObject(i).getString("translation_en")
                         surahModel.transliteration_en =
                             jsonArr.getJSONObject(i).getString("transliteration_en")
+
+                        surahModel.surah_name = surahList.find { it.number == surahModel.surah_number }?.name ?: ""
+
                         mData.add(surahModel)
                     }
                 }

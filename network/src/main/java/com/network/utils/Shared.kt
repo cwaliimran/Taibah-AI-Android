@@ -7,25 +7,30 @@ import com.google.gson.reflect.TypeToken
 import java.util.Date
 
 class SharedPref(myApp: AppClass) {
-
     val PREFS_NAME = "TAIBAH_AI_PREFS"
     private var sharedPref: SharedPreferences? = null
     private var editor: SharedPreferences.Editor? = null
     private var value: String? = null
     private val gson = Gson()
 
+    init {
+        try {
+            sharedPref = myApp.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
     fun clearAllPreferences() {
         editor = sharedPref!!.edit().clear()
         editor?.apply()
     }
-
 
     fun removeKey(key: String?) {
         editor!!.remove(key)
         editor!!.commit()
     }
 
-    //for boolean values
     fun storeBoolean(key: String?, boolValue: Boolean?) {
         editor = sharedPref!!.edit()
         editor?.putBoolean(key, boolValue!!)
@@ -40,8 +45,6 @@ class SharedPref(myApp: AppClass) {
         return sharedPref!!.getBoolean(key, false)
     }
 
-
-    //for int values
     fun storeInt(key: String?, value: Int): Int {
         editor = sharedPref!!.edit()
         editor?.putInt(key, value)
@@ -96,7 +99,6 @@ class SharedPref(myApp: AppClass) {
         return if (timestamp != -1L) Date(timestamp) else defaultDate
     }
 
-
     fun getLong(key: String?, i: Int): Long? {
         return sharedPref?.getLong(key, 0)
     }
@@ -111,23 +113,19 @@ class SharedPref(myApp: AppClass) {
         return sharedPref?.getBoolean("isArchived", false) ?: false
     }
 
-    //store object
     fun storeObject(key: String?, obj: Any?) {
-        val json = Gson().toJson(obj)
+        val json = gson.toJson(obj)
         storeString(key, json)
     }
 
-    //get object
     fun <T> getObject(key: String?, classOfT: Class<T>?): T? {
         val obj = getString(key, "")
         if (obj.equals("", ignoreCase = true)) return null
-        val gson = Gson()
         return gson.fromJson(obj, classOfT)
     }
 
-    // Saving list of type T in Shared Preferences
     fun <T> storeList(key: String, list: MutableList<T>) {
-        val json = gson.toJson(list) // Converting list to JSON
+        val json = gson.toJson(list)
         try {
             editor = sharedPref!!.edit()
             editor?.putString(key, json)
@@ -137,23 +135,13 @@ class SharedPref(myApp: AppClass) {
         }
     }
 
-    // Getting the list of type T from Shared Preferences
     fun <T> getList(key: String): MutableList<T> {
         val json = sharedPref!!.getString(key, null)
-        val type = object : TypeToken<MutableList<T>>() {}.type // Creating a TypeToken to preserve the generic type information
-
+        val type = object : TypeToken<MutableList<T>>() {}.type
         return if (json != null) {
-            gson.fromJson(json, type) // Returning the deserialized list of type T
+            gson.fromJson(json, type)
         } else {
-            mutableListOf() // Return an empty list if the JSON string is null
-        }
-    }
-
-    init {
-        try {
-            sharedPref = myApp.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        } catch (e: Exception) {
-            e.printStackTrace()
+            mutableListOf()
         }
     }
 }
