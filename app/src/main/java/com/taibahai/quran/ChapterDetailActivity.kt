@@ -159,7 +159,7 @@ class ChapterDetailActivity : AppCompatActivity() {
     private fun initAdapter() {
         mPlayerList = ArrayList()
         mData = ArrayList()
-        chaptersAdapter = name?.let { ChaptersAdapter(mData, context!!, true) }
+        chaptersAdapter = name?.let { ChaptersAdapter(mData, context!!, true,surahName=true) }
         binding.recyclerView.adapter = chaptersAdapter
         binding.recyclerView.isNestedScrollingEnabled = false
     }
