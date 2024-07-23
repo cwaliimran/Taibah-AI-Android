@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@drawable/background_editext"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="18dp"
+            android:fontFamily="@font/poppins_medium"
+            android:textColor="@color/black_70"
+            android:textSize="14sp"
+            android:text="@string/dash"
+            tools:text="In the Holy Quran, More than 1400 years ago" />
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="1.5dp"
+            android:layout_marginTop="13dp"
+            android:background="#F7F7F9" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="11dp"
+            android:fontFamily="@font/poppins_medium"
+            android:text="Scientific Facts:"
+            android:textColor="@color/primary_green"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="1dp"
+            android:fontFamily="@font/poppins_medium"
+            android:textColor="#666666"
+            android:textSize="14sp"
+            android:text="@string/dash"
+            tools:text="Center of lying and sins exist in the frontal lobe the brain." />
+
+        <ImageView
+            android:id="@+id/ivUploadImage"
+            android:layout_width="116dp"
+            android:layout_height="142dp"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="10dp"
+            android:adjustViewBounds="true"
+            android:minHeight="40dp"
+            android:src="@drawable/placeholder" />
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="10dp"
+            android:fontFamily="@font/poppins_medium"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:text="@string/dash"
+            tools:text="كَلَّا لَئِن لَّمْ يَنتَهِ لَنَسْفَعًا بِالنَّاصِيَةِ (١٥) نَاصِيَةِ كَذِبَةٍ خَاطِئَةٍ )" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/poppins_medium"
+            android:textColor="#666666"
+            android:textSize="14sp"
+            android:text="@string/dash"
+            tools:text="No! If he does not desist, We will surely drag
+him by the forelock -A lying sinning forelock." />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:fontFamily="@font/poppins"
+            android:text="@string/dash"
+            tools:text="(The Clinging substance - 15,16)"
+            android:textColor="@color/primary_green"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/btnCreate"
+            style="@style/button"
+            android:layout_margin="16dp"
+            android:background="@drawable/continue_btn_bg"
+            android:text="Comments" />
+
+
+        <Button
+            style="@style/button"
+            android:layout_margin="16dp"
+            android:background="@drawable/btn_see_all"
+            android:text="See All"
+            android:textColor="@color/primary_green" />
+
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

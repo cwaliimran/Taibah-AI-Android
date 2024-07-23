@@ -13,12 +13,12 @@ data class ModelHome(
         var description: String = "",
         var user_name: String = "",
         var user_image: String = "",
-        
         var timesince: String = "",
         var feed_attachments: List<FeedAttachment> = listOf(),
         var comments: Int = 0,
         var is_like: Boolean = false,
-        var likes: Int = 0
+        var likes: Int = 0,
+        var type:String=""
     ) : Serializable {
         data class FeedAttachment(
             var file: String = "",
