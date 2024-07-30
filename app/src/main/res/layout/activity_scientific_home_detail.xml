@@ -2,7 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".activities.HomeDetailActivity">
+    tools:context=".activities.ScientificHomeDetailActivity">
 
     <data>
 
@@ -42,7 +42,7 @@
                 android:layout_toEndOf="@id/ivBackArrow"
                 android:fontFamily="@font/poppins_medium"
                 android:padding="10dp"
-                android:text="Details"
+                android:text="Comments"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 tools:ignore="RtlCompat" />
@@ -61,22 +61,70 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <include
-                    android:id="@+id/ii"
-                    layout="@layout/item_home"
+                <TextView
+                    android:id="@+id/tvScientificFact"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="11dp"
+                    android:fontFamily="@font/poppins_medium"
+                    android:text="Scientific Fact:"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:textColor="@color/primary_green"
+                    android:textSize="14sp" />
+                <TextView
+                    android:id="@+id/tv_scientific_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginTop="1dp"
+                    android:fontFamily="@font/poppins_medium"
+                    android:textColor="#666666"
+
+                    android:textSize="14sp"
+                    app:layout_constraintTop_toBottomOf="@id/tvScientificFact"
+                    tools:text="Center of lying and sins exist in the frontal lobe the brain." />
+
+                <ImageView
+                    android:id="@+id/ivUploadImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginHorizontal="16dp"
+                    android:adjustViewBounds="true"
+                    android:layout_marginTop="10dp"
+                    android:src="@drawable/placeholder"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toBottomOf="@id/tv_scientific_description" />
+
+                <TextView
+                    android:id="@+id/description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginTop="16dp"
+                    android:fontFamily="@font/poppins_medium"
+                    android:textColor="#666666"
+                    android:textSize="14sp"
+                    android:text="@string/dash"
+                    app:layout_constraintTop_toBottomOf="@id/ivUploadImage"
+                    tools:text="No! If he does not desist, We will surely drag
+him by the forelock -A lying sinning forelock." />
+
+
+
                 <View
                     android:id="@+id/view"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="#F7F7F9"
+                    android:layout_marginTop="8dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/ii" />
+                    app:layout_constraintTop_toBottomOf="@id/description" />
 
                 <TextView
                     android:id="@+id/textView7"

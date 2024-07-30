@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-
     <uses-feature android:name="android.hardware.camera" />
 
     <uses-permission android:name="android.permission.CAMERA" />
@@ -29,6 +28,9 @@
         android:usesCleartextTraffic="true"
         android:windowSoftInputMode="adjustResize"
         tools:targetApi="31">
+        <activity
+            android:name=".activities.ScientificHomeDetailActivity"
+            android:exported="false" />
         <activity
             android:name=".activities.BooksCategoriesActivity"
             android:exported="false" />
@@ -125,12 +127,12 @@
             android:exported="false" />
         <activity
             android:name=".quran.QuranChaptersActivity"
-            android:exported="true"
-            android:configChanges="orientation|screenSize"/>
+            android:configChanges="orientation|screenSize"
+            android:exported="true" />
         <activity
             android:name=".quran.ChapterDetailActivity"
-            android:exported="true"
-            android:configChanges="orientation|screenSize"/>
+            android:configChanges="orientation|screenSize"
+            android:exported="true" />
         <activity
             android:name=".activities.HistoryActivity"
             android:exported="false" />
@@ -148,8 +150,9 @@
             android:exported="false" />
         <activity
             android:name=".bottom_navigation.BottomNavigation"
-            android:exported="true"
-            android:configChanges="orientation|screenSize"/>
+            android:configChanges="orientation|screenSize"
+            android:exported="true" />
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
@@ -186,9 +189,7 @@
         <receiver
             android:name=".notifications.MediaNotificationManager"
             android:enabled="true"
-            android:exported="false">
-        </receiver>
-
+            android:exported="false" />
     </application>
 
 </manifest>

@@ -2,6 +2,7 @@ package com.taibahai.adapters
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -26,17 +27,19 @@ class AdapterHome(
 
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private val VIEW_TYPE_HOME = 0
-    private val VIEW_TYPE_SCIENTIFIC = 1
+    private val USER_POST = 0
+    private val ADMIN_POST_SCIENTIFIC = 1
 
     lateinit var context: Context
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         context = parent.context
         return when (viewType) {
-            VIEW_TYPE_SCIENTIFIC -> {
+            ADMIN_POST_SCIENTIFIC -> {
                 val binding =
                     ItemScientificHomeBinding.inflate(LayoutInflater.from(context), parent, false)
+
+
                 ScientificViewHolder(binding, listener)
             }
 
@@ -48,7 +51,7 @@ class AdapterHome(
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (showData[position].type == "scientific") VIEW_TYPE_SCIENTIFIC else VIEW_TYPE_HOME
+        return if (showData[position].post_type == "adminPostScientific") ADMIN_POST_SCIENTIFIC else USER_POST
     }
 
     fun setData(list: MutableList<ModelHome.Data>) {
@@ -101,7 +104,17 @@ class AdapterHome(
             }
 
             is ScientificViewHolder -> {
-                // Bind data for scientific view holder
+                holder.binding.tvScientificDescription.text = Html.fromHtml(userData.scientific_description, Html.FROM_HTML_MODE_COMPACT)
+                holder.binding.description.text = Html.fromHtml(userData.description, Html.FROM_HTML_MODE_COMPACT)
+                if (userData.feed_attachments.isNotEmpty()) {
+                    context.loadImageWithProgress(
+                        userData.feed_attachments[0].file,
+                        holder.binding.ivUploadImage,
+                        holder.binding.progressBar1
+                    )
+                } else {
+                    holder.binding.progressBar1.visibility = View.GONE
+                }
 
             }
         }
@@ -120,7 +133,7 @@ class AdapterHome(
         RecyclerView.ViewHolder(binding.root) {
         init {
             itemView.setOnClickListener {
-                listener.onClick(absoluteAdapterPosition, "comment")
+                listener.onClick(absoluteAdapterPosition, "scientific_detail")
             }
         }
     }

@@ -28,6 +28,7 @@ import com.taibahai.activities.CreatePostActivity
 import com.taibahai.activities.HomeDetailActivity
 import com.taibahai.activities.LoginActivity
 import com.taibahai.activities.NotificationActivity
+import com.taibahai.activities.ScientificHomeDetailActivity
 import com.taibahai.adapters.AdapterHome
 import com.taibahai.databinding.FragmentHomeBinding
 import com.taibahai.utils.Constants
@@ -267,6 +268,15 @@ class HomeFragment : BaseFragment() {
                         val intent = Intent(requireContext(), HomeDetailActivity::class.java)
                         intent.putExtra(AppConstants.BUNDLE, mData[position])
                         detailActivityResultLauncher.launch(intent)
+
+                    }
+                    "scientific_detail"->
+                    {
+                        val intent = Intent(requireContext(), ScientificHomeDetailActivity::class.java)
+                        intent.putExtra(AppConstants.BUNDLE, mData[position])
+                        detailActivityResultLauncher.launch(intent)
+
+
 
                     }
 

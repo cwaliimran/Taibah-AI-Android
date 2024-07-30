@@ -10,7 +10,8 @@ data class ModelHome(
 ) : Serializable {
     data class Data(
         var feed_id: String = "",
-        var description: String = "",
+        var description:String="",
+        var scientific_description: String = "",
         var user_name: String = "",
         var user_image: String = "",
         var timesince: String = "",
@@ -18,7 +19,7 @@ data class ModelHome(
         var comments: Int = 0,
         var is_like: Boolean = false,
         var likes: Int = 0,
-        var type:String=""
+        var post_type:String=""
     ) : Serializable {
         data class FeedAttachment(
             var file: String = "",
