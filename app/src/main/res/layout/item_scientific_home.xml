@@ -14,15 +14,15 @@
         <import type="android.view.View" />
 
     </data>
-<LinearLayout
-    android:id="@+id/scientificConstraint"
-    android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:layout_height="wrap_content">
 
-
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/scientificConstraint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <TextView
+            android:id="@+id/tvTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
@@ -30,7 +30,10 @@
             android:fontFamily="@font/poppins_medium"
             android:text="Scientific Fact:"
             android:textColor="@color/primary_green"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_scientific_description"
@@ -41,39 +44,53 @@
             android:fontFamily="@font/poppins_medium"
             android:textColor="#666666"
             android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvTitle"
             tools:text="Center of lying and sins exist in the frontal lobe the brain." />
 
         <ImageView
             android:id="@+id/ivUploadImage"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginHorizontal="16dp"
-            android:adjustViewBounds="true"
             android:layout_marginTop="10dp"
-            android:src="@drawable/placeholder" />
-    <ProgressBar
-        android:id="@+id/progressBar1"
-        android:layout_width="15dp"
-        android:layout_height="15dp"
-        android:indeterminate="true"
-        android:indeterminateTint="@color/primary_green"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/ivUploadImage"
-        app:layout_constraintEnd_toEndOf="@+id/ivUploadImage"
-        app:layout_constraintStart_toStartOf="@+id/ivUploadImage"/>
+            android:adjustViewBounds="true"
+            android:maxWidth="600dp"
+            android:maxHeight="400dp"
+            android:src="@drawable/placeholder"
+            android:visibility="@{data.feed_attachments != null &amp;&amp; data.feed_attachments.size() > 0 ? View.VISIBLE : View.GONE}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_scientific_description" />
+
+        <ProgressBar
+            android:id="@+id/progressBar1"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:indeterminate="true"
+            android:visibility="gone"
+            android:indeterminateTint="@color/primary_green"
+            app:layout_constraintBottom_toBottomOf="@+id/ivUploadImage"
+            app:layout_constraintEnd_toEndOf="@+id/ivUploadImage"
+            app:layout_constraintStart_toStartOf="@+id/ivUploadImage"
+            app:layout_constraintTop_toTopOf="@+id/ivUploadImage" />
+
         <TextView
             android:id="@+id/description"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
             android:layout_marginTop="16dp"
             android:fontFamily="@font/poppins_medium"
+            android:text="@string/dash"
             android:textColor="#666666"
             android:textSize="14sp"
-            android:text="@string/dash"
-            tools:text="No! If he does not desist, We will surely drag
-him by the forelock -A lying sinning forelock." />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivUploadImage"
+            tools:text="No!" />
 
 
         <Button
@@ -81,7 +98,10 @@ him by the forelock -A lying sinning forelock." />
             style="@style/button"
             android:layout_marginTop="10dp"
             android:background="@drawable/continue_btn_bg"
-            android:text="Comments" />
+            android:text="Comments"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/description" />
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

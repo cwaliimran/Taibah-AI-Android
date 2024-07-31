@@ -154,6 +154,8 @@
                 android:layout_marginVertical="5dp"
                 android:layout_toStartOf="@id/sendBtn"
                 android:background="@color/transparent"
+                android:singleLine="true"
+                android:imeOptions="actionSend"
                 android:fontFamily="@font/poppins"
                 android:textCursorDrawable="@drawable/et_cursor"
                 android:hint="type here.."

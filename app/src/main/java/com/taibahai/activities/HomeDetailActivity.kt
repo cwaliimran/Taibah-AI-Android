@@ -3,7 +3,8 @@ package com.taibahai.activities
 
 import android.app.Activity
 import android.content.Intent
-import android.view.View
+import android.view.inputmethod.EditorInfo
+import android.widget.TextView.OnEditorActionListener
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import com.bumptech.glide.Glide
@@ -20,6 +21,7 @@ import com.taibahai.adapters.AdapterComments
 import com.taibahai.databinding.ActivityHomeDetailBinding
 import com.taibahai.utils.showOptionsMenu
 import com.taibahai.utils.showToast
+
 
 class HomeDetailActivity : BaseActivity() {
     lateinit var binding: ActivityHomeDetailBinding
@@ -51,6 +53,17 @@ class HomeDetailActivity : BaseActivity() {
 
     override fun clicks() {
 
+        binding.messageBox.setOnEditorActionListener(OnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_SEND) {
+                comment = binding.messageBox.text.toString()
+                if (comment.isNotEmpty()) {
+                    viewModel.feedComment(model.feed_id, comment)
+
+                }
+                return@OnEditorActionListener true
+            }
+            false
+        })
 
         binding.ivBackArrow.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
@@ -70,7 +83,7 @@ class HomeDetailActivity : BaseActivity() {
 
         binding.sendBtn.setOnClickListener {
             comment = binding.messageBox.text.toString()
-            if (!comment.isNullOrEmpty()) {
+            if (comment.isNotEmpty()) {
                 viewModel.feedComment(model.feed_id, comment)
 
             }

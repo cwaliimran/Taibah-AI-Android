@@ -13,7 +13,6 @@ import com.network.base.BaseActivity
 import com.network.network.NetworkResult
 import com.network.utils.ProgressLoading.displayLoading
 import com.network.viewmodels.MainViewModelAI
-import com.taibahai.bottom_navigation.BottomNavigation
 import com.taibahai.databinding.ActivityCreatePostBinding
 import com.taibahai.utils.getPicker
 import com.taibahai.utils.showToast
@@ -43,6 +42,13 @@ class CreatePostActivity : BaseActivity() {
         }
 
         binding.ivPostUpload.setOnClickListener {
+            getPicker().createIntent {
+                displayLoading()
+                startForImageResult.launch(it)
+            }
+
+        }
+        binding.cvPost.setOnClickListener {
             getPicker().createIntent {
                 displayLoading()
                 startForImageResult.launch(it)
@@ -81,12 +87,16 @@ class CreatePostActivity : BaseActivity() {
                 }
 
                 is NetworkResult.Success -> {
-                    it.data?.let { it1 -> showToast(it1.message) }
+                    if (it.data?.status == 200) {
+                        it.data?.let { it1 -> showToast(it1.message) }
+                        val resultIntent = Intent()
+                        resultIntent.putExtra("result_key", true)
+                        setResult(Activity.RESULT_OK, resultIntent)
+                        finish()
+                    } else {
+                        it.data?.message?.let { it1 -> showToast(it1) }
+                    }
 
-                    val resultIntent = Intent()
-                    resultIntent.putExtra("result_key", true)
-                    setResult(Activity.RESULT_OK, resultIntent)
-                    finish()
                 }
 
                 is NetworkResult.Error -> {

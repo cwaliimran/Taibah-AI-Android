@@ -169,6 +169,7 @@ class MyProfileActivity : BaseActivity() {
                 is NetworkResult.Success -> {
                     mData.removeAt(currentItemAction)
                     adapter.notifyItemRemoved(currentItemAction)
+                    adapter.notifyItemRangeChanged(currentItemAction, mData.size)
                     if (mData.isEmpty()) {
                         show(binding.noData.root)
                         binding.noData.title.text = getString(R.string.no_posts_found)

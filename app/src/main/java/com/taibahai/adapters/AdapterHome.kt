@@ -104,8 +104,10 @@ class AdapterHome(
             }
 
             is ScientificViewHolder -> {
-                holder.binding.tvScientificDescription.text = Html.fromHtml(userData.scientific_description, Html.FROM_HTML_MODE_COMPACT)
-                holder.binding.description.text = Html.fromHtml(userData.description, Html.FROM_HTML_MODE_COMPACT)
+                holder.binding.tvScientificDescription.text =
+                    Html.fromHtml(userData.scientific_description, Html.FROM_HTML_MODE_COMPACT)
+                holder.binding.description.text =
+                    Html.fromHtml(userData.description, Html.FROM_HTML_MODE_COMPACT)
                 if (userData.feed_attachments.isNotEmpty()) {
                     context.loadImageWithProgress(
                         userData.feed_attachments[0].file,
@@ -116,6 +118,9 @@ class AdapterHome(
                     holder.binding.progressBar1.visibility = View.GONE
                 }
 
+                holder.binding.btnComment.setOnClickListener {
+                    listener.onClick(holder.absoluteAdapterPosition, "scientific_detail")
+                }
             }
         }
     }

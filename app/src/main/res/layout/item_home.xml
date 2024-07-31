@@ -113,16 +113,17 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-            <!--            android:loadImage="@{data.feed_attachments != null &amp;&amp; data.feed_attachments.size() > 0 ? data.feed_attachments[0].file : null}"-->
 
             <ImageView
                 android:id="@+id/ivUploadImage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="10dp"
                 android:adjustViewBounds="true"
-                android:minHeight="100dp"
+                android:maxWidth="600dp"
+                android:maxHeight="400dp"
                 android:src="@drawable/placeholder"
                 android:visibility="@{data.feed_attachments != null &amp;&amp; data.feed_attachments.size() > 0 ? View.VISIBLE : View.GONE}"
                 app:layout_constraintEnd_toEndOf="parent"
