@@ -8,6 +8,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.github.marlonlom.utilities.timeago.TimeAgo
 import com.network.interfaces.OnItemClick
 import com.network.models.ModelHome
@@ -75,11 +76,14 @@ class AdapterHome(
                 holder.binding.tvTimesAgo.text =
                     TimeAgo.using(userData.timesince.convertDateToLong())
                 if (userData.feed_attachments.isNotEmpty()) {
-                    context.loadImageWithProgress(
-                        userData.feed_attachments[0].file,
-                        holder.binding.ivUploadImage,
-                        holder.binding.progressBar1
-                    )
+
+                    Glide.with(context)
+                        .load(userData.feed_attachments[0].file).placeholder(R.drawable.placeholder).into(holder.binding.ivUploadImage)
+//                    context.loadImageWithProgress(
+//                        userData.feed_attachments[0].file,
+//                        holder.binding.ivUploadImage,
+//                        holder.binding.progressBar1
+//                    )
                 } else {
                     holder.binding.progressBar1.visibility = View.GONE
                 }
@@ -109,13 +113,15 @@ class AdapterHome(
                 holder.binding.description.text =
                     Html.fromHtml(userData.description, Html.FROM_HTML_MODE_COMPACT)
                 if (userData.feed_attachments.isNotEmpty()) {
-                    context.loadImageWithProgress(
-                        userData.feed_attachments[0].file,
-                        holder.binding.ivUploadImage,
-                        holder.binding.progressBar1
-                    )
+                    Glide.with(context)
+                        .load(userData.feed_attachments[0].file).placeholder(R.drawable.placeholder).into(holder.binding.ivUploadImage)
+//                    context.loadImageWithProgress(
+//                        userData.feed_attachments[0].file,
+//                        holder.binding.ivUploadImage,
+//                        holder.binding.progressBar1
+//                    )
                 } else {
-                    holder.binding.progressBar1.visibility = View.GONE
+//                    holder.binding.progressBar1.visibility = View.GONE
                 }
 
                 holder.binding.btnComment.setOnClickListener {

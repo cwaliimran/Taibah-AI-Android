@@ -16,262 +16,257 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/homeConstraint"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/bg_rounded_button"
+        android:backgroundTint="@color/grey"
+        android:paddingVertical="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cvImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                app:cardCornerRadius="100dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/ivProfileImage"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:loadImage="@{data.user_image}"
+                    android:scaleType="centerCrop" />
+            </androidx.cardview.widget.CardView>
+
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraintLayout"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/cvImage"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/tvUserName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins"
+                    android:text="@{data.user_name, default=``}"
+                    android:textColor="@color/black_russian"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Hassan Ali" />
+
+                <TextView
+                    android:id="@+id/tvTimesAgo"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20dp"
+                    android:fontFamily="@font/poppins"
+                    android:textColor="@color/silver"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toStartOf="@+id/ivDots"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvUserName"
+                    tools:text="2 hours ago" />
+
+                <ImageView
+                    android:id="@+id/ivDots"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:padding="10dp"
+                    android:src="@drawable/dots_black"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/ivDelete"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/delete"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ImageView
+            android:id="@+id/ivUploadImage"
+            android:layout_width="match_parent"
+            android:layout_height="320dp"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="10dp"
+            android:adjustViewBounds="true"
+            android:maxWidth="600dp"
+            android:maxHeight="400dp"
+            android:src="@drawable/placeholder"
+            android:visibility="@{data.feed_attachments != null &amp;&amp; data.feed_attachments.size() > 0 ? View.VISIBLE : View.GONE}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/constraintLayout" />
+
+        <ProgressBar
+            android:id="@+id/progressBar1"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:indeterminate="true"
+            android:indeterminateTint="@color/primary_green"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/ivUploadImage"
+            app:layout_constraintEnd_toEndOf="@+id/ivUploadImage"
+            app:layout_constraintStart_toStartOf="@+id/ivUploadImage"
+            app:layout_constraintTop_toTopOf="@+id/ivUploadImage" />
+
+        <TextView
+            android:id="@+id/tvDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/poppins"
+            android:text="@{data.description, default=``}"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ivUploadImage"
+            tools:text="Discover the spiritual depths and wisdom that illuminate your path with insights on Islamicteachings and practices." />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clLikes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvDescription">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cvImage"
+                <TextView
+                    android:id="@+id/likesCounting"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    app:cardCornerRadius="100dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    android:drawableStart="@drawable/likes_icon"
+                    android:drawablePadding="10dp"
+                    android:fontFamily="@font/poppins"
+                    android:text="@{data.likes+``, default=``}"
+                    android:textColor="@color/silver"
+                    android:textSize="14sp" />
 
-                    <ImageView
-                        android:id="@+id/ivProfileImage"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:loadImage="@{data.user_image}"
-                        android:scaleType="centerCrop" />
-                </androidx.cardview.widget.CardView>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="10dp"
-                    android:layout_marginTop="10dp"
-                    android:orientation="vertical"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/cvImage"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <TextView
-                        android:id="@+id/tvUserName"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/poppins"
-                        android:text="@{data.user_name, default=``}"
-                        android:textColor="@color/black_russian"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:text="Hassan Ali" />
-
-                    <TextView
-                        android:id="@+id/tvTimesAgo"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="20dp"
-                        android:fontFamily="@font/poppins"
-                        android:textColor="@color/silver"
-                        android:textSize="14sp"
-                        app:layout_constraintEnd_toStartOf="@+id/ivDots"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tvUserName"
-                        tools:text="2 hours ago" />
-
-                    <ImageView
-                        android:id="@+id/ivDots"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:padding="10dp"
-                        android:src="@drawable/dots_black"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <ImageView
-                        android:id="@+id/ivDelete"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:src="@drawable/delete"
-                        android:visibility="gone"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <ImageView
-                android:id="@+id/ivUploadImage"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="10dp"
-                android:adjustViewBounds="true"
-                android:maxWidth="600dp"
-                android:maxHeight="400dp"
-                android:src="@drawable/placeholder"
-                android:visibility="@{data.feed_attachments != null &amp;&amp; data.feed_attachments.size() > 0 ? View.VISIBLE : View.GONE}"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/constraintLayout" />
-
-            <ProgressBar
-                android:id="@+id/progressBar1"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:indeterminate="true"
-                android:indeterminateTint="@color/primary_green"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="@+id/ivUploadImage"
-                app:layout_constraintEnd_toEndOf="@+id/ivUploadImage"
-                app:layout_constraintStart_toStartOf="@+id/ivUploadImage"
-                app:layout_constraintTop_toTopOf="@+id/ivUploadImage" />
-
-            <TextView
-                android:id="@+id/tvDescription"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="20dp"
-                android:fontFamily="@font/poppins"
-                android:text="@{data.description, default=``}"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/ivUploadImage"
-                tools:text="Discover the spiritual depths and wisdom that illuminate your path with insights on Islamicteachings and practices." />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/clLikes"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvDescription">
-
-                <RelativeLayout
+                <TextView
+                    android:id="@+id/commentCounts"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <TextView
-                        android:id="@+id/likesCounting"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:drawableStart="@drawable/likes_icon"
-                        android:drawablePadding="10dp"
-                        android:fontFamily="@font/poppins"
-                        android:text="@{data.likes+``, default=``}"
-                        android:textColor="@color/silver"
-                        android:textSize="14sp" />
-
-                    <TextView
-                        android:id="@+id/commentCounts"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:drawablePadding="10dp"
-                        android:fontFamily="@font/poppins"
-                        android:text="@{data.comments+` Comments`, default=``}"
-                        android:textColor="@color/silver"
-                        android:textSize="14sp"
-                        tools:text="@string/dash" />
-                </RelativeLayout>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <View
-                android:id="@+id/view"
-                android:layout_width="match_parent"
-                android:layout_height="1.5dp"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="10dp"
-                android:background="#F7F7F9"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/clLikes" />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraint"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="20dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/view">
-
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <TextView
-                        android:id="@+id/tvLike"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentTop="true"
-                        android:drawablePadding="10dp"
-                        android:fontFamily="@font/poppins"
-                        android:text="Like"
-                        android:textColor="@color/silver"
-                        android:textSize="16sp"
-                        app:drawableStartCompat="@drawable/like_2"
-                        app:drawableStartFromBoolean="@{data._like}" />
-
-                    <TextView
-                        android:id="@+id/tvAddComment"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignParentEnd="true"
-                        android:drawableStart="@drawable/comment"
-                        android:drawablePadding="10dp"
-                        android:fontFamily="@font/poppins"
-                        android:text="Comment"
-                        android:textColor="@color/silver"
-                        android:textSize="16dp"
-                        android:visibility="visible" />
-
-                </RelativeLayout>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <!-- <View
-                 android:layout_width="match_parent"
-                 android:layout_height="10dp"
-                 app:layout_constraintStart_toStartOf="parent"
-                 app:layout_constraintEnd_toEndOf="parent"
-                 android:background="@color/lightgrey"
-                 android:layout_marginTop="10dp"
-                 app:layout_constraintTop_toBottomOf="@id/constraint"/>-->
+                    android:layout_alignParentEnd="true"
+                    android:drawablePadding="10dp"
+                    android:fontFamily="@font/poppins"
+                    android:text="@{data.comments+` Comments`, default=``}"
+                    android:textColor="@color/silver"
+                    android:textSize="14sp"
+                    tools:text="@string/dash" />
+            </RelativeLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="1.5dp"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="10dp"
+            android:background="#F7F7F9"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/clLikes" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/tvLike"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:drawablePadding="10dp"
+                    android:fontFamily="@font/poppins"
+                    android:text="Like"
+                    android:textColor="@color/silver"
+                    android:textSize="16sp"
+                    app:drawableStartCompat="@drawable/like_2"
+                    app:drawableStartFromBoolean="@{data._like}" />
+
+                <TextView
+                    android:id="@+id/tvAddComment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:drawableStart="@drawable/comment"
+                    android:drawablePadding="10dp"
+                    android:fontFamily="@font/poppins"
+                    android:text="Comment"
+                    android:textColor="@color/silver"
+                    android:textSize="16dp"
+                    android:visibility="visible" />
+
+            </RelativeLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- <View
+             android:layout_width="match_parent"
+             android:layout_height="10dp"
+             app:layout_constraintStart_toStartOf="parent"
+             app:layout_constraintEnd_toEndOf="parent"
+             android:background="@color/lightgrey"
+             android:layout_marginTop="10dp"
+             app:layout_constraintTop_toBottomOf="@id/constraint"/>-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>
