@@ -1,12 +1,17 @@
 package com.taibahai.fragments
 
 import android.app.Activity
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import android.widget.LinearLayout
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
@@ -30,6 +35,7 @@ import com.taibahai.activities.LoginActivity
 import com.taibahai.activities.NotificationActivity
 import com.taibahai.activities.ScientificHomeDetailActivity
 import com.taibahai.adapters.AdapterHome
+import com.taibahai.databinding.DialogWelcomeBinding
 import com.taibahai.databinding.FragmentHomeBinding
 import com.taibahai.utils.Constants
 import com.taibahai.utils.genericDialog
@@ -62,6 +68,26 @@ class HomeFragment : BaseFragment() {
     }
 
     override fun viewCreated() {
+        if (!AppClass.sharedPref.getBoolean("welcomeNote")) {
+            AppClass.sharedPref.storeBoolean("welcomeNote", true)
+            val dialog = Dialog(requireActivity())
+            val layoutInflater = LayoutInflater.from(requireActivity())
+            val binding = DialogWelcomeBinding.inflate(layoutInflater)
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+            dialog.setContentView(binding.root)
+            dialog.setCancelable(false)
+            binding.btnyes.setOnClickListener {
+                dialog.dismiss()
+            }
+
+            dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            dialog.window!!.setLayout(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+
+            dialog.show()
+
+        }
     }
 
     private val addPostActivityResultLauncher =
@@ -270,12 +296,12 @@ class HomeFragment : BaseFragment() {
                         detailActivityResultLauncher.launch(intent)
 
                     }
-                    "scientific_detail"->
-                    {
-                        val intent = Intent(requireContext(), ScientificHomeDetailActivity::class.java)
+
+                    "scientific_detail" -> {
+                        val intent =
+                            Intent(requireContext(), ScientificHomeDetailActivity::class.java)
                         intent.putExtra(AppConstants.BUNDLE, mData[position])
                         detailActivityResultLauncher.launch(intent)
-
 
 
                     }

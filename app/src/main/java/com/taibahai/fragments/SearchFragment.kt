@@ -51,7 +51,6 @@ import java.io.IOException
 import java.util.Locale
 import java.util.UUID
 
-
 class SearchFragment : BaseFragment(), OnItemClick {
     lateinit var binding: FragmentSearchBinding
     private val client = OkHttpClient()
@@ -109,7 +108,6 @@ class SearchFragment : BaseFragment(), OnItemClick {
         return binding.root
     }
 
-
     private fun hideBottomNavigation() {
         bottomNavigationView.visibility = View.GONE
     }
@@ -152,14 +150,14 @@ class SearchFragment : BaseFragment(), OnItemClick {
         }
     }
 
-
     override fun viewCreated() {
         isArchived = AppClass.sharedPref.getIsArchived()
+        archiveMessageId = AppClass.sharedPref.getLong(AppConstants.ARCHIVE_MESSAGE_ID, 0)
         chatDatabase = ChatDatabase.getDatabase(requireContext())
         chatMessageDao = chatDatabase.chatMessageDao()
 
         adapterMessagePopups = AdapterChatPopups(showMessagePopups) { message ->
-            if (message == "Completing Missed Rakaats"){
+            if (message == "Completing Missed Rakaats") {
 
             }
             binding.messageBox.setText(message)
@@ -169,9 +167,7 @@ class SearchFragment : BaseFragment(), OnItemClick {
         showTopMessagePopups()
         getAllMessages()
 
-        if (isArchived) {
-            archiveChat()
-        } else {
+        if (!isArchived) {
             unarchiveChat()
         }
     }
@@ -182,34 +178,30 @@ class SearchFragment : BaseFragment(), OnItemClick {
                 return@setOnClickListener
             }
             userQuestion = binding.messageBox.text.toString().trim()
-            if (userQuestion != null) {
-                if (userQuestion.isNotEmpty()) {
-                    activity?.displayLoading()
-                    binding.messageBox.text.clear()
+            if (userQuestion.isNotEmpty()) {
+                activity?.displayLoading()
+                binding.messageBox.text.clear()
 
-                    // Generate or use the existing conversationId for this conversation
-                    currentChatId = UUID.randomUUID().toString()
+                // Generate or use the existing conversationId for this conversation
+                currentChatId = UUID.randomUUID().toString()
 
-                    // Save the user's message to the Room database
-                    val userMessage = ModelChatMessage(
-                        message = userQuestion, isUser = true, conversationId = currentChatId!!
-                    )
+                // Save the user's message to the Room database
+                val userMessage = ModelChatMessage(
+                    message = userQuestion, isUser = true, conversationId = currentChatId!!
+                )
 
-                    GlobalScope.launch {
-                        chatDatabase.chatMessageDao().insertMessage(userMessage)
+                GlobalScope.launch {
+                    chatDatabase.chatMessageDao().insertMessage(userMessage)
 
-                        // Send the user question to chatbot API
-                        if (!spokenText.isNullOrEmpty()) {
-                            askChatbot(spokenText!!)
-                            spokenText = null  // Reset spokenText after sending the message
-                        } else {
-                            askChatbot(userQuestion)
-                        }
+                    // Send the user question to chatbot API
+                    if (!spokenText.isNullOrEmpty()) {
+                        askChatbot(spokenText!!)
+                        spokenText = null  // Reset spokenText after sending the message
+                    } else {
+                        askChatbot(userQuestion)
                     }
                 }
             }
-
-
         }
 
         binding.clFlashMsg.setOnClickListener {
@@ -240,9 +232,7 @@ class SearchFragment : BaseFragment(), OnItemClick {
             showToast("Not enough AI tokens")
         }
         return aiTokens > 0
-
     }
-
 
     private fun startSpeechToText() {
         val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
@@ -251,7 +241,6 @@ class SearchFragment : BaseFragment(), OnItemClick {
         )
 //        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ar-SA")
         //intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Say Something") // Change the language if needed
-
 
         try {
             startActivityForResult(intent, SPEECH_REQUEST_CODE)
@@ -273,49 +262,40 @@ class SearchFragment : BaseFragment(), OnItemClick {
         }
     }
 
-
     @SuppressLint("NotifyDataSetChanged")
     private fun updateUI(messages: List<ModelChatMessage>) {
         showMessage.clear()
 
         if (isArchived) {
-            binding.rvSearchAI.adapter?.notifyDataSetChanged()
-
-        } else {
-            if (isNewMessage) {
-                for (i in messages.indexOfFirst { it.id == archiveMessageId } + 1 until messages.size) {
-                    val message = messages[i]
-                    val modelMessage = ModelSearchAI(message.message, message.isUser)
-                    showMessage.add(modelMessage)
-                    messageAdapter.notifyItemInserted(showMessage.size)
-                    binding.rvSearchAI.scrollToPosition(showMessage.size - 1)
-                }
-            } else {
-                // Display the entire chat
-                for (message in messages) {
-                    val modelMessage = ModelSearchAI(message.message, message.isUser)
-                    showMessage.add(modelMessage)
-                }
-                binding.rvSearchAI.adapter?.notifyDataSetChanged()
-                binding.rvSearchAI.scrollToPosition(showMessage.size - 1)
+            // Filter messages to show only new messages after the last archived message
+            val newMessages = messages.filter { it.id > (archiveMessageId ?: 0) }
+            for (message in newMessages) {
+                val modelMessage = ModelSearchAI(message.message, message.isUser)
+                showMessage.add(modelMessage)
             }
+            binding.rvSearchAI.adapter?.notifyDataSetChanged()
+            binding.rvSearchAI.scrollToPosition(showMessage.size - 1)
+        } else {
+            // Display the entire chat
+            for (message in messages) {
+                val modelMessage = ModelSearchAI(message.message, message.isUser)
+                showMessage.add(modelMessage)
+            }
+            binding.rvSearchAI.adapter?.notifyDataSetChanged()
+            binding.rvSearchAI.scrollToPosition(showMessage.size - 1)
         }
     }
-
-
 
     private suspend fun getLastMessageId(): Long? = withContext(Dispatchers.IO) {
         val lastUserMessage = chatDatabase.chatMessageDao().getLastMessage()
         lastUserMessage?.id
     }
 
-
     private fun getAllMessages() {
         chatMessageDao.getAllMessages().observe(viewLifecycleOwner, Observer { messages ->
             updateUI(messages)
         })
     }
-
 
     private fun askChatbot(userQuestion: String) {
         getBotAnswer(userQuestion) { response ->
@@ -326,7 +306,6 @@ class SearchFragment : BaseFragment(), OnItemClick {
                 botResponse = response
                 displayBotResponse()
                 activity?.displayLoading(false)
-
             }
         }
     }
@@ -399,8 +378,6 @@ class SearchFragment : BaseFragment(), OnItemClick {
         })
     }
 
-
-
     private fun displayBotResponse() {
         // Save the bot response
         botResponse?.let {
@@ -411,9 +388,11 @@ class SearchFragment : BaseFragment(), OnItemClick {
             }
             botResponse = null
 
+            // Update UI to reflect the new message
+            isNewMessage = true
+            getAllMessages()
         }
     }
-
 
     override fun initAdapter() {
         messageAdapter = AdapterAISearch(requireContext(), showMessage, object : OnItemClick {
@@ -430,13 +409,11 @@ class SearchFragment : BaseFragment(), OnItemClick {
 
                         }
 
-
                         "pause" -> {
                             textToSpeech?.stop()
                             isAudioPlaying = false
                             updateVisibility(position)
                         }
-
 
                         else -> {}
                     }
@@ -444,8 +421,6 @@ class SearchFragment : BaseFragment(), OnItemClick {
                     Log.e("AISearch", "Invalid position: $position")
                 }
             }
-
-
         })
         binding.rvSearchAI.adapter = messageAdapter
     }
@@ -478,7 +453,6 @@ class SearchFragment : BaseFragment(), OnItemClick {
         }
     }
 
-
     private fun updateVisibility(position: Int) {
         val itemView = binding.rvSearchAI.findViewHolderForAdapterPosition(position)?.itemView
 
@@ -496,14 +470,11 @@ class SearchFragment : BaseFragment(), OnItemClick {
         }
     }
 
-
     override fun onStop() {
         super.onStop()
         textToSpeech?.stop()
         isAudioPlaying = false
-
     }
-
 
     private fun showPopupMenu(view: View) {
         val popupMenu = PopupMenu(requireContext(), view)
@@ -538,7 +509,6 @@ class SearchFragment : BaseFragment(), OnItemClick {
         popupMenu.show()
     }
 
-
     private fun archiveChat() {
         isArchived = true
         AppClass.sharedPref.setIsArchived(isArchived)
@@ -546,16 +516,17 @@ class SearchFragment : BaseFragment(), OnItemClick {
         // Save the Id of the last message before archiving
         GlobalScope.launch(Dispatchers.Main) {
             archiveMessageId = withContext(Dispatchers.IO) { getLastMessageId() }
+            AppClass.sharedPref.storeLong(AppConstants.ARCHIVE_MESSAGE_ID, archiveMessageId ?: 0L)
             isNewMessage = false // Not loading new messages, displaying the archived state
             updateUI(emptyList())  // Clear the UI to reflect the archived state
         }
     }
 
-
     private fun unarchiveChat() {
         isArchived = false
         AppClass.sharedPref.setIsArchived(isArchived)
         archiveMessageId = null
+        AppClass.sharedPref.storeLong(AppConstants.ARCHIVE_MESSAGE_ID, 0L)
         isNewMessage = false
         getAllMessages()
     }
@@ -574,11 +545,7 @@ class SearchFragment : BaseFragment(), OnItemClick {
         showMessagePopups.add(ModelChatPopups("Hajj and Umrah"))
         showMessagePopups.add(ModelChatPopups("Islamic Quotes"))
 
-
         adapterMessagePopups.setData(showMessagePopups)
         binding.rvTopMessagePopups.adapter = adapterMessagePopups
-
     }
-
-
 }

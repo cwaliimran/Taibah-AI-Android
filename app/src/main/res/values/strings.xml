@@ -89,6 +89,11 @@
     And Allah Ta’ala (الله تعالى) knows best.
     ]]>
 </string>
+    <string name="welcome_title"><b>"Welcome to the Taibai AI. Your personal Islamic AI Assistant."</b></string>
+    <string name="welcome_desc"> You have questions? The Taibah AI has answers.\nUnlock the doors of knowledge with the Taibah AI app by relying on the teachings of Quran and Sunnah of Prophet Mohammad SAW, and the books of Islamic Scholars.\n\n
+    <font color='#4CAF50'>We have surely set forth in this Quran every ˹kind of˺ lesson for people, but humankind is the most argumentative of all beings. (18-54)</font>\n\n
+
+</string>
 
 
 </resources>
