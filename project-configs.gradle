@@ -3,7 +3,7 @@ ext {
   compileSdkVersion = 34
   minSdkVersion = 26
   targetSdkVersion = compileSdkVersion
-  versionCode = 17
-  versionName = "1.17"
+  versionCode = 18
+  versionName = "1.18"
   testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 }
