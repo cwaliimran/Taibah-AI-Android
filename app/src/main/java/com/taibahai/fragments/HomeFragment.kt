@@ -202,13 +202,18 @@ class HomeFragment : BaseFragment() {
                 }
 
                 is NetworkResult.Success -> {
-                    mData[currentItemAction].is_like = !mData[currentItemAction].is_like
-                    if (mData[currentItemAction].is_like) {
-                        mData[currentItemAction].likes += 1
-                    } else {
-                        mData[currentItemAction].likes -= 1
+                    try {
+                        mData[currentItemAction].is_like = !mData[currentItemAction].is_like
+                        if (mData[currentItemAction].is_like) {
+                            mData[currentItemAction].likes += 1
+                        } else {
+                            mData[currentItemAction].likes -= 1
+                        }
+                        adapter.notifyItemChanged(currentItemAction)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        showToast("An error occurred while updating the like status.")
                     }
-                    adapter.notifyItemChanged(currentItemAction)
                 }
 
                 is NetworkResult.Error -> {
@@ -229,8 +234,13 @@ class HomeFragment : BaseFragment() {
 
                 is NetworkResult.Success -> {
                     showToast(it.data?.message.toString())
-                    adapter.notifyItemRemoved(reportedPos)
-                    mData.removeAt(reportedPos)
+                    try {
+                        adapter.notifyItemRemoved(reportedPos)
+                        mData.removeAt(reportedPos)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        showToast("An error occurred while removing the item.")
+                    }
                 }
 
                 is NetworkResult.Error -> {

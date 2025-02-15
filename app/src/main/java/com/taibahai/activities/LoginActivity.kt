@@ -17,21 +17,11 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.facebook.AccessToken
-import com.facebook.CallbackManager
-import com.facebook.FacebookCallback
-import com.facebook.FacebookException
-import com.facebook.FacebookSdk
-import com.facebook.appevents.AppEventsLogger
-import com.facebook.internal.Utility.logd
-import com.facebook.login.LoginManager
-import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
@@ -58,7 +48,6 @@ import java.io.OutputStream
 import java.net.HttpURLConnection
 import java.net.MalformedURLException
 import java.net.URL
-import java.util.Arrays
 import java.util.concurrent.Executors
 
 
@@ -76,7 +65,6 @@ class LoginActivity : BaseActivity() {
     lateinit var user: FirebaseUser
     var name = ""
     var socialType = ""
-    private val callbackManager = CallbackManager.Factory.create()
     var deviceID = "123"
     private val TAG = "LoginActivity"
 
@@ -85,8 +73,6 @@ class LoginActivity : BaseActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
         auth = FirebaseAuth.getInstance()
-        FacebookSdk.sdkInitialize(applicationContext)
-        AppEventsLogger.activateApp(application)
         deviceId()
         isUserAuthenticated()
     }
@@ -115,9 +101,7 @@ class LoginActivity : BaseActivity() {
             signInWithGoogle()
         }
 
-        binding.clFacebookBtn.setOnClickListener {
-             signInWithFacebook()
-        }
+
         binding.clGuestBtn.setOnClickListener {
             viewModel.socialLogin(
                 "abc",
@@ -169,7 +153,7 @@ class LoginActivity : BaseActivity() {
                 is NetworkResult.Success -> {
                     if (BuildConfig.FLAVOR == "adsFree") {
                         AppClass.sharedPref.storeBoolean(AppConstants.IS_ADS_FREE, true)
-                       val aiTokens = 100000
+                        val aiTokens = 100000
                         AppClass.sharedPref.storeInt(AppConstants.AI_TOKENS, aiTokens)
                         AppClass.sharedPref.storeBoolean(
                             AppConstants.IS_TAIBAH_AI_DIAMOND_PURCHASED, true
@@ -221,38 +205,42 @@ class LoginActivity : BaseActivity() {
         socialType = "google"
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential).addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
+            if (task.isSuccessful) {
 
-                    user = auth.currentUser!!
-                    val googleSignInAccount = GoogleSignIn.getLastSignedInAccount(this)
-                    name = googleSignInAccount?.displayName.toString()
-                    val profileImageUri = googleSignInAccount?.photoUrl
+                user = auth.currentUser!!
+                val googleSignInAccount = GoogleSignIn.getLastSignedInAccount(this)
+                name = googleSignInAccount?.displayName.toString()
+                val profileImageUri = googleSignInAccount?.photoUrl
 
 
-                    val myExecutor = Executors.newSingleThreadExecutor()
-                    val myHandler = Handler(Looper.getMainLooper())
-                    if (profileImageUri != null) {
-                        myExecutor.execute {
-                            mImage = mLoad(profileImageUri.toString())
-                            myHandler.post {
-                                //binding.imageView3.setImageBitmap(mImage)
-                                if (mImage != null) {
-                                    mSaveMediaToStorage(mImage)
-                                }
+                val myExecutor = Executors.newSingleThreadExecutor()
+                val myHandler = Handler(Looper.getMainLooper())
+                if (profileImageUri != null) {
+                    myExecutor.execute {
+                        mImage = mLoad(profileImageUri.toString())
+                        myHandler.post {
+                            //binding.imageView3.setImageBitmap(mImage)
+                            if (mImage != null) {
+                                mSaveMediaToStorage(mImage)
                             }
                         }
-                    } else {
-                        signUp()
                     }
-
-
                 } else {
-                    Toast.makeText(this, "Authentication Failed.", Toast.LENGTH_SHORT).show()
+                    signUp()
                 }
+
+
+            } else {
+                Toast.makeText(this, "Authentication Failed.", Toast.LENGTH_SHORT).show()
             }
+        }
     }
 
     private fun signUp() {
+        //check if user initialized
+        if (::user.isInitialized) {
+            return
+        }
         viewModel.socialLogin(
             user.uid,
             socialType,
@@ -278,7 +266,9 @@ class LoginActivity : BaseActivity() {
             return BitmapFactory.decodeStream(bufferedInputStream)
         } catch (e: IOException) {
             e.printStackTrace()
-            Toast.makeText(applicationContext, "Error", Toast.LENGTH_LONG).show()
+            Handler(Looper.getMainLooper()).post {
+                signUp()
+            }
         }
         return null
     }
@@ -352,7 +342,7 @@ class LoginActivity : BaseActivity() {
 
     private fun uploadFile(fos: OutputStream) {
         fos.use {
-    //            bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, it)
+            //            bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, it)
             // Toast.makeText(this, "Saved to Gallery", Toast.LENGTH_SHORT).show()
 
             viewModel.uploadFile(savedImagePath)
@@ -376,13 +366,20 @@ class LoginActivity : BaseActivity() {
     private fun saveFileLegacy(filename: String) {
         val imagesDir =
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+        if (!imagesDir.exists()) {
+            imagesDir.mkdirs()
+        }
         val image = File(imagesDir, filename)
 
         savedImagePath = image.path
 
-        fos = FileOutputStream(image)
-        fos.use {
-            viewModel.uploadFile(savedImagePath)
+        try {
+            fos = FileOutputStream(image)
+            fos.use {
+                viewModel.uploadFile(savedImagePath)
+            }
+        } catch (e: IOException) {
+            signUp()
         }
     }
 
@@ -401,78 +398,6 @@ class LoginActivity : BaseActivity() {
                 }
             }
         }
-    }
-
-
-    private fun signInWithFacebook() {
-        LoginManager.getInstance()
-            .logInWithReadPermissions(this, Arrays.asList("email", "public_profile"))
-        LoginManager.getInstance()
-            .registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
-                override fun onSuccess(result: LoginResult) {
-                    // Check if 'email' permission is granted
-                    if (result.recentlyGrantedPermissions.contains("email")) {
-                        // Continue with the login process
-                        handleFacebookAccessToken(result.accessToken)
-                    } else {
-                        // Handle the case where 'email' permission is not granted
-                        Toast.makeText(
-                            this@LoginActivity, "Email permission not granted", Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-
-
-                override fun onCancel() {
-                    // User canceled the login process
-                    Toast.makeText(
-                        this@LoginActivity,
-                        "Facebook login canceled",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-
-                override fun onError(error: FacebookException) {
-                    Toast.makeText(this@LoginActivity, "Facebook login error", Toast.LENGTH_SHORT)
-                        .show()
-                }
-
-
-            })
-    }
-
-    private fun handleFacebookAccessToken(token: AccessToken) {
-        val credential = FacebookAuthProvider.getCredential(token.token)
-        auth.signInWithCredential(credential).addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    // Facebook authentication successful
-                    val user = auth.currentUser
-                    name = user?.displayName ?: ""
-                    val profileImageUri = user?.photoUrl
-
-
-                    val myExecutor = Executors.newSingleThreadExecutor()
-                    val myHandler = Handler(Looper.getMainLooper())
-                    if (profileImageUri != null) {
-                        myExecutor.execute {
-                            mImage = mLoad(profileImageUri.toString())
-                            myHandler.post {
-                                //binding.imageView3.setImageBitmap(mImage)
-                                if (mImage != null) {
-                                    mSaveMediaToStorage(mImage)
-                                }
-                            }
-                        }
-                    } else {
-                        signUp()
-                    }
-
-                } else {
-                    // If sign in fails, display a message to the user.
-                    Toast.makeText(this, "Facebook authentication failed", Toast.LENGTH_SHORT)
-                        .show()
-                }
-            }
     }
 
 

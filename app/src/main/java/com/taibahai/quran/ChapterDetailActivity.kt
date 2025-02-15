@@ -159,7 +159,7 @@ class ChapterDetailActivity : AppCompatActivity() {
     private fun initAdapter() {
         mPlayerList = ArrayList()
         mData = ArrayList()
-        chaptersAdapter = name?.let { ChaptersAdapter(mData, context!!, true,surahName=true) }
+        chaptersAdapter = name?.let { ChaptersAdapter(mData, context!!, true, surahName = true) }
         binding.recyclerView.adapter = chaptersAdapter
         binding.recyclerView.isNestedScrollingEnabled = false
     }
@@ -202,36 +202,36 @@ class ChapterDetailActivity : AppCompatActivity() {
 
 
     private fun showAyatList() {
-            try {
-                lifecycleScope.launch {
-                    val jsonArr = JSONArray(loadQuranJson(context!!, surahId.toString()))
-                    for (i in 0 until jsonArr.length()) {
-                        val surahModel = ModelChapter()
-                        if (surahId == jsonArr.getJSONObject(i).getString("surah_number")) {
-                            surahModel.verse_number = jsonArr.getJSONObject(i).getString("verse_number")
-                            surahModel.text = jsonArr.getJSONObject(i).getString("text")
-                            surahModel.translation_en =
-                                jsonArr.getJSONObject(i).getString("translation_en")
-                            surahModel.transliteration_en =
-                                jsonArr.getJSONObject(i).getString("transliteration_en")
-                            mData.add(surahModel)
-                            counter++
-                            if (counter == totalVerse) {
-                                break
-                            }
+        try {
+            lifecycleScope.launch {
+                val jsonArr = JSONArray(loadQuranJson(context!!, surahId.toString()))
+                for (i in 0 until jsonArr.length()) {
+                    val surahModel = ModelChapter()
+                    if (surahId == jsonArr.getJSONObject(i).getString("surah_number")) {
+                        surahModel.verse_number = jsonArr.getJSONObject(i).getString("verse_number")
+                        surahModel.text = jsonArr.getJSONObject(i).getString("text")
+                        surahModel.translation_en =
+                            jsonArr.getJSONObject(i).getString("translation_en")
+                        surahModel.transliteration_en =
+                            jsonArr.getJSONObject(i).getString("transliteration_en")
+                        mData.add(surahModel)
+                        counter++
+                        if (counter == totalVerse) {
+                            break
                         }
                     }
                 }
-                chaptersAdapter!!.updateList(mData)
-                binding.progressBar.visibility = View.GONE
-                playSurah()
-                binding.playView.visibility = View.VISIBLE
-                Handler(Looper.getMainLooper()).postDelayed({
-                    startScroll()
-                },1000)
+            }
+            chaptersAdapter!!.updateList(mData)
+            binding.progressBar.visibility = View.GONE
+            playSurah()
+            binding.playView.visibility = View.VISIBLE
+            Handler(Looper.getMainLooper()).postDelayed({
+                startScroll()
+            }, 1000)
 
-            } catch (e: JSONException) {
-                e.printStackTrace()
+        } catch (e: JSONException) {
+            e.printStackTrace()
         }
     }
 
@@ -351,14 +351,18 @@ class ChapterDetailActivity : AppCompatActivity() {
     }
 
     fun updateCurrentIndex() {
-        for (i in mPlayerList!!.indices) {
-            val model = mPlayerList!![i]
-            if (!surahId!!.isEmpty()) {
-                if (surahId == model.id) {
-                    currentIndex = i
-                    break
+        try {
+            for (i in mPlayerList!!.indices) {
+                val model = mPlayerList!![i]
+                if (!surahId!!.isEmpty()) {
+                    if (surahId == model.id) {
+                        currentIndex = i
+                        break
+                    }
                 }
             }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 

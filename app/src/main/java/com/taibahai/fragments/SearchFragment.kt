@@ -434,9 +434,11 @@ class SearchFragment : BaseFragment(), OnItemClick {
 
             // Select a male voice if available
             val availableVoices = tts.voices
-            val maleVoice = availableVoices.find { it.name.contains("male", true) }
-            if (maleVoice != null) {
-                tts.voice = maleVoice
+            if (availableVoices.isNotEmpty()) {
+                val maleVoice = availableVoices.find { it.name.contains("male", true) }
+                if (maleVoice != null) {
+                    tts.voice = maleVoice
+                }
             }
 
             tts.setOnUtteranceCompletedListener { utteranceId ->

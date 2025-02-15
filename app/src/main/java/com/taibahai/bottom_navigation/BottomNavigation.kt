@@ -20,8 +20,6 @@ import com.network.utils.AppClass
 import com.network.utils.AppConstants
 import com.taibahai.BuildConfig
 import com.taibahai.R
-import com.taibahai.billings.BillingClientManager
-import com.taibahai.billings.EnumSubscriptionStatus
 import com.taibahai.billings.EnumSubscriptions
 import com.taibahai.databinding.ActivityBottomNavigationBinding
 import com.taibahai.fragments.ExploreFragment
@@ -99,12 +97,12 @@ class BottomNavigation : AppCompatActivity() {
         val appUpdateInfoTask = appUpdateManager.appUpdateInfo
         appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
             if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE &&
-                appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)
+                appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)
             ) {
                 try {
                     appUpdateManager.startUpdateFlowForResult(
                         appUpdateInfo, activityResultLauncher,
-                        AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build()
+                        AppUpdateOptions.newBuilder(AppUpdateType.FLEXIBLE).build()
                     )
                 } catch (e: IntentSender.SendIntentException) {
                     e.printStackTrace()
@@ -127,7 +125,7 @@ class BottomNavigation : AppCompatActivity() {
                 try {
                     appUpdateManager.startUpdateFlowForResult(
                         appUpdateInfo, activityResultLauncher,
-                        AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build()
+                        AppUpdateOptions.newBuilder(AppUpdateType.FLEXIBLE).build()
                     )
                 } catch (e: IntentSender.SendIntentException) {
                     e.printStackTrace()
