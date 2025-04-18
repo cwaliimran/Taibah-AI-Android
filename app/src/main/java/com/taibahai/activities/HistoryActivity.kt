@@ -3,38 +3,54 @@ package com.taibahai.activities
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Window
 import android.widget.LinearLayout
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.Observer
 import com.network.base.BaseActivity
 import com.network.interfaces.OnItemClick
-import com.taibahai.R
+import com.network.utils.AppClass
+import com.network.utils.AppConstants
 import com.taibahai.adapters.AdapterAISearch
 import com.taibahai.databinding.ActivityHistoryBinding
 import com.taibahai.databinding.DialogHistoryBinding
-import com.taibahai.databinding.DialogLogoutBinding
 import com.taibahai.models.ModelSearchAI
 import com.taibahai.room_database.ChatDatabase
 import com.taibahai.room_database.ChatMessageDao
 import com.taibahai.room_database.ModelChatMessage
+import com.taibahai.utils.AppTourDialog
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class HistoryActivity : BaseActivity() {
-    lateinit var binding:ActivityHistoryBinding
+    lateinit var binding: ActivityHistoryBinding
     private lateinit var chatDatabase: ChatDatabase
     private lateinit var chatMessageDao: ChatMessageDao
+    private var appTourList = AppClass.sharedPref.getList<String>(AppConstants.APP_TOUR_TYPE)
 
     override fun onCreate() {
-        binding=ActivityHistoryBinding.inflate(layoutInflater)
+        binding = ActivityHistoryBinding.inflate(layoutInflater)
         chatDatabase = ChatDatabase.getDatabase(this)
         chatMessageDao = chatDatabase.chatMessageDao()
         setContentView(binding.root)
         getAllMessages()
+        if (!appTourList.contains("historyList")) {
+            AppTourDialog.appTour(
+                this,
+                binding.ivDeleteHistory,
+                "Delete History",
+                "On the History Screen, you can manage your past interactions. Tapping the Delete Icon will prompt a confirmation popup, ensuring you want to permanently delete your history before proceeding."
+            ) {
+                appTourList.add("historyList")
+                appTourList.add("historyDelete")
+                AppClass.sharedPref.storeList(
+                    AppConstants.APP_TOUR_TYPE,
+                    appTourList
+                )
+                showDeleteDialog(true)
+
+            }
+        }
     }
 
     override fun clicks() {
@@ -43,7 +59,7 @@ class HistoryActivity : BaseActivity() {
         }
 
         binding.ivDeleteHistory.setOnClickListener {
-            showDeleteDialog()
+            showDeleteDialog(false)
         }
 
     }
@@ -56,7 +72,7 @@ class HistoryActivity : BaseActivity() {
 
     override fun initAdapter() {
         super.initAdapter()
-        val messageAdapter = AdapterAISearch(this, ArrayList(),object :OnItemClick{
+        val messageAdapter = AdapterAISearch(this, ArrayList(), object : OnItemClick {
 
         })
         binding.rvHistory?.adapter = messageAdapter
@@ -75,7 +91,7 @@ class HistoryActivity : BaseActivity() {
         binding.rvHistory?.adapter?.notifyDataSetChanged()
     }
 
-    private fun showDeleteDialog() {
+    private fun showDeleteDialog(appTour: Boolean = false) {
         val dialog = Dialog(this)
         val layoutInflater = LayoutInflater.from(this)
         val binding = DialogHistoryBinding.inflate(layoutInflater)
@@ -99,5 +115,20 @@ class HistoryActivity : BaseActivity() {
         )
 
         dialog.show()
+
+        if (appTour) {
+            AppTourDialog.appTour(
+                this,
+                binding.btnYes,
+                "Delete",
+                "This button will delete your entire history. Please be cautious, as this action cannot be undone."
+            ) {
+                AppClass.sharedPref.storeList(
+                    AppConstants.APP_TOUR_TYPE,
+                    appTourList
+                )
+                finish()
+            }
+        }
     }
 }

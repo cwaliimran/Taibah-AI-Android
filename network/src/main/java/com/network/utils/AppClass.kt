@@ -8,10 +8,10 @@ import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Build
 import com.android.billingclient.api.ProductDetails
+import com.network.BuildConfig
 import com.network.models.ModelUser
 import java.io.File
 import java.util.Locale
-import com.network.BuildConfig
 
 
 class AppClass : Application() {
@@ -43,7 +43,6 @@ class AppClass : Application() {
         }
 
     }
-
 
 
     companion object {

@@ -11,6 +11,8 @@ import androidx.fragment.app.viewModels
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
 import com.network.base.BaseFragment
+import com.network.utils.AppClass
+import com.network.utils.AppConstants
 import com.network.viewmodels.MainViewModelAI
 import com.taibahai.R
 import com.taibahai.activities.SettingActivity
@@ -18,6 +20,7 @@ import com.taibahai.adapters.AdapterMore
 import com.taibahai.databinding.FragmentMoreBinding
 import com.taibahai.models.ModelMore
 import com.taibahai.models.ModelMoreLevels
+import com.taibahai.utils.AppTourDialog
 
 class MoreFragment : BaseFragment() {
     lateinit var binding: FragmentMoreBinding
@@ -51,7 +54,7 @@ class MoreFragment : BaseFragment() {
 
     override fun initAdapter() {
         showList.clear()
-        adapter = AdapterMore(requireContext(), showList)
+        adapter = AdapterMore(requireActivity(), showList)
         val moreFree = ArrayList<ModelMoreLevels>()
 
         moreFree.add(ModelMoreLevels("quran", R.drawable.quran_icon, "Quran"))
@@ -88,14 +91,46 @@ class MoreFragment : BaseFragment() {
             )
         )
 
-        moreLevel3.add(ModelMoreLevels("books_pdfs", R.drawable.bookspdf_icon, "Islamic Literature"))
-        showList.add(ModelMore("Level 3", "Diamond Package\nUnlimited AI Tokens (monthly)", moreLevel3))
+        moreLevel3.add(
+            ModelMoreLevels(
+                "books_pdfs", R.drawable.bookspdf_icon, "Islamic Literature"
+            )
+        )
+        showList.add(
+            ModelMore(
+                "Level 3", "Diamond Package\nUnlimited AI Tokens (monthly)", moreLevel3
+            )
+        )
 
 
 
 
         adapter.setData(showList)
         binding.rvMoreList.adapter = adapter
+
+        var appTourList = AppClass.sharedPref.getList<String>(AppConstants.APP_TOUR_TYPE)
+
+        if (!appTourList.contains("more")) {
+            AppTourDialog.appTour(
+                requireActivity(),
+                binding.ivAppTour,
+                "Level 2",
+                "Upgrade to the Gold Package and  enjoy 700 AI tokens monthly, access  to the Zakat Calculator, and insights  from the Four Imams of Sunnah for a  deeper Islamic learning experience."
+            ) {
+                AppTourDialog.appTour(
+                    requireActivity(),
+                    binding.ivAppTour,
+                    "Level 3",
+                    "Upgrade to the Diamond Package  and unlock unlimited AI tokens, an  ad-free experience, exclusive Islamic  literature, inheritance law guidance,  and access to a Hadith & Surah  search database."
+                ) {
+                    appTourList.add("more")
+                    AppClass.sharedPref.storeList(
+                        AppConstants.APP_TOUR_TYPE,
+                        appTourList
+                    )
+                }
+            }
+        }
     }
 
 

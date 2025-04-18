@@ -7,27 +7,34 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.github.marlonlom.utilities.timeago.TimeAgo
 import com.network.interfaces.OnItemClick
 import com.network.models.ModelHome
+import com.network.utils.AppClass
+import com.network.utils.AppConstants
 import com.network.utils.convertDateToLong
 import com.taibahai.R
 import com.taibahai.databinding.ItemHomeBinding
 import com.taibahai.databinding.ItemScientificHomeBinding
-import com.taibahai.utils.ImageLoading.loadImageWithProgress
+import com.taibahai.utils.AppTourDialog
 import com.taibahai.utils.showOptionsMenu
+import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt
 
 
 class AdapterHome(
     var showData: MutableList<ModelHome.Data>,
     private var isProfileFeed: Boolean = false,
     private var listener: OnItemClick,
+    private var fragmentContext: FragmentActivity,
     private val onMenuItemClickListener: (ModelHome.Data, MenuItem) -> Boolean
 
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
+    private var appTourList = AppClass.sharedPref.getList<String>(AppConstants.APP_TOUR_TYPE)
     private val USER_POST = 0
     private val ADMIN_POST_SCIENTIFIC = 1
 
@@ -39,8 +46,6 @@ class AdapterHome(
             ADMIN_POST_SCIENTIFIC -> {
                 val binding =
                     ItemScientificHomeBinding.inflate(LayoutInflater.from(context), parent, false)
-
-
                 ScientificViewHolder(binding, listener)
             }
 
@@ -78,7 +83,8 @@ class AdapterHome(
                 if (userData.feed_attachments.isNotEmpty()) {
 
                     Glide.with(context)
-                        .load(userData.feed_attachments[0].file).placeholder(R.drawable.placeholder).into(holder.binding.ivUploadImage)
+                        .load(userData.feed_attachments[0].file).placeholder(R.drawable.placeholder)
+                        .into(holder.binding.ivUploadImage)
 //                    context.loadImageWithProgress(
 //                        userData.feed_attachments[0].file,
 //                        holder.binding.ivUploadImage,
@@ -114,7 +120,8 @@ class AdapterHome(
                     Html.fromHtml(userData.description, Html.FROM_HTML_MODE_COMPACT)
                 if (userData.feed_attachments.isNotEmpty()) {
                     Glide.with(context)
-                        .load(userData.feed_attachments[0].file).placeholder(R.drawable.placeholder).into(holder.binding.ivUploadImage)
+                        .load(userData.feed_attachments[0].file).placeholder(R.drawable.placeholder)
+                        .into(holder.binding.ivUploadImage)
 //                    context.loadImageWithProgress(
 //                        userData.feed_attachments[0].file,
 //                        holder.binding.ivUploadImage,
@@ -126,6 +133,26 @@ class AdapterHome(
 
                 holder.binding.btnComment.setOnClickListener {
                     listener.onClick(holder.absoluteAdapterPosition, "scientific_detail")
+                }
+
+                if (holder.absoluteAdapterPosition == 0 && !appTourList.contains("home")) {
+                    AppTourDialog.appTour(
+                        fragmentContext,
+                        holder.binding.tvTitle,
+                        "Home",
+                        "Welcome to the Home screen  (Scientific Fact)! If you click on a  post, you'll be taken to the Detail  page, where you can like, comment,  and report the post if needed."
+                    ) {
+                        appTourList.add("home")
+                        AppClass.sharedPref.storeList(
+                            AppConstants.APP_TOUR_TYPE,
+                            appTourList
+                        )
+                        listener.onClick(
+                            holder.absoluteAdapterPosition,
+                            "scientific_detail"
+                        )
+                    }
+
                 }
             }
         }

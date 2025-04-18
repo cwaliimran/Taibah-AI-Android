@@ -7,11 +7,14 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.LinearLayout
+import android.widget.PopupWindow
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
@@ -28,15 +31,16 @@ import com.network.utils.AppConstants
 import com.network.utils.ProgressLoading.displayLoading
 import com.network.viewmodels.MainViewModelAI
 import com.network.viewmodels.SharedViewModel
-import com.taibahai.R
 import com.taibahai.activities.CreatePostActivity
 import com.taibahai.activities.HomeDetailActivity
 import com.taibahai.activities.LoginActivity
 import com.taibahai.activities.NotificationActivity
 import com.taibahai.activities.ScientificHomeDetailActivity
 import com.taibahai.adapters.AdapterHome
+import com.taibahai.databinding.DialogAppTourBinding
 import com.taibahai.databinding.DialogWelcomeBinding
 import com.taibahai.databinding.FragmentHomeBinding
+import com.taibahai.utils.AppTourDialog
 import com.taibahai.utils.Constants
 import com.taibahai.utils.genericDialog
 import com.taibahai.utils.showToast
@@ -61,10 +65,11 @@ class HomeFragment : BaseFragment() {
     ): View {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate<FragmentHomeBinding>(
-            inflater, R.layout.fragment_home, container, false
+            inflater, com.taibahai.R.layout.fragment_home, container, false
         )
 
         return binding.root
+
     }
 
     override fun viewCreated() {
@@ -88,12 +93,18 @@ class HomeFragment : BaseFragment() {
             dialog.show()
 
         }
+
     }
+
 
     private val addPostActivityResultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val data = result.data
+                //app tour check
+                if (data?.getStringExtra(AppConstants.BUNDLE) == "tour") {
+                    return@registerForActivityResult
+                }
                 val booleanResult = data?.getBooleanExtra("result_key", false) ?: false
                 if (booleanResult) {
                     mData.clear()
@@ -109,12 +120,24 @@ class HomeFragment : BaseFragment() {
                 handleGuestLogic()
                 return@setOnClickListener
             }
-            addPostActivityResultLauncher.launch(
-                Intent(
-                    requireContext(),
-                    CreatePostActivity::class.java
+            var isSilverPurchased =
+                AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_SILVER_PURCHASED)
+            var isGoldPurchased =
+                AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_GOLD_PURCHASED)
+            var isDiamondPurchased =
+                AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_DIAMOND_PURCHASED)
+
+            if (isSilverPurchased || isGoldPurchased || isDiamondPurchased) {
+                addPostActivityResultLauncher.launch(
+                    Intent(
+                        requireContext(),
+                        CreatePostActivity::class.java
+                    )
                 )
-            )
+            } else {
+                //show toast to subscribe first
+                showToast("Please subscribe to create a post.")
+            }
         }
 
         binding.ivNotification.setOnClickListener {
@@ -169,6 +192,7 @@ class HomeFragment : BaseFragment() {
 
                     mData.addAll((it.data?.data ?: listOf()))
                     sharedViewModel.setData(mData)
+
 
                 }
 
@@ -312,18 +336,17 @@ class HomeFragment : BaseFragment() {
                             Intent(requireContext(), ScientificHomeDetailActivity::class.java)
                         intent.putExtra(AppConstants.BUNDLE, mData[position])
                         detailActivityResultLauncher.launch(intent)
-
-
                     }
+
 
                     else -> {}
                 }
             }
 
-        }) { data, menuItem ->
+        }, requireActivity()) { data, menuItem ->
 
             when (menuItem.itemId) {
-                R.id.menu_report -> {
+                com.taibahai.R.id.menu_report -> {
                     reportedPos = mData.indexOf(data)
                     if (isGuest()) {
                         handleGuestLogic()
@@ -344,6 +367,24 @@ class HomeFragment : BaseFragment() {
             if (result.resultCode == Activity.RESULT_OK) {
                 // Handle the result
                 val data: Intent? = result.data
+
+                if (data?.getStringExtra(AppConstants.BUNDLE) == "tour") {
+                    AppTourDialog.appTour(
+                        requireActivity(),
+                        binding.ivCreatePostIcon,
+                        "Create Post",
+                        "On the Home screen, there is an  option to create a post. Clicking  this button will take you to the  Create Post screen."
+                    ) {
+                        addPostActivityResultLauncher.launch(
+                            Intent(
+                                requireContext(),
+                                CreatePostActivity::class.java
+                            )
+                        )
+                    }
+                    return@registerForActivityResult
+                }
+
                 var model: ModelHome.Data? =
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                         data?.getSerializableExtra(AppConstants.BUNDLE, ModelHome.Data::class.java)
@@ -394,4 +435,34 @@ class HomeFragment : BaseFragment() {
         })
     }
 
+    fun Activity.dialogAppTour(anchor: View, event: MotionEvent, modelTask: String) {
+        val binding = DialogAppTourBinding.inflate(layoutInflater)
+
+        val popupWindow = PopupWindow(
+            binding.root,
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+
+        popupWindow.isFocusable = true
+        popupWindow.isOutsideTouchable = true
+        popupWindow.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+//        //show on exact view position
+//        // Calculate the x and y offsets for positioning the popup to the left
+//        val xOff = -(popupWindow.width / 2)  // Adjust this value as needed
+//        val yOff = 0 // Adjust this value as needed
+//
+//        // Show the popup to the left of the anchor view
+//        popupWindow.showAsDropDown(anchor, xOff, yOff)
+
+        // Calculate the x and y coordinates for positioning the popup
+        val x = (event.rawX - popupWindow.width).toInt()
+        val y = event.rawY.toInt()
+
+        // Show the popup at the exact clicked position relative to the anchor view
+        popupWindow.showAtLocation(anchor, Gravity.NO_GRAVITY, x, y)
+
+
+    }
 }

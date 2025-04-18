@@ -28,6 +28,7 @@ import com.taibahai.quran.ReaderSettingsActivity
 import com.taibahai.utils.Constants
 import com.taibahai.utils.openPlayStoreForRating
 import com.taibahai.utils.shareApp
+import com.taibahai.utils.showToast
 
 class SettingActivity : BaseActivity() {
     lateinit var binding: ActivitySettingBinding
@@ -74,6 +75,7 @@ class SettingActivity : BaseActivity() {
             add(ModelSettings(8, R.drawable.pp, "Privacy Policy"))
             add(ModelSettings(12, R.drawable.pp, "Terms and Conditions"))
             add(ModelSettings(9, R.drawable.cs, "Contact Support"))
+            add(ModelSettings(13, R.drawable.aboutus, "Reset App Tour"))
             add(ModelSettings(10, R.drawable.logout, "Logout"))
         }
         val adapter = AdapterSettings(showList, object : OnItemClick {
@@ -139,6 +141,14 @@ class SettingActivity : BaseActivity() {
                             ReaderSettingsActivity::class.java
                         )
                     )
+
+                    13 -> {
+                        AppClass.sharedPref.storeList(
+                            AppConstants.APP_TOUR_TYPE,
+                            mutableListOf<String>()
+                        )
+                        showToast("App Tour Reset Successfully")
+                    }
                 }
             }
         })

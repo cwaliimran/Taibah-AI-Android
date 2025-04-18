@@ -11,9 +11,12 @@ import com.bumptech.glide.Glide
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.network.base.BaseActivity
 import com.network.network.NetworkResult
+import com.network.utils.AppClass
+import com.network.utils.AppConstants
 import com.network.utils.ProgressLoading.displayLoading
 import com.network.viewmodels.MainViewModelAI
 import com.taibahai.databinding.ActivityCreatePostBinding
+import com.taibahai.utils.AppTourDialog
 import com.taibahai.utils.getPicker
 import com.taibahai.utils.showToast
 
@@ -22,11 +25,29 @@ class CreatePostActivity : BaseActivity() {
     lateinit var binding: ActivityCreatePostBinding
     val viewModel: MainViewModelAI by viewModels()
     var upLoadedFile = ""
+    private var appTourList = AppClass.sharedPref.getList<String>(AppConstants.APP_TOUR_TYPE)
 
 
     override fun onCreate() {
         binding = ActivityCreatePostBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        if (!appTourList.contains("post")) {
+         AppTourDialog.appTour(
+                this,
+                binding.ivPostUpload,
+                "Post Image",
+                "Once the user selects an image, it will  be displayed on the screen."
+            ) {
+                appTourList.add("post")
+                AppClass.sharedPref.storeList(
+                    AppConstants.APP_TOUR_TYPE,
+                    appTourList
+                )
+                setResult(Activity.RESULT_OK, Intent().putExtra("result_key", "tour"))
+                finish()
+            }
+        }
     }
 
 

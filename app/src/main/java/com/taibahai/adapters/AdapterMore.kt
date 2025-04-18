@@ -1,6 +1,6 @@
 package com.taibahai.adapters
 
-import android.content.Context
+import android.app.Activity
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
@@ -23,8 +23,9 @@ import com.taibahai.models.ModelMore
 import com.taibahai.models.ModelMoreLevels
 import com.taibahai.quran.QuranChaptersActivity
 import com.taibahai.search_database_tablayout.SearchDatabaseActivity
+import com.taibahai.utils.AppTourDialog
 
-class AdapterMore(private val context: Context, var showData: MutableList<ModelMore>) :
+class AdapterMore(private val context: Activity, var showData: MutableList<ModelMore>) :
     RecyclerView.Adapter<AdapterMore.ViewHolder>() {
     lateinit var binding: ItemMoreBinding
 

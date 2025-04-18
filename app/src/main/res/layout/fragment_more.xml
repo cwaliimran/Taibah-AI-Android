@@ -12,6 +12,7 @@
         <include
             android:id="@+id/appbar"
             layout="@layout/appbar" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvMoreList"
             android:layout_width="0dp"
@@ -39,5 +40,12 @@
             app:layout_constraintStart_toStartOf="parent" />
 
 
+        <ImageView
+            android:id="@+id/ivAppTour"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginBottom="250dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

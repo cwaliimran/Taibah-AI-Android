@@ -15,5 +15,6 @@ object AppConstants {
     val CURRENT_USER = "current_user"
     val CURRENT_DATE = "current_date"
     val TODAY = "today"
+    val APP_TOUR_TYPE = "appTourType"
 
 }

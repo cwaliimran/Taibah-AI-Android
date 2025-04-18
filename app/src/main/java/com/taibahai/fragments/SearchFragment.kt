@@ -1,6 +1,7 @@
 package com.taibahai.fragments
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -33,6 +34,7 @@ import com.taibahai.models.ModelSearchAI
 import com.taibahai.room_database.ChatDatabase
 import com.taibahai.room_database.ChatMessageDao
 import com.taibahai.room_database.ModelChatMessage
+import com.taibahai.utils.AppTourDialog
 import com.taibahai.utils.showToast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -73,6 +75,7 @@ class SearchFragment : BaseFragment(), OnItemClick {
     private lateinit var bottomNavigationView: BottomNavigationView
     private var isKeyboardOpen = false
     var aiTokens = 0
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -124,6 +127,42 @@ class SearchFragment : BaseFragment(), OnItemClick {
             binding.tvRemainingTokens.text = "Unlimited Tokens"
         } else {
             binding.tvRemainingTokens.text = "Remaining Tokens : $aiTokens"
+        }
+         var appTourList = AppClass.sharedPref.getList<String>(AppConstants.APP_TOUR_TYPE)
+
+        if (!appTourList.contains("aiSearchTokens")) {
+            AppTourDialog.appTour(
+                requireActivity(),
+                binding.ivFlashMsg,
+                "AI Feature",
+                "Get instant answers to your Islamic  queries with Taibah AI."
+            ) {
+                AppTourDialog.appTour(
+                    requireActivity(),
+                    binding.sendBtn,
+                    "AI Input Box",
+                    "Type your query here to get a quick  response from Taibah AI."
+                ) {
+                    binding.ivDotsSelect.performClick()
+                    AppTourDialog.appTour(
+                        requireActivity(),
+                        binding.ivDotsSelect,
+                        "History View",
+                        "If you click on the History option, you  will be taken to the History screen."
+                    ) {
+                        appTourList.add("historyView")
+                        appTourList.add("aiSearchTokens")
+                        appTourList.add("aiInputBox")
+                        AppClass.sharedPref.storeList(
+                            AppConstants.APP_TOUR_TYPE,
+                            appTourList
+                        )
+                        //got to history screen
+                        val intent = Intent(requireContext(), HistoryActivity::class.java)
+                        startActivity(intent)
+                    }
+                }
+            }
         }
 
     }

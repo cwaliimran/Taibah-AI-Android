@@ -22,6 +22,7 @@ import com.taibahai.R
 import com.taibahai.databinding.FragmentExploreBinding
 import com.taibahai.hadiths.HadithBooksActivity1
 import com.taibahai.quran.QuranChaptersActivity
+import com.taibahai.utils.AppTourDialog
 import com.taibahai.utils.ShareImage.getBitmapFromView
 import com.taibahai.utils.showToast
 import java.text.SimpleDateFormat
@@ -46,10 +47,43 @@ class ExploreFragment : BaseFragment() {
     }
 
     override fun viewCreated() {
+
         binding.appbar.tvTitle.text = "Explore"
         binding.appbar.ivLeft.setVisibility(View.GONE)
-        
+        var appTourList = AppClass.sharedPref.getList<String>(AppConstants.APP_TOUR_TYPE)
+        if (!appTourList.contains("quran")) {
+            AppTourDialog.appTour(
+                requireActivity(),
+                binding.ivQuran,
+                "Quran",
+                "If we click on the Quran button,  we land on the Quran page."
+            ) {
+                //hadith
+                AppTourDialog.appTour(
+                    requireActivity(),
+                    binding.ivHadith,
+                    "Hadith",
+                    "If we click on the Hadiths button,  we land on the Hadiths page."
+                ) {
+                    //today verse
+                    AppTourDialog.appTour(
+                        requireActivity(),
+                        binding.inTodayVerse.tvTodaysVerse,
+                        "Today Verse",
+                        "This is the verse of the day. If we click on it, we can share it."
+                    ) {
+                        appTourList.add("hadiths")
+                        appTourList.add("quran")
+                        appTourList.add("hadith")
+                        AppClass.sharedPref.storeList(
+                            AppConstants.APP_TOUR_TYPE,
+                            appTourList
+                        )
+                    }
 
+                }
+            }
+        }
     }
 
     override fun clicks() {
@@ -89,12 +123,17 @@ class ExploreFragment : BaseFragment() {
                     val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
                     val formattedTodayDate = dateFormat.format(todayDate)
                     AppClass.sharedPref.storeObject(AppConstants.TODAY, it.data?.data)
-                    AppClass.sharedPref.storeString(AppConstants.CURRENT_DATE, formattedTodayDate)
+                    AppClass.sharedPref.storeString(
+                        AppConstants.CURRENT_DATE,
+                        formattedTodayDate
+                    )
                     binding.inTodayVerse.ayatArabicText.text = it.data?.data?.quran?.text
-                    binding.inTodayVerse.ayatNumber.text = it.data?.data?.quran?.verse_number
+                    binding.inTodayVerse.ayatNumber.text =
+                        it.data?.data?.quran?.verse_number
                     binding.inTodayVerse.ayatEnglishTranslation.text =
                         it.data?.data?.quran?.quran_translation_en
-                    binding.inTodayVerse.tvSurah.text = it.data?.data?.quran?.transliteration_en
+                    binding.inTodayVerse.tvSurah.text =
+                        it.data?.data?.quran?.transliteration_en
                     val transliteration = it.data?.data?.quran?.quran_transliteration_en
                     if (transliteration != null) {
                         val spannedText: Spanned =
@@ -128,10 +167,11 @@ class ExploreFragment : BaseFragment() {
 
     override fun apiAndArgs() {
         super.apiAndArgs()
-       // viewModel.today()
-          val todayDate = Date()
-        val savedData =AppClass.sharedPref.getObject(AppConstants.TODAY, ModelToday.Data::class.java)
-        val savedTodayDate = AppClass.sharedPref.getString(AppConstants.CURRENT_DATE,"")
+        // viewModel.today()
+        val todayDate = Date()
+        val savedData =
+            AppClass.sharedPref.getObject(AppConstants.TODAY, ModelToday.Data::class.java)
+        val savedTodayDate = AppClass.sharedPref.getString(AppConstants.CURRENT_DATE, "")
 
         val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
         val formattedTodayDate = dateFormat.format(todayDate)
@@ -139,32 +179,33 @@ class ExploreFragment : BaseFragment() {
 
         if (formattedTodayDate != savedTodayDate) {
             viewModel.today()
-        }
-        else {
-            if (savedData != null)
-            {
+        } else {
+            if (savedData != null) {
                 binding.inTodayVerse.ayatArabicText.text = savedData.quran.text
                 binding.inTodayVerse.ayatNumber.text = savedData.quran.verse_number
-                binding.inTodayVerse.ayatEnglishTranslation.text = savedData.quran.quran_translation_en
+                binding.inTodayVerse.ayatEnglishTranslation.text =
+                    savedData.quran.quran_translation_en
                 binding.inTodayVerse.tvSurah.text = savedData.quran.transliteration_en
                 val transliteration = savedData.quran.quran_transliteration_en
-               
-                if (transliteration != null)
 
-                {
-                    val spannedText: Spanned = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        Html.fromHtml(transliteration, Html.FROM_HTML_MODE_LEGACY)}
-
-                    else {
-                        @Suppress("DEPRECATION") HtmlCompat.fromHtml(transliteration,HtmlCompat.FROM_HTML_MODE_LEGACY)
-                    }
+                if (transliteration != null) {
+                    val spannedText: Spanned =
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            Html.fromHtml(transliteration, Html.FROM_HTML_MODE_LEGACY)
+                        } else {
+                            @Suppress("DEPRECATION") HtmlCompat.fromHtml(
+                                transliteration,
+                                HtmlCompat.FROM_HTML_MODE_LEGACY
+                            )
+                        }
 
                     binding.inTodayVerse.ayatEnglishTranslitration.text = spannedText
                 }
 
 
                 binding.inTodayHadith.tvArbiHadith.text = savedData.hadith.arabic
-                binding.inTodayHadith.hadithEnglishTranslitration.text = savedData.hadith.english_translation
+                binding.inTodayHadith.hadithEnglishTranslitration.text =
+                    savedData.hadith.english_translation
                 val reference = savedData.hadith.reference
                 if (reference != null) {
                     val parts = reference.split("\t : ")

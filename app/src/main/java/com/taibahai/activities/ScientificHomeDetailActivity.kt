@@ -2,29 +2,21 @@ package com.taibahai.activities
 
 import android.app.Activity
 import android.content.Intent
-import android.os.Bundle
 import android.text.Html
-import android.view.View
 import androidx.activity.OnBackPressedCallback
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
 import com.network.base.BaseActivity
 import com.network.models.ModelComments
 import com.network.models.ModelHome
 import com.network.network.NetworkResult
+import com.network.utils.AppClass
 import com.network.utils.AppConstants
-import com.network.utils.ProgressLoading.displayLoading
 import com.network.utils.convertLongToDate
 import com.network.viewmodels.MainViewModelAI
-import com.taibahai.R
 import com.taibahai.adapters.AdapterComments
-import com.taibahai.databinding.ActivityHomeDetailBinding
 import com.taibahai.databinding.ActivityScientificHomeDetailBinding
-import com.taibahai.utils.showOptionsMenu
+import com.taibahai.utils.AppTourDialog
 import com.taibahai.utils.showToast
 
 class ScientificHomeDetailActivity : BaseActivity() {
@@ -35,7 +27,7 @@ class ScientificHomeDetailActivity : BaseActivity() {
     var comment = ""
     var model = ModelHome.Data()
     private var postType: String? = null
-
+    private var appTourList = AppClass.sharedPref.getList<String>(AppConstants.APP_TOUR_TYPE)
 
 
     override fun onCreate() {
@@ -51,8 +43,26 @@ class ScientificHomeDetailActivity : BaseActivity() {
             }
         }
         onBackPressedDispatcher.addCallback(this, callback)
-    }
 
+        if (
+            !appTourList.contains("comment")
+        ){
+            AppTourDialog.appTour(
+                this,
+                binding.sendBtn,
+                "Comment",
+                "Here, you can view and add comment here."
+            ) {
+                appTourList.add("comment")
+                AppClass.sharedPref.storeList(
+                    AppConstants.APP_TOUR_TYPE,
+                    appTourList
+                )
+                setResult(Activity.RESULT_OK, Intent().putExtra(AppConstants.BUNDLE, "tour"))
+                finish()
+            }
+        }
+    }
 
 
     override fun clicks() {
@@ -137,7 +147,6 @@ class ScientificHomeDetailActivity : BaseActivity() {
         }
 
 
-
         //only used for likes
     }
 
@@ -155,7 +164,8 @@ class ScientificHomeDetailActivity : BaseActivity() {
             postType = intent.getStringExtra("POST_TYPE")
             Glide.with(this).load(model.feed_attachments.firstOrNull()?.file)
                 .into(binding.ivUploadImage)
-            binding.tvScientificDescription.text = Html.fromHtml(model.scientific_description, Html.FROM_HTML_MODE_COMPACT)
+            binding.tvScientificDescription.text =
+                Html.fromHtml(model.scientific_description, Html.FROM_HTML_MODE_COMPACT)
             binding.description.text = Html.fromHtml(model.description, Html.FROM_HTML_MODE_COMPACT)
         }
         viewModel.getFeed(model.feed_id)

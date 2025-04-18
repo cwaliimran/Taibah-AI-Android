@@ -247,7 +247,7 @@ class MyProfileActivity : BaseActivity() {
                 }
 
             }
-        }) { data, menuItem ->
+        }, this) { data, menuItem ->
             false
         }
         binding.rvProfile.adapter = adapter

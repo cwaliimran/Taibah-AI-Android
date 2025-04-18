@@ -3,9 +3,11 @@ package com.taibahai.activities
 import android.content.Intent
 import androidx.core.content.ContextCompat
 import com.network.base.BaseActivity
+import com.network.utils.AppClass
 import com.network.utils.AppConstants
 import com.taibahai.R
 import com.taibahai.databinding.ActivityZakatCalculatorBinding
+import com.taibahai.utils.AppTourDialog
 import com.taibahai.utils.addTextWatcher
 
 class ZakatCalculatorActivity : BaseActivity() {
@@ -25,11 +27,42 @@ class ZakatCalculatorActivity : BaseActivity() {
     var borrowedMoney: Double = 0.0
     var wagesDue: Double = 0.0
     var billsDue: Double = 0.0
-    
+
+    var appTourList = AppClass.sharedPref.getList<String>(AppConstants.APP_TOUR_TYPE)
 
     override fun onCreate() {
         binding = ActivityZakatCalculatorBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        if (!appTourList.contains("zakat")) {
+                AppTourDialog.appTour(
+                    this,
+                    binding.btnGoldRate,
+                    "Gold Zakat Calculator",
+                    "To check Zakat on gold, simply select  the Gold option, enter the gold  amount in grams, and tap the  \"Check Rate\" button. The system will  then calculate and display the Zakat  amount based on the latest  gold rate."
+                ) {
+
+                    AppTourDialog.appTour(
+                        this,
+                        binding.btnSilverRate,
+                        "Silver Zakat Calculator",
+                        "To check Zakat on silver, select the  Silver option, enter the amount in  grams, and tap the 'Check Rate'  button. The system will then calculate  and display the Zakat amount based  on the latest silver rate"
+                    ) {
+                        AppTourDialog.appTour(
+                            this,
+                            binding.cashInHand,
+                            "Cash in hand",
+                            "Enter the total amount of cash you  have in hand and in your bank  accounts. This will be included in  your Zakat calculation."
+                        ) {
+                            appTourList.add("zakat")
+                            AppClass.sharedPref.storeList(
+                                AppConstants.APP_TOUR_TYPE,
+                                appTourList
+                            )
+                        }
+                    }
+                }
+        }
     }
 
     override fun clicks() {

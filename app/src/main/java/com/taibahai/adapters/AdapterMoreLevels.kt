@@ -31,7 +31,6 @@ class AdapterMoreLevels(
             listener.onClick(position)
         }
 
-
     }
 
     override fun getItemCount(): Int {
