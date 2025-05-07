@@ -1,7 +1,6 @@
 package com.taibahai.fragments
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -75,6 +74,8 @@ class SearchFragment : BaseFragment(), OnItemClick {
     private lateinit var bottomNavigationView: BottomNavigationView
     private var isKeyboardOpen = false
     var aiTokens = 0
+    var isAppTourMode = false
+    private var appTourList = mutableListOf<String>()
 
 
     override fun onCreateView(
@@ -128,7 +129,7 @@ class SearchFragment : BaseFragment(), OnItemClick {
         } else {
             binding.tvRemainingTokens.text = "Remaining Tokens : $aiTokens"
         }
-         var appTourList = AppClass.sharedPref.getList<String>(AppConstants.APP_TOUR_TYPE)
+        appTourList = AppClass.sharedPref.getList<String>(AppConstants.APP_TOUR_TYPE)
 
         if (!appTourList.contains("aiSearchTokens")) {
             AppTourDialog.appTour(
@@ -143,24 +144,9 @@ class SearchFragment : BaseFragment(), OnItemClick {
                     "AI Input Box",
                     "Type your query here to get a quick  response from Taibah AI."
                 ) {
-                    binding.ivDotsSelect.performClick()
-                    AppTourDialog.appTour(
-                        requireActivity(),
-                        binding.ivDotsSelect,
-                        "History View",
-                        "If you click on the History option, you  will be taken to the History screen."
-                    ) {
-                        appTourList.add("historyView")
-                        appTourList.add("aiSearchTokens")
-                        appTourList.add("aiInputBox")
-                        AppClass.sharedPref.storeList(
-                            AppConstants.APP_TOUR_TYPE,
-                            appTourList
-                        )
-                        //got to history screen
-                        val intent = Intent(requireContext(), HistoryActivity::class.java)
-                        startActivity(intent)
-                    }
+                    isAppTourMode = true
+                    binding.messageBox.setText("Who is Allah?")
+                    binding.sendBtn.performClick()
                 }
             }
         }
@@ -345,6 +331,29 @@ class SearchFragment : BaseFragment(), OnItemClick {
                 botResponse = response
                 displayBotResponse()
                 activity?.displayLoading(false)
+
+                Handler(Looper.getMainLooper()).postDelayed({
+                    if (isAppTourMode) {
+                        binding.ivDotsSelect.performClick()
+                        AppTourDialog.appTour(
+                            requireActivity(),
+                            binding.ivDotsSelect,
+                            "History View",
+                            "If you click on the History option, you  will be taken to the History screen."
+                        ) {
+                            appTourList.add("historyView")
+                            appTourList.add("aiSearchTokens")
+                            appTourList.add("aiInputBox")
+                            AppClass.sharedPref.storeList(
+                                AppConstants.APP_TOUR_TYPE,
+                                appTourList
+                            )
+                            //got to history screen
+                            val intent = Intent(requireContext(), HistoryActivity::class.java)
+                            startActivity(intent)
+                        }
+                    }
+                }, 500)
             }
         }
     }
