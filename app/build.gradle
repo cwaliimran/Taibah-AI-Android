@@ -10,13 +10,13 @@ android {
     def configs = rootProject.ext
 
     namespace configs.applicationId
-    compileSdk 34
+    compileSdk 35
 
 
     defaultConfig {
         applicationId configs.applicationId
         minSdk configs.minSdkVersion
-        targetSdk 34
+        targetSdk 35
         versionCode configs.versionCode
         versionName configs.versionName
 

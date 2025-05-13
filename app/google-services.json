@@ -2,7 +2,7 @@
   "project_info": {
     "project_number": "1066549002485",
     "project_id": "taibah-ai",
-    "storage_bucket": "taibah-ai.appspot.com"
+    "storage_bucket": "taibah-ai.firebasestorage.app"
   },
   "client": [
     {
@@ -12,7 +12,36 @@
           "package_name": "com.taibahai"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "1066549002485-11rm3m9h9t35gv5vbjqsc8k5ilb5e5ci.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.taibahai",
+            "certificate_hash": "e674f96e7f83dc85de246a3af6e334c270d3d76c"
+          }
+        },
+        {
+          "client_id": "1066549002485-6hta6ib9040v0lpca8er20ukqcksfb7f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.taibahai",
+            "certificate_hash": "6ae492f4764c2788d14918ddf207f2a76d138925"
+          }
+        },
+        {
+          "client_id": "1066549002485-6kkrftptv4fa01igg6fp8ieej73jvh3f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.taibahai",
+            "certificate_hash": "f998c069330426fbf34a48ed05dace0828f44c51"
+          }
+        },
+        {
+          "client_id": "1066549002485-qmlgrvkjjtmgliin0hhiff8h821sp85c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCN3-FxigkIwW28Wmpqzu4PQXV2sHl7rgA"
@@ -20,45 +49,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:1066549002485:android:b3fb77a4ac9d5be47805bc",
-        "android_client_info": {
-          "package_name": "com.taibahai.dev"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCN3-FxigkIwW28Wmpqzu4PQXV2sHl7rgA"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:1066549002485:android:b3fb77a4ac9d5be47805bd",
-        "android_client_info": {
-          "package_name": "com.taibahai.adsFree"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCN3-FxigkIwW28Wmpqzu4PQXV2sHl7rgA"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1066549002485-qmlgrvkjjtmgliin0hhiff8h821sp85c.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1066549002485-4m9erqp4huitoiu57co8rnoutb54o5ur.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.taibahai"
+              }
+            }
+          ]
         }
       }
     }

@@ -3,15 +3,19 @@ package com.taibahai.activities
 
 import android.app.Activity
 import android.content.Intent
+import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView.OnEditorActionListener
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import com.bumptech.glide.Glide
 import com.network.base.BaseActivity
+import com.network.interfaces.OnItemClick
 import com.network.models.ModelComments
 import com.network.models.ModelHome
 import com.network.network.NetworkResult
+import com.network.utils.AppClass
+import com.network.utils.AppClass.Companion.isGuest
 import com.network.utils.AppConstants
 import com.network.utils.ProgressLoading.displayLoading
 import com.network.utils.convertLongToDate
@@ -19,6 +23,8 @@ import com.network.viewmodels.MainViewModelAI
 import com.taibahai.R
 import com.taibahai.adapters.AdapterComments
 import com.taibahai.databinding.ActivityHomeDetailBinding
+import com.taibahai.utils.Constants
+import com.taibahai.utils.genericDialog
 import com.taibahai.utils.showOptionsMenu
 import com.taibahai.utils.showToast
 
@@ -31,7 +37,6 @@ class HomeDetailActivity : BaseActivity() {
     var comment = ""
     var model = ModelHome.Data()
     private var postType: String? = null
-
 
 
     override fun onCreate() {
@@ -48,7 +53,6 @@ class HomeDetailActivity : BaseActivity() {
         }
         onBackPressedDispatcher.addCallback(this, callback)
     }
-
 
 
     override fun clicks() {
@@ -82,15 +86,46 @@ class HomeDetailActivity : BaseActivity() {
         }
 
         binding.sendBtn.setOnClickListener {
-            comment = binding.messageBox.text.toString()
-            if (comment.isNotEmpty()) {
-                viewModel.feedComment(model.feed_id, comment)
+            if (isGuest()) {
+                handleGuestLogic()
+                return@setOnClickListener
+            }
 
+            var isSilverPurchased =
+                AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_SILVER_PURCHASED)
+            var isGoldPurchased =
+                AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_GOLD_PURCHASED)
+            var isDiamondPurchased =
+                AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_DIAMOND_PURCHASED)
+
+            if (isSilverPurchased || isGoldPurchased || isDiamondPurchased) {
+                comment = binding.messageBox.text.toString()
+                if (comment.isNotEmpty()) {
+                    viewModel.feedComment(model.feed_id, comment)
+                }
+            } else {
+                showToast("You need to purchase a subscription to comment.")
             }
         }
         binding.ii.tvLike.setOnClickListener {
             viewModel.putLike(model.feed_id)
         }
+    }
+
+    val handleGuestLogic: () -> Unit = {
+        genericDialog(object : OnItemClick {
+            override fun onClick(position: Int, type: String?, data: Any?, view: View?) {
+                super.onClick(position, type, data, view)
+                val aiTokens = AppClass.sharedPref.getInt(AppConstants.AI_TOKENS)
+                AppClass.sharedPref.clearAllPreferences()
+                AppClass.sharedPref.storeInt(AppConstants.AI_TOKENS, aiTokens)
+                AppClass.sharedPref.storeBoolean(AppConstants.IS_FREE_AI_TOKENS_PROVIDED, true)
+                viewModel.logout(
+                    AppClass.sharedPref.getString(Constants.DEVICE_ID, "").toString(),
+                    "android"
+                )
+            }
+        })
     }
 
     override fun initObservers() {
@@ -204,6 +239,39 @@ class HomeDetailActivity : BaseActivity() {
 
                 is NetworkResult.Error -> {
                     showToast(it.message.toString())
+                }
+            }
+        }
+        viewModel.logoutLiveData.observe(this) {
+            if (it == null) {
+                return@observe
+            }
+            displayLoading(false)
+            when (it) {
+                is NetworkResult.Loading -> {
+                    displayLoading(true)
+                }
+
+                is NetworkResult.Success -> {
+                    val aiTokens = AppClass.sharedPref.getInt(AppConstants.AI_TOKENS)
+                    AppClass.sharedPref.clearAllPreferences()
+                    AppClass.sharedPref.storeInt(AppConstants.AI_TOKENS, aiTokens)
+                    AppClass.sharedPref.storeBoolean(AppConstants.IS_FREE_AI_TOKENS_PROVIDED, true)
+                    startActivity(
+                        Intent(
+                            this@HomeDetailActivity, LoginActivity::class.java
+                        )
+                    )
+                    this@HomeDetailActivity.finishAffinity()
+                }
+
+                is NetworkResult.Error -> {
+                    startActivity(
+                        Intent(
+                            this@HomeDetailActivity, LoginActivity::class.java
+                        )
+                    )
+                    this@HomeDetailActivity.finishAffinity()
                 }
             }
         }

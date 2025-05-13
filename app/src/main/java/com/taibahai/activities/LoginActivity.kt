@@ -238,7 +238,8 @@ class LoginActivity : BaseActivity() {
 
     private fun signUp() {
         //check if user initialized
-        if (::user.isInitialized) {
+        if (!::user.isInitialized) {
+            showToast("User not initialized")
             return
         }
         viewModel.socialLogin(

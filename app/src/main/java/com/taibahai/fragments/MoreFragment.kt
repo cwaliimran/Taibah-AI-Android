@@ -117,17 +117,19 @@ class MoreFragment : BaseFragment() {
                 "Level 2",
                 "Upgrade to the Gold Package and  enjoy 700 AI tokens monthly, access  to the Zakat Calculator, and insights  from the Four Imams of Sunnah for a  deeper Islamic learning experience."
             ) {
-                AppTourDialog.appTour(
-                    requireActivity(),
-                    binding.ivAppTour,
-                    "Level 3",
-                    "Upgrade to the Diamond Package  and unlock unlimited AI tokens, an  ad-free experience, exclusive Islamic  literature, inheritance law guidance,  and access to a Hadith & Surah  search database."
-                ) {
-                    appTourList.add("more")
-                    AppClass.sharedPref.storeList(
-                        AppConstants.APP_TOUR_TYPE,
-                        appTourList
-                    )
+                activity?.let { it1 ->
+                    AppTourDialog.appTour(
+                        it1,
+                        binding.ivAppTour,
+                        "Level 3",
+                        "Upgrade to the Diamond Package  and unlock unlimited AI tokens, an  ad-free experience, exclusive Islamic  literature, inheritance law guidance,  and access to a Hadith & Surah  search database."
+                    ) {
+                        appTourList.add("more")
+                        AppClass.sharedPref.storeList(
+                            AppConstants.APP_TOUR_TYPE,
+                            appTourList
+                        )
+                    }
                 }
             }
         }
