@@ -16,6 +16,7 @@ import android.view.Window
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.graphics.drawable.toDrawable
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -36,8 +37,10 @@ import com.taibahai.activities.HomeDetailActivity
 import com.taibahai.activities.LoginActivity
 import com.taibahai.activities.NotificationActivity
 import com.taibahai.activities.ScientificHomeDetailActivity
+import com.taibahai.activities.UpgradeActivity
 import com.taibahai.adapters.AdapterHome
 import com.taibahai.databinding.DialogAppTourBinding
+import com.taibahai.databinding.DialogHajjDiscountBinding
 import com.taibahai.databinding.DialogWelcomeBinding
 import com.taibahai.databinding.FragmentHomeBinding
 import com.taibahai.utils.AppTourDialog
@@ -85,14 +88,45 @@ class HomeFragment : BaseFragment() {
                 dialog.dismiss()
             }
 
-            dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            dialog.window!!.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
             dialog.window!!.setLayout(
                 LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
             )
 
             dialog.show()
 
+        } else {
+            //show hajj dialog
+
+            if (!AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_SILVER_PURCHASED) ||
+                !AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_GOLD_PURCHASED) ||
+                !AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_DIAMOND_PURCHASED)
+            ) {
+                if (System.currentTimeMillis() < 1749495600000L) { // June 10, 2025, in milliseconds
+                    showHajjDiscountDialog()
+                }
+            }
         }
+
+    }
+
+    private fun showHajjDiscountDialog() {
+        val dialog = Dialog(requireActivity())
+        val layoutInflater = LayoutInflater.from(requireActivity())
+        val binding = DialogHajjDiscountBinding.inflate(layoutInflater)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(binding.root)
+        binding.btnyes.setOnClickListener {
+            dialog.dismiss()
+            startActivity(Intent(requireContext(), UpgradeActivity::class.java))
+        }
+
+        dialog.window!!.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
+        dialog.window!!.setLayout(
+            LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+
+        dialog.show()
 
     }
 

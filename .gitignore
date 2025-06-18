@@ -27,3 +27,4 @@ output.json
 *.hprof
 app/prod/release/app-prod-release.aab
 app/prod/release/app-prod-release.aab
+app/prod/release/app-prod-release.aab

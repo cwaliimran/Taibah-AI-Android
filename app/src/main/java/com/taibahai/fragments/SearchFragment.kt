@@ -364,8 +364,7 @@ class SearchFragment : BaseFragment(), OnItemClick {
             callback(predefinedResponse)
             return
         }
-
-        val apiKey = "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"
+        val apiKey ="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"
         val url = "https://api.openai.com/v1/completions"
         val requestBody = """
         {
