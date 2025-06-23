@@ -1,0 +1,185 @@
+name: Android CI
+
+on:
+  push:
+    branches: [ "development" ]
+    paths-ignore:
+      - 'app/version.properties'
+      - 'app/play-store-releases/en-US/whatsnew.txt'
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    if: "! contains(github.event.head_commit.message, '[skip ci]')"
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write  # Grants write access to the repository
+
+    env:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Configure Git User
+        run: |
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Pull latest changes from the repository
+        run: |
+          git fetch origin main
+          git pull --rebase origin main
+
+      - name: List files in the repository
+        run: ls -R
+        # Increment version code and name
+      - name: Increment Version Code and Name
+        id: increment_version
+        run: |
+          VERSION_FILE=app/version.properties
+      
+          if [ ! -f "$VERSION_FILE" ]; then
+            echo "VERSION_CODE=1" > "$VERSION_FILE"
+            echo "VERSION_NAME=1.1" >> "$VERSION_FILE"
+            echo "Created $VERSION_FILE with default values."
+          fi
+
+          # Read current version code and version name from version.properties
+          VERSION_CODE=$(grep 'VERSION_CODE' $VERSION_FILE | cut -d '=' -f2)
+          VERSION_NAME=$(grep 'VERSION_NAME' $VERSION_FILE | cut -d '=' -f2)
+
+          echo "Current version code: $VERSION_CODE"
+          echo "Current version name: $VERSION_NAME"
+
+          # Increment version code
+          if [ -z "$VERSION_CODE" ]; then
+            echo "Error: VERSION_CODE is empty"
+            exit 1
+          fi
+          NEW_VERSION_CODE=$((VERSION_CODE + 1))
+
+          # Update version name (assuming a pattern like 1.x where x is the version code)
+          NEW_VERSION_NAME="1.${NEW_VERSION_CODE}"
+
+          echo "New version code: $NEW_VERSION_CODE"
+          echo "New version name: $NEW_VERSION_NAME"
+
+          # Write the updated version to the version.properties file
+          sed -i "s/VERSION_CODE=$VERSION_CODE/VERSION_CODE=$NEW_VERSION_CODE/g" $VERSION_FILE
+          sed -i "s/VERSION_NAME=$VERSION_NAME/VERSION_NAME=$NEW_VERSION_NAME/g" $VERSION_FILE
+
+          # Set the new version information in environment variables
+          echo "NEW_VERSION_CODE=$NEW_VERSION_CODE" >> $GITHUB_ENV
+          echo "NEW_VERSION_NAME=$NEW_VERSION_NAME" >> $GITHUB_ENV
+
+      # Commit and push the updated version.properties file
+      - name: Commit and Push Version Changes
+        run: |
+          git add app/version.properties
+          git commit -m "Incremented version to $NEW_VERSION_CODE ($NEW_VERSION_NAME) [skip ci]"
+          git push "https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
+
+      - name: Read "What's New" from the localized Play Store file
+        id: whats_new
+        run: |
+          WHATS_NEW_FILE=app/play-store-releases/en-US/whatsnew.txt
+
+          if [ ! -f "$WHATS_NEW_FILE" ]; then
+            echo "Error: $WHATS_NEW_FILE does not exist."
+            exit 1
+          fi
+
+          # Read "What's New" content for GitHub release and Play Store
+          WHATS_NEW_GITHUB=$(cat $WHATS_NEW_FILE | sed ':a;N;$!ba;s/\n/\\n/g')
+          echo "$WHATS_NEW_GITHUB" > whats_new_github.txt
+
+          WHATS_NEW_PLAYSTORE=$(cat $WHATS_NEW_FILE)
+          echo "$WHATS_NEW_PLAYSTORE" > whats_new_playstore.txt
+
+          echo "Read What's New for GitHub: $WHATS_NEW_GITHUB"
+          echo "Read What's New for Play Store: $WHATS_NEW_PLAYSTORE"
+
+      # Check if the tag already exists
+      - name: Check if tag exists
+        id: check_tag
+        run: |
+          TAG_EXISTS=$(git ls-remote --tags origin refs/tags/v${{ env.NEW_VERSION_CODE }} | wc -l)
+          echo "Tag exists: $TAG_EXISTS"
+          echo "TAG_EXISTS=$TAG_EXISTS" >> $GITHUB_ENV
+
+      # Use the temporary file for GitHub Release
+      - name: Create GitHub Release with What's New
+        if: env.TAG_EXISTS == '0'  # Only create a release if the tag does not exist
+        id: create_github_release
+        uses: actions/create-release@v1
+        with:
+          tag_name: v${{ env.NEW_VERSION_CODE }}-${{ github.run_id }}  # Add a unique suffix (run_id) to avoid duplication
+          release_name: Release ${{ env.NEW_VERSION_CODE }}
+          body: |
+            ### What's New
+            $(cat whats_new_github.txt)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up JDK 19
+        uses: actions/setup-java@v3
+        with:
+          java-version: '19'
+          distribution: 'zulu'
+          cache: gradle
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Build with Gradle
+        id: build
+        run: ./gradlew build
+
+      - name: Build Release AAB - prod
+        id: buildRelease
+        run: |
+          ./gradlew bundleProdRelease
+          ls -R app/build/outputs
+
+      - name: Sign AAB
+        id: sign
+        uses: r0adkll/sign-android-release@v1
+        with:
+          releaseDirectory: app/build/outputs/bundle/prodRelease
+          signingKeyBase64: ${{ secrets.SIGNING_KEY }}
+          alias: ${{ secrets.ALIAS }}
+          keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
+          keyPassword: ${{ secrets.KEY_PASSWORD }}
+
+      - name: Upload AAB
+        id: uploadArtifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app
+          path: app/build/outputs/bundle/prodRelease/app-prod-release.aab
+
+      - name: Create service_account.json
+        id: createServiceAccount
+        run: echo '${{ secrets.SERVICE_ACCOUNT_JSON }}' > service_account.json
+
+      # Deploy to Play Store (using the correct localized directory for "What's New")
+      - name: Deploy to Play Store (Production)
+        id: deploy_play_store
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJson: service_account.json
+          packageName: com.cwnextgen.amnames
+          releaseFiles: app/build/outputs/bundle/prodRelease/app-prod-release.aab
+          track: production
+          whatsNewDirectory: app/play-store-releases
+
+      - name: Notify on Slack
+        uses: act10ns/slack@v2
+        with:
+          status: ${{ job.status }}
+          steps: ${{ toJson(steps) }}
+        if: always()
