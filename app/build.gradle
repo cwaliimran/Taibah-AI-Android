@@ -11,14 +11,19 @@ android {
 
     namespace configs.applicationId
     compileSdk 35
+    def versionPropsFile = file("version.properties")
+    def versionProps = new Properties()
 
+    if (versionPropsFile.exists()) {
+        versionProps.load(new FileInputStream(versionPropsFile))
+    }
 
     defaultConfig {
         applicationId configs.applicationId
         minSdk configs.minSdkVersion
         targetSdk 35
-        versionCode configs.versionCode
-        versionName configs.versionName
+        versionCode versionProps['VERSION_CODE'].toInteger()
+        versionName versionProps['VERSION_NAME']
 
         testInstrumentationRunner configs.testInstrumentationRunner
         multiDexEnabled true
