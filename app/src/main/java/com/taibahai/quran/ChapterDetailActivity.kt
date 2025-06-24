@@ -395,6 +395,7 @@ class ChapterDetailActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
+        super.onBackPressed()
         finishWithUpdate(activity, model)
     }
 
