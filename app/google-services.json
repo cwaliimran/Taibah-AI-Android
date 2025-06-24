@@ -64,6 +64,78 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1066549002485:android:6f247548cadf5b317805bc",
+        "android_client_info": {
+          "package_name": "com.taibahai.adsFree"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1066549002485-qmlgrvkjjtmgliin0hhiff8h821sp85c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCN3-FxigkIwW28Wmpqzu4PQXV2sHl7rgA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1066549002485-qmlgrvkjjtmgliin0hhiff8h821sp85c.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1066549002485-4m9erqp4huitoiu57co8rnoutb54o5ur.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.taibahai"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1066549002485:android:58f373889d00ede87805bc",
+        "android_client_info": {
+          "package_name": "com.taibahai.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1066549002485-qmlgrvkjjtmgliin0hhiff8h821sp85c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCN3-FxigkIwW28Wmpqzu4PQXV2sHl7rgA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1066549002485-qmlgrvkjjtmgliin0hhiff8h821sp85c.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1066549002485-4m9erqp4huitoiu57co8rnoutb54o5ur.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.taibahai"
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"
