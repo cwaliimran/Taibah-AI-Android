@@ -172,7 +172,7 @@ jobs:
         uses: r0adkll/upload-google-play@v1
         with:
           serviceAccountJson: service_account.json
-          packageName: com.cwnextgen.amnames
+          packageName: com.taibahai
           releaseFiles: app/build/outputs/bundle/prodRelease/app-prod-release.aab
           track: production
           whatsNewDirectory: app/play-store-releases
