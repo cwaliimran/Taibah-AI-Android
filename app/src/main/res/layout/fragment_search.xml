@@ -1,163 +1,165 @@
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="20dp"
     tools:context=".fragments.SearchFragment">
 
-    <!-- RelativeLayout to manage the position of UI elements above and below the keyboard -->
-    <RelativeLayout
+    <!-- Existing UI elements above the EditText -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout5"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="20dp">
+        android:layout_height="wrap_content"
+        android:background="@color/primary_green"
+        android:padding="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <!-- Existing UI elements above the EditText -->
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraintLayout5"
-            android:layout_width="match_parent"
+        <!-- Your existing UI elements inside ConstraintLayout -->
+        <TextView
+            android:id="@+id/tvAISearch"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/primary_green"
-            android:padding="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:fontFamily="@font/poppins_semibold"
+            android:text="AI Search"
+            android:textColor="@color/white"
+            android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <!-- Your existing UI elements inside ConstraintLayout -->
-            <TextView
-                android:id="@+id/tvAISearch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins_semibold"
-                android:text="AI Search"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/tvRemainingTokens"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins"
+            android:text="Remaining Tokens : -"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvAISearch" />
 
-            <TextView
-                android:id="@+id/tvRemainingTokens"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins"
-                android:text="Remaining Tokens : -"
-                android:textColor="@color/white"
-                android:textSize="12sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvAISearch" />
+        <ImageView
+            android:id="@+id/ivDotsSelect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/dots_icon"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <ImageView
-                android:id="@+id/ivDotsSelect"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/dots_icon"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+    <!-- UI elements for flash messages -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clFlashMsg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/chat_bg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout5">
 
-        <!-- UI elements for flash messages -->
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/clFlashMsg"
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/poppins"
+            android:text="Quick Actions"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/ivFlashMsg"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/ic_chatbot"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvTopMessagePopups"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/constraintLayout5"
-            android:background="@drawable/chat_bg">
+            android:visibility="gone"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:layout_constraintTop_toBottomOf="@+id/ivFlashMsg"
+            app:spanCount="3"
+            tools:listitem="@layout/item_chat_popups" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <TextView
-                android:id="@+id/textView5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="10dp"
-                android:fontFamily="@font/poppins"
-                android:text="Quick Actions"
-                android:textColor="@color/black"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+    <!-- Main content above the EditText -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvSearchAI"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toTopOf="@+id/clAskAnything"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/clFlashMsg"
+        tools:listitem="@layout/item_receive_message" />
 
-            <ImageView
-                android:id="@+id/ivFlashMsg"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:src="@drawable/ic_chatbot"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+    <!-- Bottom part for input message (EditText) -->
+    <RelativeLayout
+        android:id="@+id/clAskAnything"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/edittext_bg"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvTopMessagePopups"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                app:layout_constraintTop_toBottomOf="@+id/ivFlashMsg"
-                app:spanCount="3"
-                tools:listitem="@layout/item_chat_popups" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <!-- Main content above the EditText -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvSearchAI"
+        <EditText
+            android:id="@+id/messageBox"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@id/clAskAnything"
-            android:layout_below="@id/clFlashMsg"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="10dp"
-            android:orientation="vertical"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/item_receive_message" />
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@id/voiceBtn"
+            android:background="@color/transparent"
+            android:fontFamily="@font/poppins"
+            android:hint="type here.."
+            android:includeFontPadding="false"
+            android:inputType="text"
+            android:singleLine="true"
+            android:textColor="#7D848D"
+            android:textColorHint="#7D848D"
+            android:textCursorDrawable="@drawable/et_cursor"
+            android:textSize="14sp" />
 
-        <!-- Bottom part for input message (EditText) -->
-        <RelativeLayout
-            android:id="@+id/clAskAnything"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_alignParentBottom="true"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/edittext_bg">
+        <ImageView
+            android:id="@+id/voiceBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginEnd="10dp"
+            android:layout_toStartOf="@id/sendBtn"
+            android:padding="5dp"
+            android:src="@drawable/microphone" />
 
-            <EditText
-                android:id="@+id/messageBox"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_centerVertical="true"
-                android:layout_toStartOf="@id/voiceBtn"
-                android:background="@color/transparent"
-                android:singleLine="true"
-                android:inputType="text"
-                android:fontFamily="@font/poppins"
-                android:hint="type here.."
-                android:textCursorDrawable="@drawable/et_cursor"
-                android:includeFontPadding="false"
-                android:textColor="#7D848D"
-                android:textColorHint="#7D848D"
-                android:textSize="14sp" />
-
-            <ImageView
-                android:id="@+id/voiceBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_marginEnd="10dp"
-                android:layout_toStartOf="@id/sendBtn"
-                android:padding="5dp"
-                android:src="@drawable/microphone" />
-
-            <ImageView
-                android:id="@+id/sendBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:padding="5dp"
-                android:src="@drawable/send" />
-        </RelativeLayout>
+        <ImageView
+            android:id="@+id/sendBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:padding="5dp"
+            android:src="@drawable/send" />
     </RelativeLayout>
-
-</layout>
+</androidx.constraintlayout.widget.ConstraintLayout>

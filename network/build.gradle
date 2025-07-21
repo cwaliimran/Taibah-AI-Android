@@ -7,11 +7,11 @@ plugins {
 android {
     namespace 'com.network'
     def configs = rootProject.ext
-    compileSdk 34
+    compileSdk 35
 
     defaultConfig {
         minSdk configs.minSdkVersion
-        targetSdk 34
+        targetSdk 35
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -71,7 +71,7 @@ dependencies {
     api("androidx.lifecycle:lifecycle-runtime:$lifeCycle")
     api("androidx.lifecycle:lifecycle-runtime-ktx:$lifeCycle")
     //coroutines
-    def coroutinesCore = "1.6.4"
+    def coroutinesCore = "1.9.0"
     api("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesCore")
     api("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesCore")
 
@@ -86,7 +86,7 @@ dependencies {
     api("com.google.code.gson:gson:2.10.1")
 
     //in app purchases and subscriptions
-    def billingClient = "6.0.1"
+    def billingClient = "8.0.0"
     api("com.android.billingclient:billing:$billingClient")
     api("com.android.billingclient:billing-ktx:$billingClient")
     api 'com.google.guava:guava:24.1-jre'

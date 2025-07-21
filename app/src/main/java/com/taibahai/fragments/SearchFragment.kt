@@ -15,6 +15,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.Toast
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -77,51 +79,41 @@ class SearchFragment : BaseFragment(), OnItemClick {
     var isAppTourMode = false
     private var appTourList = mutableListOf<String>()
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
-        // Inflate the layout for this fragment
-        binding = DataBindingUtil.inflate<FragmentSearchBinding>(
-            inflater, R.layout.fragment_search, container, false
-        )
-        bottomNavigationView =
-            activity?.findViewById(R.id.bottomNavigationView) ?: return binding.root
-
-        // Add a global layout listener to monitor layout changes, including keyboard visibility changes
-        binding.root.viewTreeObserver.addOnGlobalLayoutListener {
-            // Check if the keyboard is open or closed
-            val screenHeight = binding.root.rootView.height
-            val heightDiff = screenHeight - binding.root.height
-            val keyboardOpenThreshold = screenHeight / 3
-
-            if (heightDiff > keyboardOpenThreshold) {
-                // Keyboard is open
-                if (!isKeyboardOpen) {
-                    isKeyboardOpen = true
-                    hideBottomNavigation()
-                }
-            } else {
-                // Keyboard is closed
-                if (isKeyboardOpen) {
-                    isKeyboardOpen = false
-                    showBottomNavigation()
-                }
-            }
-        }
+    ): View
+    {
+        binding = FragmentSearchBinding.inflate(layoutInflater)
         return binding.root
     }
 
-    private fun hideBottomNavigation() {
-        bottomNavigationView.visibility = View.GONE
-    }
+        // Add a global layout listener to monitor layout changes, including keyboard visibility changes
+//        binding.root.viewTreeObserver.addOnGlobalLayoutListener {
+//            // Check if the keyboard is open or closed
+//            val screenHeight = binding.root.rootView.height
+//            val heightDiff = screenHeight - binding.root.height
+//            val keyboardOpenThreshold = screenHeight / 3
+//
+//            if (heightDiff > keyboardOpenThreshold) {
+//                // Keyboard is open
+//                if (!isKeyboardOpen) {
+//                    isKeyboardOpen = true
+//                    hideBottomNavigation()
+//                }
+//            } else {
+//                // Keyboard is closed
+//                if (isKeyboardOpen) {
+//                    isKeyboardOpen = false
+//                    showBottomNavigation()
+//                }
+//            }
+//        }
 
-    private fun showBottomNavigation() {
-        bottomNavigationView.visibility = View.VISIBLE
-    }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
 
         aiTokens = AppClass.sharedPref.getInt(AppConstants.AI_TOKENS)
         if (isDiamondPurchased) {

@@ -151,7 +151,7 @@
         <activity
             android:name=".bottom_navigation.BottomNavigation"
             android:configChanges="orientation|screenSize"
-            android:windowSoftInputMode="stateHidden|adjustResize"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
             android:exported="true" />
 
         <meta-data

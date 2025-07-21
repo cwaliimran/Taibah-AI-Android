@@ -9,6 +9,7 @@ import com.android.billingclient.api.BillingFlowParams
 import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.ConsumeParams
 import com.android.billingclient.api.ConsumeResponseListener
+import com.android.billingclient.api.PendingPurchasesParams
 import com.android.billingclient.api.ProductDetails
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.PurchasesResponseListener
@@ -36,9 +37,11 @@ class BillingClientManager(
     private var currentPurchasedItemSentToServer = false
     lateinit var productToBuy: ProductDetails
     private val purchaseScope = CoroutineScope(Dispatchers.Main)
+    val pendingPurchasesParams = PendingPurchasesParams.newBuilder()
+        .build()
     val billingClient: BillingClient =
         BillingClient.newBuilder(activity).setListener(purchasesUpdatedListener)
-            .enablePendingPurchases().build()
+            .enablePendingPurchases(pendingPurchasesParams).build()
 
 
     fun billingSetup() {
@@ -97,9 +100,10 @@ class BillingClientManager(
         billingClient.queryProductDetailsAsync(
             queryProductDetailsParams
         ) { _, productDetailsList ->
-            if (productDetailsList.isNotEmpty()) {
+
+            if (productDetailsList.productDetailsList.isNotEmpty()) {
              //   Log.d(TAG, "onProductDetailsResponse: $productDetailsList")
-                productsList = productDetailsList
+                productsList = productDetailsList.productDetailsList
                 productsInterface.productsFetched(productsList)
             } else {
                 Log.d(TAG, "onProductDetailsResponse: No products")

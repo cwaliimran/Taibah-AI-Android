@@ -1,14 +1,17 @@
 package com.taibahai.bottom_navigation
 
 import android.content.IntentSender
+import android.graphics.Rect
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingClientStateListener
 import com.android.billingclient.api.BillingResult
+import com.android.billingclient.api.PendingPurchasesParams
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.PurchasesUpdatedListener
 import com.android.billingclient.api.QueryPurchasesParams
@@ -52,37 +55,42 @@ class BottomNavigation : AppCompatActivity() {
         }
 
         checkForAppUpdate()
+       try {
+           val pendingPurchasesParams = PendingPurchasesParams.newBuilder().build()
 
-        billingClient = BillingClient.newBuilder(this@BottomNavigation)
-            .setListener(object : PurchasesUpdatedListener {
-                override fun onPurchasesUpdated(
-                    billingResult: BillingResult,
-                    purchases: MutableList<Purchase>?
-                ) {
-                    Log.d(TAG, "onPurchasesUpdated TOP: $purchases")
-                }
-            })
-            .enablePendingPurchases()
-            .build()
+           billingClient = BillingClient.newBuilder(this@BottomNavigation)
+               .setListener(object : PurchasesUpdatedListener {
+                   override fun onPurchasesUpdated(
+                       billingResult: BillingResult,
+                       purchases: MutableList<Purchase>?
+                   ) {
+                       Log.d(TAG, "onPurchasesUpdated TOP: $purchases")
+                   }
+               })
+               .enablePendingPurchases(pendingPurchasesParams)
+               .build()
 
-        billingClient.startConnection(object : BillingClientStateListener {
-            override fun onBillingSetupFinished(billingResult: BillingResult) {
-                if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                    Log.i(TAG, "OnBillingSetupFinish connected")
-                    // Check subscription status after billing setup is finished
-                    checkSubscriptionStatus()
-                } else {
-                    Log.i(
-                        TAG,
-                        "OnBillingSetupFinish failed with code: ${billingResult.responseCode}"
-                    )
-                }
-            }
+           billingClient.startConnection(object : BillingClientStateListener {
+               override fun onBillingSetupFinished(billingResult: BillingResult) {
+                   if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                       Log.i(TAG, "OnBillingSetupFinish connected")
+                       // Check subscription status after billing setup is finished
+                       checkSubscriptionStatus()
+                   } else {
+                       Log.i(
+                           TAG,
+                           "OnBillingSetupFinish failed with code: ${billingResult.responseCode}"
+                       )
+                   }
+               }
 
-            override fun onBillingServiceDisconnected() {
-                Log.i(TAG, "OnBillingServiceDisconnected")
-            }
-        })
+               override fun onBillingServiceDisconnected() {
+                   Log.i(TAG, "OnBillingServiceDisconnected")
+               }
+           })
+       } catch (e: Exception) {
+           Log.e(TAG, "Error initializing BillingClient: ${e.message}")
+       }
     }
 
     private fun replaceFragment(fragment: Fragment) {
