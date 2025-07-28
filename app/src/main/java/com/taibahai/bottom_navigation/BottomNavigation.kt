@@ -142,12 +142,12 @@ class BottomNavigation : AppCompatActivity() {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        if (billingClient.isReady) {
-            billingClient.endConnection()
-        }
-    }
+  override fun onDestroy() {
+      super.onDestroy()
+      if (::billingClient.isInitialized && billingClient.isReady) {
+          billingClient.endConnection()
+      }
+  }
 
 
     private fun checkSubscriptionStatus() {
