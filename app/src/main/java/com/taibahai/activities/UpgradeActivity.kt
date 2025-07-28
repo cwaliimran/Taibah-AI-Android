@@ -17,6 +17,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.ProductDetails
+import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.PurchasesUpdatedListener
 import com.facebook.internal.Utility.logd
 import com.network.base.BaseActivity
@@ -299,6 +300,18 @@ class UpgradeActivity : BaseActivity(), PurchaseInterface {
                     //   updateSubscriptionStatus("restore")
                     Log.d(TAG, "addInAppPurchase restore: $inAppPurchase")
                 }
+
+                override fun onSubscriptionActive(subscriptions: List<Purchase>) {
+
+                }
+
+                override fun onSubscriptionInactive() {
+
+                }
+
+                override fun onSubscriptionError(message: String) {
+
+                }
             }, this, object : ProductsInterface {
                 override fun productsFetched(products: MutableList<ProductDetails>) {
                   //  Log.d(TAG, "productsFetched: $products")
@@ -323,7 +336,9 @@ class UpgradeActivity : BaseActivity(), PurchaseInterface {
                         }
                     }
 
-                    binding.viewPager.adapter?.notifyDataSetChanged()
+                    runOnMainThread {
+                        binding.viewPager.adapter?.notifyDataSetChanged()
+                    }
                 }
 
             })
@@ -345,14 +360,6 @@ class UpgradeActivity : BaseActivity(), PurchaseInterface {
 //        } else {
 //            //  Log.i(TAG, "onPurchasesUpdated: Error ${billingResult.debugMessage}")
 //        }
-    }
-
-
-    // Called before the activity is destroyed
-    public override fun onDestroy() {
-        super.onDestroy()
-        billingClientManager.releaseBillingClient()
-
     }
 
     private fun updateSubscriptionStatus(type: String) {

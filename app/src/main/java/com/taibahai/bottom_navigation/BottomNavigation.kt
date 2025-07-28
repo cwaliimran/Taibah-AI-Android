@@ -23,18 +23,24 @@ import com.network.utils.AppClass
 import com.network.utils.AppConstants
 import com.taibahai.BuildConfig
 import com.taibahai.R
+import com.taibahai.billings.BillingClientManager
+import com.taibahai.billings.BillingManagerActions
 import com.taibahai.billings.EnumSubscriptions
+import com.taibahai.billings.ProductsInterface
+import com.taibahai.billings.PurchaseInterface
 import com.taibahai.databinding.ActivityBottomNavigationBinding
 import com.taibahai.fragments.ExploreFragment
 import com.taibahai.fragments.HomeFragment
 import com.taibahai.fragments.MoreFragment
 import com.taibahai.fragments.SearchFragment
+import com.taibahai.models.InAppPurchase
 import java.util.Calendar
 
 class BottomNavigation : AppCompatActivity() {
     private lateinit var binding: ActivityBottomNavigationBinding
     private val TAG = "BottomNavigation"
-    private lateinit var billingClient: BillingClient
+//    private lateinit var billingClient: BillingClient
+    lateinit var billingClientManager: BillingClientManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,38 +62,35 @@ class BottomNavigation : AppCompatActivity() {
 
         checkForAppUpdate()
        try {
-           val pendingPurchasesParams = PendingPurchasesParams.newBuilder().build()
 
-           billingClient = BillingClient.newBuilder(this@BottomNavigation)
-               .setListener(object : PurchasesUpdatedListener {
-                   override fun onPurchasesUpdated(
-                       billingResult: BillingResult,
-                       purchases: MutableList<Purchase>?
-                   ) {
-                       Log.d(TAG, "onPurchasesUpdated TOP: $purchases")
-                   }
-               })
-               .enablePendingPurchases(pendingPurchasesParams)
-               .build()
+         billingClientManager = BillingClientManager(
+             this,
+             purchasesUpdatedListener = object : PurchasesUpdatedListener {
+                 override fun onPurchasesUpdated(billingResult: BillingResult, purchases: MutableList<Purchase>?) {
+                     Log.d(TAG, "onPurchasesUpdated: BillingResult - ${billingResult.debugMessage}, Purchases - $purchases")
+                 }
+             },
+             actions = object : BillingManagerActions { /* optional */
+                 override fun addInAppPurchase(inAppPurchase: InAppPurchase) {
+                     Log.d(TAG, "addInAppPurchase: $inAppPurchase")
+                 }
+                 override fun onSubscriptionActive(subscriptions: List<Purchase>) {
+                     Log.d(TAG, "onSubscriptionActive: Subscriptions - $subscriptions")
+                     billingClientManager.checkSubscriptionStatusFromManager()
+                 }
 
-           billingClient.startConnection(object : BillingClientStateListener {
-               override fun onBillingSetupFinished(billingResult: BillingResult) {
-                   if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                       Log.i(TAG, "OnBillingSetupFinish connected")
-                       // Check subscription status after billing setup is finished
-                       checkSubscriptionStatus()
-                   } else {
-                       Log.i(
-                           TAG,
-                           "OnBillingSetupFinish failed with code: ${billingResult.responseCode}"
-                       )
-                   }
-               }
+                 override fun onSubscriptionInactive() {
+                     Log.d(TAG, "onSubscriptionInactive: No active subscriptions")
+                 }
 
-               override fun onBillingServiceDisconnected() {
-                   Log.i(TAG, "OnBillingServiceDisconnected")
-               }
-           })
+                 override fun onSubscriptionError(message: String) {
+                     Log.e(TAG, "onSubscriptionError: $message")
+                 }
+             },
+             purchaseListener = object : PurchaseInterface { /* handle updates */ },
+             productsInterface = object : ProductsInterface { /* fetch product list */ }
+         )
+           billingClientManager.billingSetup()
        } catch (e: Exception) {
            Log.e(TAG, "Error initializing BillingClient: ${e.message}")
        }
@@ -142,107 +145,10 @@ class BottomNavigation : AppCompatActivity() {
         }
     }
 
-  override fun onDestroy() {
-      super.onDestroy()
-      if (::billingClient.isInitialized && billingClient.isReady) {
-          billingClient.endConnection()
-      }
-  }
-
-
-    private fun checkSubscriptionStatus() {
-        val queryPurchasesParams =
-            QueryPurchasesParams.newBuilder().setProductType(BillingClient.ProductType.SUBS).build()
-
-        billingClient.queryPurchasesAsync(
-            queryPurchasesParams
-        ) { billingResult, purchases ->
-            if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                val activeSubscriptions =
-                    purchases.filter { it.purchaseState == Purchase.PurchaseState.PURCHASED }
-                Log.d(TAG, "checkSubscriptionStatus activeSubscriptions: $activeSubscriptions")
-
-                if (activeSubscriptions.isNotEmpty()) {
-                    val currentMonth = Calendar.getInstance().get(Calendar.MONTH)
-                    val awardedMonth = AppClass.sharedPref.getInt("tokens_awarded_month")
-
-                    activeSubscriptions.forEach { subscription ->
-                        val startTime = subscription.purchaseTime
-                        val endTime = calculateExpiryTime(subscription) // Calculate the expiry time
-
-                        AppClass.sharedPref.storeLong("subscription_start_date", startTime)
-                        AppClass.sharedPref.storeLong("subscription_end_date", endTime)
-
-                        if (awardedMonth != currentMonth) {
-                            awardTokens(subscription.products)
-                            AppClass.sharedPref.storeInt("tokens_awarded_month", currentMonth)
-                        }
-                    }
-                } else {
-                    Log.d(TAG, "checkSubscriptionStatus: not active")
-                    if (BuildConfig.FLAVOR == "prod") {
-                        revokeTokensAndLevels()
-                    }
-                }
-            } else {
-                Log.e(TAG, "Failed to query active subscriptions: ${billingResult.debugMessage}")
-            }
-        }
+    // Called before the activity is destroyed
+    public override fun onDestroy() {
+        super.onDestroy()
+        billingClientManager.releaseBillingClient()
     }
 
-    private fun calculateExpiryTime(purchase: Purchase): Long {
-        val calendar = Calendar.getInstance()
-        calendar.timeInMillis = purchase.purchaseTime
-
-        purchase.products.forEach { productId ->
-            when (productId) {
-                EnumSubscriptions.TAIBAH_AI_SILVER.productId -> {
-                    calendar.add(Calendar.MONTH, 1)
-                }
-
-                EnumSubscriptions.TAIBAH_AI_GOLD.productId -> {
-                    calendar.add(Calendar.MONTH, 1)
-                }
-
-                EnumSubscriptions.TAIBAH_AI_DIAMOND.productId -> {
-                    calendar.add(Calendar.MONTH, 1)
-                }
-            }
-        }
-
-        return calendar.timeInMillis
-    }
-
-
-    private fun awardTokens(products: List<String>) {
-        var aiTokens = AppClass.sharedPref.getInt(AppConstants.AI_TOKENS)
-
-        products.forEach {
-            when (it) {
-                EnumSubscriptions.TAIBAH_AI_SILVER.productId -> {
-                    aiTokens += 300
-                }
-
-                EnumSubscriptions.TAIBAH_AI_GOLD.productId -> {
-                    aiTokens += 700
-                }
-
-                EnumSubscriptions.TAIBAH_AI_DIAMOND.productId -> {
-                    aiTokens += 100000
-                }
-            }
-        }
-
-        AppClass.sharedPref.storeInt(AppConstants.AI_TOKENS, aiTokens)
-    }
-
-    private fun revokeTokensAndLevels() {
-        if (AppClass.sharedPref.getInt(AppConstants.AI_TOKENS) > 30) {
-            AppClass.sharedPref.storeInt(AppConstants.AI_TOKENS, 0)
-        }
-        AppClass.sharedPref.storeBoolean(AppConstants.IS_TAIBAH_AI_SILVER_PURCHASED, false)
-        AppClass.sharedPref.storeBoolean(AppConstants.IS_TAIBAH_AI_GOLD_PURCHASED, false)
-        AppClass.sharedPref.storeBoolean(AppConstants.IS_TAIBAH_AI_DIAMOND_PURCHASED, false)
-        AppClass.sharedPref.storeBoolean(AppConstants.IS_ADS_FREE, false)
-    }
 }

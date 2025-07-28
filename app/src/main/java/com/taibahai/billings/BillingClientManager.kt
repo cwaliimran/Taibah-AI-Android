@@ -18,13 +18,17 @@ import com.android.billingclient.api.QueryProductDetailsParams
 import com.android.billingclient.api.QueryPurchasesParams
 import com.android.billingclient.api.acknowledgePurchase
 import com.google.common.collect.ImmutableList
+import com.network.utils.AppClass
 import com.network.utils.AppClass.Companion.productsList
+import com.network.utils.AppConstants
+import com.taibahai.BuildConfig
 import com.taibahai.utils.showToast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.Calendar
 
 class BillingClientManager(
     private val activity: Activity,
@@ -37,10 +41,11 @@ class BillingClientManager(
     private var currentPurchasedItemSentToServer = false
     lateinit var productToBuy: ProductDetails
     private val purchaseScope = CoroutineScope(Dispatchers.Main)
-    val pendingPurchasesParams = PendingPurchasesParams.newBuilder()
+    val pendingPurchasesParams = PendingPurchasesParams.newBuilder().enableOneTimeProducts()
         .build()
     val billingClient: BillingClient =
-        BillingClient.newBuilder(activity).setListener(purchasesUpdatedListener)
+        BillingClient.newBuilder(activity)
+            .setListener(purchasesUpdatedListener)
             .enablePendingPurchases(pendingPurchasesParams).build()
 
 
@@ -94,7 +99,7 @@ class BillingClientManager(
             )
             .build()
         val queryProductDetailsParams = QueryProductDetailsParams.newBuilder().setProductList(
-           productList
+            productList
         ).build()
 
         billingClient.queryProductDetailsAsync(
@@ -102,7 +107,7 @@ class BillingClientManager(
         ) { _, productDetailsList ->
 
             if (productDetailsList.productDetailsList.isNotEmpty()) {
-             //   Log.d(TAG, "onProductDetailsResponse: $productDetailsList")
+                //   Log.d(TAG, "onProductDetailsResponse: $productDetailsList")
                 productsList = productDetailsList.productDetailsList
                 productsInterface.productsFetched(productsList)
             } else {
@@ -132,7 +137,11 @@ class BillingClientManager(
             billingClient.launchBillingFlow(activity, billingFlowParams)
         } else {
             //product not found
-            purchaseListener.onPurchaseUpdate(0, "purchase_no_product", EnumPurchaseResponse.PRODUCT_NOT_FOUND)
+            purchaseListener.onPurchaseUpdate(
+                0,
+                "purchase_no_product",
+                EnumPurchaseResponse.PRODUCT_NOT_FOUND
+            )
         }
     }
 
@@ -256,72 +265,101 @@ class BillingClientManager(
         billingClient.consumeAsync(consumeParams, listener)
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // CHECK SUBSCRIPTION STATUS
-    ///////////////////////////////////////////////////////////////////////////
-    fun checkSubscriptionStatus() {
-        // Create a query to check the user's active subscriptions.
-        val queryPurchasesParams =
-            QueryPurchasesParams.newBuilder().setProductType(BillingClient.ProductType.SUBS).build()
+    fun checkSubscriptionStatusFromManager() {
+        val queryPurchasesParams = QueryPurchasesParams.newBuilder()
+            .setProductType(BillingClient.ProductType.SUBS)
+            .build()
 
-        billingClient.queryPurchasesAsync(
-            queryPurchasesParams
-        ) { billingResult, purchases ->
+        billingClient.queryPurchasesAsync(queryPurchasesParams) { billingResult, purchases ->
             if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                // Query was successful, check the subscription status.
-                val activeSubscriptions =
-                    purchases.filter { it.purchaseState == Purchase.PurchaseState.PURCHASED }
+                val activeSubscriptions = purchases.filter {
+                    it.purchaseState == Purchase.PurchaseState.PURCHASED &&
+                            it.products.any { purchasedId -> productsList.any { p -> p.productId == purchasedId } }
+                }
+
+                Log.d(TAG, "Active subscriptions: $activeSubscriptions")
 
                 if (activeSubscriptions.isNotEmpty()) {
-                    // The user has active subscriptions.
-                    // You can now check the subscription expiration dates, etc.
-                    // Implement the logic to check the subscription status and expiration date here.
+                    val currentMonth = Calendar.getInstance().get(Calendar.MONTH)
+                    val awardedMonth = AppClass.sharedPref.getInt("tokens_awarded_month")
 
-                    // For example, you can check the expiration date of the first active subscription:
                     activeSubscriptions.forEach { subscription ->
-                        Log.d(TAG, "checkSubscriptionStatus: $subscription")
-                        Log.d(TAG, "checkSubscriptionStatus: ${subscription.products}")
-                        subscription.products.forEach {
-                            Log.d(TAG, "checkSubscriptionStatus: $it")
-                            if (it == EnumSubscriptions.TAIBAH_AI_SILVER.productId) {
-                                purchaseListener.onPurchaseUpdate(
-                                    0, "subscription_status", EnumSubscriptionStatus.SUBSCRIPTION_ACTIVE
-                                )
+                        val startTime = subscription.purchaseTime
+                        val endTime = calculateExpiryTime(subscription)
 
-                            }
-                            if (it == EnumSubscriptions.TAIBAH_AI_GOLD.productId) {
-                                purchaseListener.onPurchaseUpdate(
-                                    0, "subscription_status", EnumSubscriptionStatus.SUBSCRIPTION_ACTIVE
-                                )
-                            }
-                            if (it == EnumSubscriptions.TAIBAH_AI_DIAMOND.productId) {
-                                purchaseListener.onPurchaseUpdate(
-                                    0, "subscription_status", EnumSubscriptionStatus.SUBSCRIPTION_ACTIVE
-                                )
-                            }
+                        AppClass.sharedPref.storeLong("subscription_start_date", startTime)
+                        AppClass.sharedPref.storeLong("subscription_end_date", endTime)
 
+                        if (awardedMonth != currentMonth) {
+                            awardTokens(subscription.products)
+                            AppClass.sharedPref.storeInt("tokens_awarded_month", currentMonth)
                         }
-
                     }
                 } else {
-                    // No active subscriptions found.
-                    // Handle this scenario accordingly, e.g., prompt the user to subscribe.
-
-                    // Notify your UI or application logic about the subscription status.
-                    purchaseListener.onPurchaseUpdate(
-                        0, "subscription_status", EnumSubscriptionStatus.SUBSCRIPTION_INACTIVE
-                    )
+                    Log.d(TAG, "No active subscriptions found.")
+                    if (BuildConfig.FLAVOR == "prod") {
+                        revokeTokensAndLevels()
+                    }
                 }
             } else {
-                // Handle the case where the query fails.
-                Log.e(TAG, "Failed to query active subscriptions: ${billingResult.debugMessage}")
-
-                // Notify your UI or application logic about the error.
-                purchaseListener.onPurchaseUpdate(
-                    0, "subscription_status", EnumSubscriptionStatus.SUBSCRIPTION_ERROR
-                )
+                Log.e(TAG, "Failed to query subscriptions: ${billingResult.debugMessage}")
             }
         }
+    }
+    private fun calculateExpiryTime(purchase: Purchase): Long {
+        val calendar = Calendar.getInstance()
+        calendar.timeInMillis = purchase.purchaseTime
+
+        purchase.products.forEach { productId ->
+            when (productId) {
+                EnumSubscriptions.TAIBAH_AI_SILVER.productId -> {
+                    calendar.add(Calendar.MONTH, 1)
+                }
+
+                EnumSubscriptions.TAIBAH_AI_GOLD.productId -> {
+                    calendar.add(Calendar.MONTH, 1)
+                }
+
+                EnumSubscriptions.TAIBAH_AI_DIAMOND.productId -> {
+                    calendar.add(Calendar.MONTH, 1)
+                }
+            }
+        }
+
+        return calendar.timeInMillis
+    }
+
+
+    private fun awardTokens(products: List<String>) {
+        var aiTokens = AppClass.sharedPref.getInt(AppConstants.AI_TOKENS)
+
+        products.forEach {
+            when (it) {
+                EnumSubscriptions.TAIBAH_AI_SILVER.productId -> {
+                    aiTokens += 300
+                }
+
+                EnumSubscriptions.TAIBAH_AI_GOLD.productId -> {
+                    aiTokens += 700
+                }
+
+                EnumSubscriptions.TAIBAH_AI_DIAMOND.productId -> {
+                    aiTokens += 100000
+                }
+            }
+        }
+
+        AppClass.sharedPref.storeInt(AppConstants.AI_TOKENS, aiTokens)
+    }
+
+    private fun revokeTokensAndLevels() {
+        if (AppClass.sharedPref.getInt(AppConstants.AI_TOKENS) > 30) {
+            AppClass.sharedPref.storeInt(AppConstants.AI_TOKENS, 0)
+        }
+        AppClass.sharedPref.storeBoolean(AppConstants.IS_TAIBAH_AI_SILVER_PURCHASED, false)
+        AppClass.sharedPref.storeBoolean(AppConstants.IS_TAIBAH_AI_GOLD_PURCHASED, false)
+        AppClass.sharedPref.storeBoolean(AppConstants.IS_TAIBAH_AI_DIAMOND_PURCHASED, false)
+        AppClass.sharedPref.storeBoolean(AppConstants.IS_ADS_FREE, false)
     }
 
 }
