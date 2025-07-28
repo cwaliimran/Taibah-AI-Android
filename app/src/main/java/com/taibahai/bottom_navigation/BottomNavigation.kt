@@ -1,31 +1,21 @@
 package com.taibahai.bottom_navigation
 
 import android.content.IntentSender
-import android.graphics.Rect
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.android.billingclient.api.BillingClient
-import com.android.billingclient.api.BillingClientStateListener
 import com.android.billingclient.api.BillingResult
-import com.android.billingclient.api.PendingPurchasesParams
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.PurchasesUpdatedListener
-import com.android.billingclient.api.QueryPurchasesParams
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.appupdate.AppUpdateOptions
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
-import com.network.utils.AppClass
-import com.network.utils.AppConstants
-import com.taibahai.BuildConfig
 import com.taibahai.R
 import com.taibahai.billings.BillingClientManager
 import com.taibahai.billings.BillingManagerActions
-import com.taibahai.billings.EnumSubscriptions
 import com.taibahai.billings.ProductsInterface
 import com.taibahai.billings.PurchaseInterface
 import com.taibahai.databinding.ActivityBottomNavigationBinding
@@ -34,12 +24,12 @@ import com.taibahai.fragments.HomeFragment
 import com.taibahai.fragments.MoreFragment
 import com.taibahai.fragments.SearchFragment
 import com.taibahai.models.InAppPurchase
-import java.util.Calendar
 
 class BottomNavigation : AppCompatActivity() {
     private lateinit var binding: ActivityBottomNavigationBinding
     private val TAG = "BottomNavigation"
-//    private lateinit var billingClient: BillingClient
+
+    //    private lateinit var billingClient: BillingClient
     lateinit var billingClientManager: BillingClientManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,39 +51,44 @@ class BottomNavigation : AppCompatActivity() {
         }
 
         checkForAppUpdate()
-       try {
+        try {
 
-         billingClientManager = BillingClientManager(
-             this,
-             purchasesUpdatedListener = object : PurchasesUpdatedListener {
-                 override fun onPurchasesUpdated(billingResult: BillingResult, purchases: MutableList<Purchase>?) {
-                     Log.d(TAG, "onPurchasesUpdated: BillingResult - ${billingResult.debugMessage}, Purchases - $purchases")
-                 }
-             },
-             actions = object : BillingManagerActions { /* optional */
-                 override fun addInAppPurchase(inAppPurchase: InAppPurchase) {
-                     Log.d(TAG, "addInAppPurchase: $inAppPurchase")
-                 }
-                 override fun onSubscriptionActive(subscriptions: List<Purchase>) {
-                     Log.d(TAG, "onSubscriptionActive: Subscriptions - $subscriptions")
-                     billingClientManager.checkSubscriptionStatusFromManager()
-                 }
+            billingClientManager = BillingClientManager(
+                this,
+                purchasesUpdatedListener = object : PurchasesUpdatedListener {
+                    override fun onPurchasesUpdated(
+                        billingResult: BillingResult, purchases: MutableList<Purchase>?
+                    ) {
+                        Log.d(
+                            TAG,
+                            "onPurchasesUpdated: BillingResult - ${billingResult.debugMessage}, Purchases - $purchases"
+                        )
+                    }
+                },
+                actions = object : BillingManagerActions { /* optional */
+                    override fun addInAppPurchase(inAppPurchase: InAppPurchase) {
+                        Log.d(TAG, "addInAppPurchase: $inAppPurchase")
+                    }
 
-                 override fun onSubscriptionInactive() {
-                     Log.d(TAG, "onSubscriptionInactive: No active subscriptions")
-                 }
+                    override fun onSubscriptionActive(subscriptions: List<Purchase>) {
+                        Log.d(TAG, "onSubscriptionActive: Subscriptions - $subscriptions")
+                        billingClientManager.checkSubscriptionStatusFromManager()
+                    }
 
-                 override fun onSubscriptionError(message: String) {
-                     Log.e(TAG, "onSubscriptionError: $message")
-                 }
-             },
-             purchaseListener = object : PurchaseInterface { /* handle updates */ },
-             productsInterface = object : ProductsInterface { /* fetch product list */ }
-         )
-           billingClientManager.billingSetup()
-       } catch (e: Exception) {
-           Log.e(TAG, "Error initializing BillingClient: ${e.message}")
-       }
+                    override fun onSubscriptionInactive() {
+                        Log.d(TAG, "onSubscriptionInactive: No active subscriptions")
+                    }
+
+                    override fun onSubscriptionError(message: String) {
+                        Log.e(TAG, "onSubscriptionError: $message")
+                    }
+                },
+                purchaseListener = object : PurchaseInterface { /* handle updates */ },
+                productsInterface = object : ProductsInterface { /* fetch product list */ })
+            billingClientManager.billingSetup()
+        } catch (e: Exception) {
+            Log.e(TAG, "Error initializing BillingClient: ${e.message}")
+        }
     }
 
     private fun replaceFragment(fragment: Fragment) {
@@ -107,12 +102,14 @@ class BottomNavigation : AppCompatActivity() {
         val appUpdateManager = AppUpdateManagerFactory.create(this)
         val appUpdateInfoTask = appUpdateManager.appUpdateInfo
         appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
-            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE &&
-                appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE && appUpdateInfo.isUpdateTypeAllowed(
+                    AppUpdateType.IMMEDIATE
+                )
             ) {
                 try {
                     appUpdateManager.startUpdateFlowForResult(
-                        appUpdateInfo, activityResultLauncher,
+                        appUpdateInfo,
+                        activityResultLauncher,
                         AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build()
                     )
                 } catch (e: IntentSender.SendIntentException) {
@@ -135,7 +132,8 @@ class BottomNavigation : AppCompatActivity() {
             if (appUpdateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
                 try {
                     appUpdateManager.startUpdateFlowForResult(
-                        appUpdateInfo, activityResultLauncher,
+                        appUpdateInfo,
+                        activityResultLauncher,
                         AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build()
                     )
                 } catch (e: IntentSender.SendIntentException) {
