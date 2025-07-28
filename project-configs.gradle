@@ -1,6 +1,6 @@
 ext {
   applicationId = "com.taibahai"
-  compileSdkVersion = 34
+  compileSdkVersion = 35
   minSdkVersion = 26
   targetSdkVersion = compileSdkVersion
   versionCode = 29
