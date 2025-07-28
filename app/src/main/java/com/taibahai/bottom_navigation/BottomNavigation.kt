@@ -105,12 +105,12 @@ class BottomNavigation : AppCompatActivity() {
         val appUpdateInfoTask = appUpdateManager.appUpdateInfo
         appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
             if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE &&
-                appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)
+                appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)
             ) {
                 try {
                     appUpdateManager.startUpdateFlowForResult(
                         appUpdateInfo, activityResultLauncher,
-                        AppUpdateOptions.newBuilder(AppUpdateType.FLEXIBLE).build()
+                        AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build()
                     )
                 } catch (e: IntentSender.SendIntentException) {
                     e.printStackTrace()
@@ -133,7 +133,7 @@ class BottomNavigation : AppCompatActivity() {
                 try {
                     appUpdateManager.startUpdateFlowForResult(
                         appUpdateInfo, activityResultLauncher,
-                        AppUpdateOptions.newBuilder(AppUpdateType.FLEXIBLE).build()
+                        AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build()
                     )
                 } catch (e: IntentSender.SendIntentException) {
                     e.printStackTrace()
