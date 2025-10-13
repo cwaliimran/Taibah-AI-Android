@@ -64,43 +64,48 @@ class MoreFragment : BaseFragment() {
 
         val moreLevel1 = ArrayList<ModelMoreLevels>()
 
-        moreLevel1.add(ModelMoreLevels("", R.drawable.ads_icon, "Ads"))
-        showList.add(ModelMore("Level 1", "Silver Package\n300 AI Tokens (monthly)", moreLevel1))
+        if (!isDiamondPurchased) {
+            moreLevel1.add(ModelMoreLevels("", R.drawable.ads_icon, "Ads Free"))
+            moreLevel1.add(ModelMoreLevels("", R.drawable.search2, "Unlimited AI Tokens"))
+        }
 
 
-        val moreLevel2 = ArrayList<ModelMoreLevels>()
+//        val moreLevel2 = ArrayList<ModelMoreLevels>()
 
-        moreLevel2.add(
+        moreLevel1.add(
             ModelMoreLevels(
                 "zakat_calculator", R.drawable.zakat_icon, "Zakat Calculator"
             )
         )
-        moreLevel2.add(ModelMoreLevels("imams", R.drawable.imams_logo, "Four Imams"))
-        showList.add(ModelMore("Level 2", "Gold Package\n700 AI Tokens (monthly)", moreLevel2))
+        moreLevel1.add(ModelMoreLevels("imams", R.drawable.imams_logo, "Four Imams"))
+//        showList.add(ModelMore("Level 2", "Gold Package\n700 AI Tokens (monthly)", moreLevel2))
 
-        val moreLevel3 = ArrayList<ModelMoreLevels>()
+//        val moreLevel3 = ArrayList<ModelMoreLevels>()
 
-        moreLevel3.add(
+        moreLevel1.add(
             ModelMoreLevels(
                 "inheritance_law", R.drawable.inheritancelaw_icon, "Inheritance Law"
             )
         )
-        moreLevel3.add(
+        moreLevel1.add(
             ModelMoreLevels(
                 "searchdb", R.drawable.sd_icon, "Search Database Hadith, Surah"
             )
         )
 
-        moreLevel3.add(
+        moreLevel1.add(
             ModelMoreLevels(
                 "books_pdfs", R.drawable.bookspdf_icon, "Islamic Literature"
             )
         )
-        showList.add(
-            ModelMore(
-                "Level 3", "Diamond Package\nUnlimited AI Tokens (monthly)", moreLevel3
-            )
-        )
+        /*  showList.add(
+              ModelMore(
+                  "Level 3", "Diamond Package\nUnlimited AI Tokens (monthly)", moreLevel3
+              )
+          )*/
+
+        showList.add(ModelMore("Premium Package", "Unlimited AI Tokens (monthly)", moreLevel1))
+
 
 
 
@@ -111,25 +116,25 @@ class MoreFragment : BaseFragment() {
         var appTourList = AppClass.sharedPref.getList<String>(AppConstants.APP_TOUR_TYPE)
 
         if (!appTourList.contains("more")) {
-            AppTourDialog.appTour(
-                requireActivity(),
-                binding.ivAppTour,
-                "Level 2",
-                "Upgrade to the Gold Package and  enjoy 700 AI tokens monthly, access  to the Zakat Calculator, and insights  from the Four Imams of Sunnah for a  deeper Islamic learning experience."
-            ) {
-                activity?.let { it1 ->
-                    AppTourDialog.appTour(
-                        it1,
-                        binding.ivAppTour,
-                        "Level 3",
-                        "Upgrade to the Diamond Package  and unlock unlimited AI tokens, an  ad-free experience, exclusive Islamic  literature, inheritance law guidance,  and access to a Hadith & Surah  search database."
-                    ) {
-                        appTourList.add("more")
-                        AppClass.sharedPref.storeList(
-                            AppConstants.APP_TOUR_TYPE,
-                            appTourList
-                        )
-                    }
+//            AppTourDialog.appTour(
+//                requireActivity(),
+//                binding.ivAppTour,
+//                "Level 2",
+//                "Upgrade to the Gold Package and  enjoy 700 AI tokens monthly, access  to the Zakat Calculator, and insights  from the Four Imams of Sunnah for a  deeper Islamic learning experience."
+//            ) {
+            activity?.let { it1 ->
+                AppTourDialog.appTour(
+                    it1,
+                    binding.ivAppTour,
+                    "Premium Package",
+                    "Upgrade to the Premium Package  and unlock unlimited AI tokens, an  ad-free experience, exclusive Islamic  literature, inheritance law guidance,  and access to a Hadith & Surah  search database."
+                ) {
+                    appTourList.add("more")
+                    AppClass.sharedPref.storeList(
+                        AppConstants.APP_TOUR_TYPE,
+                        appTourList
+                    )
+//                    }
                 }
             }
         }

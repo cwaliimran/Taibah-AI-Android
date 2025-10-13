@@ -28,8 +28,8 @@ abstract class BaseFragment : Fragment() {
         requireActivity()
     }
 
-    var isSilverPurchased = false
-    var isGoldPurchased = false
+//    var isSilverPurchased = false
+//    var isGoldPurchased = false
     var isDiamondPurchased = false
 
     protected val fragmentActivity: FragmentActivity by lazy {
@@ -40,8 +40,8 @@ abstract class BaseFragment : Fragment() {
         super.onCreate(savedInstanceState)
         currentUser = AppClass.getCurrentUser()
         isAdsFree = AppClass.sharedPref.getBoolean(AppConstants.IS_ADS_FREE)
-        isSilverPurchased = AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_SILVER_PURCHASED)
-        isGoldPurchased = AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_GOLD_PURCHASED)
+//        isSilverPurchased = AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_SILVER_PURCHASED)
+//        isGoldPurchased = AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_GOLD_PURCHASED)
         isDiamondPurchased = AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_DIAMOND_PURCHASED)
     }
 
@@ -79,8 +79,8 @@ abstract class BaseFragment : Fragment() {
         super.onResume()
         currentUser = AppClass.getCurrentUser()
         isAdsFree = AppClass.sharedPref.getBoolean(AppConstants.IS_ADS_FREE)
-        isSilverPurchased = AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_SILVER_PURCHASED)
-        isGoldPurchased = AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_GOLD_PURCHASED)
+//        isSilverPurchased = AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_SILVER_PURCHASED)
+//        isGoldPurchased = AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_GOLD_PURCHASED)
         isDiamondPurchased = AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_DIAMOND_PURCHASED)
     }
 }

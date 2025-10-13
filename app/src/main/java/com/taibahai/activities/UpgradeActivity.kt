@@ -19,13 +19,11 @@ import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.ProductDetails
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.PurchasesUpdatedListener
-import com.facebook.internal.Utility.logd
 import com.network.base.BaseActivity
 import com.network.interfaces.AlertDialogListener
 import com.network.interfaces.OnItemClick
 import com.network.utils.AppClass
 import com.network.utils.AppConstants
-import com.network.utils.ProgressLoading.displayLoading
 import com.taibahai.R
 import com.taibahai.adapters.AdapterUpgrade
 import com.taibahai.billings.BillingClientManager
@@ -66,7 +64,7 @@ class UpgradeActivity : BaseActivity(), PurchaseInterface {
     override fun initAdapter() {
         super.initAdapter()
 
-        val upgradeBasic = ArrayList<ModelUpgradeList>()
+      /*  val upgradeBasic = ArrayList<ModelUpgradeList>()
         upgradeBasic.add(ModelUpgradeList("300 AI Tokens/Month"))
         upgradeBasic.add(ModelUpgradeList("Ads"))
         upgradeBasic.add(ModelUpgradeList("Quran"))
@@ -103,7 +101,7 @@ class UpgradeActivity : BaseActivity(), PurchaseInterface {
                 isGoldPurchased
             )
         )
-
+*/
 
         val upgradeExclusive = ArrayList<ModelUpgradeList>()
         upgradeExclusive.add(ModelUpgradeList("Unlimited AI Tokens/M"))
@@ -119,11 +117,11 @@ class UpgradeActivity : BaseActivity(), PurchaseInterface {
 
         showList.add(
             ModelUpgrade(
-                "3",
-                "Exclusive",
-                "Diamond Package",
+                "1",
+                "Premium Package",
+                "Premium Package",
                 upgradeExclusive,
-                "\$9.99/month",
+                "\$1.99/month",
                 isDiamondPurchased
             )
         )
@@ -137,27 +135,32 @@ class UpgradeActivity : BaseActivity(), PurchaseInterface {
                 when (type) {
                     "subscribe" -> {
                         when (position) {
-                            0 -> {
-                                if (isSilverPurchased){
+                        /*    0 -> {
+                                if (isSilverPurchased) {
                                     showToast(getString(R.string.already_purchased))
-                                }else{
-                                    billingClientManager.makePurchase(EnumSubscriptions.TAIBAH_AI_SILVER.productId)
+                                } else {
+                                    //    billingClientManager.makePurchase(EnumSubscriptions.TAIBAH_AI_SILVER.productId)
+                                    billingClientManager.makePurchase(EnumSubscriptions.TAIBAH_AI_DIAMOND.productId)
+
                                 }
                             }
 
                             1 -> {
-                                if (isGoldPurchased){
+                                if (isGoldPurchased) {
                                     showToast(getString(R.string.already_purchased))
-                                }else{
-                                billingClientManager.makePurchase(EnumSubscriptions.TAIBAH_AI_GOLD.productId)
-                            }
-                            }
+                                } else {
+                                    //  billingClientManager.makePurchase(EnumSubscriptions.TAIBAH_AI_GOLD.productId)
+                                    billingClientManager.makePurchase(EnumSubscriptions.TAIBAH_AI_DIAMOND.productId)
 
-                            2 -> {
-                                if (isDiamondPurchased){
+                                }
+                            }*/
+
+                            //2
+                            0 -> {
+                                if (isDiamondPurchased) {
                                     showToast(getString(R.string.already_purchased))
-                                }else
-                                billingClientManager.makePurchase(EnumSubscriptions.TAIBAH_AI_DIAMOND.productId)
+                                } else
+                                    billingClientManager.makePurchase(EnumSubscriptions.TAIBAH_AI_DIAMOND.productId)
                             }
 
                             else -> {}
@@ -204,21 +207,21 @@ class UpgradeActivity : BaseActivity(), PurchaseInterface {
             var aiTokens = AppClass.sharedPref.getInt(AppConstants.AI_TOKENS)
 
             when (data.toString()) {
-                EnumSubscriptions.TAIBAH_AI_SILVER.productId -> {
-                    AppClass.sharedPref.storeBoolean(
-                        AppConstants.IS_TAIBAH_AI_SILVER_PURCHASED, true
-                    )
-                    aiTokens += 300
-                    AppClass.sharedPref.storeInt(AppConstants.AI_TOKENS, aiTokens)
-                }
+                /*    EnumSubscriptions.TAIBAH_AI_SILVER.productId -> {
+                        AppClass.sharedPref.storeBoolean(
+                            AppConstants.IS_TAIBAH_AI_SILVER_PURCHASED, true
+                        )
+                        aiTokens += 300
+                        AppClass.sharedPref.storeInt(AppConstants.AI_TOKENS, aiTokens)
+                    }
 
-                EnumSubscriptions.TAIBAH_AI_GOLD.productId -> {
-                    AppClass.sharedPref.storeBoolean(AppConstants.IS_TAIBAH_AI_GOLD_PURCHASED, true)
-                    AppClass.sharedPref.storeBoolean(AppConstants.IS_ADS_FREE, true)
-                    aiTokens += 700
-                    AppClass.sharedPref.storeInt(AppConstants.AI_TOKENS, aiTokens)
+                    EnumSubscriptions.TAIBAH_AI_GOLD.productId -> {
+                        AppClass.sharedPref.storeBoolean(AppConstants.IS_TAIBAH_AI_GOLD_PURCHASED, true)
+                        AppClass.sharedPref.storeBoolean(AppConstants.IS_ADS_FREE, true)
+                        aiTokens += 700
+                        AppClass.sharedPref.storeInt(AppConstants.AI_TOKENS, aiTokens)
 
-                }
+                    }*/
 
                 EnumSubscriptions.TAIBAH_AI_DIAMOND.productId -> {
                     AppClass.sharedPref.storeBoolean(
@@ -240,27 +243,27 @@ class UpgradeActivity : BaseActivity(), PurchaseInterface {
             if (products.isNotEmpty()) {
                 products.forEach {
                     when (it) {
-                        EnumSubscriptions.TAIBAH_AI_SILVER.productId -> {
+                        /*                        EnumSubscriptions.TAIBAH_AI_SILVER.productId -> {
 
-                            aiTokens = 300
-                            AppClass.sharedPref.storeInt(AppConstants.AI_TOKENS, aiTokens)
+                                                    aiTokens = 300
+                                                    AppClass.sharedPref.storeInt(AppConstants.AI_TOKENS, aiTokens)
 
-                            AppClass.sharedPref.storeBoolean(
-                                AppConstants.IS_TAIBAH_AI_SILVER_PURCHASED, true
-                            )
-                        }
+                                                    AppClass.sharedPref.storeBoolean(
+                                                        AppConstants.IS_TAIBAH_AI_SILVER_PURCHASED, true
+                                                    )
+                                                }
 
-                        EnumSubscriptions.TAIBAH_AI_GOLD.productId -> {
-                            AppClass.sharedPref.storeBoolean(AppConstants.IS_ADS_FREE, true)
-                            aiTokens = 700
-                            AppClass.sharedPref.storeInt(AppConstants.AI_TOKENS, aiTokens)
+                                                EnumSubscriptions.TAIBAH_AI_GOLD.productId -> {
+                                                    AppClass.sharedPref.storeBoolean(AppConstants.IS_ADS_FREE, true)
+                                                    aiTokens = 700
+                                                    AppClass.sharedPref.storeInt(AppConstants.AI_TOKENS, aiTokens)
 
-                            AppClass.sharedPref.storeBoolean(
-                                AppConstants.IS_TAIBAH_AI_GOLD_PURCHASED,
-                                true
-                            )
+                                                    AppClass.sharedPref.storeBoolean(
+                                                        AppConstants.IS_TAIBAH_AI_GOLD_PURCHASED,
+                                                        true
+                                                    )
 
-                        }
+                                                }*/
 
                         EnumSubscriptions.TAIBAH_AI_DIAMOND.productId -> {
                             AppClass.sharedPref.storeBoolean(AppConstants.IS_ADS_FREE, true)
@@ -314,24 +317,31 @@ class UpgradeActivity : BaseActivity(), PurchaseInterface {
                 }
             }, this, object : ProductsInterface {
                 override fun productsFetched(products: MutableList<ProductDetails>) {
-                  //  Log.d(TAG, "productsFetched: $products")
+                    //  Log.d(TAG, "productsFetched: $products")
 
                     products.forEach { product ->
                         when (product.productId) {
-                            EnumSubscriptions.TAIBAH_AI_SILVER.productId -> {
-                                val price = product.subscriptionOfferDetails?.get(0)?.pricingPhases?.pricingPhaseList?.getOrNull(0)?.formattedPrice
-                                showList[0].subscriptionPrice = price?.let { "$it/month" } ?: "\$2.99/month"
-                                Log.d(TAG, "Silver subscription price: ${showList[0].subscriptionPrice}")
-                            }
-                            EnumSubscriptions.TAIBAH_AI_GOLD.productId -> {
-                                val price = product.subscriptionOfferDetails?.get(0)?.pricingPhases?.pricingPhaseList?.getOrNull(0)?.formattedPrice
-                                showList[1].subscriptionPrice = price?.let { "$it/month" } ?: "\$4.99/month"
-                                Log.d(TAG, "Gold subscription price: ${showList[1].subscriptionPrice}")
-                            }
+                            /*   EnumSubscriptions.TAIBAH_AI_SILVER.productId -> {
+                                   val price = product.subscriptionOfferDetails?.get(0)?.pricingPhases?.pricingPhaseList?.getOrNull(0)?.formattedPrice
+                                   showList[0].subscriptionPrice = price?.let { "$it/month" } ?: "\$2.99/month"
+                                   Log.d(TAG, "Silver subscription price: ${showList[0].subscriptionPrice}")
+                               }
+                               EnumSubscriptions.TAIBAH_AI_GOLD.productId -> {
+                                   val price = product.subscriptionOfferDetails?.get(0)?.pricingPhases?.pricingPhaseList?.getOrNull(0)?.formattedPrice
+                                   showList[1].subscriptionPrice = price?.let { "$it/month" } ?: "\$4.99/month"
+                                   Log.d(TAG, "Gold subscription price: ${showList[1].subscriptionPrice}")
+                               }*/
                             EnumSubscriptions.TAIBAH_AI_DIAMOND.productId -> {
-                                val price = product.subscriptionOfferDetails?.get(0)?.pricingPhases?.pricingPhaseList?.getOrNull(0)?.formattedPrice
-                                showList[2].subscriptionPrice = price?.let { "$it/month" } ?: "\$9.99/month"
-                                Log.d(TAG, "Diamond subscription price: ${showList[2].subscriptionPrice}")
+                                val price =
+                                    product.subscriptionOfferDetails?.get(0)?.pricingPhases?.pricingPhaseList?.getOrNull(
+                                        0
+                                    )?.formattedPrice
+                                showList[2].subscriptionPrice =
+                                    price?.let { "$it/month" } ?: "\$1.99/month"
+                                Log.d(
+                                    TAG,
+                                    "Diamond subscription price: ${showList[2].subscriptionPrice}"
+                                )
                             }
                         }
                     }

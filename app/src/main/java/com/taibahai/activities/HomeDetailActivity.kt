@@ -91,14 +91,15 @@ class HomeDetailActivity : BaseActivity() {
                 return@setOnClickListener
             }
 
-            var isSilverPurchased =
-                AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_SILVER_PURCHASED)
-            var isGoldPurchased =
-                AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_GOLD_PURCHASED)
+//            var isSilverPurchased =
+//                AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_SILVER_PURCHASED)
+//            var isGoldPurchased =
+//                AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_GOLD_PURCHASED)
             var isDiamondPurchased =
                 AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_DIAMOND_PURCHASED)
 
-            if (isSilverPurchased || isGoldPurchased || isDiamondPurchased) {
+//            if (isSilverPurchased || isGoldPurchased || isDiamondPurchased) {
+            if (isDiamondPurchased) {
                 comment = binding.messageBox.text.toString()
                 if (comment.isNotEmpty()) {
                     viewModel.feedComment(model.feed_id, comment)

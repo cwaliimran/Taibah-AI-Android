@@ -15,9 +15,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.Toast
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.network.base.BaseFragment
@@ -81,13 +78,12 @@ class SearchFragment : BaseFragment(), OnItemClick {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View
-    {
+    ): View {
         binding = FragmentSearchBinding.inflate(layoutInflater)
         return binding.root
     }
 
-        // Add a global layout listener to monitor layout changes, including keyboard visibility changes
+    // Add a global layout listener to monitor layout changes, including keyboard visibility changes
 //        binding.root.viewTreeObserver.addOnGlobalLayoutListener {
 //            // Check if the keyboard is open or closed
 //            val screenHeight = binding.root.rootView.height
@@ -108,7 +104,6 @@ class SearchFragment : BaseFragment(), OnItemClick {
 //                }
 //            }
 //        }
-
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -356,7 +351,8 @@ class SearchFragment : BaseFragment(), OnItemClick {
             callback(predefinedResponse)
             return
         }
-        val apiKey ="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"
+        val apiKey =
+            "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"
         val url = "https://api.openai.com/v1/completions"
         val requestBody = """
         {

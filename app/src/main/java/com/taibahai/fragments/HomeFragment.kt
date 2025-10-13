@@ -97,15 +97,16 @@ class HomeFragment : BaseFragment() {
 
         } else {
             //show hajj dialog
-
-            if (!AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_SILVER_PURCHASED) ||
-                !AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_GOLD_PURCHASED) ||
+/*
+            if (
+//                !AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_SILVER_PURCHASED) ||
+//                !AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_GOLD_PURCHASED) ||
                 !AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_DIAMOND_PURCHASED)
             ) {
                 if (System.currentTimeMillis() < 1749495600000L) { // June 10, 2025, in milliseconds
                     showHajjDiscountDialog()
                 }
-            }
+            }*/
         }
 
     }
@@ -154,14 +155,14 @@ class HomeFragment : BaseFragment() {
                 handleGuestLogic()
                 return@setOnClickListener
             }
-            var isSilverPurchased =
-                AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_SILVER_PURCHASED)
-            var isGoldPurchased =
-                AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_GOLD_PURCHASED)
+//            var isSilverPurchased =
+//                AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_SILVER_PURCHASED)
+//            var isGoldPurchased =
+//                AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_GOLD_PURCHASED)
             var isDiamondPurchased =
                 AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_DIAMOND_PURCHASED)
 
-            if (isSilverPurchased || isGoldPurchased || isDiamondPurchased) {
+            if (isDiamondPurchased) {
                 addPostActivityResultLauncher.launch(
                     Intent(
                         requireContext(),

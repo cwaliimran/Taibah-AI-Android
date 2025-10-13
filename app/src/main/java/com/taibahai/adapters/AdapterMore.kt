@@ -29,9 +29,9 @@ class AdapterMore(private val context: Activity, var showData: MutableList<Model
     RecyclerView.Adapter<AdapterMore.ViewHolder>() {
     lateinit var binding: ItemMoreBinding
 
-    var isSilverPurchased =
-        AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_SILVER_PURCHASED)
-    var isGoldPurchased = AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_GOLD_PURCHASED)
+//    var isSilverPurchased =
+//        AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_SILVER_PURCHASED)
+//    var isGoldPurchased = AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_GOLD_PURCHASED)
     var isDiamondPurchased =
         AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_DIAMOND_PURCHASED)
 
@@ -46,17 +46,18 @@ class AdapterMore(private val context: Activity, var showData: MutableList<Model
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val moreData = showData[position]
+        val holderPos = holder.absoluteAdapterPosition
+        val moreData = showData[holderPos]
         holder.binding.model = moreData
-        holder.binding.tvLevel.text = showData[position].level
-        holder.binding.tvPackege.text = showData[position].packageName
+        holder.binding.tvLevel.text = showData[holderPos].level
+        holder.binding.tvPackege.text = showData[holderPos].packageName
         val adapter = AdapterMoreLevels(moreData.levelsList, object : OnItemClick {
             override fun onClick(position: Int, type: String?, data: Any?, view: View?) {
                 navigateToActivity(moreData.levelsList[position])
             }
         })
         holder.rvMoreLevelsList.adapter = adapter
-        if (position == 0) {
+        if (holderPos == 0) {
             holder.binding.tvFree.visibility = View.VISIBLE
             holder.binding.tvLevel.visibility = View.INVISIBLE
             holder.binding.btnUpgrade.visibility = View.INVISIBLE
@@ -66,20 +67,21 @@ class AdapterMore(private val context: Activity, var showData: MutableList<Model
         } else {
             holder.binding.tvFree.visibility = View.INVISIBLE
             holder.binding.tvLevel.visibility = View.VISIBLE
-            holder.binding.btnUpgrade.visibility = View.VISIBLE
+//            holder.binding.btnUpgrade.visibility = View.VISIBLE
 
         }
+//
+//        if (position == 1 && isSilverPurchased) {
+//            holder.binding.btnUpgrade.visibility = View.INVISIBLE
+//        }
+//        if (position == 2 && isGoldPurchased) {
+//            holder.binding.btnUpgrade.visibility = View.INVISIBLE
+//        }
 
-        if (position == 1 && isSilverPurchased) {
-            holder.binding.btnUpgrade.visibility = View.INVISIBLE
-        }
-        if (position == 2 && isGoldPurchased) {
-            holder.binding.btnUpgrade.visibility = View.INVISIBLE
+        if (isDiamondPurchased){
+            holder.binding.btnUpgrade.text = "Subscribed"
         }
 
-        if (isDiamondPurchased) {
-            holder.binding.btnUpgrade.visibility = View.INVISIBLE
-        }
         binding.btnUpgrade.setOnClickListener {
             context.startActivity(Intent(context, UpgradeActivity::class.java))
         }
@@ -102,7 +104,7 @@ class AdapterMore(private val context: Activity, var showData: MutableList<Model
 
 
             "zakat_calculator" -> {
-                if (isGoldPurchased || isDiamondPurchased) {
+                if (isDiamondPurchased) {
                     val intent = Intent(context, ZakatCalculatorActivity::class.java)
                     context.startActivity(intent)
                 } else {
@@ -112,7 +114,7 @@ class AdapterMore(private val context: Activity, var showData: MutableList<Model
             }
 
             "imams" -> {
-                if (isGoldPurchased || isDiamondPurchased) {
+                if (isDiamondPurchased) {
                     val intent = Intent(context, ImamsOfSunnaActivity::class.java)
                     context.startActivity(intent)
                 } else {

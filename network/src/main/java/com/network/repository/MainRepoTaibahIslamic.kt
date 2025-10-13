@@ -11,7 +11,6 @@ import com.network.network.BaseApiResponse
 import com.network.network.NetworkResult
 import com.network.network.SingleLiveEvent
 import com.network.network.UrlManager.BASE_URL_AI
-import com.network.network.UrlManager.BASE_URL_TAIBAH_ISLAMIC
 
 
 class MainRepoTaibahIslamic : BaseApiResponse() {

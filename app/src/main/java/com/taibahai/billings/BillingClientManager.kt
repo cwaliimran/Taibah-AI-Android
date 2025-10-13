@@ -79,7 +79,7 @@ class BillingClientManager(
 
     private fun queryProduct() {
         val productList = ImmutableList.builder<QueryProductDetailsParams.Product>()
-            .add(
+        /*    .add(
                 QueryProductDetailsParams.Product.newBuilder()
                     .setProductId(EnumSubscriptions.TAIBAH_AI_GOLD.productId)
                     .setProductType(BillingClient.ProductType.SUBS)
@@ -90,7 +90,7 @@ class BillingClientManager(
                     .setProductId(EnumSubscriptions.TAIBAH_AI_SILVER.productId)
                     .setProductType(BillingClient.ProductType.SUBS)
                     .build()
-            )
+            )*/
             .add(
                 QueryProductDetailsParams.Product.newBuilder()
                     .setProductId(EnumSubscriptions.TAIBAH_AI_DIAMOND.productId)
@@ -312,13 +312,13 @@ class BillingClientManager(
 
         purchase.products.forEach { productId ->
             when (productId) {
-                EnumSubscriptions.TAIBAH_AI_SILVER.productId -> {
-                    calendar.add(Calendar.MONTH, 1)
-                }
-
-                EnumSubscriptions.TAIBAH_AI_GOLD.productId -> {
-                    calendar.add(Calendar.MONTH, 1)
-                }
+//                EnumSubscriptions.TAIBAH_AI_SILVER.productId -> {
+//                    calendar.add(Calendar.MONTH, 1)
+//                }
+//
+//                EnumSubscriptions.TAIBAH_AI_GOLD.productId -> {
+//                    calendar.add(Calendar.MONTH, 1)
+//                }
 
                 EnumSubscriptions.TAIBAH_AI_DIAMOND.productId -> {
                     calendar.add(Calendar.MONTH, 1)
@@ -335,16 +335,16 @@ class BillingClientManager(
 
         products.forEach {
             when (it) {
-                EnumSubscriptions.TAIBAH_AI_SILVER.productId -> {
+             /*   EnumSubscriptions.TAIBAH_AI_SILVER.productId -> {
                     aiTokens += 300
                 }
 
                 EnumSubscriptions.TAIBAH_AI_GOLD.productId -> {
                     aiTokens += 700
                 }
-
+*/
                 EnumSubscriptions.TAIBAH_AI_DIAMOND.productId -> {
-                    aiTokens += 100000
+                    aiTokens += 900000
                 }
             }
         }
@@ -356,8 +356,8 @@ class BillingClientManager(
         if (AppClass.sharedPref.getInt(AppConstants.AI_TOKENS) > 30) {
             AppClass.sharedPref.storeInt(AppConstants.AI_TOKENS, 0)
         }
-        AppClass.sharedPref.storeBoolean(AppConstants.IS_TAIBAH_AI_SILVER_PURCHASED, false)
-        AppClass.sharedPref.storeBoolean(AppConstants.IS_TAIBAH_AI_GOLD_PURCHASED, false)
+//        AppClass.sharedPref.storeBoolean(AppConstants.IS_TAIBAH_AI_SILVER_PURCHASED, false)
+//        AppClass.sharedPref.storeBoolean(AppConstants.IS_TAIBAH_AI_GOLD_PURCHASED, false)
         AppClass.sharedPref.storeBoolean(AppConstants.IS_TAIBAH_AI_DIAMOND_PURCHASED, false)
         AppClass.sharedPref.storeBoolean(AppConstants.IS_ADS_FREE, false)
     }
