@@ -59,22 +59,32 @@ class MoreFragment : BaseFragment() {
 
         moreFree.add(ModelMoreLevels("quran", R.drawable.quran_icon, "Quran"))
         moreFree.add(ModelMoreLevels("hadith", R.drawable.hadih_icon, "Hadith"))
-        moreFree.add(ModelMoreLevels("", R.drawable.ads_icon, "Ads"))
+        moreFree.add(ModelMoreLevels("english_translation", R.drawable.quran_icon, "English Translation"))
+
         showList.add(ModelMore("Free", "30 AI Tokens (monthly)", moreFree))
 
         val moreLevel1 = ArrayList<ModelMoreLevels>()
 
         if (!isDiamondPurchased) {
-            moreLevel1.add(ModelMoreLevels("", R.drawable.ads_icon, "Ads Free"))
             moreLevel1.add(ModelMoreLevels("", R.drawable.search2, "Unlimited AI Tokens"))
         }
 
 
 //        val moreLevel2 = ArrayList<ModelMoreLevels>()
+        moreLevel1.add(
+            ModelMoreLevels(
+                "searchdb", R.drawable.sd_icon, "Search Database Hadith, Surah"
+            )
+        )
 
         moreLevel1.add(
             ModelMoreLevels(
                 "zakat_calculator", R.drawable.zakat_icon, "Zakat Calculator"
+            )
+        )
+        moreLevel1.add(
+            ModelMoreLevels(
+                "inheritance_law", R.drawable.inheritancelaw_icon, "Inheritance Law"
             )
         )
         moreLevel1.add(ModelMoreLevels("imams", R.drawable.imams_logo, "Four Imams"))
@@ -82,16 +92,8 @@ class MoreFragment : BaseFragment() {
 
 //        val moreLevel3 = ArrayList<ModelMoreLevels>()
 
-        moreLevel1.add(
-            ModelMoreLevels(
-                "inheritance_law", R.drawable.inheritancelaw_icon, "Inheritance Law"
-            )
-        )
-        moreLevel1.add(
-            ModelMoreLevels(
-                "searchdb", R.drawable.sd_icon, "Search Database Hadith, Surah"
-            )
-        )
+
+
 
         moreLevel1.add(
             ModelMoreLevels(
