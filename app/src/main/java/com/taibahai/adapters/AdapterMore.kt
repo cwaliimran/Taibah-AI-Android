@@ -12,6 +12,7 @@ import com.network.interfaces.OnItemClick
 import com.network.utils.AppClass
 import com.network.utils.AppConstants
 import com.taibahai.R
+import com.taibahai.activities.BookPDFDetailActivity
 import com.taibahai.activities.BooksCategoriesActivity
 import com.taibahai.activities.ImamsOfSunnaActivity
 import com.taibahai.activities.InheritanceLawActivity
@@ -93,6 +94,12 @@ class AdapterMore(private val context: Activity, var showData: MutableList<Model
 
             "quran" -> {
                 val intent = Intent(context, QuranChaptersActivity::class.java)
+                context.startActivity(intent)
+            }
+            "english_translation" -> {
+                val intent = Intent(context, BookPDFDetailActivity::class.java)
+                intent.putExtra("title", "The Clear Quran English Translation")
+                intent.putExtra("url", "https://admin.taibahislamic.com/uploads/bdbf34d6bffe4ceddc5881e64260bfe0.pdf")
                 context.startActivity(intent)
             }
 

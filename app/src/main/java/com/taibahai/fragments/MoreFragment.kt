@@ -60,7 +60,6 @@ class MoreFragment : BaseFragment() {
         moreFree.add(ModelMoreLevels("quran", R.drawable.quran_icon, "Quran"))
         moreFree.add(ModelMoreLevels("hadith", R.drawable.hadih_icon, "Hadith"))
         moreFree.add(ModelMoreLevels("english_translation", R.drawable.quran_icon, "English Translation"))
-
         showList.add(ModelMore("Free", "30 AI Tokens (monthly)", moreFree))
 
         val moreLevel1 = ArrayList<ModelMoreLevels>()
@@ -69,11 +68,26 @@ class MoreFragment : BaseFragment() {
             moreLevel1.add(ModelMoreLevels("", R.drawable.search2, "Unlimited AI Tokens"))
         }
 
-
+        moreLevel1.add(
+            ModelMoreLevels(
+                "quran", R.drawable.quran_icon, "Quran"
+            )
+        )
+        moreLevel1.add(
+            ModelMoreLevels(
+                "hadith", R.drawable.hadih_icon, "Hadith"
+            )
+        )
 //        val moreLevel2 = ArrayList<ModelMoreLevels>()
         moreLevel1.add(
             ModelMoreLevels(
                 "searchdb", R.drawable.sd_icon, "Search Database Hadith, Surah"
+            )
+        )
+
+        moreLevel1.add(
+            ModelMoreLevels(
+                "islamic_content_videos", R.drawable.quran_icon, "Islamic Content Videos"
             )
         )
 

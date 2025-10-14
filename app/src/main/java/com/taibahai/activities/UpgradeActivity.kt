@@ -105,14 +105,15 @@ class UpgradeActivity : BaseActivity(), PurchaseInterface {
 
         val upgradeExclusive = ArrayList<ModelUpgradeList>()
         upgradeExclusive.add(ModelUpgradeList("Unlimited AI Tokens/M"))
-        upgradeExclusive.add(ModelUpgradeList("No Ads"))
         upgradeExclusive.add(ModelUpgradeList("Quran"))
         upgradeExclusive.add(ModelUpgradeList("Hadith"))
-        upgradeExclusive.add(ModelUpgradeList("4 Influential Scholars"))
-        upgradeExclusive.add(ModelUpgradeList("Islamic Literature"))
+        upgradeExclusive.add(ModelUpgradeList("Search Database"))
+        upgradeExclusive.add(ModelUpgradeList("Islamic Content Videos"))
         upgradeExclusive.add(ModelUpgradeList("Zakat Calculator"))
         upgradeExclusive.add(ModelUpgradeList("Inheritance Law"))
-        upgradeExclusive.add(ModelUpgradeList("Search Database"))
+        upgradeExclusive.add(ModelUpgradeList("4 Influential Scholars"))
+        upgradeExclusive.add(ModelUpgradeList("Islamic Literature"))
+
 
 
         showList.add(
