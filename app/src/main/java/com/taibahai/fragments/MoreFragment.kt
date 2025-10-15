@@ -59,14 +59,20 @@ class MoreFragment : BaseFragment() {
 
         moreFree.add(ModelMoreLevels("quran", R.drawable.quran_icon, "Quran"))
         moreFree.add(ModelMoreLevels("hadith", R.drawable.hadih_icon, "Hadith"))
-        moreFree.add(ModelMoreLevels("english_translation", R.drawable.quran_icon, "English Translation"))
+        moreFree.add(ModelMoreLevels("english_translation", R.drawable.clear_quran_icon, "The Clear Quran"))
         showList.add(ModelMore("Free", "30 AI Tokens (monthly)", moreFree))
 
         val moreLevel1 = ArrayList<ModelMoreLevels>()
 
-        if (!isDiamondPurchased) {
-            moreLevel1.add(ModelMoreLevels("", R.drawable.search2, "Unlimited AI Tokens"))
-        }
+//        if (!isDiamondPurchased) {
+//            moreLevel1.add(ModelMoreLevels("", R.drawable.search2, "Exclusive: Premium Subscription Package"))
+//        }
+
+        moreLevel1.add(
+            ModelMoreLevels(
+                "unlimited_aI_tokens", R.drawable.search_icon, "Unlimited AI Tokens"
+            )
+        )
 
         moreLevel1.add(
             ModelMoreLevels(
@@ -81,13 +87,13 @@ class MoreFragment : BaseFragment() {
 //        val moreLevel2 = ArrayList<ModelMoreLevels>()
         moreLevel1.add(
             ModelMoreLevels(
-                "searchdb", R.drawable.sd_icon, "Search Database Hadith, Surah"
+                "searchdb", R.drawable.sd_icon, "Qur'an & Hadith Search"
             )
         )
 
         moreLevel1.add(
             ModelMoreLevels(
-                "islamic_content_videos", R.drawable.quran_icon, "Islamic Content Videos"
+                "islamic_content_videos", R.drawable.watch_icon, "Watch & Learn"
             )
         )
 
@@ -101,7 +107,7 @@ class MoreFragment : BaseFragment() {
                 "inheritance_law", R.drawable.inheritancelaw_icon, "Inheritance Law"
             )
         )
-        moreLevel1.add(ModelMoreLevels("imams", R.drawable.imams_logo, "Four Imams"))
+        moreLevel1.add(ModelMoreLevels("imams", R.drawable.imams_logo, "4 Influential Scholars"))
 //        showList.add(ModelMore("Level 2", "Gold Package\n700 AI Tokens (monthly)", moreLevel2))
 
 //        val moreLevel3 = ArrayList<ModelMoreLevels>()
@@ -120,7 +126,7 @@ class MoreFragment : BaseFragment() {
               )
           )*/
 
-        showList.add(ModelMore("Premium Package", "Unlimited AI Tokens (monthly)", moreLevel1))
+        showList.add(ModelMore("Premium Subscription", "Exclusive: Premium Subscription Package", moreLevel1))
 
 
 

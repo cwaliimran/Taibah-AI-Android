@@ -29,6 +29,12 @@
         android:windowSoftInputMode="adjustResize"
         tools:targetApi="31">
         <activity
+            android:name=".watch_and_learn.WatchAndLearnVideoListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".watch_and_learn.WatchAndLearnListActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.ScientificHomeDetailActivity"
             android:exported="false" />
         <activity
@@ -151,8 +157,8 @@
         <activity
             android:name=".bottom_navigation.BottomNavigation"
             android:configChanges="orientation|screenSize"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
-            android:exported="true" />
+            android:exported="true"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
 
         <meta-data
             android:name="preloaded_fonts"

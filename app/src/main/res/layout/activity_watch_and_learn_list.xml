@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:background="@drawable/more_bg"
+        android:layout_height="match_parent"
+        tools:context=".activities.WatchAndLearnListActivity">
+
+        <include
+            android:id="@+id/appbar"
+            layout="@layout/appbar" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvScholarList"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="20dp"
+            tools:listitem="@layout/item_books_pdf"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/appbar" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

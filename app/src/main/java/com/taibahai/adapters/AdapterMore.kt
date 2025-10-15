@@ -25,6 +25,7 @@ import com.taibahai.models.ModelMoreLevels
 import com.taibahai.quran.QuranChaptersActivity
 import com.taibahai.search_database_tablayout.SearchDatabaseActivity
 import com.taibahai.utils.AppTourDialog
+import com.taibahai.watch_and_learn.WatchAndLearnListActivity
 
 class AdapterMore(private val context: Activity, var showData: MutableList<ModelMore>) :
     RecyclerView.Adapter<AdapterMore.ViewHolder>() {
@@ -143,6 +144,14 @@ class AdapterMore(private val context: Activity, var showData: MutableList<Model
             "inheritance_law" -> {
                 if (isDiamondPurchased) {
                     val intent = Intent(context, InheritanceLawActivity::class.java)
+                    context.startActivity(intent)
+                } else
+                    Toast.makeText(context, "Please upgrade to Diamond Package", Toast.LENGTH_SHORT)
+                        .show()
+            }
+            "islamic_content_videos" -> {
+                if (isDiamondPurchased) {
+                    val intent = Intent(context, WatchAndLearnListActivity::class.java)
                     context.startActivity(intent)
                 } else
                     Toast.makeText(context, "Please upgrade to Diamond Package", Toast.LENGTH_SHORT)
