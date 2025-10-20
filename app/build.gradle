@@ -6,6 +6,10 @@ plugins {
     id 'com.google.firebase.crashlytics'
 }
 
+
+// app/build.gradle
+apply from: "../secrets.gradle"
+
 android {
     def configs = rootProject.ext
 
@@ -28,6 +32,10 @@ android {
         testInstrumentationRunner configs.testInstrumentationRunner
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
+
+
+        // Inject into BuildConfig safely
+        buildConfigField "String", "CHAT_GPT_API_KEY", "\"${CHAT_GPT_API_KEY}\""
 
     }
 

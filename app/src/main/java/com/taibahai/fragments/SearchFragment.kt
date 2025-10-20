@@ -22,6 +22,7 @@ import com.network.interfaces.OnItemClick
 import com.network.utils.AppClass
 import com.network.utils.AppConstants
 import com.network.utils.ProgressLoading.displayLoading
+import com.taibahai.BuildConfig
 import com.taibahai.R
 import com.taibahai.activities.HistoryActivity
 import com.taibahai.adapters.AdapterAISearch
@@ -75,7 +76,7 @@ class SearchFragment : BaseFragment(), OnItemClick {
     var aiTokens = 0
     var isAppTourMode = false
     private var appTourList = mutableListOf<String>()
-
+    private var CHAT_GPT_API_KEY = ""
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -108,6 +109,8 @@ class SearchFragment : BaseFragment(), OnItemClick {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        CHAT_GPT_API_KEY = BuildConfig.CHAT_GPT_API_KEY
 
 
         aiTokens = AppClass.sharedPref.getInt(AppConstants.AI_TOKENS)
@@ -351,8 +354,7 @@ class SearchFragment : BaseFragment(), OnItemClick {
             callback(predefinedResponse)
             return
         }
-        val apiKey =
-            "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"
+
         val url = "https://api.openai.com/v1/completions"
         val requestBody = """
         {
@@ -366,7 +368,7 @@ class SearchFragment : BaseFragment(), OnItemClick {
         val request = Request.Builder()
             .url(url)
             .header("Content-Type", "application/json")
-            .addHeader("Authorization", "Bearer $apiKey")
+            .addHeader("Authorization", "Bearer $CHAT_GPT_API_KEY")
             .post(requestBody.toRequestBody("application/json".toMediaTypeOrNull()))
             .build()
 
