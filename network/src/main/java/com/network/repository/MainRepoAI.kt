@@ -6,9 +6,11 @@ import com.network.models.ModelBooksCategories
 import com.network.models.ModelChapterHadith3
 import com.network.models.ModelDailyAlert
 import com.network.models.ModelGetFeeds
+import com.network.models.ModelGetInfluencers
 import com.network.models.ModelHome
 import com.network.models.ModelInheritanceLaw
 import com.network.models.ModelNotifications
+import com.network.models.ModelPodcastsResponse
 import com.network.models.ModelPostFeed
 import com.network.models.ModelPrivacyTerms
 import com.network.models.ModelScholars
@@ -203,6 +205,30 @@ class MainRepoAI : BaseApiResponse() {
         booksCategoriesMutableLiveData.postValue(NetworkResult.Loading())
         booksCategoriesMutableLiveData.postValue(safeApiCall {
             apiService.booksCategories()
+        })
+    }
+
+    val getInfluencersMutableLiveData: SingleLiveEvent<NetworkResult<ModelGetInfluencers>> by lazy {
+        SingleLiveEvent()
+    }
+
+    suspend fun getInfluencers( page: Int, limit: Int) {
+        getInfluencersMutableLiveData.value = null
+        getInfluencersMutableLiveData.postValue(NetworkResult.Loading())
+        getInfluencersMutableLiveData.postValue(safeApiCall {
+            apiService.getInfluencers(page, limit)
+        })
+    }
+
+    val getPodcastsByInfluencerMutableLiveData: SingleLiveEvent<NetworkResult<ModelPodcastsResponse>> by lazy {
+        SingleLiveEvent()
+    }
+
+    suspend fun getPodcastsByInfluencer(id: Int, page: Int, limit: Int) {
+        getPodcastsByInfluencerMutableLiveData.value = null
+        getPodcastsByInfluencerMutableLiveData.postValue(NetworkResult.Loading())
+        getPodcastsByInfluencerMutableLiveData.postValue(safeApiCall {
+            apiService.getPodcastsByInfluencer(id,page, limit)
         })
     }
 

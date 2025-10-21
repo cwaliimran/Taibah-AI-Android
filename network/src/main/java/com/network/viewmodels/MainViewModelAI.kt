@@ -10,9 +10,11 @@ import com.network.models.ModelBooksCategories
 import com.network.models.ModelChapterHadith3
 import com.network.models.ModelDailyAlert
 import com.network.models.ModelGetFeeds
+import com.network.models.ModelGetInfluencers
 import com.network.models.ModelHome
 import com.network.models.ModelInheritanceLaw
 import com.network.models.ModelNotifications
+import com.network.models.ModelPodcastsResponse
 import com.network.models.ModelPostFeed
 import com.network.models.ModelPrivacyTerms
 import com.network.models.ModelScholars
@@ -164,6 +166,21 @@ class MainViewModelAI(application: Application) : AndroidViewModel(application) 
     fun booksCategories() {
         viewModelScope.launch {
             repository.booksCategories()
+        }
+    }
+
+val getInfluencersLiveData: MutableLiveData<NetworkResult<ModelGetInfluencers>>
+        get() = repository.getInfluencersMutableLiveData
+    fun getInfluencers( page: Int, limit: Int) {
+        viewModelScope.launch {
+            repository.getInfluencers(page, limit)
+        }
+    }
+val getPodcastsByInfluencerLiveData: MutableLiveData<NetworkResult<ModelPodcastsResponse>>
+        get() = repository.getPodcastsByInfluencerMutableLiveData
+    fun getPodcastsByInfluencer(id:Int, page: Int, limit: Int) {
+        viewModelScope.launch {
+            repository.getPodcastsByInfluencer(id,page, limit)
         }
     }
 

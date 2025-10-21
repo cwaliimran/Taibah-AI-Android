@@ -14,6 +14,23 @@
             android:id="@+id/appbar"
             layout="@layout/appbar" />
 
+
+        <TextView
+            android:id="@+id/tvScholars"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:fontFamily="@font/poppins_medium"
+            android:gravity="center_vertical"
+            android:text="Scholars"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_margin="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/appbar" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvScholarList"
             android:layout_width="match_parent"
@@ -22,7 +39,7 @@
             tools:listitem="@layout/item_books_pdf"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/appbar" />
+            app:layout_constraintTop_toBottomOf="@+id/tvScholars" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
