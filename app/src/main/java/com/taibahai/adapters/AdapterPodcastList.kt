@@ -4,12 +4,18 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.network.interfaces.OnItemClick
 import com.network.models.ModelPodcastsResponse
+import com.taibahai.R
 import com.taibahai.activities.BookPDFDetailActivity
 import com.taibahai.databinding.ItemPodcastListBinding
 
 
-class AdapterPodcastList(var showData: MutableList<ModelPodcastsResponse.Data.Podcast>) :
+class AdapterPodcastList(
+    var showData: MutableList<ModelPodcastsResponse.Data.Podcast>,
+    var listener: OnItemClick
+) :
     RecyclerView.Adapter<AdapterPodcastList.ViewHolder>() {
     lateinit var binding: ItemPodcastListBinding
 
@@ -29,7 +35,15 @@ class AdapterPodcastList(var showData: MutableList<ModelPodcastsResponse.Data.Po
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val podcast = showData[position]
         holder.binding.tvBookName.text = podcast.title
+        holder.binding.tvTotal.text = podcast.duration
+        Glide.with(holder.itemView.context)
+            .load(podcast.thumbnail)
+            .placeholder(R.drawable.books)
+            .into(holder.binding.ivImage)
 
+        holder.itemView.setOnClickListener {
+            listener.onClick(position)
+        }
 
 //        holder.itemView.setOnClickListener {
 //            val context = holder.itemView.context
