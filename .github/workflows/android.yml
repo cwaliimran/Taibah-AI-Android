@@ -2,7 +2,7 @@ name: Android CI
 
 on:
   push:
-    branches: [ "n/a" ]
+    branches: [ "development" ]
     paths-ignore:
       - 'app/version.properties'
       - 'app/play-store-releases/en-US/whatsnew.txt'
