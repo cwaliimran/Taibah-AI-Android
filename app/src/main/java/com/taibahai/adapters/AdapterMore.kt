@@ -1,11 +1,11 @@
 package com.taibahai.adapters
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.network.interfaces.OnItemClick
@@ -24,14 +24,13 @@ import com.taibahai.models.ModelMore
 import com.taibahai.models.ModelMoreLevels
 import com.taibahai.quran.QuranChaptersActivity
 import com.taibahai.search_database_tablayout.SearchDatabaseActivity
-import com.taibahai.utils.AppTourDialog
 import com.taibahai.watch_and_learn.WatchAndLearnListActivity
 
 class AdapterMore(private val context: Activity, var showData: MutableList<ModelMore>) :
     RecyclerView.Adapter<AdapterMore.ViewHolder>() {
     lateinit var binding: ItemMoreBinding
 
-//    var isSilverPurchased =
+    //    var isSilverPurchased =
 //        AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_SILVER_PURCHASED)
 //    var isGoldPurchased = AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_GOLD_PURCHASED)
     var isDiamondPurchased =
@@ -80,8 +79,10 @@ class AdapterMore(private val context: Activity, var showData: MutableList<Model
 //            holder.binding.btnUpgrade.visibility = View.INVISIBLE
 //        }
 
-        if (isDiamondPurchased){
+        if (isDiamondPurchased) {
             holder.binding.btnUpgrade.text = "Subscribed"
+        } else {
+            holder.binding.btnUpgrade.text = "Upgrade"
         }
 
         binding.btnUpgrade.setOnClickListener {
@@ -97,10 +98,14 @@ class AdapterMore(private val context: Activity, var showData: MutableList<Model
                 val intent = Intent(context, QuranChaptersActivity::class.java)
                 context.startActivity(intent)
             }
+
             "english_translation" -> {
                 val intent = Intent(context, BookPDFDetailActivity::class.java)
                 intent.putExtra("title", "The Clear Quran English Translation")
-                intent.putExtra("url", "https://admin.taibahislamic.com/uploads/bdbf34d6bffe4ceddc5881e64260bfe0.pdf")
+                intent.putExtra(
+                    "url",
+                    "https://admin.taibahislamic.com/uploads/bdbf34d6bffe4ceddc5881e64260bfe0.pdf"
+                )
                 context.startActivity(intent)
             }
 
@@ -116,8 +121,7 @@ class AdapterMore(private val context: Activity, var showData: MutableList<Model
                     val intent = Intent(context, ZakatCalculatorActivity::class.java)
                     context.startActivity(intent)
                 } else {
-                    Toast.makeText(context, "Please upgrade to Gold Package", Toast.LENGTH_SHORT)
-                        .show()
+                    gotoUpgradeScreen(context)
                 }
             }
 
@@ -126,8 +130,7 @@ class AdapterMore(private val context: Activity, var showData: MutableList<Model
                     val intent = Intent(context, ImamsOfSunnaActivity::class.java)
                     context.startActivity(intent)
                 } else {
-                    Toast.makeText(context, "Please upgrade to Gold Package", Toast.LENGTH_SHORT)
-                        .show()
+                    gotoUpgradeScreen(context)
                 }
             }
 
@@ -137,8 +140,7 @@ class AdapterMore(private val context: Activity, var showData: MutableList<Model
                     val intent = Intent(context, BooksCategoriesActivity::class.java)
                     context.startActivity(intent)
                 } else
-                    Toast.makeText(context, "Please upgrade to Diamond Package", Toast.LENGTH_SHORT)
-                        .show()
+                    gotoUpgradeScreen(context)
             }
 
             "inheritance_law" -> {
@@ -146,16 +148,15 @@ class AdapterMore(private val context: Activity, var showData: MutableList<Model
                     val intent = Intent(context, InheritanceLawActivity::class.java)
                     context.startActivity(intent)
                 } else
-                    Toast.makeText(context, "Please upgrade to Diamond Package", Toast.LENGTH_SHORT)
-                        .show()
+                    gotoUpgradeScreen(context)
             }
+
             "islamic_content_videos" -> {
                 if (isDiamondPurchased) {
                     val intent = Intent(context, WatchAndLearnListActivity::class.java)
                     context.startActivity(intent)
                 } else
-                    Toast.makeText(context, "Please upgrade to Diamond Package", Toast.LENGTH_SHORT)
-                        .show()
+                    gotoUpgradeScreen(context)
             }
 
             "searchdb" -> {
@@ -163,8 +164,7 @@ class AdapterMore(private val context: Activity, var showData: MutableList<Model
                     val intent = Intent(context, SearchDatabaseActivity::class.java)
                     context.startActivity(intent)
                 } else
-                    Toast.makeText(context, "Please upgrade to Diamond Package", Toast.LENGTH_SHORT)
-                        .show()
+                    gotoUpgradeScreen(context)
             }
 
 
@@ -181,6 +181,11 @@ class AdapterMore(private val context: Activity, var showData: MutableList<Model
 
     class ViewHolder(val binding: ItemMoreBinding) : RecyclerView.ViewHolder(binding.root) {
         val rvMoreLevelsList: RecyclerView = itemView.findViewById(R.id.rvMoreLevelsList)
+
+    }
+
+    fun gotoUpgradeScreen(context: Context) {
+        context.startActivity(Intent(context, UpgradeActivity::class.java))
 
     }
 }

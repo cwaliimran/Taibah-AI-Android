@@ -46,7 +46,7 @@ class AppClass : Application() {
 
 
     companion object {
-        val BASE_URL_1 = "https://taibahislamic.com/admin/"
+        val BASE_URL_1 = "https://taibahislamic.com/"
 
         private const val TAG = "AppClass"
         var myApp: AppClass? = null

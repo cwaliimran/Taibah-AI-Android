@@ -1,30 +1,19 @@
 package com.taibahai.watch_and_learn
 
-import android.content.Intent
-import android.os.Bundle
 import android.view.View
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.network.base.BaseActivity
 import com.network.interfaces.OnItemClick
-import com.network.models.ModelBooks
 import com.network.models.ModelPodcastsResponse
 import com.network.network.NetworkResult
 import com.network.utils.ProgressLoading.displayLoading
 import com.network.viewmodels.MainViewModelAI
-import com.taibahai.R
-import com.taibahai.adapters.AdapterBooksAndPDF
 import com.taibahai.adapters.AdapterPodcastList
-import com.taibahai.databinding.ActivityWatchAndLearnListBinding
 import com.taibahai.databinding.ActivityWatchAndLearnVideoListBinding
 import com.taibahai.fragments.FullscreenVideoDialog
 import com.taibahai.utils.showToast
-import kotlin.getValue
 
-class WatchAndLearnVideoListActivity: BaseActivity(){
+class WatchAndLearnVideoListActivity : BaseActivity() {
     lateinit var binding: ActivityWatchAndLearnVideoListBinding
     val viewModel: MainViewModelAI by viewModels()
     var page = 1
@@ -74,11 +63,13 @@ class WatchAndLearnVideoListActivity: BaseActivity(){
         super.initData()
         binding.appbar.tvTitle.text = "Videos"
     }
+
     override fun apiAndArgs() {
         super.apiAndArgs()
         val categoryId = intent.getStringExtra("categoryId").toString()
-        viewModel.getPodcastsByInfluencer(categoryId.toInt(),page,limit)
+        viewModel.getPodcastsByInfluencer(categoryId.toInt(), page, limit)
     }
+
     override fun initAdapter() {
         super.initAdapter()
 //        adapter = AdapterPodcastList(showList)

@@ -145,6 +145,8 @@ class QuranChaptersActivity : AppCompatActivity() {
         val requestUrl = AppClass.sharedPref.getString(StringUtils.PREV_SURAH_URL, "")
         val requestPath = AppClass.sharedPref.getString(StringUtils.PREV_SURAH_FILEPATH, "")
         if (!requestUrl!!.isEmpty() || !requestPath!!.isEmpty()) {
+            Log.d(TAG, "initDownloader: $requestUrl")
+            Log.d(TAG, "requestPath: $requestPath")
             request = Request(requestUrl, requestPath!!)
             request!!.groupId = StringUtils.SURAH_GROUP_ID
             fetch!!.getDownload(request!!.id) { result: Download? ->
@@ -334,6 +336,8 @@ class QuranChaptersActivity : AppCompatActivity() {
         val file = File(getAudioOutputDirectory(), child)
         val audio_path = file.absolutePath
         request = Request(BASE_URL_1 + s, audio_path)
+        Log.d(TAG, "downloadAudio: " + request?.url)
+        Log.d(TAG, "downloadAudio: " + request)
         request!!.priority = Priority.HIGH
         request!!.networkType = NetworkType.ALL
         request!!.groupId = StringUtils.SURAH_GROUP_ID

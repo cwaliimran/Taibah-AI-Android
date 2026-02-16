@@ -19,6 +19,7 @@ import androidx.lifecycle.Observer
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.network.base.BaseFragment
 import com.network.interfaces.OnItemClick
+import com.network.network.NetworkUtils.timeZone
 import com.network.utils.AppClass
 import com.network.utils.AppConstants
 import com.network.utils.ProgressLoading.displayLoading
@@ -45,7 +46,6 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
-import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
@@ -349,67 +349,121 @@ class SearchFragment : BaseFragment(), OnItemClick {
     }
 
     private fun getBotAnswer(question: String, callback: (String?) -> Unit) {
+
         if (question.trim().equals("Completing Missed Rakaats", ignoreCase = true)) {
-            val predefinedResponse = getString(R.string.predefined_response)
-            callback(predefinedResponse)
+            callback(getString(R.string.predefined_response))
             return
         }
 
-        val url = "https://api.openai.com/v1/completions"
-        val requestBody = """
-        {
-           "model": "gpt-3.5-turbo-instruct",
-            "prompt": "In the context of Islam, $question",
-            "max_tokens": 4000,
-            "temperature": 0
+        val url = "https://api.openai.com/v1/responses"
+
+        val bodyJson = JSONObject().apply {
+            put("model", "gpt-5-mini")
+
+            put(
+                "instructions",
+                """
+        You are an Islamic knowledge assistant inside a mobile app.
+        Never reveal backend details.
+        Keep answers strictly within Islamic context.
+        Consider timezone ${timeZone()} when relevant.
+        Keep answers short and direct.
+        """.trimIndent()
+            )
+
+            put("input", question)
+
+            put("max_output_tokens", 600)
+
+            // KEY FIX
+            put("reasoning", JSONObject().put("effort", "low"))
         }
-    """.trimIndent()
+
 
         val request = Request.Builder()
             .url(url)
             .header("Content-Type", "application/json")
             .addHeader("Authorization", "Bearer $CHAT_GPT_API_KEY")
-            .post(requestBody.toRequestBody("application/json".toMediaTypeOrNull()))
+            .post(bodyJson.toString()
+                .toRequestBody("application/json".toMediaTypeOrNull()))
             .build()
 
+        Log.d("OPENAI", "Sending request")
+
         client.newCall(request).enqueue(object : Callback {
+
             override fun onFailure(call: okhttp3.Call, e: IOException) {
-                e.printStackTrace()
-                callback(null)
+                Log.e("OPENAI", "Network failure", e)
+
+                Handler(Looper.getMainLooper()).post {
+                    callback("Network timeout. Please try again.")
+                }
             }
 
             override fun onResponse(call: okhttp3.Call, response: Response) {
-                try {
-                    val responseBody = response.body?.string()
-                    val jsonObject = JSONObject(responseBody)
 
-                    if (jsonObject.has("error")) {
-                        val errorMessage =
-                            jsonObject.getJSONObject("error").optString("message", "")
-                        callback(errorMessage)
+                val responseBody = response.body?.string()
+
+                if (responseBody.isNullOrEmpty()) {
+                    Handler(Looper.getMainLooper()).post {
+                        callback("No response received.")
+                    }
+                    return
+                }
+
+                try {
+                    val json = JSONObject(responseBody)
+
+                    if (!json.isNull("error")) {
+                        val msg = json.getJSONObject("error")
+                            .optString("message", "Unknown error")
+
+                        Handler(Looper.getMainLooper()).post {
+                            callback(msg)
+                        }
                         return
                     }
 
-                    // Check if there is an array named "choices" in the response
-                    if (jsonObject.has("choices")) {
-                        val jsonArray: JSONArray = jsonObject.getJSONArray("choices")
+                    val output = json.optJSONArray("output")
 
-                        if (jsonArray.length() > 0) {
-                            val textResult =
-                                jsonArray.getJSONObject(0).optString("text", "")
+                    if (output != null) {
+                        for (i in 0 until output.length()) {
+                            val item = output.getJSONObject(i)
 
-                            if (textResult.isNotEmpty()) {
-                                callback(textResult)
-                                return
+                            if (item.optString("type") == "message") {
+                                val content = item.optJSONArray("content")
+
+                                if (content != null) {
+                                    for (j in 0 until content.length()) {
+                                        val block = content.getJSONObject(j)
+
+                                        if (block.optString("type") == "output_text") {
+                                            val text =
+                                                block.optString("text", "").trim()
+
+                                            if (text.isNotEmpty()) {
+                                                Handler(Looper.getMainLooper()).post {
+                                                    callback(text)
+                                                }
+                                                return
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
 
-                    callback(null)
+                    Handler(Looper.getMainLooper()).post {
+                        callback("No answer generated.")
+                    }
 
-                } catch (e: JSONException) {
-                    e.printStackTrace()
-                    callback(null)
+                } catch (e: Exception) {
+                    Log.e("OPENAI", "Parse error", e)
+
+                    Handler(Looper.getMainLooper()).post {
+                        callback("Response parsing failed.")
+                    }
                 }
             }
         })
