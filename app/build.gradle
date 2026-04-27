@@ -26,8 +26,8 @@ android {
         applicationId configs.applicationId
         minSdk configs.minSdkVersion
         targetSdk 35
-        versionCode versionProps['VERSION_CODE'].toInteger()
-        versionName versionProps['VERSION_NAME']
+        versionCode = 65
+        versionName = "1.65"
 
         testInstrumentationRunner configs.testInstrumentationRunner
         multiDexEnabled true

@@ -35,6 +35,7 @@ import com.network.viewmodels.SharedViewModel
 import com.taibahai.activities.CreatePostActivity
 import com.taibahai.activities.HomeDetailActivity
 import com.taibahai.activities.LoginActivity
+import com.taibahai.activities.MakkahLiveActivity
 import com.taibahai.activities.NotificationActivity
 import com.taibahai.activities.ScientificHomeDetailActivity
 import com.taibahai.activities.UpgradeActivity
@@ -97,16 +98,16 @@ class HomeFragment : BaseFragment() {
 
         } else {
             //show hajj dialog
-/*
-            if (
-//                !AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_SILVER_PURCHASED) ||
-//                !AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_GOLD_PURCHASED) ||
-                !AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_DIAMOND_PURCHASED)
-            ) {
-                if (System.currentTimeMillis() < 1749495600000L) { // June 10, 2025, in milliseconds
-                    showHajjDiscountDialog()
-                }
-            }*/
+            /*
+                        if (
+            //                !AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_SILVER_PURCHASED) ||
+            //                !AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_GOLD_PURCHASED) ||
+                            !AppClass.sharedPref.getBoolean(AppConstants.IS_TAIBAH_AI_DIAMOND_PURCHASED)
+                        ) {
+                            if (System.currentTimeMillis() < 1749495600000L) { // June 10, 2025, in milliseconds
+                                showHajjDiscountDialog()
+                            }
+                        }*/
         }
 
     }
@@ -150,6 +151,9 @@ class HomeFragment : BaseFragment() {
         }
 
     override fun clicks() {
+        binding.ivMakkahLive.setOnClickListener {
+            startActivity(Intent(requireActivity(), MakkahLiveActivity::class.java))
+        }
         binding.ivCreatePostIcon.setOnClickListener {
             if (isGuest()) {
                 handleGuestLogic()

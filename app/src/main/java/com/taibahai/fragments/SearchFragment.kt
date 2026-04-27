@@ -40,13 +40,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
-import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
 import java.util.Locale
@@ -54,7 +54,14 @@ import java.util.UUID
 
 class SearchFragment : BaseFragment(), OnItemClick {
     lateinit var binding: FragmentSearchBinding
-    private val client = OkHttpClient()
+    private val client: OkHttpClient by lazy {
+        OkHttpClient.Builder()
+            .connectTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
+            .readTimeout(40, java.util.concurrent.TimeUnit.SECONDS)
+            .writeTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
+            .retryOnConnectionFailure(true)
+            .build()
+    }
     private lateinit var chatDatabase: ChatDatabase
     private lateinit var chatMessageDao: ChatMessageDao
     val showMessagePopups = ArrayList<ModelChatPopups>()
@@ -315,7 +322,9 @@ class SearchFragment : BaseFragment(), OnItemClick {
     private fun askChatbot(userQuestion: String) {
         getBotAnswer(userQuestion) { response ->
             activity?.runOnUiThread {
-                aiTokens -= 1
+                if (!response.isNullOrEmpty() && !response.startsWith("API error")) {
+                    aiTokens -= 1
+                }
                 AppClass.sharedPref.storeInt(AppConstants.AI_TOKENS, aiTokens)
                 binding.tvRemainingTokens.text = "Remaining Tokens : $aiTokens"
                 botResponse = response
@@ -384,24 +393,41 @@ class SearchFragment : BaseFragment(), OnItemClick {
             .url(url)
             .header("Content-Type", "application/json")
             .addHeader("Authorization", "Bearer $CHAT_GPT_API_KEY")
-            .post(bodyJson.toString()
-                .toRequestBody("application/json".toMediaTypeOrNull()))
+            .post(
+                bodyJson.toString()
+                    .toRequestBody("application/json".toMediaTypeOrNull())
+            )
             .build()
 
         Log.d("OPENAI", "Sending request")
 
+
         client.newCall(request).enqueue(object : Callback {
 
-            override fun onFailure(call: okhttp3.Call, e: IOException) {
+            override fun onFailure(call: Call, e: IOException) {
                 Log.e("OPENAI", "Network failure", e)
 
+                val message = when (e) {
+                    is java.net.SocketTimeoutException -> "Request timed out"
+                    is java.net.UnknownHostException -> "No internet connection"
+                    is javax.net.ssl.SSLHandshakeException -> "SSL handshake failed (device/network issue)"
+                    is java.net.ConnectException -> "Failed to connect to server"
+                    else -> "Network error: ${e.localizedMessage}"
+                }
+
                 Handler(Looper.getMainLooper()).post {
-                    callback("Network timeout. Please try again.")
+                    callback(message)
                 }
             }
 
             override fun onResponse(call: okhttp3.Call, response: Response) {
-
+                if (!response.isSuccessful) {
+                    val errorMsg = "API error: ${response.code}"
+                    Handler(Looper.getMainLooper()).post {
+                        callback(errorMsg)
+                    }
+                    return
+                }
                 val responseBody = response.body?.string()
 
                 if (responseBody.isNullOrEmpty()) {
