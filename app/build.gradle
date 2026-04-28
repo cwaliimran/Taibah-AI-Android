@@ -14,7 +14,7 @@ android {
     def configs = rootProject.ext
 
     namespace configs.applicationId
-    compileSdk 35
+    compileSdk 36
     def versionPropsFile = file("version.properties")
     def versionProps = new Properties()
 
@@ -25,9 +25,9 @@ android {
     defaultConfig {
         applicationId configs.applicationId
         minSdk configs.minSdkVersion
-        targetSdk 35
-        versionCode = 65
-        versionName = "1.65"
+        targetSdk 36
+        versionCode = versionProps['VERSION_CODE'].toInteger()
+        versionName = versionProps['VERSION_NAME']
 
         testInstrumentationRunner configs.testInstrumentationRunner
         multiDexEnabled true
@@ -127,8 +127,8 @@ dependencies {
     implementation("de.hdodenhof:circleimageview:3.1.0")
 
     //room database
-    implementation( "androidx.room:room-runtime:2.5.2")
-    kapt ("androidx.room:room-compiler:2.5.2" )
+    implementation("androidx.room:room-runtime:2.5.2")
+    kapt("androidx.room:room-compiler:2.5.2")
     implementation("androidx.room:room-ktx:2.5.2")
 
 
@@ -141,7 +141,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:23.1.2'
 
     //facebook
-    implementation ("com.facebook.android:facebook-android-sdk:latest.release")
+    implementation("com.facebook.android:facebook-android-sdk:latest.release")
 
 
     implementation 'androidx.work:work-runtime-ktx:2.8.1'
@@ -191,5 +191,5 @@ dependencies {
     implementation("androidx.media3:media3-exoplayer:1.6.1")
 // UI components for ExoPlayer
     implementation("androidx.media3:media3-ui:1.6.1")
-    implementation ("com.google.android.recaptcha:recaptcha:18.5.1")
+    implementation("com.google.android.recaptcha:recaptcha:18.5.1")
 }
