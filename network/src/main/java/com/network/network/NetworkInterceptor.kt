@@ -19,26 +19,16 @@ class NetworkInterceptor(private val context: Context) : Interceptor {
         if (!isInternetAvailable()) {
             throw NetworkException(context.getString(R.string.message_no_internet_connection))
         }
-        val token = AppClass.getAccessToken().toString()
+        val token = AppClass.getAccessToken() ?: ""
+        val originalRequest = chain.request()
+        val requestBuilder = originalRequest.newBuilder()
+            .addHeader("Accept", "application/json")
 
-        var request: Request = chain.request()
-        request = if (token == "null") {
-            //Log.d(TAG, "intercept: nulltoken")
-            request.newBuilder().addHeader(
-                    "Accept", "application/json"
-                ) //                .addHeader("Request-Type", "Android")
-                .addHeader("Content-Type", "application/json").build()
-        } else {
-            //Log.d(TAG, "intercept: with token $token")
-            request.newBuilder().addHeader(
-                    "Accept", "application/json"
-                ) //                .addHeader("Request-Type", "Android")
-//                .addHeader("Content-Type", "application/x-www-form-urlencoded")
-                .addHeader("Content-Type", "application/json")
-//                .addHeader("accesstoken", "7UmULKgDXJAwOEK7ENnKxNj1Dzu16aPSht25x4FHfGHnM2BoQn").build()
-                .addHeader("accesstoken", token).build()
+        if (token.isNotEmpty() && token != "null") {
+            requestBuilder.addHeader("accesstoken", token)
         }
-        return chain.proceed(request)
+
+        return chain.proceed(requestBuilder.build())
     }
 }
 
