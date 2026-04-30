@@ -340,6 +340,7 @@ class SearchFragment : BaseFragment(), OnItemClick {
                             "History View",
                             "If you click on the History option, you  will be taken to the History screen."
                         ) {
+                            isAppTourMode = false
                             appTourList.add("historyView")
                             appTourList.add("aiSearchTokens")
                             appTourList.add("aiInputBox")
