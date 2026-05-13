@@ -1,42 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/more_bg"
-    android:orientation="vertical"
-    tools:context=".activities.BookPDFDetailActivity">
-
-    <include
-        android:id="@+id/appbar"
-        layout="@layout/appbar" />
-
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/mainLayout"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@drawable/more_bg"
+        android:orientation="vertical"
+        tools:context=".activities.BookPDFDetailActivity">
 
+        <include
+            android:id="@+id/appbar"
+            layout="@layout/appbar" />
 
-        <com.rajat.pdfviewer.PdfRendererView
-            android:id="@+id/pdfView"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/mainLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:pdfView_divider="@drawable/divider"
-            app:pdfView_engine="internal"
-            app:pdfView_showDivider="false" />
+            android:layout_height="match_parent">
 
+            <HorizontalScrollView
+                android:id="@+id/horizontalScrollView"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:fillViewport="true"
+                android:scrollbars="horizontal|vertical"
+                app:layout_constraintBottom_toTopOf="@id/zoomSeekBar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <ScrollView
+                    android:id="@+id/verticalScrollView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fillViewport="true">
 
+                    <FrameLayout
+                        android:id="@+id/pdfContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center">
 
-</LinearLayout>
+                        <com.rajat.pdfviewer.PdfRendererView
+                            android:id="@+id/pdfView"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            app:pdfView_engine="internal"
+                            app:pdfView_showDivider="false" />
+
+                    </FrameLayout>
+
+                </ScrollView>
+
+            </HorizontalScrollView>
+
+            <SeekBar
+                android:id="@+id/zoomSeekBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:max="400"
+                android:progress="100"
+                android:thumb="@drawable/custom_thumb"
+                android:splitTrack="false"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
 </layout>
