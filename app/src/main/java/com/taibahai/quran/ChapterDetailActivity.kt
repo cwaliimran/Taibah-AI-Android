@@ -17,6 +17,7 @@ import android.view.animation.LinearInterpolator
 import android.widget.ScrollView
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.network.models.ModelChapter
@@ -76,6 +77,15 @@ class ChapterDetailActivity : AppCompatActivity() {
         loadJson()
         initScroll()
         initAudioPlay()
+
+
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                finishWithUpdate(activity, model)
+
+            }
+        })
+
     }
 
 
@@ -394,10 +404,7 @@ class ChapterDetailActivity : AppCompatActivity() {
         }
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        finishWithUpdate(activity, model)
-    }
+
 
     protected fun finishWithUpdate(activity: Activity?, `val`: Any?) {
         val returnIntent = Intent()
