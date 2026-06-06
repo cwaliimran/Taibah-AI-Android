@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
+import com.network.billings.RewardedInterstitialAdManager
 import com.network.interfaces.OnItemClick
 import com.network.utils.AppClass
 import com.network.utils.AppConstants
@@ -90,91 +91,70 @@ class AdapterMore(private val context: Activity, var showData: MutableList<Model
         }
 
     }
-
     private fun navigateToActivity(model: ModelMoreLevels) {
-        when (model.key) {
+        val contextActivity = context as Activity
 
-            "quran" -> {
-                val intent = Intent(context, QuranChaptersActivity::class.java)
-                context.startActivity(intent)
-            }
-
-            "english_translation" -> {
-                val intent = Intent(context, BookPDFDetailActivity::class.java)
-                intent.putExtra("title", "The Clear Quran English Translation")
-                intent.putExtra(
-                    "url",
-                    "https://admin.taibahislamic.com/uploads/bdbf34d6bffe4ceddc5881e64260bfe0.pdf"
-                )
-                context.startActivity(intent)
-            }
-
-            "hadith" -> {
-
-                val intent = Intent(context, HadithBooksActivity1::class.java)
-                context.startActivity(intent)
-            }
-
-
-            "zakat_calculator" -> {
-                if (isDiamondPurchased) {
-                    val intent = Intent(context, ZakatCalculatorActivity::class.java)
+        val navigationLogic: () -> Unit = {
+            when (model.key) {
+                "quran" -> {
+                    val intent = Intent(context, QuranChaptersActivity::class.java)
                     context.startActivity(intent)
-                } else {
-                    gotoUpgradeScreen(context)
                 }
-            }
-
-            "imams" -> {
-                if (isDiamondPurchased) {
-                    val intent = Intent(context, ImamsOfSunnaActivity::class.java)
+                "english_translation" -> {
+                    val intent = Intent(context, BookPDFDetailActivity::class.java)
+                    intent.putExtra("title", "The Clear Quran English Translation")
+                    intent.putExtra("url", "https://admin.taibahislamic.com/uploads/bdbf34d6bffe4ceddc5881e64260bfe0.pdf")
                     context.startActivity(intent)
-                } else {
-                    gotoUpgradeScreen(context)
                 }
-            }
-
-            "books_pdfs" -> {
-
-                if (isDiamondPurchased) {
-                    val intent = Intent(context, BooksCategoriesActivity::class.java)
+                "hadith" -> {
+                    val intent = Intent(context, HadithBooksActivity1::class.java)
                     context.startActivity(intent)
-                } else
-                    gotoUpgradeScreen(context)
-            }
-
-            "inheritance_law" -> {
-                if (isDiamondPurchased) {
-                    val intent = Intent(context, InheritanceLawActivity::class.java)
-                    context.startActivity(intent)
-                } else
-                    gotoUpgradeScreen(context)
-            }
-
-            "islamic_content_videos" -> {
-                if (isDiamondPurchased) {
-                    val intent = Intent(context, WatchAndLearnListActivity::class.java)
-                    context.startActivity(intent)
-                } else
-                    gotoUpgradeScreen(context)
-            }
-
-            "searchdb" -> {
-                if (isDiamondPurchased) {
-                    val intent = Intent(context, SearchDatabaseActivity::class.java)
-                    context.startActivity(intent)
-                } else
-                    gotoUpgradeScreen(context)
-            }
-
-
-            else -> {
-
+                }
+                "zakat_calculator" -> {
+                    if (isDiamondPurchased) {
+                        val intent = Intent(context, ZakatCalculatorActivity::class.java)
+                        context.startActivity(intent)
+                    } else gotoUpgradeScreen(context)
+                }
+                "imams" -> {
+                    if (isDiamondPurchased) {
+                        val intent = Intent(context, ImamsOfSunnaActivity::class.java)
+                        context.startActivity(intent)
+                    } else gotoUpgradeScreen(context)
+                }
+                "books_pdfs" -> {
+                    if (isDiamondPurchased) {
+                        val intent = Intent(context, BooksCategoriesActivity::class.java)
+                        context.startActivity(intent)
+                    } else gotoUpgradeScreen(context)
+                }
+                "inheritance_law" -> {
+                    if (isDiamondPurchased) {
+                        val intent = Intent(context, InheritanceLawActivity::class.java)
+                        context.startActivity(intent)
+                    } else gotoUpgradeScreen(context)
+                }
+                "islamic_content_videos" -> {
+                    if (isDiamondPurchased) {
+                        val intent = Intent(context, WatchAndLearnListActivity::class.java)
+                        context.startActivity(intent)
+                    } else gotoUpgradeScreen(context)
+                }
+                "searchdb" -> {
+                    if (isDiamondPurchased) {
+                        val intent = Intent(context, SearchDatabaseActivity::class.java)
+                        context.startActivity(intent)
+                    } else gotoUpgradeScreen(context)
+                }
             }
         }
+
+        RewardedInterstitialAdManager.showAdIfEligible(
+            activity = contextActivity,
+            isAdsFree = AppClass.isAdsFreeUser(),
+            onNextAction = navigationLogic
+        )
     }
-
-
     override fun getItemCount(): Int {
         return showData.size
     }

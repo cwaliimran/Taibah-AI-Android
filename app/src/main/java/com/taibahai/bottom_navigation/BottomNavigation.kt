@@ -13,6 +13,7 @@ import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.appupdate.AppUpdateOptions
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
+import com.network.billings.RewardedInterstitialAdManager
 import com.taibahai.R
 import com.taibahai.billings.BillingClientManager
 import com.taibahai.billings.BillingManagerActions
@@ -39,6 +40,7 @@ class BottomNavigation : AppCompatActivity() {
 
         binding.bottomNavigationView?.itemIconTintList = null
         replaceFragment(HomeFragment())
+        RewardedInterstitialAdManager.loadAd(this)
         binding.bottomNavigationView.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.home -> replaceFragment(HomeFragment())

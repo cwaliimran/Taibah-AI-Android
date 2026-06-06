@@ -93,4 +93,7 @@ dependencies {
     api 'com.google.guava:guava:27.0.1-android'
 
 
+    implementation 'com.google.android.gms:play-services-ads:23.0.0'
+
+
 }

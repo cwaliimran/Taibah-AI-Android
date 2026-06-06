@@ -1,5 +1,6 @@
 package com.network.utils
 
+import android.app.Activity
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -7,27 +8,73 @@ import android.content.Context
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Build
+import android.os.Bundle
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ProcessLifecycleOwner
 import com.android.billingclient.api.ProductDetails
+import com.google.android.gms.ads.MobileAds
 import com.network.BuildConfig
+import com.network.billings.AppOpenAdManager
+import com.network.billings.RewardedInterstitialAdManager
 import com.network.models.ModelUser
 import java.io.File
 import java.util.Locale
 
-
-class AppClass : Application() {
+class AppClass : Application(), Application.ActivityLifecycleCallbacks, DefaultLifecycleObserver {
     var singleton: AppClass? = null
-
+    private var currentActivity: Activity? = null
 
     override fun onCreate() {
-        super.onCreate()
+        super<Application>.onCreate()
         myApp = this
-        AppClass().singleton = this
+        singleton = this
         sharedPref = SharedPref(this)
+        registerActivityLifecycleCallbacks(this)
+        ProcessLifecycleOwner.get().lifecycle.addObserver(this)
         createNotificationChannel()
+        com.google.android.gms.ads.MobileAds.initialize(this) {
+
+        }
+        AppOpenAdManager.loadAd(this)
+
+    }
+
+    override fun onStart(owner: LifecycleOwner) {
+        super<DefaultLifecycleObserver>.onStart(owner)
+        currentActivity?.let {
+            AppOpenAdManager.showAdIfAvailable(it, isAdsFreeUser())
+        }
+    }
+
+    override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
+        currentActivity = activity
+    }
+
+    override fun onActivityStarted(activity: Activity) {
+        if (!AppOpenAdManager.isShowingAd) {
+            currentActivity = activity
+        }
+    }
+
+    override fun onActivityResumed(activity: Activity) {
+        if (!AppOpenAdManager.isShowingAd) {
+            currentActivity = activity
+        }
+    }
+
+    override fun onActivityPaused(activity: Activity) {}
+    override fun onActivityStopped(activity: Activity) {}
+    override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {}
+
+    override fun onActivityDestroyed(activity: Activity) {
+        if (currentActivity == activity) {
+            currentActivity = null
+        }
     }
 
     fun getInstance(): AppClass? {
-        return AppClass().singleton
+        return singleton
     }
 
     private fun createNotificationChannel() {
@@ -41,20 +88,15 @@ class AppClass : Application() {
             )
             notificationManager.createNotificationChannel(channel)
         }
-
     }
-
 
     companion object {
         val BASE_URL_1 = "https://taibahislamic.com/"
-
         private const val TAG = "AppClass"
         var myApp: AppClass? = null
         val instance get() = myApp!!
         lateinit var sharedPref: SharedPref
 
-        //for storing data
-        //    AppClass.sharedPref?.storeObject(AppConstants.CURRENT_USER, responseData.body)
         fun getCurrentUser(): ModelUser.Data? {
             return sharedPref.getObject(AppConstants.CURRENT_USER, ModelUser.Data::class.java)
         }
@@ -67,6 +109,10 @@ class AppClass : Application() {
             }
         }
 
+        fun isAdsFreeUser(): Boolean {
+            val isPurchased = sharedPref.getBoolean(AppConstants.IS_ADS_FREE)
+            return com.network.BuildConfig.FLAVOR == "adsFree" || isPurchased
+        }
 
         fun getAccessToken(): String? {
             return sharedPref.getString(AppConstants.ACCESS_TOKEN, "")
@@ -108,6 +154,5 @@ class AppClass : Application() {
         }
 
         var productsList: MutableList<ProductDetails> = mutableListOf()
-
     }
 }
