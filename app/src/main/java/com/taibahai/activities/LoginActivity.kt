@@ -72,6 +72,7 @@ class LoginActivity : BaseActivity() {
     override fun onCreate() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        applySystemInsets(binding.root)
         auth = FirebaseAuth.getInstance()
         deviceId()
         isUserAuthenticated()

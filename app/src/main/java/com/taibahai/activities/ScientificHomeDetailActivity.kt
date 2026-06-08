@@ -33,6 +33,7 @@ class ScientificHomeDetailActivity : BaseActivity() {
     override fun onCreate() {
         binding = ActivityScientificHomeDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        applySystemInsets(binding.root)
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 val intent = Intent().apply {

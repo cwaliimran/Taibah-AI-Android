@@ -26,6 +26,7 @@ class NotificationActivity : BaseActivity() {
     override fun onCreate() {
         binding = ActivityNotificationBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        applySystemInsets(binding.root)
     }
 
     override fun clicks() {

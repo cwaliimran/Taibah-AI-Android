@@ -45,7 +45,7 @@ class MyProfileActivity : BaseActivity() {
     override fun onCreate() {
         binding = ActivityMyProfileBinding.inflate(layoutInflater)
         binding.appbar.tvTitle.text = getString(R.string.my_profile)
-
+        applySystemInsets(binding.root)
         show(binding.appbar.ivRight)
         binding.appbar.ivRight.setImageDrawable(
             ContextCompat.getDrawable(

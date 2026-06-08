@@ -13,6 +13,7 @@ class WebViewActivity : BaseActivity() {
     override fun onCreate() {
         binding = ActivityWebViewBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        applySystemInsets(binding.root)
     }
 
     override fun clicks() {

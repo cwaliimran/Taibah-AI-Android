@@ -52,6 +52,7 @@ class UpgradeActivity : BaseActivity(), PurchaseInterface {
     override fun onCreate() {
         binding = ActivityUpgradeBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        applySystemInsets(binding.root)
         addViewPager()
     }
 

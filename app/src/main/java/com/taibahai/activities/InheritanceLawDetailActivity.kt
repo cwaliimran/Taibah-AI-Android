@@ -34,6 +34,7 @@ class InheritanceLawDetailActivity : BaseActivity() {
     override fun onCreate() {
         binding = ActivityInheritanceLawDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        applySystemInsets(binding.root)
         engine = PdfEngine.INTERNAL
 
         val type = intent.getStringExtra("type")

@@ -16,6 +16,7 @@ class ZakatInfoActivity : BaseActivity() {
     override fun onCreate() {
         binding=ActivityZakatInfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        applySystemInsets(binding.root)
     }
 
     override fun clicks() {

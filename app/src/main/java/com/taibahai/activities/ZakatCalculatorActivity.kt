@@ -33,7 +33,7 @@ class ZakatCalculatorActivity : BaseActivity() {
     override fun onCreate() {
         binding = ActivityZakatCalculatorBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        applySystemInsets(binding.root)
         if (!appTourList.contains("zakat")) {
                 AppTourDialog.appTour(
                     this,

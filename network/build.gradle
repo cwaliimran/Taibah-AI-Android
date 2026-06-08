@@ -92,7 +92,8 @@ dependencies {
     api 'com.google.guava:guava:24.1-jre'
     api 'com.google.guava:guava:27.0.1-android'
 
-
+    implementation 'androidx.activity:activity:1.9.3'
+    implementation 'androidx.activity:activity-ktx:1.9.3'
     implementation 'com.google.android.gms:play-services-ads:23.0.0'
 
 

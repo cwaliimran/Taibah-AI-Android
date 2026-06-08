@@ -108,31 +108,26 @@ dependencies {
     implementation("com.google.android.material:material:1.6.0")
     implementation 'androidx.media3:media3-exoplayer:1.2.0'
     implementation 'com.google.firebase:firebase-crashlytics-ktx:18.3.2'
-    implementation 'androidx.activity:activity:1.9.0'
+
+    implementation 'androidx.activity:activity:1.9.3'
+    implementation 'androidx.activity:activity-ktx:1.9.3'
+
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
-
-    //android x
-    implementation("androidx.activity:activity-ktx:1.7.2")
     implementation("androidx.fragment:fragment-ktx:1.6.0")
-
     implementation 'androidx.core:core-ktx:1.12.0'
-
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("com.tbuonomo:dotsindicator:4.3")
     implementation("io.github.chaosleung:pinview:1.4.4")
     implementation("com.hbb20:ccp:2.5.4")
     implementation("de.hdodenhof:circleimageview:3.1.0")
 
-    //room database
     implementation("androidx.room:room-runtime:2.5.2")
     kapt("androidx.room:room-compiler:2.5.2")
     implementation("androidx.room:room-ktx:2.5.2")
 
-
-    //firebase
     implementation("com.google.firebase:firebase-auth-ktx:22.1.2")
     implementation 'com.google.firebase:firebase-analytics-ktx:21.3.0'
     implementation 'com.google.firebase:firebase-bom:32.1.1'
@@ -140,17 +135,12 @@ dependencies {
     implementation 'com.google.android.gms:play-services-cloud-messaging:17.0.2'
     implementation 'com.google.firebase:firebase-messaging:23.1.2'
 
-    //facebook
     implementation("com.facebook.android:facebook-android-sdk:latest.release")
 
-
     implementation 'androidx.work:work-runtime-ktx:2.8.1'
-
     implementation 'androidx.browser:browser:1.5.0'
-
     implementation 'com.google.android.gms:play-services-auth:20.7.0'
 
-    //gif/image loading libraries
     implementation 'com.github.bumptech.glide:glide:4.15.1'
     kapt 'com.github.bumptech.glide:compiler:4.15.1'
     implementation("androidx.viewpager2:viewpager2:1.0.0")
@@ -158,40 +148,22 @@ dependencies {
     implementation("com.github.afreakyelf:Pdf-Viewer:v1.1.2")
 
     kapt 'com.android.databinding:compiler:3.5.1'
-
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
-
     implementation 'com.github.dhaval2404:imagepicker:2.1'
-
-    //ask permissions dependencies
     implementation 'io.github.ParkSangGwon:tedpermission-normal:3.3.0'
-
     implementation 'com.mikhaellopez:circularprogressbar:3.1.0'
-
     implementation 'com.google.android.gms:play-services-ads:23.0.0'
-
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.0-RC.2")
 
-    implementation("com.github.marlonlom:timeago:4.0.3")
-
-    //fetch
-//    implementation "com.github.tonyofrancis.Fetch:xfetch2:3.1.6"
     implementation "com.github.abbas7777:fetch2-android14:3.2.0-beta02"
     implementation "androidx.media:media:1.7.0"
-
-    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
-
 
     implementation("com.google.android.play:app-update:2.1.0")
     implementation("com.google.android.play:app-update-ktx:2.1.0")
 
     implementation 'uk.co.samuelwall:material-tap-target-prompt:3.3.2'
 
-// Media3 ExoPlayer for audio playback
     implementation("androidx.media3:media3-exoplayer:1.6.1")
-// UI components for ExoPlayer
     implementation("androidx.media3:media3-ui:1.6.1")
-
     implementation("com.google.android.recaptcha:recaptcha:18.9.1")
-
 }

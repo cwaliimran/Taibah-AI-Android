@@ -28,7 +28,7 @@ class HadithBooksActivity1 : BaseActivity() {
         binding = ActivityHadithBooks1Binding.inflate(layoutInflater)
         binding.appbar.tvTitle.text = getString(R.string.hadith)
         
-        
+        applySystemInsets(binding.root)
        if (!isAdsFree) loadAd() else binding.adView.visibility = View.GONE
         setContentView(binding.root)
     }

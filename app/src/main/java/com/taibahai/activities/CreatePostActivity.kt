@@ -31,7 +31,7 @@ class CreatePostActivity : BaseActivity() {
     override fun onCreate() {
         binding = ActivityCreatePostBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        applySystemInsets(binding.root)
         if (!appTourList.contains("post")) {
          AppTourDialog.appTour(
                 this,

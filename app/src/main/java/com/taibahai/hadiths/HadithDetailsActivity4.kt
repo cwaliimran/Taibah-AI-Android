@@ -41,6 +41,7 @@ class HadithDetailsActivity4 : BaseActivity() {
         }
 
         setContentView(binding.root)
+        applySystemInsets(binding.root)
     }
 
     override fun clicks() {

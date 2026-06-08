@@ -50,6 +50,7 @@ class EditProfileActivity : BaseActivity() {
         googleSignInClient = GoogleSignIn.getClient(this, gso)
 
         setContentView(binding.root)
+        applySystemInsets(binding.root)
     }
 
     override fun clicks() {

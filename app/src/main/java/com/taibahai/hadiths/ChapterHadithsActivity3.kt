@@ -34,6 +34,7 @@ class ChapterHadithsActivity3 : BaseActivity() {
         binding = ActivityChapterHadiths3Binding.inflate(layoutInflater)
        if (!isAdsFree) loadAd() else binding.adView.visibility = View.GONE
         setContentView(binding.root)
+        applySystemInsets(binding.root)
     }
 
 

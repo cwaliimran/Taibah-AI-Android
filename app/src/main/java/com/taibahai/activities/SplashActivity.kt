@@ -15,6 +15,7 @@ class SplashActivity : BaseActivity() {
     override fun onCreate() {
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        applySystemInsets(binding.root)
 
         if (currentUser == null) {
             if (!AppClass.sharedPref.getBoolean(AppConstants.IS_FREE_AI_TOKENS_PROVIDED)) {

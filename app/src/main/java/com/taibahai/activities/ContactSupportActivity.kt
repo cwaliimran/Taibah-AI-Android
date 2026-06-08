@@ -21,6 +21,7 @@ class ContactSupportActivity : BaseActivity() {
     override fun onCreate() {
         binding=ActivityContactSupportBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        applySystemInsets(binding.root)
     }
 
     override fun clicks() {

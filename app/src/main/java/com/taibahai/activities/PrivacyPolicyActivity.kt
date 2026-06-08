@@ -20,6 +20,7 @@ class PrivacyPolicyActivity : BaseActivity() {
     override fun onCreate() {
         binding = ActivityPrivacyPolicyBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        applySystemInsets(binding.root)
     }
 
     override fun clicks() {

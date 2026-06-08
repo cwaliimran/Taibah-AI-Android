@@ -22,6 +22,7 @@ class BooksAndPDFActivity : BaseActivity() {
     override fun onCreate() {
         binding = ActivityBooksAndPdfactivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        applySystemInsets(binding.root)
     }
 
     override fun clicks() {

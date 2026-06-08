@@ -15,7 +15,7 @@ class MakkahLiveActivity : BaseActivity() {
     override fun onCreate() {
         binding = ActivityMakkahLiveBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        applySystemInsets(binding.root)
         setupWebView()
         loadLive()
     }

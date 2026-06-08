@@ -27,6 +27,7 @@ class UpcomingFeaturesActivity : BaseActivity() {
     override fun onCreate() {
         binding = ActivityUpcomingFeaturesBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        applySystemInsets(binding.root)
     }
 
     override fun initAdapter() {

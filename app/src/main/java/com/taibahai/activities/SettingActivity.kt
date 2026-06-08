@@ -44,7 +44,7 @@ class SettingActivity : BaseActivity() {
             .requestEmail()
             .build()
         googleSignInClient = GoogleSignIn.getClient(this, gso)
-
+        applySystemInsets(binding.root)
         setContentView(binding.root)
     }
 

@@ -25,7 +25,7 @@ class SearchDatabaseActivity : BaseActivity() {
         binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Quran"))
         binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Hadith"))
         binding.viewPager.adapter = adapter
-
+        applySystemInsets(binding.root)
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 if (tab != null) {

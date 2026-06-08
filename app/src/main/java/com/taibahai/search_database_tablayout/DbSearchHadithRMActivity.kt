@@ -20,6 +20,7 @@ class DbSearchHadithRMActivity : BaseActivity() {
         binding.appbar.ivRight.visibility = View.GONE
 
         setContentView(binding.root)
+        applySystemInsets(binding.root)
     }
 
     override fun clicks() {

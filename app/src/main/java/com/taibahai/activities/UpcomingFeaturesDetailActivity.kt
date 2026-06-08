@@ -15,6 +15,7 @@ class UpcomingFeaturesDetailActivity : BaseActivity() {
     override fun onCreate() {
         binding = ActivityUpcomingFeaturesDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        applySystemInsets(binding.root)
     }
 
     override fun clicks() {

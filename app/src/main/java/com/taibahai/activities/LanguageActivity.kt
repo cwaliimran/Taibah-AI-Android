@@ -14,6 +14,7 @@ class LanguageActivity : BaseActivity() {
     override fun onCreate() {
         binding=ActivityLanguageBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        applySystemInsets(binding.root)
     }
 
     override fun clicks() {

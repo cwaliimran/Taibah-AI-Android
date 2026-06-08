@@ -42,6 +42,7 @@ class HomeDetailActivity : BaseActivity() {
     override fun onCreate() {
         binding = ActivityHomeDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        applySystemInsets(binding.root)
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 val intent = Intent().apply {

@@ -23,6 +23,7 @@ class WatchAndLearnVideoListActivity : BaseActivity() {
     override fun onCreate() {
         binding = ActivityWatchAndLearnVideoListBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        applySystemInsets(binding.root)
     }
 
     override fun clicks() {

@@ -3,8 +3,12 @@ package com.taibahai.bottom_navigation
 import android.content.IntentSender
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.Purchase
@@ -37,7 +41,8 @@ class BottomNavigation : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityBottomNavigationBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        enableEdgeToEdge()
+        applySystemInsets(binding.root)
         binding.bottomNavigationView?.itemIconTintList = null
         replaceFragment(HomeFragment())
         RewardedInterstitialAdManager.loadAd(this)
@@ -92,7 +97,13 @@ class BottomNavigation : AppCompatActivity() {
             Log.e(TAG, "Error initializing BillingClient: ${e.message}")
         }
     }
-
+    fun applySystemInsets(view: View) {
+        ViewCompat.setOnApplyWindowInsetsListener(view) { v, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(insets.left, insets.top, insets.right, insets.bottom)
+            WindowInsetsCompat.CONSUMED
+        }
+    }
     private fun replaceFragment(fragment: Fragment) {
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()

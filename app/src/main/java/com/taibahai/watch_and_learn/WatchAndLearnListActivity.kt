@@ -34,6 +34,7 @@ class WatchAndLearnListActivity  : BaseActivity() {
     override fun onCreate() {
         binding = ActivityWatchAndLearnListBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        applySystemInsets(binding.root)
     }
 
     override fun clicks() {

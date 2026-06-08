@@ -33,6 +33,7 @@ class HistoryActivity : BaseActivity() {
         chatDatabase = ChatDatabase.getDatabase(this)
         chatMessageDao = chatDatabase.chatMessageDao()
         setContentView(binding.root)
+        applySystemInsets(binding.root)
         getAllMessages()
         if (!appTourList.contains("historyList")) {
             AppTourDialog.appTour(

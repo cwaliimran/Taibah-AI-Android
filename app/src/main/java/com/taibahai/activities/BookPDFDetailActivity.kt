@@ -29,7 +29,7 @@ class BookPDFDetailActivity : BaseActivity() {
         binding = ActivityBookPdfdetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
         engine = PdfEngine.INTERNAL
-
+        applySystemInsets(binding.root)
         setupZoomControls()
     }
 
