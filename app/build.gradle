@@ -36,6 +36,7 @@ android {
 
         // Inject into BuildConfig safely
         buildConfigField "String", "CHAT_GPT_API_KEY", "\"${CHAT_GPT_API_KEY}\""
+        buildConfigField "String", "DEEPSEEK_API_KEY", "\"${DEEPSEEK_API_KEY}\""
 
     }
 
