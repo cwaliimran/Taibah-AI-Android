@@ -7,11 +7,11 @@ plugins {
 android {
     namespace 'com.network'
     def configs = rootProject.ext
-    compileSdk 35
+    compileSdk configs.compileSdkVersion
 
     defaultConfig {
         minSdk configs.minSdkVersion
-        targetSdk 35
+        targetSdk configs.targetSdkVersion
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
