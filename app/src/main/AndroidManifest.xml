@@ -160,6 +160,11 @@
             android:name=".quran.ReaderSettingsActivity"
             android:exported="false" />
         <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:theme="@style/Theme.UCrop"
+            tools:replace="android:theme"
+            tools:ignore="MissingClass" />
+        <activity
             android:name=".bottom_navigation.BottomNavigation"
             android:configChanges="orientation|screenSize"
             android:exported="true"

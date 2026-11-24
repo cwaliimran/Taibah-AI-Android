@@ -8,7 +8,10 @@ plugins {
 
 
 // app/build.gradle
-apply from: "../secrets.gradle"
+def secretsFile = rootProject.file("secrets.gradle")
+if (secretsFile.exists()) {
+    apply from: secretsFile
+}
 
 android {
     def configs = rootProject.ext
@@ -25,7 +28,7 @@ android {
     defaultConfig {
         applicationId configs.applicationId
         minSdk configs.minSdkVersion
-        targetSdk 36
+        targetSdk configs.targetSdkVersion
         versionCode = versionProps['VERSION_CODE'].toInteger()
         versionName = versionProps['VERSION_NAME']
 
@@ -35,8 +38,10 @@ android {
 
 
         // Inject into BuildConfig safely
-        buildConfigField "String", "CHAT_GPT_API_KEY", "\"${CHAT_GPT_API_KEY}\""
-        buildConfigField "String", "DEEPSEEK_API_KEY", "\"${DEEPSEEK_API_KEY}\""
+        def chatGptKey = project.hasProperty('CHAT_GPT_API_KEY') ? CHAT_GPT_API_KEY : ""
+        def deepSeekKey = project.hasProperty('DEEPSEEK_API_KEY') ? DEEPSEEK_API_KEY : ""
+        buildConfigField "String", "CHAT_GPT_API_KEY", "\"${chatGptKey}\""
+        buildConfigField "String", "DEEPSEEK_API_KEY", "\"${deepSeekKey}\""
 
     }
 
@@ -70,11 +75,11 @@ android {
 
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_19
-        targetCompatibility JavaVersion.VERSION_19
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_19.toString()
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
 
     flavorDimensions 'taibahai'

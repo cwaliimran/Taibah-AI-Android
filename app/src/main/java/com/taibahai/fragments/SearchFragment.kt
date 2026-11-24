@@ -521,7 +521,7 @@ class SearchFragment : BaseFragment(), OnItemClick {
         val url = "https://api.deepseek.com/chat/completions"
 
         val bodyJson = JSONObject().apply {
-            put("model", "deepseek-v4-flash")
+            put("model", "deepseek-chat")
             put("stream", false)
             put("max_tokens", 600)
             put("temperature", 0.3)
